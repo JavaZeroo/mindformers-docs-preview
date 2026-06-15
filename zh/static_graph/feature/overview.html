@@ -1,0 +1,317 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>功能特性概述 &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="启动任务" href="start_tasks.html" />
+    <link rel="prev" title="功能特性" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">介绍</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/quick_start.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">模型支持库</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">安装</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">安装指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">功能特性</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/overview.html">功能特性概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/start_task.html">启动任务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/configuration.html">配置文件说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/logging.html">日志</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/dataset.html">数据集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/training_hyperparameters.html">训练超参数与优化器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/save_and_load_checkpoint.html">权重保存与加载</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/resume_training.html">断点续训</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/monitor.html">训练指标监控与 Profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/static_graph_features.html">静态图实现特性</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">环境变量</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../env_variables.html">环境变量说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">贡献指南</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers贡献指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">魔乐社区贡献指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">模型相关 FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">功能相关 FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">静态图实现（Deprecated）</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">大模型全流程指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">功能特性</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">功能特性概述</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">通用功能</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">训练功能</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">推理功能</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="start_tasks.html">启动任务</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ckpt.html">Ckpt权重</a></li>
+<li class="toctree-l2"><a class="reference internal" href="safetensors.html">Safetensors权重</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">配置文件说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="load_huggingface_config.html">加载 Hugging Face 模型配置</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html">日志</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tokenizer.html">使用Tokenizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset.html">数据集</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training_hyperparameters.html">训练超参数</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monitor.html">训练指标监控</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training.html">断点续训</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoint_saving_and_loading.html">checkpoint保存和加载</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training2.0.html">断点续训2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l2"><a class="reference internal" href="high_availability.html">训练高可用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skip_data_and_ckpt_health_monitor.html">数据跳过和健康监测</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pma_fused_checkpoint.html">Pre-trained Model Average 权重合并</a></li>
+<li class="toctree-l2"><a class="reference internal" href="other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantization.html">量化</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_development/index.html">高阶开发</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">优秀实践</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">环境变量说明</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">功能特性</a></li>
+      <li class="breadcrumb-item active">功能特性概述</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/feature/overview.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">已废弃（Deprecated）</p>
+<p>本页属于 <strong>静态图（GRAPH_MODE）实现</strong> 章节，已标记为废弃。新特性优先在「r2.0.0 动态图实现」章节演进，请优先查阅动态图相关文档。</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>功能特性概述<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/static_graph/feature/overview.md"><img alt="查看源文件" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source.svg" /></a></p>
+<p>MindSpore Transformers 在预训练、微调、推理与部署全流程中提供丰富的功能特性，便于用户进行配置化开发与调优。本章节按 <strong>通用功能</strong>、<strong>训练功能</strong> 和 <strong>推理功能</strong> 对全部功能进行分类汇总，便于快速查找与跳转。</p>
+<section id="id2">
+<h2>通用功能<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p>适用于预训练、微调与推理全流程的基础能力，便于统一配置与复用。</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>功能</p></th>
+<th class="head"><p>说明</p></th>
+<th class="head"><p>架构支持</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/start_tasks.html">启动任务</a></p></td>
+<td><p>单卡、单机和多机任务一键启动。</p></td>
+<td><p>Mcore/Legacy</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/ckpt.html">Ckpt权重</a></p></td>
+<td><p>[Checkpoint 1.0 版本] 支持 ckpt 格式的权重文件转换及切分功能。</p></td>
+<td><p>Legacy</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/safetensors.html">Safetensors权重</a></p></td>
+<td><p>[Checkpoint 1.0 版本] 支持 safetensors 格式的权重文件保存及加载功能。</p></td>
+<td><p>Mcore/Legacy</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/configuration.html">配置文件说明</a></p></td>
+<td><p>支持使用 YAML 文件集中管理和调整任务中的可配置项。</p></td>
+<td><p>Mcore/Legacy</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/load_huggingface_config.html">加载 Hugging Face 模型配置</a></p></td>
+<td><p>支持加载 Hugging Face 社区模型配置，即插即用、无缝对接。</p></td>
+<td><p>Mcore</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/logging.html">日志</a></p></td>
+<td><p>日志相关介绍，包括日志结构、日志保存等。</p></td>
+<td><p>Mcore/Legacy</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/tokenizer.html">使用 Tokenizer</a></p></td>
+<td><p>Tokenizer 相关介绍，支持在推理、数据集中使用 Hugging Face Tokenizer。</p></td>
+<td><p>Mcore</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id3">
+<h2>训练功能<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<p>支持大规模、高可用的大模型训练与调优。</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>功能</p></th>
+<th class="head"><p>说明</p></th>
+<th class="head"><p>架构支持</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/dataset.html">数据集</a></p></td>
+<td><p>支持多种类型和格式的数据集（Megatron、Hugging Face、MindRecord 等）。</p></td>
+<td><p>Mcore/Legacy</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/training_hyperparameters.html">训练超参数</a></p></td>
+<td><p>灵活配置大模型训练的超参数（学习率、优化器等）。</p></td>
+<td><p>Mcore/Legacy</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/monitor.html">训练指标监控</a></p></td>
+<td><p>提供大模型训练阶段的可视化服务，用于监控和分析训练过程中的各种指标和信息。</p></td>
+<td><p>Mcore/Legacy</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/resume_training.html">断点续训</a></p></td>
+<td><p>[Checkpoint 1.0 版本] 支持 step 级断点续训，减少大规模训练意外中断造成的浪费。</p></td>
+<td><p>Mcore/Legacy</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/checkpoint_saving_and_loading.html">checkpoint 保存和加载</a></p></td>
+<td><p>[Checkpoint 2.0 版本] 支持 checkpoint 保存和加载功能。</p></td>
+<td><p>Mcore</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/resume_training2.0.html">断点续训 2.0</a></p></td>
+<td><p>[Checkpoint 2.0 版本] 支持 step 级断点续训及扩缩容、增量等场景。</p></td>
+<td><p>Mcore</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/high_availability.html">训练高可用（Beta）</a></p></td>
+<td><p>提供临终 CKPT 保存、UCE 故障容错恢复和进程级重调度恢复等能力。</p></td>
+<td><p>Mcore</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/parallel_training.html">分布式并行训练</a></p></td>
+<td><p>一键配置多维混合分布式并行，支持在万卡级集群中高效训练。</p></td>
+<td><p>Mcore/Legacy</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/memory_optimization.html">训练内存优化</a></p></td>
+<td><p>支持重计算与细粒度激活值 SWAP，降低训练峰值显存。</p></td>
+<td><p>Mcore/Legacy</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/skip_data_and_ckpt_health_monitor.html">数据跳过和健康监测</a></p></td>
+<td><p>支持数据跳过与权重健康监测，提升训练鲁棒性。</p></td>
+<td><p>Mcore/Legacy</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/pma_fused_checkpoint.html">Pre-trained Model Average 权重合并</a></p></td>
+<td><p>支持多 checkpoint 权重合并（PMA）及融合保存。</p></td>
+<td><p>Mcore</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/other_training_features.html">其它训练特性</a></p></td>
+<td><p>梯度累积、梯度裁剪、CPU 绑核、MoE DropRate、RoPE/SwiGLU 融合等。</p></td>
+<td><p>Mcore/Legacy</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id4">
+<h2>推理功能<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<p>面向模型推理与部署场景，支持将训练好的模型高效部署并服务于生产环境。</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>功能</p></th>
+<th class="head"><p>说明</p></th>
+<th class="head"><p>架构支持</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/quantization.html">量化</a></p></td>
+<td><p>集成 MindSpore Golden Stick 工具组件，提供统一量化推理流程，开箱即用。</p></td>
+<td><p>Mcore/Legacy</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="功能特性" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="start_tasks.html" class="btn btn-neutral float-right" title="启动任务" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

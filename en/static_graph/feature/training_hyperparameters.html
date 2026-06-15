@@ -1,0 +1,374 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Training Hyperparameters &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Training Metrics Monitoring" href="monitor.html" />
+    <link rel="prev" title="Dataset" href="dataset.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">Models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contribution Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">Modelers Contribution Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">Model-Related FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">Feature-Related FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Static Graph Implementation (Deprecated)</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Full-process Guide to Large Models</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Features</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">Features Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="start_tasks.html">Start Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ckpt.html">Ckpt Weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="safetensors.html">Safetensors Weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">Configuration File Descriptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="load_huggingface_config.html">Loading Hugging Face Model Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html">Logs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tokenizer.html">Using Tokenizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset.html">Dataset</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Training Hyperparameters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#learning-rate">Learning Rate</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#dynamic-learning-rate">Dynamic Learning Rate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#grouped-learning-rate">Grouped Learning Rate</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#optimizer">Optimizer</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#adamw-optimizer">AdamW Optimizer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#muon-optimizer">Muon Optimizer</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="monitor.html">Training Metrics Monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training.html">Resumable Training After Breakpoint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoint_saving_and_loading.html">Checkpoint Saving and Loading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training2.0.html">Resume Training2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel_training.html">Distributed Parallelism Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="high_availability.html">Training High Availability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory_optimization.html">Memory Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skip_data_and_ckpt_health_monitor.html">Data Skip And Checkpoint Health Monitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pma_fused_checkpoint.html">Pre-trained Model Average Weight Consolidation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="other_training_features.html">Other Training Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantization.html">Quantization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_development/index.html">Advanced Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">Excellent Practice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">Environment Variable Descriptions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Features</a></li>
+      <li class="breadcrumb-item active">Training Hyperparameters</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/feature/training_hyperparameters.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">Deprecated</p>
+<p>This page belongs to the <strong>Static Graph (GRAPH_MODE) Implementation</strong> section and has been marked as deprecated. New features are primarily being developed in the “r2.0.0 Dynamic Graph Implementation” section. Please refer to the dynamic graph documentation first.</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="training-hyperparameters">
+<h1>Training Hyperparameters<a class="headerlink" href="#training-hyperparameters" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_en/static_graph/feature/training_hyperparameters.md"><img alt="View Source on AtomGit" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source_en.svg" /></a></p>
+<p>Hyperparameters significantly affect model performance, with different settings potentially leading to vastly different outcomes.</p>
+<p>Choices regarding these parameters influence aspects such as training speed, convergence, capacity, and generalization ability. They are not learned directly from the training data but are determined by developers based on experience, experiments, or tuning processes.</p>
+<p>MindSpore Transformers offers several categories of hyperparameter configuration methods.</p>
+<section id="learning-rate">
+<h2>Learning Rate<a class="headerlink" href="#learning-rate" title="Link to this heading"></a></h2>
+<section id="dynamic-learning-rate">
+<h3>Dynamic Learning Rate<a class="headerlink" href="#dynamic-learning-rate" title="Link to this heading"></a></h3>
+<p>The learning rate controls the size of the step taken during updates to model weights, determining the pace at which parameters are updated.</p>
+<p>It is a critical parameter affecting both the training speed and stability of the model. During each iteration, gradients of the loss function with respect to the weights are calculated and adjusted according to the learning rate.</p>
+<p>Setting the learning rate too high can prevent the model from converging, while setting it too low can make the training process unnecessarily slow.</p>
+<p><strong>YAML Parameter Configuration</strong></p>
+<p>Users can utilize the learning rate by adding an <code class="docutils literal notranslate"><span class="pre">lr_schedule</span></code> module to the YAML configuration file used for model training.</p>
+<p>Taking the <a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/example/deepseek3/pretrain_deepseek3_671b.yaml">DeepSeek-V3 pre-training’s YAML file</a> as an example, it could be configured as follows:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># lr schedule</span>
+<span class="nt">lr_schedule</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConstantWarmUpLR</span>
+<span class="w">  </span><span class="nt">learning_rate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.2e-4</span>
+<span class="w">  </span><span class="nt">warmup_ratio</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.02</span>
+<span class="w">  </span><span class="nt">total_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-1</span><span class="w"> </span><span class="c1"># -1 means it will load the total steps of the dataset</span>
+</pre></div>
+</div>
+<p><strong>Key Parameters Introduction</strong></p>
+<p>Different learning rates require different configuration parameters. MindSpore Transformers currently supports the following learning rates:</p>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/core/mindformers.core.ConstantWarmUpLR.html">Constant Warm Up Learning Rate</a></p></li>
+<li><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/core/mindformers.core.LinearWithWarmUpLR.html">Linear with Warm Up Learning Rate</a></p></li>
+<li><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/core/mindformers.core.CosineWithWarmUpLR.html">Cosine with Warm Up Learning Rate</a></p></li>
+<li><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/core/mindformers.core.CosineWithRestartsAndWarmUpLR.html">Cosine with Restarts and Warm Up Learning Rate</a></p></li>
+<li><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/core/mindformers.core.PolynomialWithWarmUpLR.html">Polynomial with Warm Up Learning Rate</a></p></li>
+<li><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/core/mindformers.core.CosineAnnealingLR.html">The cosine annealing part of SGDR</a></p></li>
+<li><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/core/mindformers.core.CosineAnnealingWarmRestarts.html">Set the learning rate of each parameter group using a cosine annealing schedule</a></p></li>
+<li><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/core/mindformers.core.LearningRateWiseLayer.html">Learning Rate Wise Layer</a></p></li>
+</ol>
+<p>Taking the cosine warm-up learning rate (CosineWithWarmUpLR) as an example, the main parameters that need to be paid attention to are listed in the following table:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Value Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>type</p></td>
+<td><p>Type of learning rate to use.</p></td>
+<td><p>(str, required) - Such as <code class="docutils literal notranslate"><span class="pre">ConstantWarmUpLR</span></code>, <code class="docutils literal notranslate"><span class="pre">CosineWithWarmUpLR</span></code>, etc.</p></td>
+</tr>
+<tr class="row-odd"><td><p>learning_rate</p></td>
+<td><p>Initial value of learning rate.</p></td>
+<td><p>(float, required) - Default value: <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>warmup_steps</p></td>
+<td><p>Number of steps in the warmup phase.</p></td>
+<td><p>(int, optional) - Default value: <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>warmup_lr_init</p></td>
+<td><p>Initial learning rate in the warmup phase.</p></td>
+<td><p>(float, optional) - Default value: <code class="docutils literal notranslate"><span class="pre">0.0</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>warmup_ratio</p></td>
+<td><p>Ratio of warmup phase to total training steps.</p></td>
+<td><p>(float, optional) - Default value: <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>total_steps</p></td>
+<td><p>Total number of warmup steps.</p></td>
+<td><p>(int, optional) - Default value: <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>lr_end</p></td>
+<td><p>Final value of the learning rate.</p></td>
+<td><p>(float, optional) - Default value: <code class="docutils literal notranslate"><span class="pre">0.0</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+<p>In yaml file, the following configuration can be made, indicating that the cosine warmup learning rate with an initial value of 1e-5 is used, the total warmup steps are 20, and the warmup phase accounts for 1% of the total training steps:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># lr schedule</span>
+<span class="nt">lr_schedule</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CosineWithWarmUpLR</span>
+<span class="w">  </span><span class="nt">learning_rate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1e-5</span>
+<span class="w">  </span><span class="nt">warmup_lr_init</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0</span>
+<span class="w">  </span><span class="nt">warmup_ratio</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.01</span>
+<span class="w">  </span><span class="nt">warmup_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">  </span><span class="nt">total_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span><span class="w"> </span><span class="c1"># -1 means it will load the total steps of the dataset</span>
+</pre></div>
+</div>
+<p>For more details about the learning rate API (such as <code class="docutils literal notranslate"><span class="pre">type</span></code> configuration names and introductions to learning rate algorithms), please refer to the related links in the <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/mindformers.core.html#learning-rate">MindSpore Transformers API Documentation: Learning Rate</a>.</p>
+</section>
+<section id="grouped-learning-rate">
+<h3>Grouped Learning Rate<a class="headerlink" href="#grouped-learning-rate" title="Link to this heading"></a></h3>
+<p>Since different layers or parameters in a model have varying sensitivities to the learning rate, configuring different learning rate strategies for different parameters during training can improve training efficiency and performance. This helps avoid overfitting or insufficient training in certain parts of the network.</p>
+<p>To enable grouped learning rate functionality, configure the <code class="docutils literal notranslate"><span class="pre">grouped_lr_schedule</span></code> field in the configuration file. This configuration includes two configurable options: <code class="docutils literal notranslate"><span class="pre">default</span></code> and <code class="docutils literal notranslate"><span class="pre">grouped</span></code>.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Type</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>default</p></td>
+<td><p>The learning rate strategy for parameters that do not require grouping. The configuration contents are the same as the <code class="docutils literal notranslate"><span class="pre">lr_schedule</span></code> in <a class="reference internal" href="#dynamic-learning-rate">Dynamic Learning Rate</a>.</p></td>
+<td><p>dict</p></td>
+</tr>
+<tr class="row-odd"><td><p>grouped</p></td>
+<td><p>Each parameter group and its corresponding learning rate strategy configuration. Compared to the <code class="docutils literal notranslate"><span class="pre">lr_schedule</span></code> in [Dynamic Learning Rate] (#dynamic-learning-rate), an additional <code class="docutils literal notranslate"><span class="pre">params</span></code> parameter needs to be configured for each parameter group. The model’s parameters are matched using regex, and the corresponding learning rate strategy is applied.</p></td>
+<td><p>list</p></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<div><p>When both lr_schedule and grouped_lr_schedule are set, lr_schedule will not take effect.</p>
+</div></blockquote>
+<p>Here is an example of grouped learning rate configuration:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">grouped_lr_schedule</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">default</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LinearWithWarmUpLR</span>
+<span class="w">    </span><span class="nt">learning_rate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.e-5</span>
+<span class="w">    </span><span class="nt">warmup_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">    </span><span class="nt">total_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-1</span><span class="w"> </span><span class="c1"># -1 means it will load the total steps of the dataset</span>
+<span class="w">  </span><span class="nt">grouped</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LinearWithWarmUpLR</span>
+<span class="w">      </span><span class="nt">params</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;embedding.*&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;output_layer.weight&#39;</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">learning_rate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.5e-5</span>
+<span class="w">      </span><span class="nt">warmup_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">      </span><span class="nt">total_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-1</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConstantWarmUpLR</span>
+<span class="w">      </span><span class="nt">params</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;q_layernorm&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;kv_layernorm&#39;</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">learning_rate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.e-6</span>
+<span class="w">      </span><span class="nt">warmup_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">      </span><span class="nt">total_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-1</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="optimizer">
+<h2>Optimizer<a class="headerlink" href="#optimizer" title="Link to this heading"></a></h2>
+<section id="overview">
+<h3>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h3>
+<p>An optimizer is an algorithmic choice used for optimizing neural network weights during training by updating model weights to minimize the loss function.</p>
+<p>Selecting the right optimizer is crucial for the convergence speed and final performance of the model. Different optimizers employ various strategies to adjust the learning rate and other hyperparameters to accelerate the training process, improve convergence, and avoid local optima.</p>
+<p>MindSpore Transformers currently supports the following optimizers:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/mindformers.core.html#optimizer"><strong>AdamW Optimizer</strong></a></p></li>
+<li><p><strong>Muon Optimizer</strong></p></li>
+</ul>
+<p>These optimizers use different mathematical strategies—such as adaptive learning rates, momentum estimation, and direction normalization—to influence training stability, convergence characteristics, and final accuracy.</p>
+<p>Users can use the optimizer by adding an <code class="docutils literal notranslate"><span class="pre">optimizer</span></code> module to the YAML configuration file for model training.</p>
+<p>The following example is based on the <a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/example/deepseek3/pretrain_deepseek3_671b.yaml">DeepSeek-V3 pre-training’s YAML file</a>.</p>
+</section>
+<section id="adamw-optimizer">
+<h3>AdamW Optimizer<a class="headerlink" href="#adamw-optimizer" title="Link to this heading"></a></h3>
+<p>AdamW is an optimizer based on Adaptive Moment Estimation (Adam) with an improved decoupled weight decay formulation. It maintains first-order and second-order moment estimates of gradients to provide adaptive learning rates, enabling stable and efficient parameter updates during training.</p>
+<p>Thanks to its robustness and strong convergence behavior, AdamW is widely used in large-scale Transformer models, LLM pretraining, and architectures such as MoE. It remains one of the most commonly applied optimizers in modern deep learning systems.</p>
+<section id="yaml-example">
+<h4>YAML Example<a class="headerlink" href="#yaml-example" title="Link to this heading"></a></h4>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">optimizer</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AdamW</span>
+<span class="w">  </span><span class="nt">betas</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.9</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.95</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">eps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.e-8</span>
+<span class="w">  </span><span class="nt">weight_decay</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.01</span>
+</pre></div>
+</div>
+</section>
+<section id="key-parameters-introduction">
+<h4>Key Parameters Introduction<a class="headerlink" href="#key-parameters-introduction" title="Link to this heading"></a></h4>
+<p>For the main parameters of optimizer configuration, see the relevant link in <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/core/mindformers.core.AdamW.html#mindformers.core.AdamW">MindSpore Transformers API Documentation: Optimizer</a>.</p>
+</section>
+</section>
+<section id="muon-optimizer">
+<h3>Muon Optimizer<a class="headerlink" href="#muon-optimizer" title="Link to this heading"></a></h3>
+<p>Muon (Momentum Orthogonalized by Newton-Schulz) is a matrix-structured and geometry-aware optimizer designed for large-scale deep learning, especially LLM training. It optimizes 2D neural network parameters by first taking the updates produced by SGD with momentum. Then, it applies a Newton–Schulz iteration as a post-processing step to each update before applying it to the parameters. For details, see <a class="reference external" href="https://kellerjordan.github.io/posts/muon/">Muon Optimizer Documentation</a>.</p>
+<section id="id1">
+<h4>YAML Example<a class="headerlink" href="#id1" title="Link to this heading"></a></h4>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">optimizer</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Muon</span>
+<span class="w">  </span><span class="nt">adamw_betas</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.9</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.95</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">adamw_eps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.e-8</span>
+<span class="w">  </span><span class="nt">weight_decay</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.01</span>
+<span class="w">  </span><span class="nt">matched_adamw_rms</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.2</span>
+<span class="w">  </span><span class="nt">qk_clip_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
+</pre></div>
+</div>
+</section>
+<section id="id2">
+<h4>Key Parameters Introduction<a class="headerlink" href="#id2" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">adamw_betas</span></code> (list[float] or tuple[float], optional): Exponential decay rates for the first and second moment estimates, used to match AdamW’s momentum statistics. Each value must lie within (0.0, 1.0). Default: (0.95, 0.95).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">adamw_eps</span></code> (float, optional): A small constant added to the denominator to improve numerical stability. Must be greater than 0. Default: 1e-8.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">weight_decay</span></code> (float, optional): The coefficient for L2 weight decay, used to regularize parameters during optimization. Default: 0.1.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">matched_adamw_rms</span></code> (float, optional): Matches the RMS (root-mean-square) magnitude of AdamW updates to ensure compatible update scales—preventing instability from overly large steps and avoiding slow convergence from overly small steps. Default: 0.2.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">qk_clip_threshold</span></code> (float, optional): A clipping threshold applied to Q/K dot-product attention scores to prevent excessively large softmax inputs, which can cause numerical instability or gradient explosions. Default: 100.</p></li>
+</ul>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="dataset.html" class="btn btn-neutral float-left" title="Dataset" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="monitor.html" class="btn btn-neutral float-right" title="Training Metrics Monitoring" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

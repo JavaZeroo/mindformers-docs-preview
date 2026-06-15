@@ -1,0 +1,389 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>制作 MindSpore Transformers 的 Docker 镜像的实践案例 &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="使用DeepSeek-R1进行模型蒸馏的实践案例" href="distilled/distilled.html" />
+    <link rel="prev" title="优秀实践" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">介绍</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/quick_start.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">模型支持库</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">安装</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">安装指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">功能特性</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/overview.html">功能特性概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/start_task.html">启动任务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/configuration.html">配置文件说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/logging.html">日志</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/dataset.html">数据集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/training_hyperparameters.html">训练超参数与优化器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/save_and_load_checkpoint.html">权重保存与加载</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/resume_training.html">断点续训</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/monitor.html">训练指标监控与 Profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/static_graph_features.html">静态图实现特性</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">环境变量</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../env_variables.html">环境变量说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">贡献指南</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers贡献指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">魔乐社区贡献指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">模型相关 FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">功能相关 FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">静态图实现（Deprecated）</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">大模型全流程指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/index.html">功能特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_development/index.html">高阶开发</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">优秀实践</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">制作 MindSpore Transformers 的 Docker 镜像的实践案例</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">环境准备</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id2">系统要求</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">工具安装</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">基础镜像选择</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">镜像构建步骤</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id6">参数说明</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">验证构建</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">使用示例</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id9">启动开发容器</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id10">安全风险</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id11">参考资源</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="distilled/distilled.html">使用DeepSeek-R1进行模型蒸馏的实践案例</a></li>
+<li class="toctree-l2"><a class="reference internal" href="convert_ckpt_to_megatron/convert_ckpt_to_megatron.html">转换模型权重为Megatron模型权重的实践案例</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_test/model_test.html">MindSpore Transformers对接通用评测工具的实践案例</a></li>
+<li class="toctree-l2"><a class="reference internal" href="finetune_with_glm4/finetune_with_glm4.html">使用GLM4-9B进行多卡模型微调的实践案例</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">环境变量说明</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">优秀实践</a></li>
+      <li class="breadcrumb-item active">制作 MindSpore Transformers 的 Docker 镜像的实践案例</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/example/docker-installation.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">已废弃（Deprecated）</p>
+<p>本页属于 <strong>静态图（GRAPH_MODE）实现</strong> 章节，已标记为废弃。新特性优先在「r2.0.0 动态图实现」章节演进，请优先查阅动态图相关文档。</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="mindspore-transformers-docker">
+<h1>制作 MindSpore Transformers 的 Docker 镜像的实践案例<a class="headerlink" href="#mindspore-transformers-docker" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/static_graph/example/docker-installation.md"><img alt="查看源文件" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source.svg" /></a></p>
+<p>本案例将分享构建 <strong>MindSpore Transformers</strong> 的 Docker 镜像的实践，开发者可以参考本案例构建自己的镜像。</p>
+<blockquote>
+<div><p>本案例提供制作镜像的方案和软件包均来源于开源社区，仅供参考。用户参考本案例制作的镜像，如需用于生产环境部署等商用行为，需自行保障镜像的可靠性、安全性等，MindSpore Transformers 不对其网络安全性负责，请在可信的环境中使用。</p>
+</div></blockquote>
+<section id="id1">
+<h2>环境准备<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<p>在构建镜像前，需要准备主机环境，包括硬件、软件和网络。这一步确保构建顺利进行。</p>
+<section id="id2">
+<h3>系统要求<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>硬件要求</strong>：宿主机需安装 NPU 驱动和固件。参考文档：<a class="reference external" href="https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/82RC1/softwareinst/instg/instg_0005.html?Mode=DockerIns&amp;InstallType=local&amp;OS=Debian&amp;Software=cannToolKit">昇腾社区-安装NPU驱动和固件</a>。</p></li>
+<li><p><strong>软件要求</strong>：Docker 版本：<code class="docutils literal notranslate"><span class="pre">26.1.4</span></code>或更高版本；</p></li>
+<li><p><strong>网络要求</strong>：稳定的互联网连接；能访问华为云（下载 CANN、MindSpore 等）；网络慢时，构建时间会延长。</p></li>
+</ul>
+<blockquote>
+<div><p>确保主机时间和时区正确，以避免下载问题。</p>
+</div></blockquote>
+</section>
+</section>
+<section id="id3">
+<h2>工具安装<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<p>验证安装以下工具：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>--version
+</pre></div>
+</div>
+<p>若没有显示版本信息，请根据官方指导安装：</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://docs.docker.com/engine/install/">Docker 官方安装教程</a></p></li>
+</ul>
+</section>
+<section id="id4">
+<h2>基础镜像选择<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>本案例 Dockerfile 使用 <code class="docutils literal notranslate"><span class="pre">ubuntu:24.04</span></code> 作为基础镜像</p></li>
+<li><p>采用 <strong>多阶段构建</strong>：</p>
+<ol class="arabic simple">
+<li><p>第一阶段安装 Python</p></li>
+<li><p>第二阶段安装 CANN</p></li>
+<li><p>最终阶段安装 MindSpore 和 MindSpore Transformers，并整合结果</p></li>
+</ol>
+</li>
+</ul>
+<p>这样可以减少最终镜像大小，并提高构建效率。</p>
+<p>Dockerfile的内容可参考<a class="reference external" href="https://atomgit.com/mindspore/mindformers/issues/2231">社区 issue</a></p>
+<p>并将其中的Dockerfile保存到本地。</p>
+</section>
+<section id="id5">
+<h2>镜像构建步骤<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
+<p>根据以下内容构建 <strong>MindSpore Transformers</strong> 镜像：</p>
+<ul>
+<li><p>创建文件夹</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># 创建并进入存放 Dockerfile 的目录</span>
+mkdir<span class="w"> </span>-p<span class="w"> </span>mindformers-Dockerfiles
+<span class="nb">cd</span><span class="w"> </span>mindformers-Dockerfiles
+</pre></div>
+</div>
+</li>
+<li><p>将Dockerfile保存到以下目录：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>mindformers-Dockerfiles/
+└── Dockerfile
+</pre></div>
+</div>
+</li>
+<li><p>运行 Docker 构建命令</p>
+<p>通用指令如下：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 开始构建镜像</span>
+docker<span class="w"> </span>build<span class="w"> </span>-f<span class="w"> </span>Dockerfile<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--build-arg<span class="w"> </span><span class="nv">PYTHON_VERSION</span><span class="o">=</span><span class="s2">&quot;Python版本&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--build-arg<span class="w"> </span><span class="nv">CANN_TOOLKIT_URL</span><span class="o">=</span><span class="s2">&quot;CANN toolkit 下载链接&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--build-arg<span class="w"> </span><span class="nv">CANN_KERNELS_URL</span><span class="o">=</span><span class="s2">&quot;CANN kernels 下载链接&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--build-arg<span class="w"> </span><span class="nv">MS_WHL_URL</span><span class="o">=</span><span class="s2">&quot;MindSpore whl包下载链接&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--build-arg<span class="w"> </span><span class="nv">MINDFORMERS_GIT_REF</span><span class="o">=</span><span class="s2">&quot;MindSpore Transformers代码仓库分支名称&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-t<span class="w"> </span><span class="s2">&quot;镜像名称:标签&quot;</span><span class="w"> </span>.
+</pre></div>
+</div>
+<p>MindSpore Transformers 1.8.0 版本示例如下：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 开始构建镜像，这里的标签命名方式仅作参考，包含了版本信息便于管理</span>
+docker<span class="w"> </span>build<span class="w"> </span>-f<span class="w"> </span>Dockerfile<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--build-arg<span class="w"> </span><span class="nv">PYTHON_VERSION</span><span class="o">=</span><span class="s2">&quot;3.11.4&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--build-arg<span class="w"> </span><span class="nv">CANN_TOOLKIT_URL</span><span class="o">=</span><span class="s2">&quot;https://ascend-repo.obs.cn-east-2.myhuaweicloud.com/CANN/CANN%208.5.0/Ascend-cann-toolkit_8.5.0_linux-aarch64.run&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--build-arg<span class="w"> </span><span class="nv">CANN_KERNELS_URL</span><span class="o">=</span><span class="s2">&quot;https://ascend-repo.obs.cn-east-2.myhuaweicloud.com/CANN/CANN%208.5.0/Ascend-cann-910b-ops_8.5.0_linux-aarch64.run&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--build-arg<span class="w"> </span><span class="nv">MS_WHL_URL</span><span class="o">=</span><span class="s2">&quot;https://ms-release.obs.cn-north-4.myhuaweicloud.com/2.7.2/MindSpore/unified/aarch64/mindspore-2.7.2-cp311-cp311-linux_aarch64.whl&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--build-arg<span class="w"> </span><span class="nv">MINDFORMERS_GIT_REF</span><span class="o">=</span><span class="s2">&quot;r1.8.0&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-t<span class="w"> </span><span class="s2">&quot;mindformers:r1.8.0_ms2.7.2_cann8.5.0_py3.11&quot;</span><span class="w"> </span>.
+</pre></div>
+</div>
+</li>
+</ul>
+<section id="id6">
+<h3>参数说明<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>参数</p></th>
+<th class="head"><p>说明</p></th>
+<th class="head"><p>获取地址</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PYTHON_VERSION</span></code></p></td>
+<td><p>Python 版本</p></td>
+<td><p><a class="reference external" href="https://www.python.org/downloads/">Python 官网</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CANN_TOOLKIT_URL</span></code></p></td>
+<td><p>CANN toolkit包下载地址</p></td>
+<td><p><a class="reference external" href="https://www.hiascend.com/developer/download/community/result?module=cann">昇腾社区下载页</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CANN_KERNELS_URL</span></code></p></td>
+<td><p>CANN kernels包下载地址</p></td>
+<td><p><a class="reference external" href="https://www.hiascend.com/developer/download/community/result?module=cann">昇腾社区下载页</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">MS_WHL_URL</span></code></p></td>
+<td><p>MindSpore wheel 包地址</p></td>
+<td><p><a class="reference external" href="https://repo.mindspore.cn/pypi/simple/mindspore/">MindSpore PyPI</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MINDFORMERS_GIT_REF</span></code></p></td>
+<td><p>MindFormers 分支名称，会自动checkout到对应分支</p></td>
+<td><p><a class="reference external" href="https://atomgit.com/mindspore/mindformers">MindFormers 仓库</a></p></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<div><p>构建过程可能需要 30 分钟左右，取决于网络速度和硬件性能。</p>
+</div></blockquote>
+</section>
+</section>
+<section id="id7">
+<h2>验证构建<a class="headerlink" href="#id7" title="Link to this heading"></a></h2>
+<p>查看镜像是否成功：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 查找特定镜像</span>
+docker<span class="w"> </span>images<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>mindformers
+</pre></div>
+</div>
+<p>示例：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>REPOSITORY    TAG                                IMAGE ID       CREATED        SIZE
+mindformers   r1.8.0_ms2.7.2_cann8.5.0_py3.11    67fa2e821694   19 hours ago   14GB
+</pre></div>
+</div>
+</section>
+<section id="id8">
+<h2>使用示例<a class="headerlink" href="#id8" title="Link to this heading"></a></h2>
+<section id="id9">
+<h3>启动开发容器<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>-itd<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--hostname<span class="w"> </span><span class="k">$(</span>hostname<span class="w"> </span>-I<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $1}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tr<span class="w"> </span><span class="s1">&#39;.&#39;</span><span class="w"> </span><span class="s1">&#39;-&#39;</span><span class="k">)</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--ipc<span class="o">=</span>host<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--network<span class="o">=</span>host<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--device<span class="o">=</span>/dev/davinci0:rwm<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--device<span class="o">=</span>/dev/davinci1:rwm<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--device<span class="o">=</span>/dev/davinci2:rwm<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--device<span class="o">=</span>/dev/davinci3:rwm<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--device<span class="o">=</span>/dev/davinci4:rwm<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--device<span class="o">=</span>/dev/davinci5:rwm<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--device<span class="o">=</span>/dev/davinci6:rwm<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--device<span class="o">=</span>/dev/davinci7:rwm<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--device<span class="o">=</span>/dev/davinci_manager:rwm<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--device<span class="o">=</span>/dev/devmm_svm:rwm<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--device<span class="o">=</span>/dev/hisi_hdc:rwm<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-v<span class="w"> </span>/usr/local/dcmi:/usr/local/dcmi<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-v<span class="w"> </span>/var/log/npu/:/usr/slog<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-v<span class="w"> </span>/usr/local/bin/npu-smi:/usr/local/bin/npu-smi<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-v<span class="w"> </span>/usr/bin/hccn_tool:/usr/bin/hccn_tool<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-v<span class="w"> </span>/usr/local/Ascend/driver/lib64/common:/usr/local/Ascend/driver/lib64/common<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-v<span class="w"> </span>/usr/local/Ascend/driver/lib64/driver:/usr/local/Ascend/driver/lib64/driver<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-v<span class="w"> </span>/usr/local/Ascend/driver/version.info:/usr/local/Ascend/driver/version.info<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-v<span class="w"> </span>/etc/ascend_install.info:/etc/ascend_install.info<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-v<span class="w"> </span>/etc/hccn.conf:/etc/hccn.conf<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-v<span class="w"> </span>/etc/localtime:/etc/localtime<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--name<span class="w"> </span>容器名称<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>镜像名称<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>/bin/bash
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id10">
+<h2>安全风险<a class="headerlink" href="#id10" title="Link to this heading"></a></h2>
+<p>在使用 Docker 容器运行 MindSpore Transformers 时，需要注意以下安全风险：</p>
+<ul class="simple">
+<li><p><strong>使用 root 用户运行</strong>：容器默认以 root 用户身份运行，可能带来安全隐患。建议在生产环境中创建非特权用户来运行应用程序。</p></li>
+<li><p><strong>缺少 CPU 和内存资源限制</strong>：未设置资源限制可能导致容器消耗过多系统资源，影响宿主机性能。建议使用 <code class="docutils literal notranslate"><span class="pre">--cpus</span></code> 和 <code class="docutils literal notranslate"><span class="pre">--memory</span></code> 参数限制资源使用。</p></li>
+<li><p><strong>设备使用 <code class="docutils literal notranslate"><span class="pre">rwm</span></code> 权限</strong>：为 NPU 设备分配了读写和 mknod 权限，虽然功能运行需要，但在安全敏感环境中应谨慎评估权限范围。</p></li>
+</ul>
+<blockquote>
+<div><p>在生产环境部署时，请根据实际安全要求调整容器配置，确保系统安全性。</p>
+</div></blockquote>
+</section>
+<section id="id11">
+<h2>参考资源<a class="headerlink" href="#id11" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.mindspore.cn">MindSpore 官网</a></p></li>
+<li><p><a class="reference external" href="https://atomgit.com/mindspore/mindformers">MindSpore Transformers 仓库</a></p></li>
+<li><p><a class="reference external" href="https://docs.docker.com">Docker 官方文档</a></p></li>
+<li><p><a class="reference external" href="https://www.hiascend.com/developer">Ascend 社区</a></p></li>
+<li><p><a class="reference external" href="https://atomgit.com/mindspore/community">MindSpore 社区</a></p></li>
+<li><p><a class="reference external" href="https://gitee.com/mindspore/mindformers/issues/ICQ9JF">相关 issue</a></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="优秀实践" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="distilled/distilled.html" class="btn btn-neutral float-right" title="使用DeepSeek-R1进行模型蒸馏的实践案例" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

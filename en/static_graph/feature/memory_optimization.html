@@ -1,0 +1,540 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Memory Optimization &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Data Skip And Checkpoint Health Monitor" href="skip_data_and_ckpt_health_monitor.html" />
+    <link rel="prev" title="Training High Availability" href="high_availability.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">Models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contribution Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">Modelers Contribution Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">Model-Related FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">Feature-Related FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Static Graph Implementation (Deprecated)</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Full-process Guide to Large Models</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Features</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">Features Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="start_tasks.html">Start Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ckpt.html">Ckpt Weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="safetensors.html">Safetensors Weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">Configuration File Descriptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="load_huggingface_config.html">Loading Hugging Face Model Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html">Logs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tokenizer.html">Using Tokenizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset.html">Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training_hyperparameters.html">Training Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monitor.html">Training Metrics Monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training.html">Resumable Training After Breakpoint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoint_saving_and_loading.html">Checkpoint Saving and Loading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training2.0.html">Resume Training2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel_training.html">Distributed Parallelism Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="high_availability.html">Training High Availability</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Memory Optimization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#recomputation">Recomputation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#configuration-and-usage">Configuration and Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#fine-grained-activations-swap">Fine-Grained Activations SWAP</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#instruction-for-use">Instruction for Use</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cases-of-fine-grained-activations-swap">Cases of Fine-Grained Activations SWAP</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="skip_data_and_ckpt_health_monitor.html">Data Skip And Checkpoint Health Monitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pma_fused_checkpoint.html">Pre-trained Model Average Weight Consolidation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="other_training_features.html">Other Training Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantization.html">Quantization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_development/index.html">Advanced Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">Excellent Practice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">Environment Variable Descriptions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Features</a></li>
+      <li class="breadcrumb-item active">Memory Optimization</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/feature/memory_optimization.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">Deprecated</p>
+<p>This page belongs to the <strong>Static Graph (GRAPH_MODE) Implementation</strong> section and has been marked as deprecated. New features are primarily being developed in the “r2.0.0 Dynamic Graph Implementation” section. Please refer to the dynamic graph documentation first.</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="memory-optimization">
+<h1>Memory Optimization<a class="headerlink" href="#memory-optimization" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_en/static_graph/feature/memory_optimization.md"><img alt="View Source on AtomGit" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source_en.svg" /></a></p>
+<section id="recomputation">
+<h2>Recomputation<a class="headerlink" href="#recomputation" title="Link to this heading"></a></h2>
+<section id="overview">
+<h3>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h3>
+<p>Recomputation can significantly reduce activation memory usage during training but at the cost of additional computations. For more information about the principles of recalculation and framework measurement capabilities, please refer to <a class="reference external" href="https://www.mindspore.cn/tutorials/en/master/parallel/recompute.html">MindSpore Tutorial Document: Recompute</a>.</p>
+</section>
+<section id="configuration-and-usage">
+<h3>Configuration and Usage<a class="headerlink" href="#configuration-and-usage" title="Link to this heading"></a></h3>
+<section id="yaml-parameter-configuration">
+<h4>YAML Parameter Configuration<a class="headerlink" href="#yaml-parameter-configuration" title="Link to this heading"></a></h4>
+<p>Users can enable recomputation by adding a <code class="docutils literal notranslate"><span class="pre">recompute_config</span></code> module to the YAML configuration file used for model training.</p>
+<p>Taking the <a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/example/deepseek3/pretrain_deepseek3_671b.yaml">DeepSeek-V3 pre-training’s YAML file</a> as an example, it could be configured as follows:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># recompute config</span>
+<span class="nt">recompute_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">recompute</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">3</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">4</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">4</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">4</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">4</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">4</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">4</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">4</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">4</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">4</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">4</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">4</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">4</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">3</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">select_recompute</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">parallel_optimizer_comm_recompute</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">mp_comm_recompute</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">recompute_slice_activation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+</div>
+<p>For specific configurations targeting individual layers, a tuple-based approach can be used.</p>
+<p>For instance, with a network having 48 layers, pp_interleave_num set to 2, pipeline_stage set to 5, and offset configured as [[0,1,1,1,1],[1,1,1,1,0]], the recomputation configuration would look like this:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># recompute config</span>
+<span class="nt">recompute_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">recompute</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[[</span><span class="nv">2</span><span class="p p-Indicator">,</span><span class="nv">1</span><span class="p p-Indicator">,</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="nv">0</span><span class="p p-Indicator">],[</span><span class="nv">1</span><span class="p p-Indicator">,</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="nv">0</span><span class="p p-Indicator">]]</span>
+<span class="w">  </span><span class="nt">select_recompute</span><span class="p">:</span>
+<span class="w">    </span><span class="s">&#39;feed_forward\.w1\.activation\.silu&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">    </span><span class="s">&#39;feed_forward\.mul&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">    </span><span class="s">&#39;feed_forward\.w1\.matmul&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">[[</span><span class="nv">1</span><span class="p p-Indicator">,</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="nv">0</span><span class="p p-Indicator">],[</span><span class="nv">2</span><span class="p p-Indicator">,</span><span class="nv">1</span><span class="p p-Indicator">,</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="nv">0</span><span class="p p-Indicator">]]</span>
+<span class="w">    </span><span class="s">&#39;feed_forward\.w3\.matmul&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">2</span><span class="p p-Indicator">,</span><span class="nv">1</span><span class="p p-Indicator">,</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="nv">0</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">select_comm_recompute</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;ffn_norm\.norm&#39;</span><span class="p p-Indicator">,</span><span class="s">&#39;attention_norm\.norm&#39;</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+<p>The log will print the recalculation strategy information after normalizing the input format:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>INFO - Formative layer_recompute: [[2, 1, 0, 0, 0], [1, 0, 0, 0, 0]]
+INFO - Formative select_recompute: {&#39;feed_forward\.w1\.activation\.silu&#39;: [[4, 5, 5, 5, 5], [5, 5, 5, 5, 4]], &#39;feed_forward\.mul&#39;: [[4, 5, 5, 5, 5], [5, 5, 5, 5, 4]], &#39;feed_forward\.w1\.matmul&#39;: [[1, 0, 0, 0, 0], [2, 1, 0, 0, 0]], &#39;feed_forward\.w3\.matmul&#39;: [[1, 1, 0, 0, 0], [1, 0, 0, 0, 0]]}
+INFO - Formative select_comm_recompute: {&#39;ffn_norm\.norm&#39;: [[4, 5, 5, 5, 5], [5, 5, 5, 5, 4]], &#39;attention_norm\.norm&#39;: [[4, 5, 5, 5, 5], [5, 5, 5, 5, 4]]}
+</pre></div>
+</div>
+<p>Then the configuration of each layer recompute will be printed.</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>If both full recomputation and selective recomputation are configured for a layer, full recomputation takes effect.</p></li>
+<li><p>Integers in a one-dimensional integer list or tuple can be replaced with True or False to enable or disable recomputation for all layers.</p></li>
+</ol>
+</div></blockquote>
+</section>
+<section id="key-parameters-introduction">
+<h4>Key Parameters Introduction<a class="headerlink" href="#key-parameters-introduction" title="Link to this heading"></a></h4>
+<p>The main parameters for recomputation configuration are listed in the following table:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Value Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>recompute</p></td>
+<td><p>(By layer) Full recompute.</p></td>
+<td><p>Can be configured as bool, list or tuple of integers, or 2D list or tuple. <br>When configured as bool type, turn on or off full recompute for all layers; <br>When configured as list or tuple of integers, it indicates how many layers in each <code class="docutils literal notranslate"><span class="pre">pipeline_stage</span></code> have full recompute enabled. When <code class="docutils literal notranslate"><span class="pre">pp_interleave_num</span> <span class="pre">&gt;</span> <span class="pre">1</span></code>, the number of recompute layers enabled will be evenly distributed to each interleave; <br>When configured as a 2D list or tuple of integers, it indicates how many layers in each mini stage have full recompute enabled.</p></td>
+</tr>
+<tr class="row-odd"><td><p>select_recompute</p></td>
+<td><p>(By operator) Select recompute.</p></td>
+<td><p>Can be configured as bool, list or tuple of integers, or two-dimensional list or tuple, list or tuple of strings, and dict. <br>The default selection recalculation operator is <code class="docutils literal notranslate"><span class="pre">['feed_forward\\.mul',</span> <span class="pre">'feed_forward\\.w1\\.activation\\.silu']</span></code> . <br>When configured as bool type, it turns on or off the selection recalculation of the default operator for all layers; <br>When configured as an integer list or tuple, it represents how many layers in each <code class="docutils literal notranslate"><span class="pre">pipeline_stage</span></code> turn on the selection recalculation of the default operator. When <code class="docutils literal notranslate"><span class="pre">pp_interleave_num</span> <span class="pre">&gt;</span> <span class="pre">1</span></code>, the number of selection recalculation layers turned on will be evenly distributed to each interleave; <br>When configured as an integer two-dimensional list or tuple, it represents how many layers in each mini stage turn on the selection recalculation of the default operator. <br>When configured as a string list or tuple, it indicates which operators are enabled for selective recomputation. The operator names are matched by regular expressions, and the hierarchical relationships are separated by <code class="docutils literal notranslate"><span class="pre">'\\.'</span></code>; <br>When configured as a dict, the key value corresponds to the operator name, and the value corresponds to the configuration method for selective recomputation. This method can fine-tune the recomputation strategy for each operator.</p></td>
+</tr>
+<tr class="row-even"><td><p>select_comm_recompute</p></td>
+<td><p>Select communication recomputation (by operator).</p></td>
+<td><p>The configuration method is the same as <strong>select_recompute</strong>. The default selection of communication recomputation operators is <code class="docutils literal notranslate"><span class="pre">['.*\\.norm']</span></code> . Generally, it is only configured for layer_norm or similar layers.</p></td>
+</tr>
+<tr class="row-odd"><td><p>parallel_optimizer_comm_recompute</p></td>
+<td><p>Optimizer parallel communication recomputation. Whether to recompute AllGather communication in optimizer parallelism.</p></td>
+<td><p>(bool, optional) - After enabling, in automatic parallelism or semi-automatic parallelism mode, specify whether AllGather communication introduced by optimizer parallelism in Cell is recomputed. Default value: <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>mp_comm_recompute</p></td>
+<td><p>Model parallel communication recomputation, whether to recompute communication operators in model parallelism.</p></td>
+<td><p>(bool, optional) - After turning on, in automatic parallelism or semi-automatic parallelism mode, specify whether to recompute the communication operations introduced by model parallelism in the cell. Default value: <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>recompute_slice_activation</p></td>
+<td><p>Slice recomputation, whether to slice the cell output that will be kept in memory. This parameter is only supported in Legacy models.</p></td>
+<td><p>(bool, optional) - Default value: <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+<section id="fine-grained-activations-swap">
+<h2>Fine-Grained Activations SWAP<a class="headerlink" href="#fine-grained-activations-swap" title="Link to this heading"></a></h2>
+<section id="id1">
+<h3>Overview<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<p>In traditional large-scale model training tasks, the memory resources of computing cards often become a bottleneck. Although adopting larger-scale model parallel (mp) and pipeline parallel (pp) can alleviate the memory pressure on individual computing cards to some extent, it requires larger-scale cluster resources, and excessive communication can significantly reduce the model’s Model FLOPs Utilization (MFU). Under limited cluster resources, recomputation is another effective method to mitigate memory pressure. It reduces the memory footprint of activations by discarding the storage of activation values during the forward propagation phase and recomputing the required activation values during gradient backpropagation. However, since recomputation introduces additional computational overhead, this method also significantly decreases the MFU of model training.</p>
+<p>Against this backdrop, fine-grained activations SWAP can provide a third effective approach to reduce memory usage while offering greater end-to-end performance advantages. Specifically, SWAP offloads activations that need to be stored long-term to the host side during the forward propagation phase and prefetches them back to the device side in advance when they are needed during backpropagation. In terms of resource utilization, fine-grained activations SWAP leverages D2H/H2D bandwidth, which can overlap with computation tasks and D2D communication tasks during training, thereby masking the overhead of memory transfers.</p>
+<p>The fine-grained activations SWAP technology offers high flexibility in usage. During the forward propagation phase of large model training, multiple activations of varying data sizes are generated, allowing users to swap specific activations at the granularity of the operator selectively. When the model type or configuration changes, users can flexibly adjust the corresponding SWAP strategy to minimize memory overhead and achieve optimal performance.</p>
+</section>
+<section id="instruction-for-use">
+<h3>Instruction for Use<a class="headerlink" href="#instruction-for-use" title="Link to this heading"></a></h3>
+<section id="constraint-scenarios">
+<h4>Constraint Scenarios<a class="headerlink" href="#constraint-scenarios" title="Link to this heading"></a></h4>
+<ul>
+<li><p>Only support static graph O0/O1 mode</p></li>
+<li><p>Somas does not support heterogeneity and needs to be set in the configuration file:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">context</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">memory_optimize_level</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">O0</span>
+</pre></div>
+</div>
+</li>
+<li><p>Only support Ascend backend</p></li>
+</ul>
+</section>
+<section id="instruction-for-api">
+<h4>Instruction for API<a class="headerlink" href="#instruction-for-api" title="Link to this heading"></a></h4>
+<p>Fine-grained activations SWAP is enabled through the <code class="docutils literal notranslate"><span class="pre">model_config</span></code> field in YAML configuration, which includes four functional interfaces: <code class="docutils literal notranslate"><span class="pre">cpu_offloading</span></code>, <code class="docutils literal notranslate"><span class="pre">default_prefetch</span></code>, <code class="docutils literal notranslate"><span class="pre">cpu_offloading_num_layers</span></code>, and <code class="docutils literal notranslate"><span class="pre">op_swap</span></code>. These interfaces allow users to flexibly enable SWAP for specific layers or specific operators within layers.</p>
+<blockquote>
+<div><p>This document mainly introduces the configuration method for Mcore models, with configuration items located under the <code class="docutils literal notranslate"><span class="pre">model_config</span></code> field. If using Legacy models, configuration items are located under the <code class="docutils literal notranslate"><span class="pre">swap_config</span></code> field with different parameter names. For specific configuration parameters, please refer to the Legacy configuration table in <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/configuration.html#model-optimization-configuration">Configuration File Descriptions</a>.</p>
+<p>MindSpore framework currently decouples memory offloading and memory release. When activations are offloaded from the device side to the host side, the memory space occupied on the device side is not immediately released even after all data has been transferred. An explicit release operation is required instead. Before triggering the memory release, the system checks whether the activation offloading is complete. If not, the process will wait in place until the offloading finishes.</p>
+</div></blockquote>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>Configuration Item</p></th>
+<th class="head text-center"><p>Type</p></th>
+<th class="head text-left"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p>cpu_offloading</p></td>
+<td class="text-center"><p>bool</p></td>
+<td class="text-left"><p>Default False. When set to False, all four functional interfaces are disabled. When set to True, activations SWAP is enabled, and the system checks whether cpu_offloading_num_layers and op_swap are None. If both are None, the default SWAP strategy is applied, which enables SWAP for the flash_attention operator across all layers. If either cpu_offloading_num_layers or op_swap has a non-None value, the default policy is overridden, and SWAP is enabled according to the configurations in cpu_offloading_num_layers and op_swap.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>default_prefetch</p></td>
+<td class="text-center"><p>int</p></td>
+<td class="text-left"><p>Default 1 and only takes effect when cpu_offloading=True, cpu_offloading_num_layers=None, and op_swap=None. It controls the timing of releasing memory in the forward phase and starting prefetch in the backward phase of the default SWAP strategy. A larger <code class="docutils literal notranslate"><span class="pre">default_prefetch</span></code> delays memory release during the forward phase. This keeps device memory occupied by activations locked for an extended period after offloading, preventing reuse by other data blocks. It also starts prefetching earlier from host to device during the backward phase, which applies memory pressure prematurely. A smaller <code class="docutils literal notranslate"><span class="pre">default_prefetch</span></code> releases memory earlier in the forward phase but may introduce idle waiting for copy operations to complete. Additionally, delayed prefetch in the backward phase may cause computation stalls if prefetching isn’t finished before activation usage, impacting end-to-end performance. This interface allows users to fine-tune memory release and prefetch timing for optimal memory efficiency and performance.</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>cpu_offloading_num_layers</p></td>
+<td class="text-center"><p>list</p></td>
+<td class="text-left"><p>Default None. When set to None, this interface is inactive. When the type is List, this interface contains several list elements of the Dict type. Each Dict element contains two keys: <code class="docutils literal notranslate"><span class="pre">backward_prefetch</span></code>, and <code class="docutils literal notranslate"><span class="pre">layers</span></code>, and provides the prefetch opportunity and layer index for enabling swap.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>op_swap</p></td>
+<td class="text-center"><p>list</p></td>
+<td class="text-left"><p>Default None. When set to None, this interface is inactive. When the type is List, this interface contains several list elements of the Dict type. Each Dict element contains three keys: <code class="docutils literal notranslate"><span class="pre">op_name</span></code>, <code class="docutils literal notranslate"><span class="pre">backward_prefetch</span></code>, and <code class="docutils literal notranslate"><span class="pre">layers</span></code>, and provides the prefetch opportunity, operator name, and layer index for enabling swap.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="used-together-with-recomputation">
+<h4>Used together with Recomputation<a class="headerlink" href="#used-together-with-recomputation" title="Link to this heading"></a></h4>
+<p>Fine-Grained Activations SWAP and Recomputation have coupling effects:</p>
+<ol class="arabic simple">
+<li><p>If any operator has both recomputation and SWAP enabled simultaneously, recomputation will take effect while SWAP will not.</p></li>
+<li><p>For any operator with SWAP enabled, if its output is used by an operator with recomputation enabled, then SWAP for that operator will not take effect.</p></li>
+<li><p>The YAML configuration interface for recomputation only supports enabling recomputation for a specific number of layers sequentially from front to back, rather than selecting specific layers or specific operators within layers. This means when using both SWAP and recomputation together, SWAP can only be enabled for later layers or operators within later layers, preventing full utilization of SWAP’s benefits. Therefore, when and only when <code class="docutils literal notranslate"><span class="pre">cpu_offloading=True</span></code>, the recomputation interface functionality will be adjusted as shown in the table below.</p></li>
+</ol>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>Interface Name</p></th>
+<th class="head text-left"><p>Original Functionality</p></th>
+<th class="head text-left"><p>Functionality When Enabling SWAP</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p>recompute</p></td>
+<td class="text-left"><p>Determine the number of layers with recomputation enabled in each pipeline stage.</p></td>
+<td class="text-left"><p>Pipeline stage-agnostic, only accepts bool/list type inputs. When bool type: enables recomputation for all layers; when list type: uses layer indices to enable recomputation for specific layers.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>select_recompute</p></td>
+<td class="text-left"><p>Determine the number of layers with recomputation enabled for specific operators in each pipeline stage.</p></td>
+<td class="text-left"><p>Pipeline stage-agnostic, for each operator’s key-value pair, only accepts bool/list type inputs. When bool type: enables recomputation for all layers; when list type: uses layer indices to enable recomputation for specific layers.</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>select_comm_recompute</p></td>
+<td class="text-left"><p>Determine the number of layers with recomputation enabled for communication operators in each pipeline stage.</p></td>
+<td class="text-left"><p>Pipeline stage-agnostic, only accepts bool/list type inputs. When bool type: enables recomputation for all layers; when list type: uses layer indices to enable recomputation for specific layers.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="cases-of-fine-grained-activations-swap">
+<h3>Cases of Fine-Grained Activations SWAP<a class="headerlink" href="#cases-of-fine-grained-activations-swap" title="Link to this heading"></a></h3>
+<p>This section demonstrates the usage of fine-grained activations SWAP using <a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/example/deepseek3/pretrain_deepseek3_671b.yaml">DeepSeek-V3 pre-training’s YAML file</a> as an example.</p>
+<section id="environmental-preparation">
+<h4>Environmental Preparation<a class="headerlink" href="#environmental-preparation" title="Link to this heading"></a></h4>
+<p>Download MindSpore Transformers, and prepare the pre-training dataset, such as wikitext.</p>
+</section>
+<section id="case-1-default-swap-strategy">
+<h4>Case 1: Default SWAP Strategy<a class="headerlink" href="#case-1-default-swap-strategy" title="Link to this heading"></a></h4>
+<p>Modify and supplement the recomputation and SWAP configurations in YAML as follows:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">context</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">memory_optimize_level</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;O0&quot;</span>
+<span class="nt">model</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">model_config</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">num_layers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">    </span><span class="nt">cpu_offloading</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">    </span><span class="nt">default_prefetch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="nt">recompute_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">recompute</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">select_recompute</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">select_comm_recompute</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+</pre></div>
+</div>
+<p>Execute the following script to launch single-node 8-NPU training, with the script’s execution path being the root directory, requiring the user to specify the YAML file path(machine_ip needs to fill in the local environment IP address):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">GLOG_v</span><span class="o">=</span><span class="m">1</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MS_MEMORY_STATISTIC</span><span class="o">=</span><span class="m">1</span>
+<span class="nv">YAML_FILE</span><span class="o">=</span><span class="nv">$1</span><span class="w"> </span><span class="c1"># User specifies the YAML file path.</span>
+<span class="nv">ROOT_PATH</span><span class="o">=</span><span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>
+
+bash<span class="w"> </span>./scripts/msrun_launcher.sh<span class="w"> </span><span class="s2">&quot;run_mindformer.py \</span>
+<span class="s2">    --config </span><span class="si">${</span><span class="nv">ROOT_PATH</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">YAML_FILE</span><span class="si">}</span><span class="s2"> \</span>
+<span class="s2">    --run_mode train \</span>
+<span class="s2">    --use_parallel True&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="m">8</span><span class="w"> </span><span class="m">8</span><span class="w"> </span>&lt;machine_ip&gt;<span class="w"> </span><span class="m">8118</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>output/msrun<span class="w"> </span>False<span class="w"> </span><span class="m">300</span>
+</pre></div>
+</div>
+<p>After training completes, execute the command <code class="docutils literal notranslate"><span class="pre">cat</span> <span class="pre">output/msrun/worker_0.log</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">'attention.flash_attention'</span></code> to check the execution status of the default SWAP strategy:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>-INFO - Set op_swap at layer 0: attention.flash_attention, value=10
+-INFO - Set op_swap at layer 1: attention.flash_attention, value=10
+-INFO - Set op_swap at layer 2: attention.flash_attention, value=10
+-INFO - Set op_swap at layer 3: attention.flash_attention, value=10
+</pre></div>
+</div>
+<p>The default SWAP strategy is executed successfully.</p>
+</section>
+<section id="case-2-select-specific-layers-to-enable-swap">
+<h4>Case 2: Select Specific Layers to Enable SWAP<a class="headerlink" href="#case-2-select-specific-layers-to-enable-swap" title="Link to this heading"></a></h4>
+<p>Modify and supplement the recomputation and SWAP configurations in YAML as follows:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">context</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">memory_optimize_level</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;O0&quot;</span>
+<span class="nt">model</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">model_config</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">num_layers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">    </span><span class="nt">cpu_offloading</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">    </span><span class="nt">cpu_offloading_num_layers</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">backward_prefetch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span>
+<span class="w">        </span><span class="nt">layers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="nv">3</span><span class="p p-Indicator">]</span>
+<span class="nt">recompute_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">recompute</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">select_recompute</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">select_comm_recompute</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+</pre></div>
+</div>
+<p>Execute the following script to launch single-node 8-NPU training, with the script’s execution path being the root directory, requiring the user to specify the YAML file path(machine_ip needs to fill in the local environment IP address):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">GLOG_v</span><span class="o">=</span><span class="m">1</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MS_MEMORY_STATISTIC</span><span class="o">=</span><span class="m">1</span>
+<span class="nv">YAML_FILE</span><span class="o">=</span><span class="nv">$1</span><span class="w"> </span><span class="c1"># User specifies the YAML file path.</span>
+<span class="nv">ROOT_PATH</span><span class="o">=</span><span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>
+
+bash<span class="w"> </span>./scripts/msrun_launcher.sh<span class="w"> </span><span class="s2">&quot;run_mindformer.py \</span>
+<span class="s2">    --config </span><span class="si">${</span><span class="nv">ROOT_PATH</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">YAML_FILE</span><span class="si">}</span><span class="s2"> \</span>
+<span class="s2">    --run_mode train \</span>
+<span class="s2">    --use_parallel True&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="m">8</span><span class="w"> </span><span class="m">8</span><span class="w"> </span>&lt;machine_ip&gt;<span class="w"> </span><span class="m">8118</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>output/msrun<span class="w"> </span>False<span class="w"> </span><span class="m">300</span>
+</pre></div>
+</div>
+<p>After training completes, execute the command <code class="docutils literal notranslate"><span class="pre">cat</span> <span class="pre">output/msrun/worker_0.log</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">'Set</span> <span class="pre">layer</span> <span class="pre">swap</span> <span class="pre">at'</span></code> to check the execution status of the default SWAP strategy:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>-INFO - Set layer swap at layer 0 and value is: 20
+-INFO - Set layer swap at layer 3 and value is: 20
+</pre></div>
+</div>
+<p>The strategy of enabling SWAP for specific layers is executed successfully.</p>
+</section>
+<section id="case-3-select-specific-operators-within-layers-to-enable-swap">
+<h4>Case 3: Select Specific Operators within Layers to Enable SWAP<a class="headerlink" href="#case-3-select-specific-operators-within-layers-to-enable-swap" title="Link to this heading"></a></h4>
+<p>Modify and supplement the recomputation and SWAP configurations in YAML as follows:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">context</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">memory_optimize_level</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;O0&quot;</span>
+<span class="nt">model</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">model_config</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">num_layers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">    </span><span class="nt">cpu_offloading</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">    </span><span class="nt">op_swap</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">op_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;attention&#39;</span>
+<span class="w">        </span><span class="nt">backward_prefetch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span>
+<span class="w">        </span><span class="nt">layers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="nv">1</span><span class="p p-Indicator">,</span><span class="nv">2</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">op_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;attention&#39;</span>
+<span class="w">        </span><span class="nt">backward_prefetch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="w">        </span><span class="nt">layers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">3</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">op_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;feed_forward&#39;</span>
+<span class="w">        </span><span class="nt">backward_prefetch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">15</span>
+<span class="w">        </span><span class="nt">layers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1</span><span class="p p-Indicator">,</span><span class="nv">2</span><span class="p p-Indicator">]</span>
+<span class="nt">recompute_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">recompute</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">select_recompute</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">select_comm_recompute</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+</pre></div>
+</div>
+<p>Execute the following script to launch single-node 8-NPU training, with the script’s execution path being the root directory, requiring the user to specify the YAML file path(machine_ip needs to fill in the local environment IP address):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">GLOG_v</span><span class="o">=</span><span class="m">1</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MS_MEMORY_STATISTIC</span><span class="o">=</span><span class="m">1</span>
+<span class="nv">YAML_FILE</span><span class="o">=</span><span class="nv">$1</span><span class="w"> </span><span class="c1"># User specifies the YAML file path.</span>
+<span class="nv">ROOT_PATH</span><span class="o">=</span><span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>
+
+bash<span class="w"> </span>./scripts/msrun_launcher.sh<span class="w"> </span><span class="s2">&quot;run_mindformer.py \</span>
+<span class="s2">    --config </span><span class="si">${</span><span class="nv">ROOT_PATH</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">YAML_FILE</span><span class="si">}</span><span class="s2"> \</span>
+<span class="s2">    --run_mode train \</span>
+<span class="s2">    --use_parallel True&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="m">8</span><span class="w"> </span><span class="m">8</span><span class="w"> </span>&lt;machine_ip&gt;<span class="w"> </span><span class="m">8118</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>output/msrun<span class="w"> </span>False<span class="w"> </span><span class="m">300</span>
+</pre></div>
+</div>
+<p>After training completes, execute the command <code class="docutils literal notranslate"><span class="pre">cat</span> <span class="pre">output/msrun/worker_0.log</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">'Set</span> <span class="pre">op_swap</span> <span class="pre">at</span> <span class="pre">layer'</span></code> to check the execution status of the default SWAP strategy:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>-INFO - Set op_swap at layer 0: .attention, value=20
+-INFO - Set op_swap at layer 1: .attention, value=20, .feed_forward, value=15
+-INFO - Set op_swap at layer 2: .attention, value=20, .feed_forward, value=15
+-INFO - Set op_swap at layer 3: .attention, value=10
+</pre></div>
+</div>
+<p>The strategy of enabling SWAP for specific operators within layers is executed successfully.</p>
+</section>
+<section id="case-4-use-fine-grained-activations-swap-together-with-recomputation">
+<h4>Case 4: Use Fine-Grained Activations SWAP together with Recomputation<a class="headerlink" href="#case-4-use-fine-grained-activations-swap-together-with-recomputation" title="Link to this heading"></a></h4>
+<p>Modify and supplement the recomputation and SWAP configurations in YAML as follows:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">context</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">memory_optimize_level</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;O0&quot;</span>
+<span class="nt">model</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">model_config</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">num_layers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">    </span><span class="nt">cpu_offloading</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">    </span><span class="nt">op_swap</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">op_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;attention&#39;</span>
+<span class="w">        </span><span class="nt">backward_prefetch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span>
+<span class="w">        </span><span class="nt">layers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="nv">1</span><span class="p p-Indicator">,</span><span class="nv">2</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">op_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;attention&#39;</span>
+<span class="w">        </span><span class="nt">backward_prefetch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="w">        </span><span class="nt">layers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">3</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">op_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;feed_forward&#39;</span>
+<span class="w">        </span><span class="nt">backward_prefetch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">15</span>
+<span class="w">        </span><span class="nt">layers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1</span><span class="p p-Indicator">,</span><span class="nv">2</span><span class="p p-Indicator">]</span>
+<span class="nt">recompute_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">recompute</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">select_recompute</span><span class="p">:</span>
+<span class="w">    </span><span class="s">&#39;feed_forward&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="nv">3</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">select_comm_recompute</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+</pre></div>
+</div>
+<p>Execute the following script to launch single-node 8-NPU training, with the script’s execution path being the root directory, requiring the user to specify the YAML file path(machine_ip needs to fill in the local environment IP address):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">GLOG_v</span><span class="o">=</span><span class="m">1</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MS_MEMORY_STATISTIC</span><span class="o">=</span><span class="m">1</span>
+<span class="nv">YAML_FILE</span><span class="o">=</span><span class="nv">$1</span><span class="w"> </span><span class="c1"># User specifies the YAML file path.</span>
+<span class="nv">ROOT_PATH</span><span class="o">=</span><span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>
+
+bash<span class="w"> </span>./scripts/msrun_launcher.sh<span class="w"> </span><span class="s2">&quot;run_mindformer.py \</span>
+<span class="s2">    --config </span><span class="si">${</span><span class="nv">ROOT_PATH</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">YAML_FILE</span><span class="si">}</span><span class="s2"> \</span>
+<span class="s2">    --run_mode train \</span>
+<span class="s2">    --use_parallel True&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="m">8</span><span class="w"> </span><span class="m">8</span><span class="w"> </span>&lt;machine_ip&gt;<span class="w"> </span><span class="m">8118</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>output/msrun<span class="w"> </span>False<span class="w"> </span><span class="m">300</span>
+</pre></div>
+</div>
+<p>After training completes, execute the command <code class="docutils literal notranslate"><span class="pre">cat</span> <span class="pre">output/msrun/worker_0.log</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">'Set</span> <span class="pre">op_swap</span> <span class="pre">at</span> <span class="pre">layer'</span> <span class="pre">-C</span> <span class="pre">1</span></code> to check the execution status of the default SWAP strategy:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>-INFO - Set select recompute at layer 0: feed_forward
+-INFO - Set op_swap at layer 0: .attention, value=20
+-INFO - Set op_swap at layer 1: .attention, value=20, .feed_forward, value=15
+-INFO - Set op_swap at layer 2: .attention, value=20, .feed_forward, value=15
+-INFO - Set select recompute at layer 3: feed_forward
+-INFO - Set op_swap at layer 3: .attention, value=10
+</pre></div>
+</div>
+<p>The strategy of enabling fine-grained activations SWAP together with recomputation is executed successfully.</p>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="high_availability.html" class="btn btn-neutral float-left" title="Training High Availability" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="skip_data_and_ckpt_health_monitor.html" class="btn btn-neutral float-right" title="Data Skip And Checkpoint Health Monitor" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

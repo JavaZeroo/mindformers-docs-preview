@@ -1,0 +1,457 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkpoint Saving and Loading &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Resume Training2.0" href="resume_training2.0.html" />
+    <link rel="prev" title="Resumable Training After Breakpoint" href="resume_training.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">Models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contribution Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">Modelers Contribution Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">Model-Related FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">Feature-Related FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Static Graph Implementation (Deprecated)</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Full-process Guide to Large Models</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Features</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">Features Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="start_tasks.html">Start Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ckpt.html">Ckpt Weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="safetensors.html">Safetensors Weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">Configuration File Descriptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="load_huggingface_config.html">Loading Hugging Face Model Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html">Logs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tokenizer.html">Using Tokenizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset.html">Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training_hyperparameters.html">Training Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monitor.html">Training Metrics Monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training.html">Resumable Training After Breakpoint</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Checkpoint Saving and Loading</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#checkpoint-saving">Checkpoint Saving</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#directory-structure">Directory Structure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#configuration-instructions">Configuration Instructions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#checkpoint-loading">Checkpoint Loading</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Configuration Instructions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#constraint-description">Constraint Description</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training2.0.html">Resume Training2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel_training.html">Distributed Parallelism Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="high_availability.html">Training High Availability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory_optimization.html">Memory Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skip_data_and_ckpt_health_monitor.html">Data Skip And Checkpoint Health Monitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pma_fused_checkpoint.html">Pre-trained Model Average Weight Consolidation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="other_training_features.html">Other Training Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantization.html">Quantization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_development/index.html">Advanced Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">Excellent Practice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">Environment Variable Descriptions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Features</a></li>
+      <li class="breadcrumb-item active">Checkpoint Saving and Loading</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/feature/checkpoint_saving_and_loading.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">Deprecated</p>
+<p>This page belongs to the <strong>Static Graph (GRAPH_MODE) Implementation</strong> section and has been marked as deprecated. New features are primarily being developed in the “r2.0.0 Dynamic Graph Implementation” section. Please refer to the dynamic graph documentation first.</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="checkpoint-saving-and-loading">
+<h1>Checkpoint Saving and Loading<a class="headerlink" href="#checkpoint-saving-and-loading" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_en/static_graph/feature/checkpoint_saving_and_loading.md"><img alt="View Source on AtomGit" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source_en.svg" /></a></p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>MindSpore Transformers supports saving intermediate checkpoints during training. A checkpoint includes <strong>model weights</strong>, <strong>optimizer weights</strong>, <strong>training context information</strong>, and <strong>distributed strategy meta-information</strong>. Their core functions are to <strong>resume training after interruption</strong>, <strong>prevent progress loss due to training failures</strong>, and support <strong>subsequent fine-tuning</strong>, <strong>inference</strong>, or <strong>model iteration</strong>.</p>
+<p>MindSpore Transformers has launched <strong>Checkpoint 2.0</strong>, which achieves comprehensive improvements in usability and loading efficiency by reconstructing the checkpoint saving strategy and loading process.</p>
+<p>Compared with Checkpoint 1.0, the core updates are as follows:</p>
+<ul class="simple">
+<li><p><strong>New checkpoint saving <a class="reference internal" href="#directory-structure">directory structure</a></strong>: The checkpoint directory contains files for <strong>model weights</strong>, <strong>optimizer weights</strong>, <strong>training context information</strong>, <strong>distributed strategy meta-information</strong>, etc.;</p></li>
+<li><p><strong>Added online Reshard loading mechanism</strong>: If the distributed strategy meta-information of the checkpoint to be loaded is inconsistent with the current task, Reshard conversion will be <strong>automatically performed on the weight parameters</strong> during loading to generate parameters adapted to the current distributed strategy;</p></li>
+<li><p><strong>Simplified loading configuration</strong>: Relying on the online Reshard mechanism, users <strong>do not need to manually configure parameters such as <code class="docutils literal notranslate"><span class="pre">auto_trans_ckpt</span></code> and <code class="docutils literal notranslate"><span class="pre">src_strategy_path_or_dir</span></code></strong> to trigger weight strategy conversion, which significantly improves usability.</p></li>
+<li><p><strong>Simplified YAML configuration</strong>: Checkpoint level 1 configuration integrates previously scattered weight-related configurations under this configuration. This configuration encompasses parameters such as the checkpoint saving path, saving interval steps, saving file name prefix, maximum number of saved files, path for loading weights during resume training from a checkpoint, and the resume training switch. Additionally, it is compatible with Checkpoint 1.0 configuration.</p></li>
+</ul>
+<p>MindSpore Transformers currently uses Checkpoint 1.0 by default. Users need to add the following parameters to the YAML configuration file to enable the saving and loading functions of Checkpoint 2.0.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">use_legacy_format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>This document is only for users to experience Checkpoint 2.0. If using Checkpoint 1.0, please refer to the <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/safetensors.html">Safetensors Document</a> or <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/ckpt.html">Ckpt Document</a>.</p>
+</div></blockquote>
+</section>
+<section id="checkpoint-saving">
+<h2>Checkpoint Saving<a class="headerlink" href="#checkpoint-saving" title="Link to this heading"></a></h2>
+<section id="directory-structure">
+<h3>Directory Structure<a class="headerlink" href="#directory-structure" title="Link to this heading"></a></h3>
+<p>The training checkpoints of MindSpore Transformers are stored in the <code class="docutils literal notranslate"><span class="pre">output/checkpoint</span></code> directory by default, and each checkpoint is independently saved as a subfolder named after <code class="docutils literal notranslate"><span class="pre">iteration</span></code>. Taking the checkpoint generated in the first step of an 8-card task as an example, its saving format is as follows:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>output
+    ├── checkpoint
+        ├── iteration_00000001
+            ├── metadata.json
+            ├── common.json
+            ├── {prefix}-model-0000000-0000008.safetensors
+            ...
+            ├── {prefix}-model-0000007-0000008.safetensors
+            ├── {prefix}-opt-0000000-0000008.safetensors
+            ...
+            └── {prefix}-opt-0000007-0000008.safetensors
+        ...
+        └── latest_checkpointed_iteration.txt
+</pre></div>
+</div>
+<p>Description of weight-related files</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>File</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>metadata.json</p></td>
+<td><p>Records the distributed strategy meta-information and storage information of each parameter, providing necessary metadata support for automatically performing Reshard conversion when loading weights later, ensuring that the conversion is accurately adapted to the current task.</p></td>
+</tr>
+<tr class="row-odd"><td><p>common.json</p></td>
+<td><p>Records the training information of the current iteration, providing data support for resuming training from a breakpoint.</p></td>
+</tr>
+<tr class="row-even"><td><p>{prefix}-model-0000000-0000008.safetensors</p></td>
+<td><p>Model weight storage file. Naming rule description: <code class="docutils literal notranslate"><span class="pre">prefix</span></code> is a custom file name prefix, <code class="docutils literal notranslate"><span class="pre">model</span></code> identifies the file type as model weights, <code class="docutils literal notranslate"><span class="pre">0000000</span></code> is the file sequence number, and <code class="docutils literal notranslate"><span class="pre">0000008</span></code> represents the total number of files.</p></td>
+</tr>
+<tr class="row-odd"><td><p>{prefix}-opt-0000000-0000008.safetensors</p></td>
+<td><p>Optimizer weight storage file. Naming rule description: <code class="docutils literal notranslate"><span class="pre">prefix</span></code> is a custom file name prefix, <code class="docutils literal notranslate"><span class="pre">opt</span></code> identifies the file type as optimizer weights, <code class="docutils literal notranslate"><span class="pre">0000000</span></code> is the file sequence number, and <code class="docutils literal notranslate"><span class="pre">0000008</span></code> represents the total number of files.</p></td>
+</tr>
+<tr class="row-even"><td><p>latest_checkpointed_iteration.txt</p></td>
+<td><p>Records the iteration step corresponding to the last successfully saved checkpoint in the <code class="docutils literal notranslate"><span class="pre">output/checkpoint</span></code> directory.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="configuration-instructions">
+<h3>Configuration Instructions<a class="headerlink" href="#configuration-instructions" title="Link to this heading"></a></h3>
+<section id="checkpoint-2-0-configuration">
+<h4>Checkpoint 2.0 Configuration<a class="headerlink" href="#checkpoint-2-0-configuration" title="Link to this heading"></a></h4>
+<p>Users can control the weight saving behavior by modifying the relevant fields under <code class="docutils literal notranslate"><span class="pre">checkpoint</span></code> in the YAML configuration file. The specific parameter descriptions are as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter Name</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Value Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>save_path</p></td>
+<td><p>Set the directory for saving weight files. If not configured, the default directory is <code class="docutils literal notranslate"><span class="pre">checkpoint/</span></code> under the <code class="docutils literal notranslate"><span class="pre">output_dir</span></code> directory.</p></td>
+<td><p>str</p></td>
+</tr>
+<tr class="row-odd"><td><p>save_max</p></td>
+<td><p>The maximum number of weight files to retain. When the number of saved weights exceeds this value, the system will delete the oldest files in order of creation time to ensure that the total number does not exceed this limit. Used to control disk space usage. Default to <code class="docutils literal notranslate"><span class="pre">5</span></code>.</p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-even"><td><p>save_interleaved_steps</p></td>
+<td><p>Sets the automatic saving interval for weights based on the number of training steps (unit: steps). For example, save every 1000 steps. Default to <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-odd"><td><p>no_save_optim</p></td>
+<td><p>Optimizer weight saving function switch (controls whether to save optimizer weight information). Default to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></td>
+<td><p>bool</p></td>
+</tr>
+<tr class="row-even"><td><p>async_save</p></td>
+<td><p>Whether to save weights asynchronously. Enabling this feature will not block the main training process, improving training efficiency. However, please note that I/O resource contention may cause write delays. Default to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></td>
+<td><p>bool</p></td>
+</tr>
+<tr class="row-odd"><td><p>prefix</p></td>
+<td><p>Set the prefix for the weight file name. For example, <code class="docutils literal notranslate"><span class="pre">CKP-100.ckpt</span></code> is generated. If not configured, default to <code class="docutils literal notranslate"><span class="pre">'CKP'</span></code>.</p></td>
+<td><p>str</p></td>
+</tr>
+<tr class="row-even"><td><p>save_remove_redundancy</p></td>
+<td><p>Whether to remove redundancy from model weights when saving. Default to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></td>
+<td><p>bool</p></td>
+</tr>
+</tbody>
+</table>
+<p>Configuration example is as follows:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">use_legacy_format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+
+<span class="nt">checkpoint</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">save_path</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;./output_dir/checkpoint/&#39;</span>
+<span class="w">  </span><span class="nt">save_max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+<span class="w">  </span><span class="nt">save_interleaved_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span>
+<span class="w">  </span><span class="nt">no_save_optim</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">async_save</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;qwen3&quot;</span>
+<span class="w">  </span><span class="nt">save_remove_redundancy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+</pre></div>
+</div>
+</section>
+<section id="checkpoint-1-0-configuration">
+<h4>Checkpoint 1.0 Configuration<a class="headerlink" href="#checkpoint-1-0-configuration" title="Link to this heading"></a></h4>
+<p>Users can control the weight saving behavior by modifying the relevant fields under <code class="docutils literal notranslate"><span class="pre">CheckpointMonitor</span></code> in the YAML configuration file. The specific parameter descriptions are as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter Name</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Value Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>prefix</p></td>
+<td><p>Custom prefix for weight file names. It is recommended to fill in the model name to distinguish checkpoints of different models.</p></td>
+<td><p>(str, optional) - Default value: <code class="docutils literal notranslate"><span class="pre">&quot;CKP&quot;</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>directory</p></td>
+<td><p>The path where checkpoints are saved. If not configured, they are stored in <code class="docutils literal notranslate"><span class="pre">./output/checkpoint</span></code> by default.</p></td>
+<td><p>(str, optional) - Default value: <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>save_checkpoint_steps</p></td>
+<td><p>Set the training interval steps for saving checkpoints (i.e., save a checkpoint every specified number of training steps).</p></td>
+<td><p>(int, optional) - Default value: <code class="docutils literal notranslate"><span class="pre">1</span></code>. If not set, model weights will not be saved.</p></td>
+</tr>
+<tr class="row-odd"><td><p>keep_checkpoint_max</p></td>
+<td><p>Set the maximum number of checkpoints to keep. When the limit is reached, the oldest checkpoint will be automatically deleted when a new checkpoint is saved.</p></td>
+<td><p>(int, optional) - Default value: <code class="docutils literal notranslate"><span class="pre">5</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>async_save</p></td>
+<td><p>Switch for the asynchronous checkpoint saving function (controls whether to enable the asynchronous saving mechanism).</p></td>
+<td><p>(bool, optional) - When <code class="docutils literal notranslate"><span class="pre">True</span></code>, an asynchronous thread will be used to save checkpoints. Default value: <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>checkpoint_format</p></td>
+<td><p>The saving format of checkpoint weights. Checkpoint 2.0 only supports <code class="docutils literal notranslate"><span class="pre">'safetensors'</span></code>; if <code class="docutils literal notranslate"><span class="pre">use_legacy_format:</span> <span class="pre">False</span></code> is configured, this field will be automatically converted to <code class="docutils literal notranslate"><span class="pre">'safetensors'</span></code>.</p></td>
+<td><p>(str, optional) - Default value: <code class="docutils literal notranslate"><span class="pre">'safetensors'</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>remove_redundancy</p></td>
+<td><p>Switch for the checkpoint redundancy removal function (controls whether to enable the redundancy removal saving mechanism).</p></td>
+<td><p>(bool, optional) - Default value: <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>save_optimizer</p></td>
+<td><p>Switch for the optimizer weight saving function (controls whether to save optimizer weight information).</p></td>
+<td><p>(bool, optional) - Default value: <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+<p>Configuration example is as follows:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">use_legacy_format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+
+<span class="nt">callbacks</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">- type</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CheckpointMonitor</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">prefix</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;qwen3&quot;</span>
+<span class="w">    </span><span class="nt">save_checkpoint_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span>
+<span class="w">    </span><span class="nt">keep_checkpoint_max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+<span class="w">    </span><span class="nt">async_save</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">    </span><span class="nt">checkpoint_format</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;safetensors&quot;</span>
+<span class="w">    </span><span class="nt">save_optimizer</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>If <code class="docutils literal notranslate"><span class="pre">checkpoint</span></code> is configured, the <code class="docutils literal notranslate"><span class="pre">use_legacy_format</span></code> parameter will be automatically converted to <code class="docutils literal notranslate"><span class="pre">False</span></code>. The above configuration specifies that the training task uses “qwen3” as the prefix for safetensors file names, adopts the synchronous saving mode, saves checkpoints containing model weights and optimizer weights every 1000 steps, and retains at most the latest 5 checkpoints throughout the training process.</p>
+</div></blockquote>
+<p>If you want to learn more about CheckpointMonitor, you can refer to the <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/core/mindformers.core.CheckpointMonitor.html">CheckpointMonitor API Document</a>.</p>
+</section>
+</section>
+</section>
+<section id="checkpoint-loading">
+<h2>Checkpoint Loading<a class="headerlink" href="#checkpoint-loading" title="Link to this heading"></a></h2>
+<p>MindSpore Transformers provides flexible checkpoint loading capabilities, covering all scenarios of single-card and multi-card, with the following core features:</p>
+<ol class="arabic simple">
+<li><p>Adaptability upgrade for Checkpoint 2.0: Relying on the online Reshard mechanism, weights can be automatically adapted to any distributed strategy task during loading without manual adjustment, reducing the cost of multi-scenario deployment;</p></li>
+<li><p>Cross-platform weight compatibility: Through a dedicated conversion interface, it supports loading weight files released by the HuggingFace community. Currently, it has achieved compatible adaptation for the Qwen3 model training scenario, facilitating users to reuse community resources.</p></li>
+</ol>
+<section id="id1">
+<h3>Configuration Instructions<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<section id="id2">
+<h4>Checkpoint 2.0 Configuration<a class="headerlink" href="#id2" title="Link to this heading"></a></h4>
+<p>Users can control the weight loading behavior by modifying the relevant fields in the YAML configuration file.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter Name</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Value Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>load_path</p></td>
+<td><p>The file or folder path for loading weights. Supports the following three scenarios: 1. The path to the complete weights file; 2. The path to the distributed weights folder after offline splitting; 3. The path to the folder containing LoRA incremental weights and base model weights. For details on how to obtain various weights, see <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/ckpt.html#weight-format-conversion">Checkpoint Conversion Function</a>. Default to <code class="docutils literal notranslate"><span class="pre">''</span></code>.</p></td>
+<td><p>str</p></td>
+</tr>
+<tr class="row-odd"><td><p>load_balanced</p></td>
+<td><p>The switch for the weight balanced loading function <strong>only supports being turned on in distributed tasks</strong>. When set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, each rank loads weights according to a balanced parameter allocation strategy, and then obtains the final weights through parameter broadcasting. Default to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></td>
+<td><p>str</p></td>
+</tr>
+<tr class="row-even"><td><p>no_load_optim</p></td>
+<td><p>Whether to enable the resumable training feature. When enabled, the optimizer state, learning rate scheduler state, and other parameters will be restored from the path specified by <code class="docutils literal notranslate"><span class="pre">load_checkpoint</span></code> to continue training. For more information, see <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/resume_training.html#resumable-training-after-breakpoint">Resumable Training</a>.</p></td>
+<td><p>bool</p></td>
+</tr>
+<tr class="row-odd"><td><p>reshard_worker_number</p></td>
+<td><p>Specifies the number of threads for parallel weight resharding. For scenarios where weights need to be resharded online, this field can be configured for parallel acceleration. Default to <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></td>
+<td><p>int</p></td>
+</tr>
+</tbody>
+</table>
+<p>When <code class="docutils literal notranslate"><span class="pre">load_path</span></code> is configured as the path of the <code class="docutils literal notranslate"><span class="pre">output/checkpoint</span></code> folder, users can modify the step recorded in <code class="docutils literal notranslate"><span class="pre">latest_checkpointed_iteration.txt</span></code> to load the weights of the specified <code class="docutils literal notranslate"><span class="pre">iteration</span></code>.</p>
+</section>
+<section id="id3">
+<h4>Checkpoint 1.0 Configuration<a class="headerlink" href="#id3" title="Link to this heading"></a></h4>
+<p>Users can control the weight loading behavior by modifying the relevant fields in the YAML configuration file.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter Name</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Value Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>load_checkpoint</p></td>
+<td><p>The path to the checkpoint folder, supporting <strong>filling in the <code class="docutils literal notranslate"><span class="pre">output/checkpoint</span></code> folder path</strong> or <strong>the specific <code class="docutils literal notranslate"><span class="pre">iteration</span></code> subfolder path</strong>. <br> If the former is filled in, the checkpoint in the corresponding <code class="docutils literal notranslate"><span class="pre">iteration</span></code> subfolder will be loaded according to the step recorded in <code class="docutils literal notranslate"><span class="pre">latest_checkpointed_iteration.txt</span></code>.</p></td>
+<td><p>(str, optional) - Default value: <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>pretrained_model_dir</p></td>
+<td><p>Specify the folder path of HuggingFace community weights; if <code class="docutils literal notranslate"><span class="pre">load_checkpoint</span></code> is also configured, this field will be automatically invalidated.</p></td>
+<td><p>(str, optional) - Default value: <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>balanced_load</p></td>
+<td><p>Switch for the weight balanced loading function, <strong>only supported in distributed tasks</strong>; when set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, each rank loads weights according to the parameter balanced allocation strategy, and then obtains the final weights through parameter broadcasting.</p></td>
+<td><p>(bool, optional) - Default value: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>use_legacy_format</p></td>
+<td><p>Switch for enabling Checkpoint 1.0, which needs to be set to <code class="docutils literal notranslate"><span class="pre">False</span></code> (to use Checkpoint 2.0).</p></td>
+<td><p>(bool, optional) - Default value: <code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>load_ckpt_format</p></td>
+<td><p>Specify the format of the loaded weights, which needs to be set to <code class="docutils literal notranslate"><span class="pre">'safetensors'</span></code> (to adapt to Checkpoint 2.0).</p></td>
+<td><p>(str, optional) - Default value: <code class="docutils literal notranslate"><span class="pre">'ckpt'</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>reshard_worker_num</p></td>
+<td><p>Specifies the number of threads for the parallel weighted reshard. For scenarios where weights need to be resharded online, this field can be configured for parallel acceleration.</p></td>
+<td><p>(int, optional) - Default value: <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+<p>When <code class="docutils literal notranslate"><span class="pre">load_checkpoint</span></code> is configured as the path of the <code class="docutils literal notranslate"><span class="pre">output/checkpoint</span></code> folder, users can modify the step recorded in <code class="docutils literal notranslate"><span class="pre">latest_checkpointed_iteration.txt</span></code> to load the weights of the specified <code class="docutils literal notranslate"><span class="pre">iteration</span></code>.</p>
+</section>
+</section>
+</section>
+<section id="constraint-description">
+<h2>Constraint Description<a class="headerlink" href="#constraint-description" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>In multi-machine scenarios, all files need to be stored in the <strong>same shared directory</strong>, and users need to configure the <strong>shared path to the environment variable <code class="docutils literal notranslate"><span class="pre">SHARED_PATHS</span></code></strong>. It is recommended to configure it as the uppermost shared directory path first. Example: If the shared directory is <code class="docutils literal notranslate"><span class="pre">/data01</span></code> (the project directory is under it), you can execute <code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">SHARED_PATHS=/data01</span></code>.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="resume_training.html" class="btn btn-neutral float-left" title="Resumable Training After Breakpoint" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="resume_training2.0.html" class="btn btn-neutral float-right" title="Resume Training2.0" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

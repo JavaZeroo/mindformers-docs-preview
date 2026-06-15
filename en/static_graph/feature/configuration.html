@@ -1,0 +1,1999 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Configuration File Descriptions &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Loading Hugging Face Model Configuration" href="load_huggingface_config.html" />
+    <link rel="prev" title="Safetensors Weights" href="safetensors.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">Models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contribution Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">Modelers Contribution Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">Model-Related FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">Feature-Related FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Static Graph Implementation (Deprecated)</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Full-process Guide to Large Models</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Features</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">Features Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="start_tasks.html">Start Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ckpt.html">Ckpt Weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="safetensors.html">Safetensors Weights</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Configuration File Descriptions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#description-of-the-yaml-file-contents">Description of the YAML File Contents</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#basic-configuration">Basic Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#context-configuration">Context Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#legacy-model-configuration">Legacy Model Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mcore-model-configuration">Mcore Model Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#model-training-configuration">Model Training Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#model-training-checkpoint-configuration">Model Training Checkpoint Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parallel-configuration">Parallel Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#model-optimization-configuration">Model Optimization Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#callbacks-configuration">Callbacks Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#processor-configuration">Processor Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#model-evaluation-configuration">Model Evaluation Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#profile-configuration">Profile Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#metric-monitoring-configuration">Metric Monitoring Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tensorboard-configuration">TensorBoard Configuration</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="load_huggingface_config.html">Loading Hugging Face Model Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html">Logs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tokenizer.html">Using Tokenizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset.html">Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training_hyperparameters.html">Training Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monitor.html">Training Metrics Monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training.html">Resumable Training After Breakpoint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoint_saving_and_loading.html">Checkpoint Saving and Loading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training2.0.html">Resume Training2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel_training.html">Distributed Parallelism Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="high_availability.html">Training High Availability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory_optimization.html">Memory Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skip_data_and_ckpt_health_monitor.html">Data Skip And Checkpoint Health Monitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pma_fused_checkpoint.html">Pre-trained Model Average Weight Consolidation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="other_training_features.html">Other Training Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantization.html">Quantization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_development/index.html">Advanced Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">Excellent Practice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">Environment Variable Descriptions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Features</a></li>
+      <li class="breadcrumb-item active">Configuration File Descriptions</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/feature/configuration.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">Deprecated</p>
+<p>This page belongs to the <strong>Static Graph (GRAPH_MODE) Implementation</strong> section and has been marked as deprecated. New features are primarily being developed in the “r2.0.0 Dynamic Graph Implementation” section. Please refer to the dynamic graph documentation first.</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="configuration-file-descriptions">
+<h1>Configuration File Descriptions<a class="headerlink" href="#configuration-file-descriptions" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_en/static_graph/feature/configuration.md"><img alt="View Source on AtomGit" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source_en.svg" /></a></p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>Different parameters usually need to be configured during the training and inference process of a model. MindSpore Transformers supports the use of <code class="docutils literal notranslate"><span class="pre">YAML</span></code> files to centrally manage and adjust the configurable items, which makes the configuration of the model more structured and improves its maintainability at the same time.</p>
+</section>
+<section id="description-of-the-yaml-file-contents">
+<h2>Description of the YAML File Contents<a class="headerlink" href="#description-of-the-yaml-file-contents" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">YAML</span></code> file provided by MindSpore Transformers contains configuration items for different functions, which are described below according to their contents.</p>
+<section id="basic-configuration">
+<h3>Basic Configuration<a class="headerlink" href="#basic-configuration" title="Link to this heading"></a></h3>
+<p>The basic configuration is mainly used to specify MindSpore random seeds and related settings for loading weights.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter Name</p></th>
+<th class="head"><p>Data Type</p></th>
+<th class="head"><p>Optional</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Value Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>seed</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>0</p></td>
+<td><p>Sets the global random seed to ensure experimental reproducibility. For details, see <a class="reference external" href="https://www.mindspore.cn/docs/en/master/api_python/mindspore/mindspore.set_seed.html">mindspore.set_seed</a>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>run_mode</p></td>
+<td><p>string</p></td>
+<td><p>Required</p></td>
+<td><p>None</p></td>
+<td><p>Sets the model’s run mode. Optional: <code class="docutils literal notranslate"><span class="pre">train</span></code>, <code class="docutils literal notranslate"><span class="pre">finetune</span></code>, <code class="docutils literal notranslate"><span class="pre">eval</span></code>, or <code class="docutils literal notranslate"><span class="pre">predict</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>output_dir</p></td>
+<td><p>string</p></td>
+<td><p>Optional</p></td>
+<td><p>None</p></td>
+<td><p>Sets the output directory for saving log files, checkpoint files, and parallel strategy files. If the directory does not exist, it will be created automatically.</p></td>
+</tr>
+<tr class="row-odd"><td><p>load_checkpoint</p></td>
+<td><p>string</p></td>
+<td><p>Optional</p></td>
+<td><p>None</p></td>
+<td><p>The file or folder path for loading weights. Supports the following three scenarios: 1. The path to the complete weights file; 2. The path to the distributed weights folder after offline splitting; 3. The path to the folder containing LoRA incremental weights and base model weights. For details on how to obtain various weights, see <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/ckpt.html#weight-format-conversion">Checkpoint Conversion Function</a>.</p></td>
+</tr>
+<tr class="row-even"><td><p>auto_trans_ckpt</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Whether to enable automatic splitting and merging of distributed weights. When enabled, you can load split weights from multiple cards onto a single card, or load single-card weights from multiple cards onto multiple cards. For more information, see <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/ckpt.html#distributed-weight-slicing-and-merging">Distributed Weight Slicing and Merging</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>resume_training</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Whether to enable the resumable training feature. When enabled, the optimizer state, learning rate scheduler state, and other parameters will be restored from the path specified by <code class="docutils literal notranslate"><span class="pre">load_checkpoint</span></code> to continue training. For more information, see <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/resume_training.html#resumable-training-after-breakpoint">Resumable Training</a></p></td>
+</tr>
+<tr class="row-even"><td><p>load_ckpt_format</p></td>
+<td><p>string</p></td>
+<td><p>Optional</p></td>
+<td><p>“ckpt”</p></td>
+<td><p>The format of the loaded model weights. Optional values include <code class="docutils literal notranslate"><span class="pre">&quot;ckpt&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;safetensors&quot;</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>remove_redundancy</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Whether the loaded model weights have been de-redundant. For details, see <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/safetensors.html#de-redundant-saving-and-loading">Saving and Loading Weights with De-Redundancy</a>.</p></td>
+</tr>
+<tr class="row-even"><td><p>train_precision_sync</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>None</p></td>
+<td><p>Enables deterministic computation for training. Setting this to True enables synchronous computation for training, which improves computational certainty and is generally used to ensure experimental reproducibility. Setting this to False disables this feature.</p></td>
+</tr>
+<tr class="row-odd"><td><p>infer_precision_sync</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>None</p></td>
+<td><p>Enables deterministic computation for inference. If set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, inference synchronization is enabled, which improves computational certainty and is generally used to ensure experimental reproducibility. If set to <code class="docutils literal notranslate"><span class="pre">False</span></code>, this feature is disabled.</p></td>
+</tr>
+<tr class="row-even"><td><p>use_skip_data_by_global_norm</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Whether to enable data skipping based on the global gradient norm. When a batch of data causes exploding gradients, that batch is automatically skipped to improve training stability. For more information, see <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/skip_data_and_ckpt_health_monitor.html#skipping-data">Data Skipping</a>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>use_checkpoint_health_monitor</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Whether to enable weight health monitoring. When enabled, checkpoint integrity and availability are verified when saving, preventing corrupted weight files from being saved. For more information, see <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/skip_data_and_ckpt_health_monitor.html#checkpoint-health-monitor">Checkpoint Health Monitor</a>.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="context-configuration">
+<h3>Context Configuration<a class="headerlink" href="#context-configuration" title="Link to this heading"></a></h3>
+<p>Context configuration is mainly used to specify the <a class="reference external" href="https://www.mindspore.cn/docs/en/master/api_python/mindspore/mindspore.set_context.html">mindspore.set_context</a> in the related parameters.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter Name</p></th>
+<th class="head"><p>Data Type</p></th>
+<th class="head"><p>Optional</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Value Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>context.mode</p></td>
+<td><p>int</p></td>
+<td><p>Required</p></td>
+<td><p>None</p></td>
+<td><p>Sets the backend execution mode. <code class="docutils literal notranslate"><span class="pre">0</span></code> indicates GRAPH_MODE. MindSpore Transformers currently only supports running in GRAPH_MODE mode.</p></td>
+</tr>
+<tr class="row-odd"><td><p>context.device_target</p></td>
+<td><p>string</p></td>
+<td><p>Required</p></td>
+<td><p>None</p></td>
+<td><p>Sets the backend execution device. MindSpore Transformers only supports running on <code class="docutils literal notranslate"><span class="pre">Ascend</span></code> devices.</p></td>
+</tr>
+<tr class="row-even"><td><p>context.device_id</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>0</p></td>
+<td><p>Sets the execution device ID. The value must be within the available device range. The default value is <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>context.enable_graph_kernel</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Whether to enable graph fusion to optimize network execution performance. The default value is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>context.max_call_depth</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>1000</p></td>
+<td><p>Sets the maximum depth of function calls. This value must be a positive integer. The default value is <code class="docutils literal notranslate"><span class="pre">1000</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>context.max_device_memory</p></td>
+<td><p>string</p></td>
+<td><p>Optional</p></td>
+<td><p>“1024GB”</p></td>
+<td><p>Sets the maximum memory available on the device. The format is “xxGB”. The default value is <code class="docutils literal notranslate"><span class="pre">&quot;1024GB&quot;</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>context.mempool_block_size</p></td>
+<td><p>string</p></td>
+<td><p>Optional</p></td>
+<td><p>“1GB”</p></td>
+<td><p>Sets the memory block size. The format is “xxGB”. The default value is <code class="docutils literal notranslate"><span class="pre">&quot;1GB&quot;</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>context.save_graphs</p></td>
+<td><p>bool / int</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Save compiled graphs during execution:<br/>• <code class="docutils literal notranslate"><span class="pre">False</span></code> or <code class="docutils literal notranslate"><span class="pre">0</span></code>: Do not save intermediate compiled graphs<br/>• <code class="docutils literal notranslate"><span class="pre">1</span></code>: Output some intermediate files during graph compilation<br/>• <code class="docutils literal notranslate"><span class="pre">True</span></code> or <code class="docutils literal notranslate"><span class="pre">2</span></code>: Generate more IR files related to the backend process<br/>• <code class="docutils literal notranslate"><span class="pre">3</span></code>: Generate a visual computation graph and a more detailed frontend IR graph</p></td>
+</tr>
+<tr class="row-even"><td><p>context.save_graphs_path</p></td>
+<td><p>string</p></td>
+<td><p>Optional</p></td>
+<td><p>‘./graph’</p></td>
+<td><p>The path to save compiled graphs. If not set and <code class="docutils literal notranslate"><span class="pre">save_graphs</span> <span class="pre">!=</span> <span class="pre">False</span></code>, the default temporary path <code class="docutils literal notranslate"><span class="pre">'./graph'</span></code> is used.</p></td>
+</tr>
+<tr class="row-odd"><td><p>context.affinity_cpu_list</p></td>
+<td><p>dict / string</p></td>
+<td><p>Optional</p></td>
+<td><p>None</p></td>
+<td><p>Optional configuration item used to implement a user-defined core binding strategy. <strong>This configuration is merged into affinity_config. Please use affinity_config instead.</strong><br/>- When not configured: default automatic core binding<br/>- <code class="docutils literal notranslate"><span class="pre">None</span></code> or not set: disable core binding<br/>- Pass in a <code class="docutils literal notranslate"><span class="pre">dict</span></code>: customize CPU core binding strategy. For details, refer to <a class="reference external" href="https://www.mindspore.cn/docs/en/master/api_python/runtime/mindspore.runtime.set_cpu_affinity.html">mindspore.runtime.set_cpu_affinity</a></p></td>
+</tr>
+<tr class="row-even"><td><p>context.affinity_config</p></td>
+<td><p>dict</p></td>
+<td><p>Optional</p></td>
+<td><p>None</p></td>
+<td><p>Optional configuration item used to implement a user-defined core binding strategy.<br/>- When not configured: default automatic core binding<br/>- Pass in <code class="docutils literal notranslate"><span class="pre">dict</span></code>: customize CPU core binding strategy. For details, refer to <a class="reference external" href="https://www.mindspore.cn/docs/en/master/api_python/runtime/mindspore.runtime.set_cpu_affinity.html">mindspore.runtime.set_cpu_affinity</a></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="legacy-model-configuration">
+<h3>Legacy Model Configuration<a class="headerlink" href="#legacy-model-configuration" title="Link to this heading"></a></h3>
+<p>If you use MindSpore Transformers to run tasks for legacy models, you need to configure the relevant hyperparameters in a YAML file. Please note that the configuration described in this section applies only to legacy models and cannot be mixed with mcore model configurations. Please pay attention to <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/README.md#models-list">version compatibility</a>.</p>
+<p>Because different model configurations may vary, this section only describes the general configuration of models in MindSpore Transformers.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Optional</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Value Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>model.arch.type</p></td>
+<td><p>string</p></td>
+<td><p>Required</p></td>
+<td><p>None</p></td>
+<td><p>Sets the model class. This class can be used to instantiate the model when building it.</p></td>
+</tr>
+<tr class="row-odd"><td><p>model.model_config.type</p></td>
+<td><p>string</p></td>
+<td><p>Required</p></td>
+<td><p>None</p></td>
+<td><p>Sets the model configuration class. This class must match the model class; that is, it must contain all parameters used by the model class.</p></td>
+</tr>
+<tr class="row-even"><td><p>model.model_config.num_layers</p></td>
+<td><p>int</p></td>
+<td><p>Required</p></td>
+<td><p>None</p></td>
+<td><p>Sets the number of model layers, typically the number of decoder layers.</p></td>
+</tr>
+<tr class="row-odd"><td><p>model.model_config.seq_length</p></td>
+<td><p>int</p></td>
+<td><p>Required</p></td>
+<td><p>None</p></td>
+<td><p>Sets the model sequence length. This parameter indicates the maximum sequence length supported by the model.</p></td>
+</tr>
+<tr class="row-even"><td><p>model.model_config.hidden_size</p></td>
+<td><p>int</p></td>
+<td><p>Required</p></td>
+<td><p>None</p></td>
+<td><p>Sets the dimension of the model’s hidden state.</p></td>
+</tr>
+<tr class="row-odd"><td><p>model.model_config.vocab_size</p></td>
+<td><p>int</p></td>
+<td><p>Required</p></td>
+<td><p>None</p></td>
+<td><p>Sets the size of the model vocabulary.</p></td>
+</tr>
+<tr class="row-even"><td><p>model.model_config.top_k</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>None</p></td>
+<td><p>Sets the sampling from the <code class="docutils literal notranslate"><span class="pre">top_k</span></code> tokens with the highest probability during inference.</p></td>
+</tr>
+<tr class="row-odd"><td><p>model.model_config.top_p</p></td>
+<td><p>float</p></td>
+<td><p>Optional</p></td>
+<td><p>None</p></td>
+<td><p>Sets the sampling from the tokens with the highest probability, whose cumulative probability does not exceed <code class="docutils literal notranslate"><span class="pre">top_p</span></code>, during inference. The value range is usually <code class="docutils literal notranslate"><span class="pre">(0,1]</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>model.model_config.use_past</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Whether to enable incremental inference for the model. Enabling this allows Paged Attention to improve inference performance. Must be set to <code class="docutils literal notranslate"><span class="pre">False</span></code> during model training.</p></td>
+</tr>
+<tr class="row-odd"><td><p>model.model_config.max_decode_length</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>None</p></td>
+<td><p>Sets the maximum length of generated text, including the input length.</p></td>
+</tr>
+<tr class="row-even"><td><p>model.model_config.max_length</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>None</p></td>
+<td><p>Same as <code class="docutils literal notranslate"><span class="pre">max_decode_length</span></code>. When both <code class="docutils literal notranslate"><span class="pre">max_decode_length</span></code> and <code class="docutils literal notranslate"><span class="pre">max_length</span></code> are set, only <code class="docutils literal notranslate"><span class="pre">max_length</span></code> takes effect.</p></td>
+</tr>
+<tr class="row-odd"><td><p>model.model_config.max_new_tokens</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>None</p></td>
+<td><p>Sets the maximum length of generated new text, excluding the input length. When both <code class="docutils literal notranslate"><span class="pre">max_length</span></code> and <code class="docutils literal notranslate"><span class="pre">max_new_tokens</span></code> are set, only <code class="docutils literal notranslate"><span class="pre">max_new_tokens</span></code> takes effect.</p></td>
+</tr>
+<tr class="row-even"><td><p>model.model_config.min_length</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>None</p></td>
+<td><p>Sets the minimum length of generated text, including the input length.</p></td>
+</tr>
+<tr class="row-odd"><td><p>model.model_config.min_new_tokens</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>None</p></td>
+<td><p>Sets the minimum length of new text generated, excluding the input length. When <code class="docutils literal notranslate"><span class="pre">min_length</span></code> is set at the same time, only <code class="docutils literal notranslate"><span class="pre">min_new_tokens</span></code> takes effect.</p></td>
+</tr>
+<tr class="row-even"><td><p>model.model_config.repetition_penalty</p></td>
+<td><p>float</p></td>
+<td><p>Optional</p></td>
+<td><p>1.0</p></td>
+<td><p>Sets the penalty coefficient for generating repeated text. <code class="docutils literal notranslate"><span class="pre">repetition_penalty</span></code> must be no less than 1. When it is equal to 1, no penalty is imposed on repeated output.</p></td>
+</tr>
+<tr class="row-odd"><td><p>model.model_config.block_size</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>None</p></td>
+<td><p>Sets the block size in Paged Attention. This only takes effect when <code class="docutils literal notranslate"><span class="pre">use_past=True</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>model.model_config.num_blocks</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>None</p></td>
+<td><p>Sets the total number of blocks in Paged Attention. This only takes effect when <code class="docutils literal notranslate"><span class="pre">use_past=True</span></code>. This should satisfy <code class="docutils literal notranslate"><span class="pre">batch_size</span> <span class="pre">×</span> <span class="pre">seq_length</span> <span class="pre">&lt;=</span> <span class="pre">block_size</span> <span class="pre">×</span> <span class="pre">num_blocks</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>model.model_config.return_dict_in_generate</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Whether to return the inference results of the <code class="docutils literal notranslate"><span class="pre">generate</span></code> interface in dictionary form. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>model.model_config.output_scores</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Whether to include the scores before softmax of the input for each forward generation when returning the results in dictionary form. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>model.model_config.output_logits</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Whether to include the logits of the model output for each forward generation when returning the results in dictionary form. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>model.model_config.layers_per_stage</p></td>
+<td><p>list(int)</p></td>
+<td><p>Optional</p></td>
+<td><p>None</p></td>
+<td><p>Sets the number of transformer layers assigned to each stage when enabling pipeline stages. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>, indicating an equal distribution across all stages. The value to be set is a list of integers with a length equal to the number of pipeline stages, where the i-th position indicates the number of transformer layers assigned to the i-th stage.</p></td>
+</tr>
+<tr class="row-odd"><td><p>model.model_config.use_fused_swiglu</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Whether to use the swiglu fusion operator. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>model.model_config.use_fused_rope</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Whether to use the RoPE fusion operator. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+<p>In addition to the basic configuration of the above models, the MoE model requires separate configuration of some MoE module hyperparameters. Since different models use different parameters, only the general configuration is described:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Optional</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Value Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>moe_config.expert_num</p></td>
+<td><p>int</p></td>
+<td><p>Required</p></td>
+<td><p>None</p></td>
+<td><p>Sets the number of routing experts.</p></td>
+</tr>
+<tr class="row-odd"><td><p>moe_config.shared_expert_num</p></td>
+<td><p>int</p></td>
+<td><p>Required</p></td>
+<td><p>None</p></td>
+<td><p>Sets the number of shared experts.</p></td>
+</tr>
+<tr class="row-even"><td><p>moe_config.moe_intermediate_size</p></td>
+<td><p>int</p></td>
+<td><p>Required</p></td>
+<td><p>None</p></td>
+<td><p>Sets the size of the intermediate dimension of the expert layer.</p></td>
+</tr>
+<tr class="row-odd"><td><p>moe_config.capacity_factor</p></td>
+<td><p>float</p></td>
+<td><p>Required</p></td>
+<td><p>None</p></td>
+<td><p>Sets the expert capacity factor.</p></td>
+</tr>
+<tr class="row-even"><td><p>moe_config.num_experts_chosen</p></td>
+<td><p>int</p></td>
+<td><p>Required</p></td>
+<td><p>None</p></td>
+<td><p>Sets the number of experts chosen for each token.</p></td>
+</tr>
+<tr class="row-odd"><td><p>moe_config.enable_sdrop</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Enables the <code class="docutils literal notranslate"><span class="pre">sdrop</span></code> token drop strategy. Since MindSpore Transformers’ MoE uses a static shape implementation, it cannot retain all tokens.</p></td>
+</tr>
+<tr class="row-even"><td><p>moe_config.aux_loss_factor</p></td>
+<td><p>list(float)</p></td>
+<td><p>Optional</p></td>
+<td><p>None</p></td>
+<td><p>Sets the weight for the balanced loss.</p></td>
+</tr>
+<tr class="row-odd"><td><p>moe_config.first_k_dense_replace</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>1</p></td>
+<td><p>Enables the block for the Moe layer. Typically set to <code class="docutils literal notranslate"><span class="pre">1</span></code> to disable Moe in the first block.</p></td>
+</tr>
+<tr class="row-even"><td><p>moe_config.balance_via_topk_bias</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Enables the <code class="docutils literal notranslate"><span class="pre">aux_loss_free</span></code> load balancing algorithm.</p></td>
+</tr>
+<tr class="row-odd"><td><p>moe_config.topk_bias_update_rate</p></td>
+<td><p>float</p></td>
+<td><p>Optional</p></td>
+<td><p>None</p></td>
+<td><p>Sets the bias update step for the <code class="docutils literal notranslate"><span class="pre">aux_loss_free</span></code> load balancing algorithm.</p></td>
+</tr>
+<tr class="row-even"><td><p>moe_config.comp_comm_parallel</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Sets whether to enable parallel computation and communication for ffn.</p></td>
+</tr>
+<tr class="row-odd"><td><p>moe_config.comp_comm_parallel_degree</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>None</p></td>
+<td><p>Sets the number of splits for ffn computation and communication. A larger number results in more overlap, but consumes more memory. This parameter is only valid when <code class="docutils literal notranslate"><span class="pre">comp_comm_parallel=True</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>moe_config.moe_shared_expert_overlap</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Sets whether to enable parallel computation and communication for shared and routing experts.</p></td>
+</tr>
+<tr class="row-odd"><td><p>moe_config.use_gating_sigmoid</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Sets whether to use the sigmoid function for gating results in MoE.</p></td>
+</tr>
+<tr class="row-even"><td><p>moe_config.use_gmm</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Sets whether to use GroupedMatmul for MoE expert computation.</p></td>
+</tr>
+<tr class="row-odd"><td><p>moe_config.use_fused_ops_permute</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Specifies whether MoE uses the permute and unpermute fused operators for performance acceleration. This option only takes effect when <code class="docutils literal notranslate"><span class="pre">use_gmm=True</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>moe_config.enable_deredundency</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Specifies whether to enable de-redundancy communication. This requires that the number of expert parallel operations is an integer multiple of the number of NPUs in each node. Default value: False. This option takes effect when <code class="docutils literal notranslate"><span class="pre">use_gmm=True</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>moe_config.npu_nums_per_device</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>8</p></td>
+<td><p>Specifies the number of NPUs in each node. Default value: 8. This option takes effect when <code class="docutils literal notranslate"><span class="pre">enable_deredundency=True</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>moe_config.enable_gmm_safe_tokens</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Ensures that each expert is assigned at least one token to prevent GroupedMatmul calculation failures in extreme load imbalance. The default value is <code class="docutils literal notranslate"><span class="pre">False</span></code>. It is recommended to enable this when <code class="docutils literal notranslate"><span class="pre">use_gmm=True</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="mcore-model-configuration">
+<h3>Mcore Model Configuration<a class="headerlink" href="#mcore-model-configuration" title="Link to this heading"></a></h3>
+<p>When using MindSpore Transformers to launch an Mcore model task, you need to configure relevant hyperparameters under <code class="docutils literal notranslate"><span class="pre">model_config</span></code>, including model selection, model parameters, calculation type, and MoE parameters.</p>
+<p>Since different models may have different configurations, this section introduces commonly used model configurations in MindSpore Transformers.</p>
+<p>The default values for these parameters may vary between models; only the default values for most cases are shown here. For specific default values, please refer to the configuration class definition <code class="docutils literal notranslate"><span class="pre">configuration_xxx.py</span></code> for each model (e.g., the configuration class for DeepSeek-V3 is <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/mindformers/models/deepseek3/configuration_deepseek_v3.py">configuration_deepseek_v3.py</a>).</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Optional</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Value Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>model.model_config.model_type</p></td>
+<td><p>string</p></td>
+<td><p>Required</p></td>
+<td><p>None</p></td>
+<td><p>Sets the model configuration class. The model configuration class must match the model class; that is, the model configuration class should contain all parameters used by the model class.</p></td>
+</tr>
+<tr class="row-odd"><td><p>model.model_config.architectures</p></td>
+<td><p>string</p></td>
+<td><p>Required</p></td>
+<td><p>None</p></td>
+<td><p>Sets the model class. When building the model, you can instantiate the model based on the model class.</p></td>
+</tr>
+<tr class="row-even"><td><p>model.model_config.offset</p></td>
+<td><p>int / list(int)</p></td>
+<td><p>Required</p></td>
+<td><p>0</p></td>
+<td><p>In pipeline parallelism (PP), set the offset of each stage’s layers: when the model layers cannot be evenly distributed, it is used to accurately allocate the layers of each stage.<br><br><strong>Rule 1 (Basic PP)</strong>: When <code class="docutils literal notranslate"><span class="pre">pipeline_interleave</span> <span class="pre">=</span> <span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">offset</span></code> is a list of lengths equal to <code class="docutils literal notranslate"><span class="pre">pipelin_stage</span></code>.<br> - <code class="docutils literal notranslate"><span class="pre">offset[i]</span></code> represents the <strong>additional number</strong> of layers added to the base layer in the <code class="docutils literal notranslate"><span class="pre">i-th</span></code> stage.<br> - <strong>Constraint</strong>: <code class="docutils literal notranslate"><span class="pre">sum</span> <span class="pre">(offset)</span></code> must be equal to <code class="docutils literal notranslate"><span class="pre">num_1ayers</span> <span class="pre">%</span> <span class="pre">pipeline_stage</span></code>. <br> - <strong>Example</strong> : <code class="docutils literal notranslate"><span class="pre">pipeline_stage</span> <span class="pre">=</span> <span class="pre">4</span></code>, <code class="docutils literal notranslate"><span class="pre">num_1ayers</span> <span class="pre">=</span> <span class="pre">5</span></code>, let <code class="docutils literal notranslate"><span class="pre">offset</span> <span class="pre">=</span> <span class="pre">[0,0,1,0]</span></code>. The number of layers in each stage is: [1, 1, 2, 1].<br><br><strong>Rule 2(Enable interleaving)</strong>: When <code class="docutils literal notranslate"><span class="pre">pipeline_interleave</span> <span class="pre">&gt;</span> <span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">offset</span></code> is a <strong>nested list</strong>, in the format of <code class="docutils literal notranslate"><span class="pre">offset[interleave_id][stage_id]</span></code>.<br> - The length of the outer list is <code class="docutils literal notranslate"><span class="pre">pipeline_interleave</span></code>, and the length of the inner list is <code class="docutils literal notranslate"><span class="pre">pipeline_stage</span></code>. <br> -<strong>Constraint</strong>: The sum of all inner layer offset values must be equal to <code class="docutils literal notranslate"><span class="pre">num_layers</span> <span class="pre">%</span> <span class="pre">(pipeline_stage</span> <span class="pre">*</span> <span class="pre">pipeline_interleave)</span></code>. <br> - <strong>Example</strong>: <code class="docutils literal notranslate"><span class="pre">pipeline_interleave</span> <span class="pre">=</span> <span class="pre">2</span></code>, <code class="docutils literal notranslate"><span class="pre">pipeline_stage</span> <span class="pre">=</span> <span class="pre">2</span></code>, <code class="docutils literal notranslate"><span class="pre">num_layers</span> <span class="pre">=</span> <span class="pre">5</span></code>, let <code class="docutils literal notranslate"><span class="pre">offset</span> <span class="pre">=</span> <span class="pre">[0,0],</span> <span class="pre">[1,0]]</span></code>. Then it means that the first stage in the second interleaved group is allocated an additional layer.</p></td>
+</tr>
+<tr class="row-odd"><td><p>model.model_config.vocab_size</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>128000</p></td>
+<td><p>Model vocabulary size.</p></td>
+</tr>
+<tr class="row-even"><td><p>model.model_config.hidden_size</p></td>
+<td><p>int</p></td>
+<td><p>Required</p></td>
+<td><p>4096</p></td>
+<td><p>Transformer hidden layer size. The default value of hidden_size differs for some models; for example, in DeepSeek-V3, it is <code class="docutils literal notranslate"><span class="pre">7168</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>model.model_config.ffn_hidden_size</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>None</p></td>
+<td><p>Transformer feedforward layer size, corresponding to <code class="docutils literal notranslate"><span class="pre">intermediate_size</span></code> in HuggingFace. If not set, the default is 4 * hidden_size.</p></td>
+</tr>
+<tr class="row-even"><td><p>model.model_config.num_layers</p></td>
+<td><p>int</p></td>
+<td><p>Required</p></td>
+<td><p>0</p></td>
+<td><p>Number of Transformer layers, corresponding to <code class="docutils literal notranslate"><span class="pre">num_hidden_layers</span></code> in HuggingFace.</p></td>
+</tr>
+<tr class="row-odd"><td><p>model.model_config.max_position_embeddings</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>4096</p></td>
+<td><p>Maximum sequence length the model can handle.</p></td>
+</tr>
+<tr class="row-even"><td><p>model.model_config.hidden_act</p></td>
+<td><p>string</p></td>
+<td><p>Optional</p></td>
+<td><p>‘gelu’</p></td>
+<td><p>Activation function used for the nonlinearity in the MLP.</p></td>
+</tr>
+<tr class="row-odd"><td><p>model.model_config.num_attention_heads</p></td>
+<td><p>int</p></td>
+<td><p>Required</p></td>
+<td><p>0</p></td>
+<td><p>Number of Transformer attention heads.</p></td>
+</tr>
+<tr class="row-even"><td><p>model.model_config.num_query_groups</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>None</p></td>
+<td><p>Number of query groups for the group-query attention mechanism, corresponding to <code class="docutils literal notranslate"><span class="pre">num_key_value_heads</span></code> in HuggingFace. If not configured, the normal attention mechanism is used.</p></td>
+</tr>
+<tr class="row-odd"><td><p>model.model_config.kv_channels</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>None</p></td>
+<td><p>Projection weight dimension for the multi-head attention mechanism, corresponding to <code class="docutils literal notranslate"><span class="pre">head_dim</span></code> in HuggingFace. If not configured, defaults to <code class="docutils literal notranslate"><span class="pre">hidden_size</span> <span class="pre">//</span> <span class="pre">num_attention_heads</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>model.model_config.layernorm_epsilon</p></td>
+<td><p>float</p></td>
+<td><p>Required</p></td>
+<td><p>1e-5</p></td>
+<td><p>Epsilon value for any LayerNorm operations.</p></td>
+</tr>
+<tr class="row-odd"><td><p>model.model_config.add_bias_linear</p></td>
+<td><p>bool</p></td>
+<td><p>Required</p></td>
+<td><p>True</p></td>
+<td><p>Include a bias term in all linear layers (after QKV projection, after core attention, and both in MLP layers).</p></td>
+</tr>
+<tr class="row-even"><td><p>model.model_config.tie_word_embeddings</p></td>
+<td><p>bool</p></td>
+<td><p>Required</p></td>
+<td><p>True</p></td>
+<td><p>Whether to share input and output embedding weights.</p></td>
+</tr>
+<tr class="row-odd"><td><p>model.model_config.use_flash_attention</p></td>
+<td><p>bool</p></td>
+<td><p>Required</p></td>
+<td><p>True</p></td>
+<td><p>Whether to use flash attention in the attention layer.</p></td>
+</tr>
+<tr class="row-even"><td><p>model.model_config.use_contiguous_weight_layout_attention</p></td>
+<td><p>bool</p></td>
+<td><p>Required</p></td>
+<td><p>False</p></td>
+<td><p>Determines the weight layout in the QKV linear projection of the self-attention layer. Affects only the self-attention layer.</p></td>
+</tr>
+<tr class="row-odd"><td><p>model.model_config.hidden_dropout</p></td>
+<td><p>float</p></td>
+<td><p>Required</p></td>
+<td><p>0.1</p></td>
+<td><p>Dropout probability for the Transformer hidden state.</p></td>
+</tr>
+<tr class="row-even"><td><p>model.model_config.attention_dropout</p></td>
+<td><p>float</p></td>
+<td><p>Required</p></td>
+<td><p>0.1</p></td>
+<td><p>Dropout probability for the post-attention layer.</p></td>
+</tr>
+<tr class="row-odd"><td><p>model.model_config.position_embedding_type</p></td>
+<td><p>string</p></td>
+<td><p>Required</p></td>
+<td><p>‘rope’</p></td>
+<td><p>Position embedding type for the attention layer.</p></td>
+</tr>
+<tr class="row-even"><td><p>model.model_config.params_dtype</p></td>
+<td><p>string</p></td>
+<td><p>Required</p></td>
+<td><p>‘float32’</p></td>
+<td><p>dtype to use when initializing weights.</p></td>
+</tr>
+<tr class="row-odd"><td><p>model.model_config.compute_dtype</p></td>
+<td><p>string</p></td>
+<td><p>Required</p></td>
+<td><p>‘bfloat16’</p></td>
+<td><p>Computed dtype for Linear layers.</p></td>
+</tr>
+<tr class="row-even"><td><p>model.model_config.layernorm_compute_dtype</p></td>
+<td><p>string</p></td>
+<td><p>Required</p></td>
+<td><p>‘float32’</p></td>
+<td><p>Computed dtype for LayerNorm layers.</p></td>
+</tr>
+<tr class="row-odd"><td><p>model.model_config.softmax_compute_dtype</p></td>
+<td><p>string</p></td>
+<td><p>Required</p></td>
+<td><p>‘float32’</p></td>
+<td><p>The dtype used to compute the softmax during attention computation.</p></td>
+</tr>
+<tr class="row-even"><td><p>model.model_config.rotary_dtype</p></td>
+<td><p>string</p></td>
+<td><p>Required</p></td>
+<td><p>‘float32’</p></td>
+<td><p>Computed dtype for custom rotated position embeddings.</p></td>
+</tr>
+<tr class="row-odd"><td><p>model.model_config.init_method_std</p></td>
+<td><p>float</p></td>
+<td><p>Required</p></td>
+<td><p>0.02</p></td>
+<td><p>The standard deviation of the zero-mean normal for the default initialization method, corresponding to <code class="docutils literal notranslate"><span class="pre">initializer_range</span></code> in HuggingFace. If <code class="docutils literal notranslate"><span class="pre">init_method</span></code> and <code class="docutils literal notranslate"><span class="pre">output_layer_init_method</span></code> are provided, this method is not used.</p></td>
+</tr>
+<tr class="row-even"><td><p>model.model_config.param_init_std_rules</p></td>
+<td><p>list[dict]</p></td>
+<td><p>Optional</p></td>
+<td><p>None</p></td>
+<td><p>Custom rules for parameter initialization standard deviation. Each rule contains <code class="docutils literal notranslate"><span class="pre">target</span></code> (regex pattern for parameter name) and <code class="docutils literal notranslate"><span class="pre">init_method_std</span></code> (std value, ≥0), for example: <code class="docutils literal notranslate"><span class="pre">[{&quot;target&quot;:</span> <span class="pre">&quot;.*weight&quot;,</span> <span class="pre">&quot;init_method_std&quot;:</span> <span class="pre">0.02}]</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>model.model_config.moe_grouped_gemm</p></td>
+<td><p>bool</p></td>
+<td><p>Required</p></td>
+<td><p>False</p></td>
+<td><p>When there are multiple experts per level, compress multiple local (potentially small) GEMMs in a single kernel launch to leverage grouped GEMM capabilities for improved utilization and performance.</p></td>
+</tr>
+<tr class="row-even"><td><p>model.model_config.num_moe_experts</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>None</p></td>
+<td><p>The number of experts to use for the MoE layer, corresponding to <code class="docutils literal notranslate"><span class="pre">n_routed_experts</span></code> in HuggingFace. When set, the MLP is replaced by the MoE layer. Setting this to None disables the MoE.</p></td>
+</tr>
+<tr class="row-odd"><td><p>model.model_config.num_experts_per_tok</p></td>
+<td><p>int</p></td>
+<td><p>Required</p></td>
+<td><p>2</p></td>
+<td><p>The number of experts to route each token to.</p></td>
+</tr>
+<tr class="row-even"><td><p>model.model_config.moe_ffn_hidden_size</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>None</p></td>
+<td><p>Size of the hidden layer of the MoE feedforward network. Corresponds to <code class="docutils literal notranslate"><span class="pre">moe_intermediate_size</span></code> in HuggingFace.</p></td>
+</tr>
+<tr class="row-odd"><td><p>model.model_config.moe_router_dtype</p></td>
+<td><p>string</p></td>
+<td><p>Required</p></td>
+<td><p>‘float32’</p></td>
+<td><p>Data type used for routing and weighted averaging of expert outputs. Corresponds to <code class="docutils literal notranslate"><span class="pre">router_dense_type</span></code> in HuggingFace.</p></td>
+</tr>
+<tr class="row-even"><td><p>model.model_config.gated_linear_unit</p></td>
+<td><p>bool</p></td>
+<td><p>Required</p></td>
+<td><p>False</p></td>
+<td><p>Use a gated linear unit for the first linear layer in the MLP.</p></td>
+</tr>
+<tr class="row-odd"><td><p>model.model_config.norm_topk_prob</p></td>
+<td><p>bool</p></td>
+<td><p>Required</p></td>
+<td><p>True</p></td>
+<td><p>Whether to use top-k probabilities for normalization.</p></td>
+</tr>
+<tr class="row-even"><td><p>model.model_config.moe_router_pre_softmax</p></td>
+<td><p>bool</p></td>
+<td><p>Required</p></td>
+<td><p>False</p></td>
+<td><p>Enables pre-softmax (pre-sigmoid) routing for MoE, meaning softmax is performed before top-k selection. By default, softmax is performed after top-k selection.</p></td>
+</tr>
+<tr class="row-odd"><td><p>model.model_config.moe_token_drop_policy</p></td>
+<td><p>string</p></td>
+<td><p>Required</p></td>
+<td><p>‘probs’</p></td>
+<td><p>The token drop policy. Can be either ‘probs’ or ‘position’. If <code class="docutils literal notranslate"><span class="pre">'probs'</span></code>, the token with the lowest probability is dropped. If <code class="docutils literal notranslate"><span class="pre">'position'</span></code>, the token at the end of each batch is dropped.</p></td>
+</tr>
+<tr class="row-even"><td><p>model.model_config.moe_router_topk_scaling_factor</p></td>
+<td><p>float</p></td>
+<td><p>Optional</p></td>
+<td><p>None</p></td>
+<td><p>Scaling factor for the routing score in Top-K routing, corresponding to <code class="docutils literal notranslate"><span class="pre">routed_scaling_factor</span></code> in HuggingFace. Valid only when <code class="docutils literal notranslate"><span class="pre">moe_router_pre_softmax</span></code> is enabled. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>, meaning no scaling.</p></td>
+</tr>
+<tr class="row-odd"><td><p>model.model_config.moe_aux_loss_coeff</p></td>
+<td><p>float</p></td>
+<td><p>Required</p></td>
+<td><p>0.0</p></td>
+<td><p>Scaling factor for the auxiliary loss. The recommended initial value is 1e-2.</p></td>
+</tr>
+<tr class="row-even"><td><p>model.model_config.moe_router_load_balancing_type</p></td>
+<td><p>string</p></td>
+<td><p>Required</p></td>
+<td><p>‘aux_loss’</p></td>
+<td><p>The router’s load balancing strategy. <code class="docutils literal notranslate"><span class="pre">'aux_loss'</span></code> corresponds to the load balancing loss used in GShard and SwitchTransformer; <code class="docutils literal notranslate"><span class="pre">'seq_aux_loss'</span></code> corresponds to the load balancing loss used in DeepSeekV2 and DeepSeekV3, which is used to calculate the loss of each sample; <code class="docutils literal notranslate"><span class="pre">'sinkhorn'</span></code> corresponds to the balancing algorithm used in S-BASE, and <code class="docutils literal notranslate"><span class="pre">'none'</span></code> means no load balancing.</p></td>
+</tr>
+<tr class="row-odd"><td><p>model.model_config.moe_permute_fusion</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Whether to use the moe_token_permute fusion operator. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>model.model_config.moe_router_force_expert_balance</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Whether to use forced load balancing in the expert router. This option is only for performance testing and not for general use. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>model.model_config.use_interleaved_weight_layout_mlp</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>True</p></td>
+<td><p>Determines the weight arrangement in the linear_fc1 projection of the MLP. Affects only MLP layers. <br>1. When True, use an interleaved arrangement: <code class="docutils literal notranslate"><span class="pre">[Gate_weights[0],</span> <span class="pre">Hidden_weights[0],</span> <span class="pre">Gate_weights[1],</span> <span class="pre">Hidden_weights[1],</span> <span class="pre">...]</span></code>. <br>2. When False, use a continuous arrangement: <code class="docutils literal notranslate"><span class="pre">[Gate_weights,</span> <span class="pre">Hidden_weights]</span></code>. <br>Note: This affects tensor memory layout, but does not affect mathematical equivalence.</p></td>
+</tr>
+<tr class="row-even"><td><p>model.model_config.moe_router_enable_expert_bias</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Whether to use TopK routing with dynamic expert bias in the unassisted lossless load balancing strategy. Routing decisions are based on the sum of the routing score and the expert bias.</p></td>
+</tr>
+<tr class="row-odd"><td><p>model.model_config.enable_expert_relocation</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Whether to enable dynamic expert migration for load balancing in the MoE model. When enabled, experts will be dynamically redistributed between devices based on their load history to improve training efficiency and load balance. Defaults to False.</p></td>
+</tr>
+<tr class="row-even"><td><p>model.model_config.expert_relocation_initial_iteration</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>20</p></td>
+<td><p>Start the initial iteration of expert migration. Expert migration will begin after this many training iterations.</p></td>
+</tr>
+<tr class="row-odd"><td><p>model.model_config.expert_relocation_freq</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>50</p></td>
+<td><p>Frequency of expert migration during training iterations. After the initial iteration, expert migration is performed every N iterations.</p></td>
+</tr>
+<tr class="row-even"><td><p>model.model_config.print_expert_load</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Whether to print expert load information. If enabled, detailed expert load statistics will be printed during training. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>model.model_config.moe_router_num_groups</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>None</p></td>
+<td><p>The number of expert groups to use for group-limited routing. Equivalent to <code class="docutils literal notranslate"><span class="pre">n_group</span></code> in HuggingFace.</p></td>
+</tr>
+<tr class="row-even"><td><p>model.model_config.moe_router_group_topk</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>None</p></td>
+<td><p>The number of selected groups for group-limited routing. Equivalent to <code class="docutils literal notranslate"><span class="pre">topk_group</span></code> in HuggingFace.</p></td>
+</tr>
+<tr class="row-odd"><td><p>model.model_config.moe_router_topk</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>2</p></td>
+<td><p>The number of experts to route each token to. Equivalent to <code class="docutils literal notranslate"><span class="pre">num_experts_per_tok</span></code> in HuggingFace. When used with <code class="docutils literal notranslate"><span class="pre">moe_router_num_groups</span></code> and <code class="docutils literal notranslate"><span class="pre">moe_router_group_topk</span></code>, first group <code class="docutils literal notranslate"><span class="pre">moe_router_num_groups</span></code>, then select <code class="docutils literal notranslate"><span class="pre">moe_router_group_topk</span></code>, and then select <code class="docutils literal notranslate"><span class="pre">moe_router_topk</span></code> experts from <code class="docutils literal notranslate"><span class="pre">moe_router_group_topk</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>model.model_config.window_size</p></td>
+<td><p>tuple(int, int)</p></td>
+<td><p>Optional</p></td>
+<td><p>None</p></td>
+<td><p>If not <code class="docutils literal notranslate"><span class="pre">None</span></code>, then will use sliding window attention. This parameter represents the range of the number of neighboring tokens that a token can ‘focus’ on in each attention operation; <code class="docutils literal notranslate"><span class="pre">window_size[0]</span></code> represents the number of tokens followed forward, while <code class="docutils literal notranslate"><span class="pre">window_size[1]</span></code> represents the number of tokens followed backward. Any token set to <code class="docutils literal notranslate"><span class="pre">-1</span></code> indicates an unlimited number of tokens to ‘follow’ forward or backward.</p></td>
+</tr>
+<tr class="row-odd"><td><p>model.model_config.window_attn_skip_freq</p></td>
+<td><p>int / list(int)</p></td>
+<td><p>Optional</p></td>
+<td><p>None</p></td>
+<td><p>Used to set the insertion frequency of the Full Attention layer in the Sliding Window Attention (SWA) layer. Supports two configuration modes:<br/>1. Equal Interval Mode: Specify an integer <code class="docutils literal notranslate"><span class="pre">N</span></code> to insert the full attention layer in a ratio of <code class="docutils literal notranslate"><span class="pre">(N-1)</span> <span class="pre">:</span> <span class="pre">1</span></code> . After passing through <code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">−</span> <span class="pre">1</span></code>  sliding window attention layers, a full attention layer is inserted. <br/>2. Custom mode: freely define the alternating order of attention layers through a Boolean value list. For example: <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">1,</span> <span class="pre">1,</span> <span class="pre">1,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">0]</span></code>, where <code class="docutils literal notranslate"><span class="pre">1</span></code> represents the sliding window attention layer and <code class="docutils literal notranslate"><span class="pre">0</span></code> represents the full attention layer. This list determines the type of each layer in the network in order.</p></td>
+</tr>
+<tr class="row-even"><td><p>model.model_config.bias_swiglu_fusion</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Whether to use the swiglu fusion operator. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>model.model_config.apply_rope_fusion</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Whether to use the RoPE fusion operator. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="model-training-configuration">
+<h3>Model Training Configuration<a class="headerlink" href="#model-training-configuration" title="Link to this heading"></a></h3>
+<p>When starting model training, in addition to model-related parameters, you also need to set the parameters of trainer, runner_config, learning rate, and optimizer and other modules required for training, MindSpore Transformers provides the following configuration items.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameters</p></th>
+<th class="head"><p>Descriptions</p></th>
+<th class="head"><p>Types</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>trainer.type</p></td>
+<td><p>Set the trainer class, usually different models for different application scenarios will set different trainer classes.</p></td>
+<td><p>str</p></td>
+</tr>
+<tr class="row-odd"><td><p>trainer.model_name</p></td>
+<td><p>Set the model name in the format ‘{name}_xxb’, indicating a certain specification of the model.</p></td>
+<td><p>str</p></td>
+</tr>
+<tr class="row-even"><td><p>runner_config.epochs</p></td>
+<td><p>Set the number of rounds for model training.</p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-odd"><td><p>runner_config.batch_size</p></td>
+<td><p>Set the sample size of the batch data, which overrides the <code class="docutils literal notranslate"><span class="pre">batch_size</span></code> in the dataset configuration.</p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-even"><td><p>runner_config.sink_mode</p></td>
+<td><p>Enable data sink mode.</p></td>
+<td><p>bool</p></td>
+</tr>
+<tr class="row-odd"><td><p>runner_config.sink_size</p></td>
+<td><p>Set the number of iterations to be sent down from Host to Device per iteration, effective only when <code class="docutils literal notranslate"><span class="pre">sink_mode=True</span></code>. This argument will be deprecated in a future release.</p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-even"><td><p>runner_config.gradient_accumulation_steps</p></td>
+<td><p>Set the number of gradient accumulation steps, the default value is 1, which means that gradient accumulation is not enabled.</p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-odd"><td><p>runner_wrapper.type</p></td>
+<td><p>Set the wrapper class, generally set ‘MFTrainOneStepCell’.</p></td>
+<td><p>str</p></td>
+</tr>
+<tr class="row-even"><td><p>runner_wrapper.local_norm</p></td>
+<td><p>Set the gradient norm of each parameter on the printing card.</p></td>
+<td><p>bool</p></td>
+</tr>
+<tr class="row-odd"><td><p>runner_wrapper.scale_sense.type</p></td>
+<td><p>Set the gradient scaling class, generally just set ‘DynamicLossScaleUpdateCell’.</p></td>
+<td><p>str</p></td>
+</tr>
+<tr class="row-even"><td><p>runner_wrapper.scale_sense.loss_scale_value</p></td>
+<td><p>Set the loss dynamic scale factor, the model loss can change dynamically according to the configuration of this parameter.</p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-odd"><td><p>runner_wrapper.use_clip_grad</p></td>
+<td><p>Turn on gradient clipping. Turning on to avoid cases where the inverse gradient is too large and training fails to converge.</p></td>
+<td><p>bool</p></td>
+</tr>
+<tr class="row-even"><td><p>lr_schedule.type</p></td>
+<td><p>Set the lr_schedule class, lr_schedule is mainly used to adjust the learning rate in model training.</p></td>
+<td><p>str</p></td>
+</tr>
+<tr class="row-odd"><td><p>lr_schedule.learning_rate</p></td>
+<td><p>Set the initialized learning rate size.</p></td>
+<td><p>float</p></td>
+</tr>
+<tr class="row-even"><td><p>lr_scale</p></td>
+<td><p>Whether to enable learning rate scaling.</p></td>
+<td><p>bool</p></td>
+</tr>
+<tr class="row-odd"><td><p>lr_scale_factor</p></td>
+<td><p>Set the learning rate scaling factor.</p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-even"><td><p>layer_scale</p></td>
+<td><p>Whether to turn on layer attenuation.</p></td>
+<td><p>bool</p></td>
+</tr>
+<tr class="row-odd"><td><p>layer_decay</p></td>
+<td><p>Set the layer attenuation factor.</p></td>
+<td><p>float</p></td>
+</tr>
+<tr class="row-even"><td><p>optimizer.type</p></td>
+<td><p>Set the optimizer class, the optimizer is mainly used to calculate the gradient for model training.</p></td>
+<td><p>str</p></td>
+</tr>
+<tr class="row-odd"><td><p>optimizer.weight_decay</p></td>
+<td><p>Set the optimizer weight decay factor.</p></td>
+<td><p>float</p></td>
+</tr>
+<tr class="row-even"><td><p>optimizer.fused_num</p></td>
+<td><p>Set <code class="docutils literal notranslate"><span class="pre">fused_num</span></code> weights for fusion, and update the fused weights to the network parameters according to the fusion algorithm. Default to <code class="docutils literal notranslate"><span class="pre">10</span></code>.</p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-odd"><td><p>optimizer.interleave_step</p></td>
+<td><p>Select the number of step intervals for the weights to be fused, and take a weight as a candidate weight for fusion once every <code class="docutils literal notranslate"><span class="pre">interleave_step</span></code> step. Default to <code class="docutils literal notranslate"><span class="pre">1000</span></code>.</p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-even"><td><p>optimizer.fused_algo</p></td>
+<td><p>Fusion algorithm, supports <code class="docutils literal notranslate"><span class="pre">ema</span></code> and <code class="docutils literal notranslate"><span class="pre">sma</span></code>. Default to <code class="docutils literal notranslate"><span class="pre">ema</span></code>.</p></td>
+<td><p>string</p></td>
+</tr>
+<tr class="row-odd"><td><p>optimizer.ema_alpha</p></td>
+<td><p>The fusion coefficient is only effective when <code class="docutils literal notranslate"><span class="pre">fused_algo</span></code> is set to <code class="docutils literal notranslate"><span class="pre">ema</span></code>. Default to <code class="docutils literal notranslate"><span class="pre">0.2</span></code>.</p></td>
+<td><p>float</p></td>
+</tr>
+<tr class="row-even"><td><p>train_dataset.batch_size</p></td>
+<td><p>The description is same as that of <code class="docutils literal notranslate"><span class="pre">runner_config.batch_size</span></code>.</p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-odd"><td><p>train_dataset.input_columns</p></td>
+<td><p>Set the input data columns for the training dataset.</p></td>
+<td><p>list</p></td>
+</tr>
+<tr class="row-even"><td><p>train_dataset.output_columns</p></td>
+<td><p>Set the output data columns for the training dataset.</p></td>
+<td><p>list</p></td>
+</tr>
+<tr class="row-odd"><td><p>train_dataset.construct_args_key</p></td>
+<td><p>Set the dataset part <code class="docutils literal notranslate"><span class="pre">keys</span></code> of the model <code class="docutils literal notranslate"><span class="pre">construct</span></code> input to the model in lexicographical order, used when the parameter passing order of the model does not match the order of the dataset input.</p></td>
+<td><p>list</p></td>
+</tr>
+<tr class="row-even"><td><p>train_dataset.column_order</p></td>
+<td><p>Set the order of the output data columns of the training dataset.</p></td>
+<td><p>list</p></td>
+</tr>
+<tr class="row-odd"><td><p>train_dataset.num_parallel_workers</p></td>
+<td><p>Set the number of processes that read the training dataset.</p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-even"><td><p>train_dataset.python_multiprocessing</p></td>
+<td><p>Enabling Python multi-process mode to improve data processing performance.</p></td>
+<td><p>bool</p></td>
+</tr>
+<tr class="row-odd"><td><p>train_dataset.drop_remainder</p></td>
+<td><p>Whether to discard the last batch of data if it contains fewer samples than batch_size.</p></td>
+<td><p>bool</p></td>
+</tr>
+<tr class="row-even"><td><p>train_dataset.repeat</p></td>
+<td><p>Set the number of dataset duplicates.</p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-odd"><td><p>train_dataset.numa_enable</p></td>
+<td><p>Set the default state of NUMA to data read startup state.</p></td>
+<td><p>bool</p></td>
+</tr>
+<tr class="row-even"><td><p>train_dataset.prefetch_size</p></td>
+<td><p>Set the amount of pre-read data.</p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-odd"><td><p>train_dataset.data_loader.type</p></td>
+<td><p>Set the data loading class.</p></td>
+<td><p>str</p></td>
+</tr>
+<tr class="row-even"><td><p>train_dataset.data_loader.dataset_dir</p></td>
+<td><p>Set the path for loading data.</p></td>
+<td><p>str</p></td>
+</tr>
+<tr class="row-odd"><td><p>train_dataset.data_loader.shuffle</p></td>
+<td><p>Whether to randomly sort the data when reading the dataset.</p></td>
+<td><p>bool</p></td>
+</tr>
+<tr class="row-even"><td><p>train_dataset.transforms</p></td>
+<td><p>Set options related to data enhancement.</p></td>
+<td><p>-</p></td>
+</tr>
+<tr class="row-odd"><td><p>train_dataset_task.type</p></td>
+<td><p>Set up the dataset class, which is used to encapsulate the data loading class and other related configurations.</p></td>
+<td><p>str</p></td>
+</tr>
+<tr class="row-even"><td><p>train_dataset_task.dataset_config</p></td>
+<td><p>Typically set as a reference to <code class="docutils literal notranslate"><span class="pre">train_dataset</span></code>, containing all configuration entries for <code class="docutils literal notranslate"><span class="pre">train_dataset</span></code>.</p></td>
+<td><p>-</p></td>
+</tr>
+<tr class="row-odd"><td><p>auto_tune</p></td>
+<td><p>Enable auto-tuning of data processing parameters, see <a class="reference external" href="https://www.mindspore.cn/docs/en/master/api_python/dataset/mindspore.dataset.config.set_enable_autotune.html">set_enable_autotune</a> for details.</p></td>
+<td><p>bool</p></td>
+</tr>
+<tr class="row-even"><td><p>filepath_prefix</p></td>
+<td><p>Set the save path for parameter configurations after data optimization.</p></td>
+<td><p>str</p></td>
+</tr>
+<tr class="row-odd"><td><p>autotune_per_step</p></td>
+<td><p>Set the configuration tuning step interval for automatic data acceleration, for details see <a class="reference external" href="https://www.mindspore.cn/docs/en/master/api_python/dataset/mindspore.dataset.config.set_autotune_interval.html">set_autotune_interval</a>.</p></td>
+<td><p>int</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="model-training-checkpoint-configuration">
+<h3>Model Training Checkpoint Configuration<a class="headerlink" href="#model-training-checkpoint-configuration" title="Link to this heading"></a></h3>
+<p>To ensure the controllability and fault tolerance of the model training process, it is usually necessary to configure save and load strategies for weight management in long-cycle training or large-scale distributed scenarios. The relevant configurations for model training weights are as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameters</p></th>
+<th class="head"><p>Descriptions</p></th>
+<th class="head"><p>Types</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>checkpoint.save_path</p></td>
+<td><p>Set the directory for saving weight files. If not configured, the default directory is <code class="docutils literal notranslate"><span class="pre">checkpoint/</span></code> under the <code class="docutils literal notranslate"><span class="pre">output_dir</span></code> directory.</p></td>
+<td><p>str</p></td>
+</tr>
+<tr class="row-odd"><td><p>checkpoint.save_max</p></td>
+<td><p>The maximum number of weight files to retain. When the number of saved weights exceeds this value, the system will delete the oldest files in order of creation time to ensure that the total number does not exceed this limit. Used to control disk space usage. Default to <code class="docutils literal notranslate"><span class="pre">5</span></code>.</p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-even"><td><p>checkpoint.save_interleaved_steps</p></td>
+<td><p>Sets the automatic saving interval for weights based on the number of training steps (unit: steps). Mutually exclusive with <code class="docutils literal notranslate"><span class="pre">save_checkpoint_seconds</span></code>; if both are set, the time-based saving takes precedence. For example, save every 1000 steps. Default to <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-odd"><td><p>checkpoint.no_save_optim</p></td>
+<td><p>Optimizer weight saving function switch (controls whether to save optimizer weight information). Default to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></td>
+<td><p>bool</p></td>
+</tr>
+<tr class="row-even"><td><p>checkpoint.async_save</p></td>
+<td><p>Whether to save weights asynchronously. Enabling this feature will not block the main training process, improving training efficiency. However, please note that I/O resource contention may cause write delays. Default to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></td>
+<td><p>bool</p></td>
+</tr>
+<tr class="row-odd"><td><p>checkpoint.prefix</p></td>
+<td><p>Set the prefix for the weight file name. For example, <code class="docutils literal notranslate"><span class="pre">CKP-100.ckpt</span></code> is generated. If not configured, default to <code class="docutils literal notranslate"><span class="pre">'CKP'</span></code>.</p></td>
+<td><p>str</p></td>
+</tr>
+<tr class="row-even"><td><p>checkpoint.save_remove_redundancy</p></td>
+<td><p>Whether to remove redundancy from model weights when saving. Default to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></td>
+<td><p>bool</p></td>
+</tr>
+<tr class="row-odd"><td><p>checkpoint.load_path</p></td>
+<td><p>The file or folder path for loading weights. Supports the following three scenarios: 1. The path to the complete weights file; 2. The path to the distributed weights folder after offline splitting; 3. The path to the folder containing LoRA incremental weights and base model weights. For details on how to obtain various weights, see <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/ckpt.html#weight-format-conversion">Checkpoint Conversion Function</a>. Default to <code class="docutils literal notranslate"><span class="pre">''</span></code>.</p></td>
+<td><p>str</p></td>
+</tr>
+<tr class="row-even"><td><p>checkpoint.load_balanced</p></td>
+<td><p>The switch for the weight balanced loading function <strong>only supports being turned on in distributed tasks</strong>. When set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, each rank loads weights according to a balanced parameter allocation strategy, and then obtains the final weights through parameter broadcasting. Default to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></td>
+<td><p>str</p></td>
+</tr>
+<tr class="row-odd"><td><p>checkpoint.no_load_optim</p></td>
+<td><p>Whether to enable the resumable training feature. When enabled, the optimizer state, learning rate scheduler state, and other parameters will be restored from the path specified by <code class="docutils literal notranslate"><span class="pre">load_checkpoint</span></code> to continue training. For more information, see <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/resume_training.html#resumable-training-after-breakpoint">Resumable Training</a>.</p></td>
+<td><p>bool</p></td>
+</tr>
+<tr class="row-even"><td><p>checkpoint.reshard_worker_number</p></td>
+<td><p>Specifies the number of threads for parallel weight resharding. For scenarios where weights need to be resharded online, this field can be configured for parallel acceleration. Default to <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></td>
+<td><p>int</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="parallel-configuration">
+<h3>Parallel Configuration<a class="headerlink" href="#parallel-configuration" title="Link to this heading"></a></h3>
+<p>In order to improve the performance of the model, it is usually necessary to configure the parallelism strategy for the model in large-scale cluster usage scenarios. For details, please refer to <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/parallel_training.html">Distributed Parallelism</a>, the parallel configuration in MindSpore Transformers is as follows.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameters</p></th>
+<th class="head"><p>Descriptions</p></th>
+<th class="head"><p>Types</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>use_parallel</p></td>
+<td><p>Enable parallel mode.</p></td>
+<td><p>bool</p></td>
+</tr>
+<tr class="row-odd"><td><p>parallel_config.data_parallel</p></td>
+<td><p>Set the number of data parallel.</p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-even"><td><p>parallel_config.model_parallel</p></td>
+<td><p>Set the number of model parallel.</p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-odd"><td><p>parallel_config.context_parallel</p></td>
+<td><p>Set the number of sequence parallel.</p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-even"><td><p>parallel_config.pipeline_stage</p></td>
+<td><p>Set the number of pipeline parallel.</p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-odd"><td><p>parallel_config.micro_batch_num</p></td>
+<td><p>Set the pipeline parallel microbatch size, which should satisfy <code class="docutils literal notranslate"><span class="pre">parallel_config.micro_batch_num</span></code> &gt;= <code class="docutils literal notranslate"><span class="pre">parallel_config.pipeline_stage</span></code> when <code class="docutils literal notranslate"><span class="pre">parallel_config.pipeline_stage</span></code> is greater than 1.</p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-even"><td><p>parallel_config.seq_split_num</p></td>
+<td><p>Set the sequence split number in sequence pipeline parallel, which should be a divisor of sequence length.</p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-odd"><td><p>parallel_config.gradient_aggregation_group</p></td>
+<td><p>Set the size of the gradient communication operator fusion group.</p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-even"><td><p>parallel_config.context_parallel_algo</p></td>
+<td><p>Set the long sequence parallel scheme, optionally <code class="docutils literal notranslate"><span class="pre">colossalai_cp</span></code>, <code class="docutils literal notranslate"><span class="pre">ulysses_cp</span></code> and <code class="docutils literal notranslate"><span class="pre">hybrid_cp</span></code>, effective only if the number of <code class="docutils literal notranslate"><span class="pre">context_parallel</span></code> slices is greater than 1.</p></td>
+<td><p>str</p></td>
+</tr>
+<tr class="row-odd"><td><p>parallel_config.ulysses_degree_in_cp</p></td>
+<td><p>Setting the Ulysses sequence parallel dimension, configured in parallel with the <code class="docutils literal notranslate"><span class="pre">hybrid_cp</span></code> long sequence parallel scheme, requires ensuring that <code class="docutils literal notranslate"><span class="pre">context_parallel</span></code> is divisible by this parameter and greater than 1, and that <code class="docutils literal notranslate"><span class="pre">ulysses_degree_in_cp</span></code> is divisible by the number of attention heads.</p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-even"><td><p>micro_batch_interleave_num</p></td>
+<td><p>Set the number of multicopy parallel, enable multicopy parallelism if it is greater than 1. Usually enabled when using model parallel, mainly used to optimize the communication loss generated by model parallel, and not recommended to be enabled when only using streaming parallel. For details, please refer to <a class="reference external" href="https://www.mindspore.cn/docs/en/master/api_python/parallel/mindspore.parallel.nn.MicroBatchInterleaved.html">MicroBatchInterleaved</a>.</p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-odd"><td><p>parallel.parallel_mode</p></td>
+<td><p>Set parallel mode, <code class="docutils literal notranslate"><span class="pre">0</span></code> means data parallel mode, <code class="docutils literal notranslate"><span class="pre">1</span></code> means semi-automatic parallel mode, <code class="docutils literal notranslate"><span class="pre">2</span></code> means automatic parallel mode, <code class="docutils literal notranslate"><span class="pre">3</span></code> means mixed parallel mode, usually set to semi-automatic parallel mode.</p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-even"><td><p>parallel.gradients_mean</p></td>
+<td><p>Whether to execute the averaging operator after the gradient AllReduce. Typically set to <code class="docutils literal notranslate"><span class="pre">False</span></code> in semi-automatic parallel mode and <code class="docutils literal notranslate"><span class="pre">True</span></code> in data parallel mode.</p></td>
+<td><p>bool</p></td>
+</tr>
+<tr class="row-odd"><td><p>parallel.enable_alltoall</p></td>
+<td><p>Enables generation of the AllToAll communication operator during communication. Typically set to <code class="docutils literal notranslate"><span class="pre">True</span></code> only in MOE scenarios, default value is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></td>
+<td><p>bool</p></td>
+</tr>
+<tr class="row-even"><td><p>parallel.full_batch</p></td>
+<td><p>Whether to load the full batch of data from the dataset in parallel mode. Setting it to <code class="docutils literal notranslate"><span class="pre">True</span></code> means all ranks will load the full batch of data. Setting it to <code class="docutils literal notranslate"><span class="pre">False</span></code> means each rank will only load the corresponding batch of data. When set to <code class="docutils literal notranslate"><span class="pre">False</span></code>, the corresponding <code class="docutils literal notranslate"><span class="pre">dataset_strategy</span></code> must be configured.</p></td>
+<td><p>bool</p></td>
+</tr>
+<tr class="row-odd"><td><p>parallel.dataset_strategy</p></td>
+<td><p>Only supports <code class="docutils literal notranslate"><span class="pre">List</span> <span class="pre">of</span> <span class="pre">List</span></code> type and is effective only when <code class="docutils literal notranslate"><span class="pre">full_batch=False</span></code>. The number of sublists in the list must be equal to the length of <code class="docutils literal notranslate"><span class="pre">train_dataset.input_columns</span></code>. Each sublist in the list must have the same shape as the data returned by the dataset. Generally, data parallel splitting is done along the first dimension, so the first dimension of the sublist should be configured to match <code class="docutils literal notranslate"><span class="pre">data_parallel</span></code>, while the other dimensions should be set to <code class="docutils literal notranslate"><span class="pre">1</span></code>. For detailed explanation, refer to <a class="reference external" href="https://www.mindspore.cn/tutorials/en/master/parallel/dataset_slice.html">Dataset Splitting</a>.</p></td>
+<td><p>list</p></td>
+</tr>
+<tr class="row-even"><td><p>parallel.search_mode</p></td>
+<td><p>Set fully-automatic parallel strategy search mode, options are <code class="docutils literal notranslate"><span class="pre">recursive_programming</span></code>, <code class="docutils literal notranslate"><span class="pre">dynamic_programming</span></code> and <code class="docutils literal notranslate"><span class="pre">sharding_propagation</span></code>, only works in fully-automatic parallel mode, experimental interface.</p></td>
+<td><p>str</p></td>
+</tr>
+<tr class="row-odd"><td><p>parallel.strategy_ckpt_save_file</p></td>
+<td><p>Set the save path for the parallel slicing strategy file.</p></td>
+<td><p>str</p></td>
+</tr>
+<tr class="row-even"><td><p>parallel.strategy_ckpt_config.only_trainable_params</p></td>
+<td><p>Whether to save (or load) information about the slicing strategy for trainable parameters only, default is True, set this parameter to <code class="docutils literal notranslate"><span class="pre">False</span></code> when there are frozen parameters in the network but need to be sliced.</p></td>
+<td><p>bool</p></td>
+</tr>
+<tr class="row-odd"><td><p>parallel.enable_parallel_optimizer</p></td>
+<td><p>Turn on optimizer parallel.<br/> 1. slice model weight parameters by number of devices in data parallel mode. <br/>2. slice model weight parameters by <code class="docutils literal notranslate"><span class="pre">parallel_config.data_parallel</span></code> in semi-automatic parallel mode.</p></td>
+<td><p>bool</p></td>
+</tr>
+<tr class="row-even"><td><p>parallel.parallel_optimizer_config.gradient_accumulation_shard</p></td>
+<td><p>Set whether the cumulative gradient variable is sliced on the data-parallel dimension, only effective if <code class="docutils literal notranslate"><span class="pre">enable_parallel_optimizer=True</span></code>.</p></td>
+<td><p>bool</p></td>
+</tr>
+<tr class="row-odd"><td><p>parallel.parallel_optimizer_config.parallel_optimizer_threshold</p></td>
+<td><p>Set the threshold for the optimizer weight parameter cut, effective only if <code class="docutils literal notranslate"><span class="pre">enable_parallel_optimizer=True</span></code>.</p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-even"><td><p>parallel.parallel_optimizer_config.optimizer_weight_shard_size</p></td>
+<td><p>Set the size of the optimizer weight parameter to slice the communication domain, requiring the value to be integrable by <code class="docutils literal notranslate"><span class="pre">parallel_config.data_parallel</span></code>, effective only if <code class="docutils literal notranslate"><span class="pre">enable_parallel_optimizer=True</span></code>.</p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-odd"><td><p>parallel.pipeline_config.pipeline_interleave</p></td>
+<td><p>Enable interleave pipeline parallel, you should set this variable to be <code class="docutils literal notranslate"><span class="pre">true</span></code> when using Seq-Pipe or ZeroBubbleV(also known as DualPipeV).</p></td>
+<td><p>bool</p></td>
+</tr>
+<tr class="row-even"><td><p>parallel.pipeline_config.pipeline_scheduler</p></td>
+<td><p>Set the pipeline scheduling strategy. We only support <code class="docutils literal notranslate"><span class="pre">&quot;seqpipe&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;zero_bubble_v&quot;</span></code> now.</p></td>
+<td><p>str</p></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<div><p>Configure the parallel strategy to satisfy device_num = data_parallel × model_parallel × context_parallel × pipeline_stage.</p>
+</div></blockquote>
+</section>
+<section id="model-optimization-configuration">
+<h3>Model Optimization Configuration<a class="headerlink" href="#model-optimization-configuration" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p>MindSpore Transformers provides recomputation-related configurations to reduce the memory footprint of the model during training, see <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/advanced_development/performance_optimization.html#recomputation">Recomputation</a> for details.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameters</p></th>
+<th class="head"><p>Descriptions</p></th>
+<th class="head"><p>Types</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>recompute_config.recompute</p></td>
+<td><p>Whether to enable recompute.</p></td>
+<td><p>bool/list/tuple</p></td>
+</tr>
+<tr class="row-odd"><td><p>recompute_config.select_recompute</p></td>
+<td><p>Turn on recomputation to recompute only for the operators in the attention layer.</p></td>
+<td><p>bool/list</p></td>
+</tr>
+<tr class="row-even"><td><p>recompute_config.parallel_optimizer_comm_recompute</p></td>
+<td><p>Whether to recompute AllGather communication introduced in parallel by the optimizer.</p></td>
+<td><p>bool/list</p></td>
+</tr>
+<tr class="row-odd"><td><p>recompute_config.mp_comm_recompute</p></td>
+<td><p>Whether to recompute communications introduced by model parallel.</p></td>
+<td><p>bool</p></td>
+</tr>
+<tr class="row-even"><td><p>recompute_config.recompute_slice_activation</p></td>
+<td><p>Whether to output slices for Cells kept in memory. This parameter is only supported in legacy models.</p></td>
+<td><p>bool</p></td>
+</tr>
+<tr class="row-odd"><td><p>recompute_config.select_recompute_exclude</p></td>
+<td><p>Disable recomputation for the specified operator, valid only for the Primitive operators.</p></td>
+<td><p>bool/list</p></td>
+</tr>
+<tr class="row-even"><td><p>recompute_config.select_comm_recompute_exclude</p></td>
+<td><p>Disable communication recomputation for the specified operator, valid only for the Primitive operators.</p></td>
+<td><p>bool/list</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>MindSpore Transformers provides fine-grained activations SWAP-related configurations to reduce the memory footprint of the model during training, see <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/memory_optimization.html#fine-grained-activations-swap">Fine-Grained Activations SWAP</a> for details.</p>
+<p><strong>Legacy Configuration (swap_config):</strong></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameters</p></th>
+<th class="head"><p>Descriptions</p></th>
+<th class="head"><p>Types</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>swap_config.swap</p></td>
+<td><p>Whether to enable activations SWAP.</p></td>
+<td><p>bool</p></td>
+</tr>
+<tr class="row-odd"><td><p>swap_config.default_prefetch</p></td>
+<td><p>Control the timing of releasing memory in the forward phase and starting prefetch in the backward phase of the default SWAP strategy, only taking effect when swap=True, layer_swap=None, and op_swap=None.</p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-even"><td><p>swap_config.layer_swap</p></td>
+<td><p>Select specific layers to enable activations SWAP.</p></td>
+<td><p>list</p></td>
+</tr>
+<tr class="row-odd"><td><p>swap_config.op_swap</p></td>
+<td><p>Select specific operators within layers to enable activations SWAP.</p></td>
+<td><p>list</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Mcore Configuration (model_config):</strong></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameters</p></th>
+<th class="head"><p>Descriptions</p></th>
+<th class="head"><p>Types</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>model_config.cpu_offloading</p></td>
+<td><p>Whether to enable activations SWAP.</p></td>
+<td><p>bool</p></td>
+</tr>
+<tr class="row-odd"><td><p>model_config.default_prefetch</p></td>
+<td><p>Control the timing of releasing memory in the forward phase and starting prefetch in the backward phase of the default SWAP strategy, only taking effect when cpu_offloading=True, cpu_offloading_num_layers=None, and op_swap=None.</p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-even"><td><p>model_config.cpu_offloading_num_layers</p></td>
+<td><p>Select specific layers to enable activations SWAP.</p></td>
+<td><p>list</p></td>
+</tr>
+<tr class="row-odd"><td><p>model_config.op_swap</p></td>
+<td><p>Select specific operators within layers to enable activations SWAP.</p></td>
+<td><p>list</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ol>
+</section>
+<section id="callbacks-configuration">
+<h3>Callbacks Configuration<a class="headerlink" href="#callbacks-configuration" title="Link to this heading"></a></h3>
+<p>MindSpore Transformers provides encapsulated Callbacks function class, mainly to achieve to return to the model training state and output in the model training process, save the model weight file and other operations. Currently, the following Callbacks function class is supported.</p>
+<ol class="arabic">
+<li><p>MFLossMonitor</p>
+<p>This callback function class is mainly used to print information such as training progress, model Loss, and learning rate during the training process and has several configurable items as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Optional</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Value Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>learning_rate</p></td>
+<td><p>float</p></td>
+<td><p>Optional</p></td>
+<td><p>None</p></td>
+<td><p>Sets the initial learning rate for <code class="docutils literal notranslate"><span class="pre">MFLossMonitor</span></code>. Used for logging and training progress calculation. If not set, attempts to obtain it from the optimizer or other configuration.</p></td>
+</tr>
+<tr class="row-odd"><td><p>per_print_times</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>1</p></td>
+<td><p>Sets the frequency of logging for <code class="docutils literal notranslate"><span class="pre">MFLossMonitor</span></code>, in steps. The default value is <code class="docutils literal notranslate"><span class="pre">1</span></code>, which prints a log message once per training step.</p></td>
+</tr>
+<tr class="row-even"><td><p>micro_batch_num</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>1</p></td>
+<td><p>Sets the number of micro batches processed at each training step, used to calculate the actual loss value. If not set, it is the same as <code class="docutils literal notranslate"><span class="pre">parallel_config.micro_batch_num</span></code> in [Parallel Configuration](#Parallel Configuration).</p></td>
+</tr>
+<tr class="row-odd"><td><p>micro_batch_interleave_num</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>1</p></td>
+<td><p>Sets the size of the multi-replica micro-batch for each training step, used for loss calculation. If not configured, it is the same as <code class="docutils literal notranslate"><span class="pre">micro_batch_interleave_num</span></code> in [Parallel Configuration](#Parallel Configuration).</p></td>
+</tr>
+<tr class="row-even"><td><p>origin_epochs</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>None</p></td>
+<td><p>Sets the total number of training epochs in <code class="docutils literal notranslate"><span class="pre">MFLossMonitor</span></code>. If not configured, it is the same as <code class="docutils literal notranslate"><span class="pre">runner_config.epochs</span></code> in [Model Training Configuration](#Model Training Configuration).</p></td>
+</tr>
+<tr class="row-odd"><td><p>dataset_size</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>None</p></td>
+<td><p>Sets the total number of samples in the dataset in <code class="docutils literal notranslate"><span class="pre">MFLossMonitor</span></code>. If not configured, it automatically uses the actual dataset size loaded.</p></td>
+</tr>
+<tr class="row-even"><td><p>initial_epoch</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>0</p></td>
+<td><p>Sets the starting epoch number for <code class="docutils literal notranslate"><span class="pre">MFLossMonitor</span></code>. The default value is <code class="docutils literal notranslate"><span class="pre">0</span></code>, indicating that counting starts from epoch 0. This can be used to resume training progress when resuming training from a breakpoint.</p></td>
+</tr>
+<tr class="row-odd"><td><p>initial_step</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>0</p></td>
+<td><p>Sets the number of initial training steps in <code class="docutils literal notranslate"><span class="pre">MFLossMonitor</span></code>. The default value is <code class="docutils literal notranslate"><span class="pre">0</span></code>. This can be used to align logs and progress bars when resuming training.</p></td>
+</tr>
+<tr class="row-even"><td><p>global_batch_size</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>0</p></td>
+<td><p>Sets the global batch size in <code class="docutils literal notranslate"><span class="pre">MFLossMonitor</span></code> (i.e., the total number of samples used in each training step). If not configured, it is automatically calculated based on the dataset size and parallelization strategy.</p></td>
+</tr>
+<tr class="row-odd"><td><p>gradient_accumulation_steps</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>1</p></td>
+<td><p>Sets the number of gradient accumulation steps in <code class="docutils literal notranslate"><span class="pre">MFLossMonitor</span></code>. If not configured, it is consistent with <code class="docutils literal notranslate"><span class="pre">gradient_accumulation_steps</span></code> in [Model Training Configuration](#Model Training Configuration). Used for loss normalization and training progress estimation.</p></td>
+</tr>
+<tr class="row-even"><td><p>check_for_nan_in_loss_and_grad</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Whether to enable NaN/Inf detection for loss values and gradients in <code class="docutils literal notranslate"><span class="pre">MFLossMonitor</span></code>. If enabled, training will be terminated if overflow (NaN or INF) is detected. The default value is <code class="docutils literal notranslate"><span class="pre">False</span></code>. It is recommended to enable it during the debugging phase to improve training stability.</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>SummaryMonitor</p>
+<p>This callback function class is mainly used to collect Summary data, see <a class="reference external" href="https://www.mindspore.cn/docs/en/master/api_python/mindspore/mindspore.SummaryCollector.html">mindspore.SummaryCollector</a> for details.</p>
+</li>
+<li><p>CheckpointMonitor</p>
+<p>This callback function class is mainly used to save the model weights file during the model training process and has several configurable items as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Optional</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Value Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>prefix</p></td>
+<td><p>string</p></td>
+<td><p>Optional</p></td>
+<td><p>‘CKP’</p></td>
+<td><p>Set the prefix for the weight file name. For example, <code class="docutils literal notranslate"><span class="pre">CKP-100.ckpt</span></code> is generated. If not configured, the default value <code class="docutils literal notranslate"><span class="pre">'CKP'</span></code> is used.</p></td>
+</tr>
+<tr class="row-odd"><td><p>directory</p></td>
+<td><p>string</p></td>
+<td><p>Optional</p></td>
+<td><p>None</p></td>
+<td><p>Set the directory for saving weight files. If not configured, the default directory is <code class="docutils literal notranslate"><span class="pre">checkpoint/</span></code> under the <code class="docutils literal notranslate"><span class="pre">output_dir</span></code> directory.</p></td>
+</tr>
+<tr class="row-even"><td><p>save_checkpoint_seconds</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>0</p></td>
+<td><p>Set the interval for automatically saving weights (in seconds). Mutually exclusive with <code class="docutils literal notranslate"><span class="pre">save_checkpoint_steps</span></code> and takes precedence. For example, save every 3600 seconds.</p></td>
+</tr>
+<tr class="row-odd"><td><p>save_checkpoint_steps</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>1</p></td>
+<td><p>Sets the automatic saving interval for weights based on the number of training steps (unit: steps). Mutually exclusive with <code class="docutils literal notranslate"><span class="pre">save_checkpoint_seconds</span></code>; if both are set, the time-based saving takes precedence. For example, save every 1000 steps.</p></td>
+</tr>
+<tr class="row-even"><td><p>keep_checkpoint_max</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>5</p></td>
+<td><p>The maximum number of weight files to retain. When the number of saved weights exceeds this value, the system will delete the oldest files in order of creation time to ensure that the total number does not exceed this limit. Used to control disk space usage.</p></td>
+</tr>
+<tr class="row-odd"><td><p>keep_checkpoint_per_n_minutes</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>0</p></td>
+<td><p>Retain one weight every N minutes. This is a time-windowed retention policy often used to balance storage and recovery flexibility in long-term training. For example, setting it to <code class="docutils literal notranslate"><span class="pre">60</span></code> means retaining at least one weight every hour.</p></td>
+</tr>
+<tr class="row-even"><td><p>integrated_save</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>True</p></td>
+<td><p>Whether to enable aggregated weight saving: <br/>• <code class="docutils literal notranslate"><span class="pre">True</span></code>: Aggregate weights from all devices when saving the weight file, i.e., all devices have the same weights; <br/>• <code class="docutils literal notranslate"><span class="pre">False</span></code>: Each device saves its own weights. <br/> In semi-automatic parallel mode, it is recommended to set this to <code class="docutils literal notranslate"><span class="pre">False</span></code> to avoid memory issues when saving weight files.</p></td>
+</tr>
+<tr class="row-odd"><td><p>save_network_params</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Whether to save only the model weights. The default value is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>save_trainable_params</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Whether to save trainable parameters separately (i.e., the model’s parameter weights during partial fine-tuning).</p></td>
+</tr>
+<tr class="row-odd"><td><p>async_save</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Whether to save weights asynchronously. Enabling this feature will not block the main training process, improving training efficiency. However, please note that I/O resource contention may cause write delays.</p></td>
+</tr>
+<tr class="row-even"><td><p>remove_redundancy</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Whether to remove redundancy from model weights when saving. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>checkpoint_format</p></td>
+<td><p>string</p></td>
+<td><p>Optional</p></td>
+<td><p>‘ckpt’</p></td>
+<td><p>The format of saved model weights. Defaults to <code class="docutils literal notranslate"><span class="pre">ckpt</span></code>. Optional <code class="docutils literal notranslate"><span class="pre">ckpt</span></code>, <code class="docutils literal notranslate"><span class="pre">safetensors</span></code>.<br/>Note: When using the Mcore architecture for training, only weights in <code class="docutils literal notranslate"><span class="pre">safetensors</span></code> format are supported, and this configuration item will not take effect.</p></td>
+</tr>
+<tr class="row-even"><td><p>embedding_local_norm_threshold</p></td>
+<td><p>float</p></td>
+<td><p>Optional</p></td>
+<td><p>1.0</p></td>
+<td><p>The threshold used in health monitoring to detect abnormalities in the embedding layer gradient or output norm. If the norm exceeds this value, an alarm or data skipping mechanism may be triggered to prevent training divergence. Defaults to <code class="docutils literal notranslate"><span class="pre">1.0</span></code> and can be adjusted based on model scale.</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ol>
+<p>Multiple Callbacks function classes can be configured at the same time under the <code class="docutils literal notranslate"><span class="pre">callbacks</span></code> field. The following is an example of <code class="docutils literal notranslate"><span class="pre">callbacks</span></code> configuration.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">callbacks</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MFLossMonitor</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CheckpointMonitor</span>
+<span class="w">    </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;name_xxb&quot;</span>
+<span class="w">    </span><span class="nt">save_checkpoint_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span>
+<span class="w">    </span><span class="nt">integrated_save</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">    </span><span class="nt">async_save</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+</pre></div>
+</div>
+</section>
+<section id="processor-configuration">
+<h3>Processor Configuration<a class="headerlink" href="#processor-configuration" title="Link to this heading"></a></h3>
+<p>Processor is mainly used to preprocess the inference data of the input model. Since the Processor configuration items are not fixed, only the generic configuration items of Processor in MindSpore Transformers are explained here.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Optional</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Value Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>processor.type</p></td>
+<td><p>string</p></td>
+<td><p>Required</p></td>
+<td><p>None</p></td>
+<td><p>Sets the name of the data processing class (Processor) to be used, such as <code class="docutils literal notranslate"><span class="pre">LlamaProcessor</span></code> or <code class="docutils literal notranslate"><span class="pre">Qwen2Processor</span></code>. This class determines the overall input data preprocessing flow and must match the model architecture.</p></td>
+</tr>
+<tr class="row-odd"><td><p>processor.return_tensors</p></td>
+<td><p>string</p></td>
+<td><p>Optional</p></td>
+<td><p>‘ms’</p></td>
+<td><p>Sets the type of tensors returned after data processing. Can be set to <code class="docutils literal notranslate"><span class="pre">'ms'</span></code> to indicate a MindSpore Tensor.</p></td>
+</tr>
+<tr class="row-even"><td><p>processor.image_processor.type</p></td>
+<td><p>string</p></td>
+<td><p>Required</p></td>
+<td><p>None</p></td>
+<td><p>Sets the type of the image data processing class. Responsible for image normalization, scaling, cropping, and other operations, and must be compatible with the model’s visual encoder.</p></td>
+</tr>
+<tr class="row-odd"><td><p>processor.tokenizer.type</p></td>
+<td><p>string</p></td>
+<td><p>Required</p></td>
+<td><p>None</p></td>
+<td><p>Sets the text tokenizer type, such as <code class="docutils literal notranslate"><span class="pre">LlamaTokenizer</span></code> or <code class="docutils literal notranslate"><span class="pre">Qwen2Tokenizer</span></code>. This determines how the text is segmented into subwords or tokens and must be consistent with the language model.</p></td>
+</tr>
+<tr class="row-even"><td><p>processor.tokenizer.vocab_file</p></td>
+<td><p>string</p></td>
+<td><p>Required</p></td>
+<td><p>None</p></td>
+<td><p>Sets the vocabulary file path required by the tokenizer (such as <code class="docutils literal notranslate"><span class="pre">vocab.txt</span></code> or <code class="docutils literal notranslate"><span class="pre">tokenizer.model</span></code>). The specific file type depends on the tokenizer implementation. This must correspond to <code class="docutils literal notranslate"><span class="pre">processor.tokenizer.type</span></code>; otherwise, loading may fail.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="model-evaluation-configuration">
+<h3>Model Evaluation Configuration<a class="headerlink" href="#model-evaluation-configuration" title="Link to this heading"></a></h3>
+<p>MindSpore Transformers provides model evaluation function, and also supports model evaluation while training. The following is the configuration related to model evaluation.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Optional</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Value Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>eval_dataset</p></td>
+<td><p>dict</p></td>
+<td><p>Required</p></td>
+<td><p>None</p></td>
+<td><p>Dataset configuration for evaluation, used in the same way as <code class="docutils literal notranslate"><span class="pre">train_dataset</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>eval_dataset_task</p></td>
+<td><p>dict</p></td>
+<td><p>Required</p></td>
+<td><p>None</p></td>
+<td><p>Evaluation task configuration, used in the same way as dataset task configuration (such as preprocessing, batch size, etc.), used to define the evaluation process.</p></td>
+</tr>
+<tr class="row-even"><td><p>metric.type</p></td>
+<td><p>string</p></td>
+<td><p>Required</p></td>
+<td><p>None</p></td>
+<td><p>Set the evaluation type, such as <code class="docutils literal notranslate"><span class="pre">Accuracy</span></code>, <code class="docutils literal notranslate"><span class="pre">F1</span></code>, etc. The specific value must be consistent with the supported evaluation metrics.</p></td>
+</tr>
+<tr class="row-odd"><td><p>do_eval</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Whether to enable the evaluation-while-training feature.</p></td>
+</tr>
+<tr class="row-even"><td><p>eval_step_interval</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>100</p></td>
+<td><p>Sets the evaluation step interval. The default value is 100. A value less than or equal to 0 disables step-by-step evaluation.</p></td>
+</tr>
+<tr class="row-odd"><td><p>eval_epoch_interval</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>-1</p></td>
+<td><p>Sets the evaluation epoch interval. The default value is -1. A value less than 0 disables epoch-by-epoch evaluation. This configuration is not recommended in data sinking mode.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="profile-configuration">
+<h3>Profile Configuration<a class="headerlink" href="#profile-configuration" title="Link to this heading"></a></h3>
+<p>MindSpore Transformers provides Profile as the main tool for model performance tuning, please refer to <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/advanced_development/performance_optimization.html">Performance Tuning Guide</a> for more details. The following is the Profile related configuration.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Optional</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Value Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>profile</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Whether to enable the performance collection tool. The default value is <code class="docutils literal notranslate"><span class="pre">False</span></code>. For details, see <a class="reference external" href="https://www.mindspore.cn/docs/en/master/api_python/mindspore/mindspore.Profiler.html">mindspore.Profiler</a>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>profile_start_step</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>1</p></td>
+<td><p>Sets the number of steps at which to start collecting performance data. The default value is <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>profile_stop_step</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>10</p></td>
+<td><p>Sets the number of steps at which to stop collecting performance data. The default value is <code class="docutils literal notranslate"><span class="pre">10</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>profile_communication</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Sets whether to collect communication performance data during multi-device training. This parameter is invalid when using a single card for training and the default value is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>profile_memory</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>True</p></td>
+<td><p>Sets whether to collect Tensor memory data. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>profile_rank_ids</p></td>
+<td><p>list</p></td>
+<td><p>Optional</p></td>
+<td><p>None</p></td>
+<td><p>Sets the rank ids for which performance collection is enabled. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>, meaning that performance collection is enabled for all rank ids.</p></td>
+</tr>
+<tr class="row-even"><td><p>profile_pipeline</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Sets whether to enable performance collection for one card in each stage of the pipeline in parallel. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>profile_output</p></td>
+<td><p>string</p></td>
+<td><p>Required</p></td>
+<td><p>None</p></td>
+<td><p>Sets the folder path for saving performance collection files.</p></td>
+</tr>
+<tr class="row-even"><td><p>profiler_level</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>1</p></td>
+<td><p>Sets the data collection level. Possible values are <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">1,</span> <span class="pre">2)</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>with_stack</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Sets whether to collect call stack data on the Python side. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>data_simplification</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Sets whether to enable data simplification. If enabled, the FRAMEWORK directory and other redundant data will be deleted after exporting performance data. The default value is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>init_start_profile</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Sets whether to enable performance data collection during Profiler initialization. This parameter has no effect when <code class="docutils literal notranslate"><span class="pre">profile_start_step</span></code> is set. It must be set to <code class="docutils literal notranslate"><span class="pre">True</span></code> when <code class="docutils literal notranslate"><span class="pre">profile_memory</span></code> is enabled.</p></td>
+</tr>
+<tr class="row-even"><td><p>mstx</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Sets whether to collect mstx timestamp records, including training steps, HCCL communication operators, etc. The default value is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="metric-monitoring-configuration">
+<h3>Metric Monitoring Configuration<a class="headerlink" href="#metric-monitoring-configuration" title="Link to this heading"></a></h3>
+<p>The metric monitoring configuration is primarily used to configure methods to record metrics during training, please refer to <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/monitor.html">Training Metrics Monitoring</a> for more details. Below is a description of the common metric monitoring configuration options in MindSpore Transformers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameters</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Optional</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Value Descriptions</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>monitor_config.monitor_on</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Set whether to enable monitoring. The default is <code class="docutils literal notranslate"><span class="pre">False</span></code>, which will disable all parameters below.</p></td>
+</tr>
+<tr class="row-odd"><td><p>monitor_config.dump_path</p></td>
+<td><p>string</p></td>
+<td><p>Optional</p></td>
+<td><p>‘./dump’</p></td>
+<td><p>Set the save path for metric files of <code class="docutils literal notranslate"><span class="pre">local_norm</span></code>, <code class="docutils literal notranslate"><span class="pre">device_local_norm</span></code> and <code class="docutils literal notranslate"><span class="pre">local_loss</span></code> during training. Defaults to ‘./dump’ when not set or set to <code class="docutils literal notranslate"><span class="pre">null</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>monitor_config.target</p></td>
+<td><p>list(string)</p></td>
+<td><p>Optional</p></td>
+<td><p>[‘.*’]</p></td>
+<td><p>Set the (partial) name of target parameters monitored by metric <code class="docutils literal notranslate"><span class="pre">optimizer</span> <span class="pre">state</span></code> and <code class="docutils literal notranslate"><span class="pre">local_norm</span></code>, can be regular expression.Defaults to [‘.*’] when not set or set to <code class="docutils literal notranslate"><span class="pre">null</span></code>, that is, specify all parameters.</p></td>
+</tr>
+<tr class="row-odd"><td><p>monitor_config.invert</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Set whether to invert the targets specified in <code class="docutils literal notranslate"><span class="pre">monitor_config.target</span></code>, defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>monitor_config.step_interval</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>1</p></td>
+<td><p>Set the frequency for metric recording. The default value is <code class="docutils literal notranslate"><span class="pre">1</span></code>, that is, the metrics are recorded every step.</p></td>
+</tr>
+<tr class="row-odd"><td><p>monitor_config.local_loss_format</p></td>
+<td><p>string / list(string)</p></td>
+<td><p>Optional</p></td>
+<td><p>null</p></td>
+<td><p>Set the format to record metric <code class="docutils literal notranslate"><span class="pre">local_loss</span></code>, can be string ‘tensorboard’ and ‘log’ (represent write to Tensorboard and write to log respectively), or list composed of them, or <code class="docutils literal notranslate"><span class="pre">null</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">null</span></code>, that is, do not monitor this metric.</p></td>
+</tr>
+<tr class="row-even"><td><p>monitor_config.device_local_loss_format</p></td>
+<td><p>string / list(string)</p></td>
+<td><p>Optional</p></td>
+<td><p>null</p></td>
+<td><p>Set the format to record metric <code class="docutils literal notranslate"><span class="pre">device_local_loss</span></code>, can be string ‘tensorboard’ and ‘log’ (represent write to Tensorboard and write to log respectively), or list composed of them, or <code class="docutils literal notranslate"><span class="pre">null</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">null</span></code>, that is, do not monitor this metric.</p></td>
+</tr>
+<tr class="row-odd"><td><p>monitor_config.local_norm_format</p></td>
+<td><p>string / list(string)</p></td>
+<td><p>Optional</p></td>
+<td><p>null</p></td>
+<td><p>Set the format to record metric <code class="docutils literal notranslate"><span class="pre">local_norm</span></code>, can be string ‘tensorboard’ and ‘log’ (represent write to Tensorboard and write to log respectively), or list composed of them, or <code class="docutils literal notranslate"><span class="pre">null</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">null</span></code>, that is, do not monitor this metric.</p></td>
+</tr>
+<tr class="row-even"><td><p>monitor_config.device_local_norm_format</p></td>
+<td><p>string / list(string)</p></td>
+<td><p>Optional</p></td>
+<td><p>null</p></td>
+<td><p>Set the format to record metric <code class="docutils literal notranslate"><span class="pre">device_local_norm</span></code>, can be string ‘tensorboard’ and ‘log’ (represent write to Tensorboard and write to log respectively), or list composed of them, or <code class="docutils literal notranslate"><span class="pre">null</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">null</span></code>, that is, do not monitor this metric.</p></td>
+</tr>
+<tr class="row-odd"><td><p>monitor_config.optimizer_state_format</p></td>
+<td><p>string / list(string)</p></td>
+<td><p>Optional</p></td>
+<td><p>null</p></td>
+<td><p>Set the format to record metric <code class="docutils literal notranslate"><span class="pre">optimizer</span> <span class="pre">state</span></code>, can be string ‘tensorboard’ and ‘log’ (represent write to Tensorboard and write to log respectively), or list composed of them, or <code class="docutils literal notranslate"><span class="pre">null</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">null</span></code>, that is, do not monitor this metric.</p></td>
+</tr>
+<tr class="row-even"><td><p>monitor_config.weight_state_format</p></td>
+<td><p>string / list(string)</p></td>
+<td><p>Optional</p></td>
+<td><p>null</p></td>
+<td><p>Set the format to record metric <code class="docutils literal notranslate"><span class="pre">weight</span> <span class="pre">L2-norm</span></code>, can be string ‘tensorboard’ and ‘log’ (represent write to Tensorboard and write to log respectively), or list composed of them, or <code class="docutils literal notranslate"><span class="pre">null</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">null</span></code>, that is, do not monitor this metric.</p></td>
+</tr>
+<tr class="row-odd"><td><p>monitor_config.throughput_baseline</p></td>
+<td><p>int / float</p></td>
+<td><p>Optional</p></td>
+<td><p>null</p></td>
+<td><p>Set the baseline of metric <code class="docutils literal notranslate"><span class="pre">throughput</span> <span class="pre">linearity</span></code>, must be positive number. Defaults to <code class="docutils literal notranslate"><span class="pre">null</span></code>, that is, do not monitor this metric.</p></td>
+</tr>
+<tr class="row-even"><td><p>monitor_config.print_struct</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Set whether to print all trainable parameters’ name of model. If set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, print all trainable parameters’ name at the beginning of the first step, and exit training process after step end. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>monitor_config.check_for_global_norm</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Set whether to enable process level fault recovery function. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>. See <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/skip_data_and_ckpt_health_monitor.html">Data Skip And Checkpoint Health Monitor</a> and <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/high_availability.html#abnormal-training-results-recovery">Abnormal Training Results Recovery</a> for details.</p></td>
+</tr>
+<tr class="row-even"><td><p>monitor_config.global_norm_spike_threshold</p></td>
+<td><p>float</p></td>
+<td><p>Optional</p></td>
+<td><p>3.0</p></td>
+<td><p>Set the threshold for global norm, triggering data skipping when the global norm is exceeded. Defaults to <code class="docutils literal notranslate"><span class="pre">3.0</span></code>. See <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/skip_data_and_ckpt_health_monitor.html">Data Skip And Checkpoint Health Monitor</a> and <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/high_availability.html#abnormal-training-results-recovery">Abnormal Training Results Recovery</a> for details.</p></td>
+</tr>
+<tr class="row-odd"><td><p>monitor_config.global_norm_spike_count_threshold</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>10</p></td>
+<td><p>Set the cumulative number of consecutive global norm anomalies, and when the threshold is reached, trigger an exception interrupt to terminate the training. Defaults to <code class="docutils literal notranslate"><span class="pre">10</span></code>. See <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/skip_data_and_ckpt_health_monitor.html">Data Skip And Checkpoint Health Monitor</a> and <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/high_availability.html#abnormal-training-results-recovery">Abnormal Training Results Recovery</a> for details.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="tensorboard-configuration">
+<h3>TensorBoard Configuration<a class="headerlink" href="#tensorboard-configuration" title="Link to this heading"></a></h3>
+<p>The TensorBoard configuration is primarily used to configure parameters related to TensorBoard during training, allowing for real-time monitoring and visualization of training metrics, please refer to <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/monitor.html">Training Metrics Monitoring</a> for more details. Below is a description of the common TensorBoard configuration options in MindSpore Transformers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameters</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Optional</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Value Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>tensorboard.tensorboard_dir</p></td>
+<td><p>string</p></td>
+<td><p>Required</p></td>
+<td><p>None</p></td>
+<td><p>Sets the path where TensorBoard event files are saved.</p></td>
+</tr>
+<tr class="row-odd"><td><p>tensorboard.tensorboard_queue_size</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>10</p></td>
+<td><p>Sets the maximum cache value of the capture queue. If it exceeds this value, it will be written to the event file, the default value is 10.</p></td>
+</tr>
+<tr class="row-even"><td><p>tensorboard.log_loss_scale_to_tensorboard</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Sets whether loss scale information is logged to the event file, default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>tensorboard.log_timers_to_tensorboard</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Sets whether to log timer information to the event file. The timer information contains the duration of the current training step (or iteration) as well as the throughput, defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>tensorboard.log_expert_load_to_tensorboard</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+<td><p>False</p></td>
+<td><p>Sets whether to log experts load to the event file, defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="safetensors.html" class="btn btn-neutral float-left" title="Safetensors Weights" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="load_huggingface_config.html" class="btn btn-neutral float-right" title="Loading Hugging Face Model Configuration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

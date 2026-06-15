@@ -1,0 +1,301 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pretraining &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Supervised Fine-Tuning (SFT)" href="supervised_fine_tuning.html" />
+    <link rel="prev" title="Training Guide" href="llm_training.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">Models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contribution Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">Modelers Contribution Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">Model-Related FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">Feature-Related FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Static Graph Implementation (Deprecated)</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Full-process Guide to Large Models</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="llm_training.html">Training Guide</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Pretraining</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pretraining-procedure-of-mindspore-transformers">Pretraining Procedure of MindSpore Transformers</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#preparing-a-dataset">1. Preparing a Dataset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#configuring-file-preparation">2. Configuring File Preparation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#launching-the-training-task">3. Launching the Training Task</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#saving-a-model">4. Saving a Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fault-recovery">5. Fault Recovery</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#mindspore-transformers-based-pretraining-practice">MindSpore Transformers-based Pretraining Practice</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Preparing a Dataset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#data-preprocessing">Data Preprocessing</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#executing-a-pretrained-task">Executing a Pretrained Task</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#single-node-training">Single-Node Training</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#multi-node-training">Multi-Node Training</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="supervised_fine_tuning.html">Supervised Fine-Tuning (SFT)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inference.html">Inference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deployment.html">Service Deployment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation.html">Evaluation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/index.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_development/index.html">Advanced Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">Excellent Practice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">Environment Variable Descriptions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Full-process Guide to Large Models</a></li>
+      <li class="breadcrumb-item active">Pretraining</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/guide/pre_training.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">Deprecated</p>
+<p>This page belongs to the <strong>Static Graph (GRAPH_MODE) Implementation</strong> section and has been marked as deprecated. New features are primarily being developed in the “r2.0.0 Dynamic Graph Implementation” section. Please refer to the dynamic graph documentation first.</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="pretraining">
+<h1>Pretraining<a class="headerlink" href="#pretraining" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_en/static_graph/guide/pre_training.md"><img alt="View Source on AtomGit" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source_en.svg" /></a></p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>Pretraining refers to training a model on large-scale unlabeled data, so that the model can comprehensively capture a wide range of features of a language. A pretrained model can learn knowledge at the vocabulary, syntax, and semantic levels. After fine-tuning, the knowledge is applied in downstream tasks to optimize the performance of specific tasks. The objective of the MindSpore Transformers framework pretraining is to help developers quickly and conveniently build and train pretrained models based on the Transformer architecture.</p>
+</section>
+<section id="pretraining-procedure-of-mindspore-transformers">
+<h2>Pretraining Procedure of MindSpore Transformers<a class="headerlink" href="#pretraining-procedure-of-mindspore-transformers" title="Link to this heading"></a></h2>
+<p>Based on actual operations, the basic pretraining process can be divided into the following steps:</p>
+<section id="preparing-a-dataset">
+<h3>1. Preparing a Dataset<a class="headerlink" href="#preparing-a-dataset" title="Link to this heading"></a></h3>
+<p>The pretraining phase of MindSpore Transformers currently supports datasets in both <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/dataset.html#megatron-dataset">Megatron format</a> and <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/dataset.html#mindrecord-dataset">MindRecord format</a>. Users can prepare the data according to the specific requirements of their tasks.</p>
+</section>
+<section id="configuring-file-preparation">
+<h3>2. Configuring File Preparation<a class="headerlink" href="#configuring-file-preparation" title="Link to this heading"></a></h3>
+<p>The pretraining task in MindSpore Transformers is managed through a unified <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/configuration.html">configuration file</a>, allowing users to flexibly adjust various <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/training_hyperparameters.html">training hyperparameters</a>. In addition, pretraining performance can be further optimized using features such as <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/parallel_training.html">distributed parallel training</a>, <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/memory_optimization.html">memory optimization</a>, and <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/other_training_features.html">other training features</a>.</p>
+</section>
+<section id="launching-the-training-task">
+<h3>3. Launching the Training Task<a class="headerlink" href="#launching-the-training-task" title="Link to this heading"></a></h3>
+<p>MindSpore Transformers provides a convenient <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/start_tasks.html">one-click script</a> to launch the pretraining task. During training, users can monitor the progress using <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/logging.html">logging</a> and <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/monitor.html">visualization tools</a>.</p>
+</section>
+<section id="saving-a-model">
+<h3>4. Saving a Model<a class="headerlink" href="#saving-a-model" title="Link to this heading"></a></h3>
+<p>Checkpoint files can be saved during training or after completion. Currently, MindSpore Transformers supports saving models in <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/ckpt.html">Ckpt format</a> or <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/safetensors.html">Safetensors format</a>, which can be used for later tasks such as resuming training or fine-tuning.</p>
+</section>
+<section id="fault-recovery">
+<h3>5. Fault Recovery<a class="headerlink" href="#fault-recovery" title="Link to this heading"></a></h3>
+<p>To handle unexpected interruptions during training, MindSpore Transformers includes <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/high_availability.html">training high availability</a> such as final-state saving and automatic recovery. It also supports <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/resume_training.html">resuming training from checkpoints</a>, improving training stability.</p>
+</section>
+</section>
+<section id="mindspore-transformers-based-pretraining-practice">
+<h2>MindSpore Transformers-based Pretraining Practice<a class="headerlink" href="#mindspore-transformers-based-pretraining-practice" title="Link to this heading"></a></h2>
+<p>Currently, MindSpore Transformers supports mainstream foundation models in the industry. In this practice, Qwen3-32B is used to demonstrate single-node training and multi-node training, respectively. For more training examples and recommended configurations by scenario, see the <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/introduction/models.html">Model Library</a>.</p>
+<section id="id1">
+<h3>Preparing a Dataset<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<p>Currently, MindSpore Transformers supports Megatron dataset, which is typically preprocessed and serialized into binary formats (such as <code class="docutils literal notranslate"><span class="pre">.bin</span></code> or <code class="docutils literal notranslate"><span class="pre">.idx</span></code> files). It also comes with a specific indexing mechanism to enable efficient parallel loading and data sharding in distributed cluster environments.</p>
+<ul class="simple">
+<li><p>Dataset download: <a class="reference external" href="https://dagshub.com/DagsHub/WIkiText-103/src/main/dataset/tokens">WikiText-103</a></p></li>
+<li><p>Tokenizer model download: <a class="reference external" href="https://huggingface.co/Qwen/Qwen3-32B/blob/main/tokenizer.json">tokenizer.json</a></p></li>
+</ul>
+</section>
+<section id="data-preprocessing">
+<h3>Data Preprocessing<a class="headerlink" href="#data-preprocessing" title="Link to this heading"></a></h3>
+<p>The MindSpore Transformers pre-training stage currently supports <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/dataset.html#megatron-dataset">Megatron format datasets</a>. Users can refer to the <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/dataset.html">Datasets</a> section and use the tools provided by MindSpore to convert the original dataset into Megatron format.</p>
+<p>To create a Megatron-formatted dataset, two steps are required. First, convert the original text dataset into JSONL format data. Then, use the script provided by MindSpore Transformers to convert the JSONL format data into .bin and .idx files in Megatron format.</p>
+<ul>
+<li><p>Convert <code class="docutils literal notranslate"><span class="pre">wiki.train.tokens</span></code> to <code class="docutils literal notranslate"><span class="pre">jsonl</span></code> format data</p>
+<p>Users need to <strong>process the <code class="docutils literal notranslate"><span class="pre">wiki.train.tokens</span></code> dataset into a jsonl format file themselves</strong>. For reference, a conversion scheme is provided in the <a class="reference external" href="https://gitee.com/mindspore/mindformers/issues/ICOKGY">community issue</a>. Users need to develop and verify the conversion logic according to their actual needs.</p>
+<p>Below is an example of a JSONL format file:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;src&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;www.nvidia.com&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;text&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;The quick brown fox&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Eng&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;0&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;First Part&quot;</span><span class="p">}</span>
+<span class="p">{</span><span class="nt">&quot;src&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;The Internet&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;text&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;jumps over the lazy dog&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Eng&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;42&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Second Part&quot;</span><span class="p">}</span>
+<span class="err">...</span>
+</pre></div>
+</div>
+</li>
+<li><p>Convert <code class="docutils literal notranslate"><span class="pre">jsonl</span></code> format data to <code class="docutils literal notranslate"><span class="pre">bin</span></code> format data</p>
+<p>MindSpore Transformers provides a data preprocessing script, <code class="docutils literal notranslate"><span class="pre">toolkit/data_preprocess/megatron/preprocess_indexed_dataset.py</span></code>, for converting raw text data in JSONL format into .bin or .idx files.</p>
+<blockquote>
+<div><p>You need to download the tokenizer file for the <a class="reference external" href="https://huggingface.co/Qwen/Qwen3-32B/blob/main/tokenizer.json">Qwen3-32B</a> model in advance.</p>
+</div></blockquote>
+<p>For example:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>toolkit/data_preprocess/megatron/preprocess_indexed_dataset.py<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--input<span class="w"> </span>/path/to/data.jsonl<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--output-prefix<span class="w"> </span>/path/to/wiki103-megatron<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--tokenizer-type<span class="w"> </span>HuggingFaceTokenizer<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--tokenizer-dir<span class="w"> </span>/path/to/Qwen3-32B<span class="w"> </span><span class="c1"># Models of other specifications can be adjusted to the corresponding tokenizer path</span>
+</pre></div>
+</div>
+<p>After the operation is completed, the files <code class="docutils literal notranslate"><span class="pre">/path/to/wiki103-megatron_text_document.bin</span></code> and <code class="docutils literal notranslate"><span class="pre">/path/to/wiki103-megatron_text_document.idx</span></code> will be generated.</p>
+<p>When filling in the dataset path, you need to use <code class="docutils literal notranslate"><span class="pre">/path/to/wiki103-megatron_text_document</span></code> without the suffix.</p>
+</li>
+</ul>
+</section>
+</section>
+<section id="executing-a-pretrained-task">
+<h2>Executing a Pretrained Task<a class="headerlink" href="#executing-a-pretrained-task" title="Link to this heading"></a></h2>
+<section id="single-node-training">
+<h3>Single-Node Training<a class="headerlink" href="#single-node-training" title="Link to this heading"></a></h3>
+<p>Specify the configuration file <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/configs/qwen3/pretrain_qwen3_32b_4k.yaml">pretrain_qwen3_32b_4k.yaml</a> and after modifying the configuration, then start the <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/run_mindformer.py">run_mindformer.py</a> script in msrun mode to perform 8-device distributed training.</p>
+<p>The configuration provided on the warehouse is a 32B model with a large number of parameters, which makes it impossible to directly start pre-training in a single-machine environment. In this example, the model size is reduced to 0.6B to demonstrate single-machine training. Modify the following parameters in the configuration file while keeping the remaining parameters unchanged:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># model_config</span>
+<span class="nt">model</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">model_config</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">hidden_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1024</span>
+<span class="w">    </span><span class="nt">num_attention_heads</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">16</span>
+<span class="w">    </span><span class="nt">num_hidden_layers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">28</span>
+</pre></div>
+</div>
+<p>The launch command is as follows:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span><span class="nv">$MINDFORMERS_HOME</span>
+bash<span class="w"> </span>scripts/msrun_launcher.sh<span class="w"> </span><span class="s2">&quot;run_mindformer.py \</span>
+<span class="s2">--config configs/qwen3/pretrain_qwen3_32b_4k.yaml \</span>
+<span class="s2">--parallel_config.data_parallel 1 \</span>
+<span class="s2">--parallel_config.model_parallel 2 \</span>
+<span class="s2">--parallel_config.pipeline_stage 4 \</span>
+<span class="s2">--parallel_config.micro_batch_num 4&quot;</span>
+</pre></div>
+</div>
+<p>Here:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">config</span></code>: The model configuration file, located in the <strong>config</strong> directory of the <strong>MindSpore Transformers</strong> repository.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">parallel_config.data_parallel</span></code>: Set the number of data parallel.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">parallel_config.model_parallel</span></code>: Set the number of model parallel.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">parallel_config.pipeline_stage</span></code>: Set the number of pipeline parallel.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">parallel_config.micro_batch_num</span></code>: Set the pipeline parallel microbatch size, which should satisfy <code class="docutils literal notranslate"><span class="pre">parallel_config.micro_batch_num</span></code> &gt;= <code class="docutils literal notranslate"><span class="pre">parallel_config.pipeline_stage</span></code> when <code class="docutils literal notranslate"><span class="pre">parallel_config.pipeline_stage</span></code> is greater than 1.</p></li>
+</ul>
+<p>For detailed instructions on launching the training task, refer to <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/configs/qwen3/README.md#3-%E5%90%AF%E5%8A%A8%E9%A2%84%E8%AE%AD%E7%BB%83%E4%BB%BB%E5%8A%A1">Start Pre-training Task</a>.</p>
+<p>After the task is executed, the <strong>checkpoint</strong> folder is generated in the <strong>mindformers/output</strong> directory, and the model file (<code class="docutils literal notranslate"><span class="pre">.safetensors</span></code>) is saved in this folder.</p>
+</section>
+<section id="multi-node-training">
+<h3>Multi-Node Training<a class="headerlink" href="#multi-node-training" title="Link to this heading"></a></h3>
+<p>If server resources are sufficient, you can launch multi-node training on multiple <strong>Atlas 800T A2 (64G)</strong> machines as shown below.</p>
+<p>Execute the following command on each server. Set <code class="docutils literal notranslate"><span class="pre">master_ip</span></code> to the <strong>IP address</strong> of the <strong>master node</strong> (i.e., the server with <code class="docutils literal notranslate"><span class="pre">Rank</span> <span class="pre">0</span></code>), and <code class="docutils literal notranslate"><span class="pre">node_rank</span></code> to the <strong>Rank</strong> index of each node, ranging from <code class="docutils literal notranslate"><span class="pre">0</span></code> to <code class="docutils literal notranslate"><span class="pre">1023</span></code>.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">master_ip</span><span class="o">=</span><span class="m">192</span>.168.1.1
+<span class="nv">node_rank</span><span class="o">=</span><span class="m">0</span>
+<span class="nv">port</span><span class="o">=</span><span class="m">50001</span>
+
+<span class="nb">cd</span><span class="w"> </span><span class="nv">$MINDFORMERS_HOME</span>
+bash<span class="w"> </span>scripts/msrun_launcher.sh<span class="w"> </span><span class="s2">&quot;run_mindformer.py \</span>
+<span class="s2">--config configs/qwen3/pretrain_qwen3_32b_4k.yaml&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="m">16</span><span class="w"> </span><span class="m">8</span><span class="w"> </span><span class="nv">$master_ip</span><span class="w"> </span><span class="nv">$port</span><span class="w"> </span><span class="nv">$node_rank</span><span class="w"> </span>output/msrun_log<span class="w"> </span>False<span class="w"> </span><span class="m">7200</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>The example code below assumes the <strong>master node IP</strong> is <code class="docutils literal notranslate"><span class="pre">192.168.1.1</span></code> and the current node’s <strong>Rank</strong> is <code class="docutils literal notranslate"><span class="pre">0</span></code>. In actual execution, please set <code class="docutils literal notranslate"><span class="pre">master_ip</span></code> to the real <strong>IP address</strong> of the master node, and set <code class="docutils literal notranslate"><span class="pre">node_rank</span></code> to the <strong>Rank</strong> index of the current node.</p>
+</div></blockquote>
+<p><strong>Note</strong>: During multi-node distributed training, some performance problems may occur. To ensure the efficiency and stability of the training process, you are advised to optimize and adjust the performance by referring to <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/advanced_development/performance_optimization.html">Large Model Performance Optimization Guide</a>.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="llm_training.html" class="btn btn-neutral float-left" title="Training Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="supervised_fine_tuning.html" class="btn btn-neutral float-right" title="Supervised Fine-Tuning (SFT)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

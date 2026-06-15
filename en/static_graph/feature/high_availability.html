@@ -1,0 +1,594 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Training High Availability &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Memory Optimization" href="memory_optimization.html" />
+    <link rel="prev" title="Distributed Parallelism Training" href="parallel_training.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">Models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contribution Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">Modelers Contribution Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">Model-Related FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">Feature-Related FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Static Graph Implementation (Deprecated)</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Full-process Guide to Large Models</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Features</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">Features Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="start_tasks.html">Start Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ckpt.html">Ckpt Weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="safetensors.html">Safetensors Weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">Configuration File Descriptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="load_huggingface_config.html">Loading Hugging Face Model Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html">Logs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tokenizer.html">Using Tokenizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset.html">Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training_hyperparameters.html">Training Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monitor.html">Training Metrics Monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training.html">Resumable Training After Breakpoint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoint_saving_and_loading.html">Checkpoint Saving and Loading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training2.0.html">Resume Training2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel_training.html">Distributed Parallelism Training</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Training High Availability</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#instructions-for-use">Instructions for Use</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#environment-variable-configuration">Environment Variable Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#yaml-configuration">YAML Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#example-usage">Example Usage</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#end-of-life-checkpoint">End-of-life CheckPoint</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#abnormal-training-results-recovery">Abnormal Training Results Recovery</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="memory_optimization.html">Memory Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skip_data_and_ckpt_health_monitor.html">Data Skip And Checkpoint Health Monitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pma_fused_checkpoint.html">Pre-trained Model Average Weight Consolidation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="other_training_features.html">Other Training Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantization.html">Quantization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_development/index.html">Advanced Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">Excellent Practice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">Environment Variable Descriptions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Features</a></li>
+      <li class="breadcrumb-item active">Training High Availability</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/feature/high_availability.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">Deprecated</p>
+<p>This page belongs to the <strong>Static Graph (GRAPH_MODE) Implementation</strong> section and has been marked as deprecated. New features are primarily being developed in the “r2.0.0 Dynamic Graph Implementation” section. Please refer to the dynamic graph documentation first.</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="training-high-availability">
+<h1>Training High Availability<a class="headerlink" href="#training-high-availability" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_en/static_graph/feature/high_availability.md"><img alt="View Source on AtomGit" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source_en.svg" /></a></p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>MindSpore Transformers high availability provides the following several functions:</p>
+<ul class="simple">
+<li><p><strong>End-of-life CKPT</strong>: It is mainly aimed at accelerating the fault recovery in the training process of large models. This feature verifies the integrity and consistency of the intermediate state data after a fault occurs during the training process and generates an end-of-life CheckPoint data, which can be used to recover the training and reduce the loss of training iterations caused by the fault.</p></li>
+<li><p><strong>UCE Fault-tolerant Recovery</strong>: It mainly focuses on the detection of UCE faults in on-chip memory during the training process of large models, and accomplishes online repair to reach Step-level recomputation.</p></li>
+<li><p><strong>HCCE Fault-tolerant Recovery</strong>: It mainly focuses on hccl recompute error during the training process of large models, and accomplishes online repair to reach Step-level recomputation.</p></li>
+<li><p><strong>TRE Training Result Exception Recovery</strong>: It mainly focuses on the detection of value exception of loss, global-norm, etc. during the training process of large models, and accomplishes online repair to reach Step-level recomputation.</p></li>
+<li><p><strong>ARF Process-Level Rescheduling Recovery</strong>: Instead of pulling up the entire cluster again after an anomaly in training occurs, simply restart or replace it on a node-by-node basis to complete the repair and continue training.</p></li>
+<li><p><strong>TSP Training Step Pause Function</strong>: After each training step is completed, enter the train pause interface，pause or resume training according to the needs of upper level operations. For example, pause training to perform communication network track switching, and resume training after successful switching.</p></li>
+<li><p><strong>RSC POD-Level Rescheduling Function</strong>: Primarily serves as a fallback solution when other fast recovery features fail. It kills the faulty process and other normal processes (the pods where the normal processes reside will not be terminated), removes the faulty pod from the current cluster, and rescheduling a new pod to join the cluster, and resumes training (the current version must rely on MindX).</p></li>
+</ul>
+<p>Constraints and dependencies of the high availability functions:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p></p></th>
+<th class="head"><p>End-of-life CKPT</p></th>
+<th class="head"><p>UCE</p></th>
+<th class="head"><p>HCCE</p></th>
+<th class="head"><p>ARF</p></th>
+<th class="head"><p>TRE</p></th>
+<th class="head"><p>TSP</p></th>
+<th class="head"><p>RSC</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Depending on MindIO</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td><p>Replica relationship between cards</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-even"><td><p>Sink Size is 1</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+</tr>
+</tbody>
+</table>
+<p>These high availability functions are currently only supported in the MindSpore Ascend back-end graph schema to support Step-level recovery.</p>
+<p>The replica relationship between cards is used to make sure when one of the cards fails, it can be recovered from the other card. It requires that there must be at least two copies of redundancy in both the weights and the optimizer. To ensure this redundancy relationship, data parallelism must be turned on to ensure that there are two cards with the same weights, and also if optimizer parallelism is turned on, it must be ensured that there are two cards with the same optimizer state.</p>
+<p>When End-of-life CKPT, UCE and ARF functions are turned on in combination, the order in which they take effect is: UCE -&gt; ARF -&gt; End-of-Life CKPT, and if one of the functions can be recovered, the next function will not be executed. The end-of-life CKPT function serves as a final safeguard, and the entire training process exits upon completion of this function, so it will be turned on by default when the UCE or ARF functions are turned on.</p>
+<p>The rapid recovery of faults is a combination of ARF and TRE functions, with the order of effectiveness being TRE -&gt; ARF. TRE is responsible for monitoring outliers in the global norm and throwing them, while ARF is responsible for capturing TRE anomalies and restarting the corrective cluster for training without interrupting the entire process.</p>
+<p>Quick recovery and use instructions for malfunctions:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>The process-level rapid recovery feature can effectively reduce the time required to restart training after encountering abnormal global norms during the training process.</p></li>
+<li><p>Please train normally for a period of time before use to determine the threshold of the global norm that needs to be set.</p></li>
+<li><p>Once a global norm exceeding the set threshold is encountered, an exception will be thrown immediately, entering the fast recovery phase.</p></li>
+<li><p>The data skipping function cannot be used in conjunction with the quick fault recovery function. Refer to the data skipping function in <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/skip_data_and_ckpt_health_monitor.html#skipping-data">Data Skip</a> function.</p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="instructions-for-use">
+<h2>Instructions for Use<a class="headerlink" href="#instructions-for-use" title="Link to this heading"></a></h2>
+<p>The high availability feature switch is enabled by an environment variable, and the switch is not set separately in the YAML configuration file. For high availability functions which depend on replica relationship between cards, the YAML file needs to be able to configure the weights and optimizer states to be the same for both cards, as detailed in the <a class="reference internal" href="#replica-relationships-configuration">Replica Relationships Configuration</a> section of this document.</p>
+<p>For high availability functions which depend on MindIO, the user needs to install the MindIO TFT SDK package.</p>
+<section id="environment-variable-configuration">
+<h3>Environment Variable Configuration<a class="headerlink" href="#environment-variable-configuration" title="Link to this heading"></a></h3>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">MINDIO_FOR_MINDSPORE</span><span class="o">=</span><span class="m">1</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MS_ENABLE_TFT</span><span class="o">=</span><span class="s2">&quot;{TTP:1,UCE:1,HCCE:1,ARF:1,TRE:1,TSP:1}&quot;</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MS_TFT_IP</span><span class="o">=</span><span class="m">127</span>.0.0.1
+<span class="nb">export</span><span class="w"> </span><span class="nv">MS_TFT_PORT</span><span class="o">=</span><span class="m">30051</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">MINDIO_FOR_MINDSPORE</span></code>: Enabling MindIO TFT SDK to support MindSpore</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MS_ENABLE_TFT</span></code>: Indicates that Training Fault Tolerance is enabled. If you want to enable only one of these functions, set the corresponding value to 1.</p>
+<ul>
+<li><p><strong>TTP (Try To Persist)</strong>: End-of-life CKPT function</p></li>
+<li><p><strong>UCE (Uncorrectable Memory Error)</strong>: UCE fault tolerance recovery</p></li>
+<li><p><strong>HCCE (Huawei Collective Communication Error)</strong>: HCCL recompute error recovery</p></li>
+<li><p><strong>ARF (Air Refuelling)</strong>: Process-level rescheduling recovery function</p></li>
+<li><p><strong>TRE (Training Result Error)</strong>: Training result exception recovery</p></li>
+<li><p><strong>TSP (Training Step Pause)</strong>: Training step pause function</p></li>
+<li><p><strong>RSC (Register Stop/Start Controller)</strong>: POD-level rescheduling function</p></li>
+<li><p>POD-level rescheduling only hands over the training processes to a third-party component (such as MindX) for management. When only RSC:1 is enabled (the current version must rely on MindX), other training fault tolerance features are not effective.</p></li>
+<li><p>When UCE or ARF is enabled, TTP is enabled by default.</p></li>
+<li><p>Enabling both TRE and asynchronous CKPT features at the same time cannot guarantee that the loss before and after resuming training is exactly the same.</p></li>
+<li><p>TRE does not depend on MindIO. It is not necessary to configure the MindIO-related environment variables MINDIO_FOR_MINDSPORE, MS_TFT_IP, and MS_TFT_PORT to enable only the TRE feature.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MS_TFT_IP</span></code> and <code class="docutils literal notranslate"><span class="pre">MS_TFT_PORT</span></code> represent the IP and port number of TFT Controller respectively, no default value, need to be specified by user. If the Controller is started by MindSpore Transformers, the IP and port number of the rank0 node in the user’s cluster are configured. If the Controller is started by the user, configure the IP and port number of the Controller.</p></li>
+</ul>
+</section>
+<section id="yaml-configuration">
+<h3>YAML Configuration<a class="headerlink" href="#yaml-configuration" title="Link to this heading"></a></h3>
+<p>The YAML configuration consists of two parts: the end-of-life CKPT saving and recovery configuration and the replica relationship between cards configuration.</p>
+<section id="saving-and-restoring-configurations">
+<h4>Saving and Restoring Configurations<a class="headerlink" href="#saving-and-restoring-configurations" title="Link to this heading"></a></h4>
+<p>The end-of-life CheckPoint preservation and recovery capabilities are used for initial and renewal training respectively, which reuse the existing MindSpore Transformers configuration, and the following describes the configuration for initial and renewal training respectively.</p>
+<ul>
+<li><p><strong>Initial Training Configuration</strong></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">output_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;./output&#39;</span><span class="w"> </span><span class="c1"># The directory where CheckPoints and Strategies are stored</span>
+<span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;&#39;</span><span class="w">    </span><span class="c1"># Configuration is empty for initial training</span>
+<span class="nt">src_strategy_path_or_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/output/strategy/&#39;</span>
+<span class="nt">only_save_strategy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="nt">resume_training</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span><span class="w">  </span><span class="c1"># Configuration is False for initial training</span>
+<span class="nt">run_mode</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;train&#39;</span>
+
+<span class="nt">callbacks</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CheckpointMonitor</span>
+<span class="w">    </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;qwen3_8b&quot;</span>
+<span class="w">    </span><span class="nt">save_checkpoint_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
+<span class="w">    </span><span class="nt">integrated_save</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">    </span><span class="nt">async_save</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Renewal Training Configuration</strong></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">output_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;./output&#39;</span><span class="w"> </span><span class="c1"># The directory where CheckPoints and Strategies are stored</span>
+<span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;./output/checkpoint/&#39;</span><span class="w">   </span><span class="c1"># Configure CheckPoint paths during renewal training</span>
+<span class="nt">src_strategy_path_or_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/output/strategy/&#39;</span>
+<span class="nt">only_save_strategy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="nt">resume_training</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w">  </span><span class="c1"># Configured to True for renewal training</span>
+<span class="nt">run_mode</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;train&#39;</span>
+
+<span class="nt">callbacks</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CheckpointMonitor</span>
+<span class="w">    </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;qwen3_8b&quot;</span>
+<span class="w">    </span><span class="nt">save_checkpoint_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
+<span class="w">    </span><span class="nt">integrated_save</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">    </span><span class="nt">async_save</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="replica-relationships-configuration">
+<h4>Replica Relationships Configuration<a class="headerlink" href="#replica-relationships-configuration" title="Link to this heading"></a></h4>
+<p>The key to the end-of-life CheckPoint, UCE and ARF functions of high availability is to configure the weight and optimizer copy redundancy relationship. The core of the configuration is that the dimension of the data parallel domain is greater than 2, and if you overlay the optimizer parallelism, you need to ensure that the number of copies of the optimizer is greater than 2 at the same time. So the configuration is divided into two categories, with the optimizer parallelism and without the optimizer parallelism. The following is an example of how to configure 8 cards.</p>
+<ul>
+<li><p><strong>Without the Optimizer Parallelism</strong></p>
+<p>Data parallelism dp configured as a multiple of 2 is sufficient, so that there will exist two cards with the same weights and optimizer state.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">parallel</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enable_parallel_optimizer</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="nt">parallel_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">data_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">model_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">  </span><span class="nt">pipeline_stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>With the Optimizer Parallelism</strong></p>
+<p>After turning on the optimizer parallelism you must ensure that a copy of the optimizer state exists, the key to configure is optimizer_weight_shard_size to 2. The number of copies of the optimizer state at this point is data_parallel/optimizer_weight_shard_size. Therefore, if the data parallelism is configured to 2, there is no optimizer replica, and the data parallelism must be configured to 4; the number of replicas in this case is data_parallel/optimizer_weight_shard_size = 4/2 = 2.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">parallel</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enable_parallel_optimizer</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">parallel_optimizer_config</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">optimizer_weight_shard_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="nt">parallel_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">data_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">  </span><span class="nt">model_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">pipeline_stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+</section>
+</section>
+<section id="example-usage">
+<h2>Example Usage<a class="headerlink" href="#example-usage" title="Link to this heading"></a></h2>
+<section id="end-of-life-checkpoint">
+<h3>End-of-life CheckPoint<a class="headerlink" href="#end-of-life-checkpoint" title="Link to this heading"></a></h3>
+<p>This section demonstrates the use of the end-of-life CKPT using Qwen3-8B training as an example.</p>
+<ol class="arabic">
+<li><p>First install MindSpore and MindIO</p></li>
+<li><p>Download MindSpore Transformers and modify the <a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/example/qwen3/pretrain_qwen3_8b.yaml">pretrain_qwen3_8b.yaml</a> configuration file with the following main configuration:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># runner config</span>
+<span class="nt">runner_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">epochs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">batch_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">  </span><span class="nt">sink_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">sink_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+
+<span class="c1"># ......</span>
+
+<span class="c1"># parallel context config</span>
+<span class="nt">parallel</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">parallel_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"> </span><span class="c1"># 0-data parallel, 1-semi-auto parallel, 2-auto parallel, 3-hybrid parallel</span>
+<span class="w">  </span><span class="nt">gradients_mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">enable_alltoall</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">full_batch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">search_mode</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sharding_propagation&quot;</span>
+<span class="w">  </span><span class="nt">enable_parallel_optimizer</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">strategy_ckpt_save_file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;./ckpt_strategy.ckpt&quot;</span>
+<span class="w">  </span><span class="nt">parallel_optimizer_config</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">gradient_accumulation_shard</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">    </span><span class="nt">parallel_optimizer_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">64</span>
+<span class="w">    </span><span class="nt">optimizer_weight_shard_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+
+<span class="c1"># ......</span>
+
+<span class="c1"># default parallel of device num = 16 for Atlas 800T A2</span>
+<span class="nt">parallel_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">data_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+<span class="w">  </span><span class="nt">model_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">pipeline_stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">use_seq_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">micro_batch_num</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">vocab_emb_dp</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">gradient_aggregation_group</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+</pre></div>
+</div>
+<p>The following key points need to be noted:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">sink_size:</span> <span class="pre">1</span></code>: Features such as end-of-life CKPT and UCE fault-tolerant recovery do not support scenarios where <code class="docutils literal notranslate"><span class="pre">sink_size</span></code> is greater than 1, so it is configured as 1 here.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">enable_parallel_optimizer:</span> <span class="pre">True</span></code>: Enable optimizer parallelism.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">optimizer_weight_shard_size:</span> <span class="pre">4</span></code>: The slice size of optimizer parallelism is 4.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data_parallel:</span> <span class="pre">8</span></code>: Data parallelism is configured as 8.</p></li>
+</ul>
+<p>As explained in the previous section, the value of <code class="docutils literal notranslate"><span class="pre">data_parallel/optimizer_weight_shard_size</span></code> is <code class="docutils literal notranslate"><span class="pre">8</span> <span class="pre">/</span> <span class="pre">4</span> <span class="pre">=</span> <span class="pre">2</span></code>, which is greater than 1, so there is a replica relationship.</p>
+</li>
+<li><p>Execute the following command to start the training</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">MINDIO_FOR_MINDSPORE</span><span class="o">=</span><span class="m">1</span>
+
+<span class="nb">export</span><span class="w"> </span><span class="nv">MS_ENABLE_TFT</span><span class="o">=</span><span class="s2">&quot;{TTP:1,UCE:1,ARF:1,TSP:1}&quot;</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MS_TFT_IP</span><span class="o">=</span><span class="m">127</span>.0.0.1
+<span class="nb">export</span><span class="w"> </span><span class="nv">MS_TFT_PORT</span><span class="o">=</span><span class="m">30051</span>
+
+bash<span class="w"> </span>scripts/msrun_launcher.sh<span class="w"> </span><span class="s2">&quot;run_mindformer.py \</span>
+<span class="s2">  --config path/to/pretrain_qwen3_8b.yaml \</span>
+<span class="s2">  --use_parallel True --run_mode train&quot;</span><span class="w"> </span><span class="m">8</span>
+</pre></div>
+</div>
+</li>
+<li><p>After a few steps of training, terminate the worker process and trigger an end-of-life CKPT save</p>
+<p>Note: With the above startup method, the MindIO Controller is attached to worker 0. In this case, worker 0 cannot be terminated, or else the MindIO Controller will exit and the end-of-life CKPT cannot be triggered. However, when training is started via taskd, the MindIO Controller is a separate process and the worker 0 process can be terminated.</p>
+</li>
+<li><p>Confirm end-of-life CheckPoint generation</p>
+<p>At the end of the entire training process, the reasonableness of the final generated CheckPoint file is confirmed through the log as follows:</p>
+<p>1). Execute the command <code class="docutils literal notranslate"><span class="pre">find</span> <span class="pre">output/checkpoint/</span> <span class="pre">-name</span> <span class="pre">'*.ckpt'</span></code> to find the generated CheckPoint file:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>$ find output/checkpoint/ -name &#39;*.ckpt&#39;
+output/checkpoint/rank_2/qwen3_8b_rank_2-5_1.ckpt
+output/checkpoint/rank_3/qwen3_8b_rank_3-5_1.ckpt
+output/checkpoint/rank_0/qwen3_8b_rank_0-5_1.ckpt
+output/checkpoint/rank_5/qwen3_8b_rank_5-5_1.ckpt
+</pre></div>
+</div>
+<p>2). Execute the command <code class="docutils literal notranslate"><span class="pre">cat</span> <span class="pre">output/msrun_log/worker_0.log</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">'Epoch:'</span></code> to see the trained steps:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>$ cat output/msrun_log/worker_0.log | grep &#39;Epoch:&#39;
+2025-04-07 15:34:27,308 - [mindformers/core/callback/callback.py:529] - INFO - { Epoch:[  1/  2], step:[    1/   19], loss: 10.649, per_step_time: 103328ms, lr: 0.0, overflow cond: False, loss_scale: 1.0, global_norm: [1 31049], train_throughput_per_npu: 2.896T
+2025-04-07 15:34:29,173 - [mindformers/core/callback/callback.py:529] - INFO - { Epoch:[  1/  2], step:[    2/   19], loss: 10.633, per_step_time: 1752ms, lr: 1e-05, overflow cond: False, loss_scale: 1.0, global_norm: [1 508834], train_throughput_per_npu: 170.738T
+2025-04-07 15:34:30,941 - [mindformers/core/callback/callback.py:529] - INFO - { Epoch:[  1/  2], step:[    3/   19], loss: 9.673, per_step_time: 1754ms, lr: 9.981987e-06, overflow cond: False, loss_scale: 1.0, global_norm [10.579812], train_throughput_per_npu: 170.523T
+2025-04-07 15:34:32,704 - [mindformers/core/callback/callback.py:529] - INFO - { Epoch:[  1/  2], step:[    4/   19], loss: 9.287, per_step_time: 1756ms, lr: 9.928079e-06, overflow cond: False, loss_scale: 1.0, global_norm [21.932272], train_throughput_per_npu: 170.319T
+2025-04-07 15:34:34,469 - [mindformers/core/callback/callback.py:529] - INFO - { Epoch:[  1/  2], step:[    5/   19], loss: 8.867, per_step_time: 1758ms, lr: 9.8386645e-06, overflow cond: False, loss_scale: 1.0, global_norm [16.986555], train_throughput_per_npu: 170.173T
+</pre></div>
+</div>
+<p>3). Execute the command <code class="docutils literal notranslate"><span class="pre">cat</span> <span class="pre">output/msrun_log/worker_0.log</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">'report</span> <span class="pre">group</span> <span class="pre">list:'</span></code> to see the replica relationships of MindIO output in the log:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>$ cat output/msrun_log/worker_0.log | grep &#39;report group list:&#39;
+2025-04-07 15:34:27.363613 info 1879138 [TTP controller.cpp:1512] rank:4, report group list: [0, 4]
+2025-04-07 15:34:27.385564 info 1879139 [TTP controller.cpp:1512] rank:7, report group list: [3, 7]
+2025-04-07 15:34:27.393198 info 1879136 [TTP controller.cpp:1512] rank:6, report group list: [2, 6]
+2025-04-07 15:34:27.393515 info 1879142 [TTP controller.cpp:1512] rank:1, report group list: [1, 5]
+</pre></div>
+</div>
+<p>From the training step information above, we can see that the 5 steps that have been trained, and the number is the same as the 5 in the file name <code class="docutils literal notranslate"><span class="pre">qwen3_8b_rank_2-5_1.ckpt</span></code> of CheckPoint.</p>
+<p>The copy relations <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">4]</span></code>, <code class="docutils literal notranslate"><span class="pre">[3,</span> <span class="pre">7]</span></code>, <code class="docutils literal notranslate"><span class="pre">[2,</span> <span class="pre">6]</span></code> and <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">5]</span></code> are known from the output in the log:</p>
+<ul class="simple">
+<li><p>The rank 0 and rank 4 weights have a replica relationship, and the end-of-life checkpoint is stored in rank 0.</p></li>
+<li><p>The rank 3 and rank 7 weights have a replica relationship, and the end-of-life checkpoint is stored in rank 3.</p></li>
+<li><p>The rank 2 and rank 6 weights have a replica relationship, and the end-of-life checkpoint is stored in rank 2.</p></li>
+<li><p>There is a replica relationship between rank 1 and rank 5 weights, and since worker 1 terminates, the final checkpoint is stored in rank 5.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="abnormal-training-results-recovery">
+<h3>Abnormal Training Results Recovery<a class="headerlink" href="#abnormal-training-results-recovery" title="Link to this heading"></a></h3>
+<p>This chapter uses Qwen3-8B training as an example to demonstrate the use of rapid fault recovery.</p>
+<blockquote>
+<div><p>The parameter values shown in the following examples are only experimental data, please refer to real training data.</p>
+</div></blockquote>
+<ol class="arabic">
+<li><p>Install <a class="reference external" href="https://www.mindspore.cn/install/en">MindSpore</a> first.</p></li>
+<li><p>Download MindSpore Transformers, using <a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/example/qwen3/pretrain_qwen3_8b.yaml">pretrain_qwen3_8b.yaml</a> to add and modify parameters according to the configuration below:</p>
+<p>Checkpoint 1.0 configuration:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">output_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;./output&#39;</span>
+
+<span class="nt">monitor_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">monitor_on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">check_for_global_norm</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">global_norm_spike_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">44.0</span>
+
+<span class="nt">callbacks</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CheckpointMonitor</span>
+<span class="w">    </span><span class="nt">save_checkpoint_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+<p>Checkpoint 2.0 configuration:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">output_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;./output&#39;</span>
+
+<span class="nt">monitor_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">monitor_on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">health_checkpoint</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">global_norm_spike_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">44.0</span>
+
+<span class="nt">callbacks</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CheckpointMonitor</span>
+<span class="w">    </span><span class="nt">save_checkpoint_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+<p><strong>Parameter:</strong></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameters</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Optional</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>health_checkpoint</p></td>
+<td><p>Configuration related to health weight. Default to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></td>
+<td><p>dict</p></td>
+<td><p>Optional</p></td>
+</tr>
+<tr class="row-odd"><td><p>output_dir</p></td>
+<td><p>Path to save checkpoint/strategy. Default to <code class="docutils literal notranslate"><span class="pre">./output</span></code>.</p></td>
+<td><p>str</p></td>
+<td><p>Optional</p></td>
+</tr>
+<tr class="row-even"><td><p>monitor_config</p></td>
+<td><p>Whether to enable training indicator monitoring configuration. Default to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></td>
+<td><p>dict</p></td>
+<td><p>Optional</p></td>
+</tr>
+<tr class="row-odd"><td><p>monitor_on</p></td>
+<td><p>Whether to enable training metric monitoring configuration. Only when enabled can abnormal global norm be monitored and TRE functionality be enabled.</p></td>
+<td><p>bool</p></td>
+<td><p>Required <code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>check_for_global_norm</p></td>
+<td><p>Whether to enable the process-level fault rapid recovery function is mutually exclusive with the data skip function. Default to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></td>
+<td><p>bool</p></td>
+<td><p>Optional</p></td>
+</tr>
+<tr class="row-odd"><td><p>global_norm_spike_threshold</p></td>
+<td><p>The threshold for global norm, which triggers data skipping when global norm is exceeded. The default value in the Checkpoint 1.0 scenario is <code class="docutils literal notranslate"><span class="pre">3.0</span></code>. In the Checkpoint 1.0 scenario, it is used in conjunction with <code class="docutils literal notranslate"><span class="pre">check_for_global_norm</span></code>. In the Checkpoint 2.0 scenario, it is used independently, and assigning a value indicates the activation of the quick failure recovery function.</p></td>
+<td><p>float</p></td>
+<td><p>Optional</p></td>
+</tr>
+<tr class="row-even"><td><p>callbacks</p></td>
+<td><p>The configs of callbacks.</p></td>
+<td><p>list</p></td>
+<td><p>Required</p></td>
+</tr>
+<tr class="row-odd"><td><p>save_checkpoint_steps</p></td>
+<td><p>The step interval for saving weights.</p></td>
+<td><p>int</p></td>
+<td><p>Required</p></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<div><p>The configuration with Checkpoint 1.0 can take effect in both Checkpoint 1.0 scenario and Checkpoint 2.0 scenario. Meanwhile, when configuring, the priority of Checkpoint 2.0 configuration is higher than that of Checkpoint 1.0 configuration. Checkpoint 2.0 configuration is only effective in Checkpoint 2.0 scenario.</p>
+</div></blockquote>
+</li>
+<li><p>Configure environment variables:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">MS_ENABLE_TFT</span><span class="o">=</span><span class="s2">&quot;{TRE:1}&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Run the following command to start training:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>mindformers
+
+bash<span class="w"> </span>scripts/msrun_launcher.sh<span class="w"> </span><span class="s2">&quot;run_mindformer.py \</span>
+<span class="s2">    --config path/to/pretrain_qwen3_8b.yaml \</span>
+<span class="s2">    --run_mode train \</span>
+<span class="s2">    --use_parallel True&quot;</span><span class="w"> </span><span class="m">8</span>
+</pre></div>
+</div>
+</li>
+<li><p>When the model officially starts training and encounters a global norm greater than the set threshold, the following log will be printed to prompt the user that an abnormal global norm has been encountered, and the corresponding global step and global norm will be recorded in abnormal_global_norm.json, triggering an error and entering the fast recovery phase.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>- INFO - { Epoch:[  1/  2], step:[    2/ 6500], loss: 11.905, per_step_time: 2775ms, lr: 2.5641025e-08, overflow cond: False, loss_scale: 1.0, global_norm: [45.702465], train_throughput_per_npu: 171.176T
+- INFO -    0.0% |                                                  | 0.36029 samples/s/p  10:01:16 }
+- INFO - Current global norm [45.702465] is greater equal than threshold 44.0, stop training...
+</pre></div>
+</div>
+</li>
+<li><p>After retraining, the training will continue from the previous breakpoint step count. If the global norm is still greater than the set threshold, since the corresponding global step has already been recorded in the abnormal_global_norm.json under the output directory set by YAML, only the corresponding global norm will be recorded here and it will not raise error.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>- INFO - { Epoch:[  1/  2], step:[    2/ 6500], loss: 11.905, per_step_time: 3504ms, lr: 2.5641025e-08, overflow cond: False, loss_scale: 1.0, global_norm: [45.706497], train_throughput_per_npu: 135.552T
+- INFO -    0.0% |                                                  | 0.28531 samples/s/p  12:39:17 }
+- INFO - The global norm [45.706497] of step 2 is still greater or equal than threshold 44.0, continue training.
+</pre></div>
+</div>
+<p>The data recorded in abnormal_global_norm.json is as follows:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;2&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mf">45.70246505737305</span><span class="p">,</span><span class="w"> </span><span class="mf">45.70649719238281</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>‘2’ represents the global step corresponding to the number of training steps, and the following list records the global norm of training before and after recovery.</p>
+</li>
+</ol>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="parallel_training.html" class="btn btn-neutral float-left" title="Distributed Parallelism Training" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="memory_optimization.html" class="btn btn-neutral float-right" title="Memory Optimization" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

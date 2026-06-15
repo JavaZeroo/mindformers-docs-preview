@@ -1,0 +1,78 @@
+/* preview-patch.css — render mindspore.cn theme.css + common.css standalone on raw
+   sphinx_rtd_theme output, without the portal's common.js / backend. Loaded last. */
+
+:root { --mf-hdr: 56px; --mf-brand: #3366ff; }
+
+html, body { margin: 0 !important; padding: 0 !important; }
+/* theme.css reserves 140px up top for the portal header common.js would inject */
+.wy-grid-for-nav { padding-top: 0 !important; }
+/* theme.css hides RTD's own sidebar (common.js injects a replacement); restore it */
+.wy-nav-side {
+  visibility: visible !important; opacity: 1 !important;
+  position: fixed !important; top: var(--mf-hdr) !important; left: 0 !important; bottom: 0 !important;
+  width: 300px !important; height: calc(100% - var(--mf-hdr)) !important;
+  overflow-y: auto !important; z-index: 200 !important;
+}
+.wy-nav-content-wrap { margin-left: 300px !important; padding-top: var(--mf-hdr) !important; }
+/* common.css reveals content only after JS adds .page-load; guarantee visible */
+.wy-nav-content, .wy-nav-content-wrap, .rst-content, .document { opacity: 1 !important; visibility: visible !important; }
+
+/* ---- static top header bar (injected by preview-init.js) ---- */
+.mf-preview-header {
+  position: fixed; top: 0; left: 0; right: 0; height: var(--mf-hdr);
+  display: flex; align-items: center; gap: 16px; padding: 0 24px;
+  background: #fff; border-bottom: 1px solid #e8eaed; z-index: 300;
+  box-shadow: 0 1px 4px rgba(0,0,0,.04);
+  font-family: "PingFang SC","Microsoft YaHei",Helvetica,Arial,sans-serif;
+}
+.mf-ph-brand {
+  font-size: 17px; font-weight: 700; color: #1a1c1f; text-decoration: none;
+  border-left: 4px solid var(--mf-brand); padding-left: 12px; line-height: 1;
+}
+.mf-ph-brand:hover { color: var(--mf-brand); }
+.mf-ph-tag { font-size: 12px; color: #8a9099; padding: 2px 8px; background: #f4f5f7; border-radius: 10px; }
+.mf-ph-spacer { flex: 1; }
+.mf-ph-link { font-size: 13px; color: #4f545c; text-decoration: none; padding: 4px 6px; }
+.mf-ph-link:hover { color: var(--mf-brand); }
+
+/* ---- right-side "On this page" TOC (injected by preview-init.js) ---- */
+.mf-onthispage { display: none; }
+@media (min-width: 1300px) {
+  .mf-onthispage {
+    display: block; position: fixed; top: calc(var(--mf-hdr) + 28px); right: 28px;
+    width: 220px; max-height: calc(100vh - var(--mf-hdr) - 56px); overflow-y: auto; z-index: 150;
+    font-family: "PingFang SC","Microsoft YaHei",Helvetica,Arial,sans-serif;
+  }
+  body.mf-has-otp .wy-nav-content { max-width: calc(100vw - 560px) !important; }
+}
+.mf-otp-title { font-size: 13px; font-weight: 700; color: #1a1c1f; margin: 0 0 10px 14px; }
+.mf-onthispage ul { list-style: none; margin: 0; padding: 0; border-left: 1px solid #e8eaed; }
+.mf-onthispage li { margin: 0; }
+.mf-onthispage li a {
+  display: block; padding: 5px 12px; margin-left: -1px;
+  border-left: 2px solid transparent; color: #686d75;
+  font-size: 13px; line-height: 1.5; text-decoration: none;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.mf-onthispage li.mf-otp-l3 a { padding-left: 24px; font-size: 12px; }
+.mf-onthispage li a:hover { color: var(--mf-brand); }
+.mf-onthispage li a.active { color: var(--mf-brand); border-left-color: var(--mf-brand); font-weight: 600; }
+
+/* ---- sidebar header: white & clean (override RTD's default blue search box,
+       which reappears now that we layer instead of overwrite theme.css) ---- */
+.wy-side-nav-search { background: #fff !important; padding: 14px 16px 8px !important; }
+.wy-side-nav-search > a,
+.wy-side-nav-search > a .icon-home,
+.wy-side-nav-search .wy-dropdown > a { color: #1a1c1f !important; font-weight: 700 !important; }
+.wy-side-nav-search > a:hover { color: var(--mf-brand) !important; }
+.wy-side-nav-search input[type="text"] {
+  border: 1px solid #e0e2e6 !important; border-radius: 6px !important; box-shadow: none !important;
+}
+.wy-side-nav-search > div.version { color: #8a9099 !important; }
+.wy-nav-side { background: #fff !important; }
+
+/* ---- mobile ---- */
+@media screen and (max-width: 768px) {
+  .wy-nav-side { left: -300px !important; }
+  .wy-nav-content-wrap { margin-left: 0 !important; }
+}

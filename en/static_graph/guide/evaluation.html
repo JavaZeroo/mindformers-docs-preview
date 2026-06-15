@@ -1,0 +1,862 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Evaluation &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Features" href="../feature/index.html" />
+    <link rel="prev" title="Service Deployment" href="deployment.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">Models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contribution Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">Modelers Contribution Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">Model-Related FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">Feature-Related FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Static Graph Implementation (Deprecated)</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Full-process Guide to Large Models</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="llm_training.html">Training Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pre_training.html">Pretraining</a></li>
+<li class="toctree-l2"><a class="reference internal" href="supervised_fine_tuning.html">Supervised Fine-Tuning (SFT)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inference.html">Inference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deployment.html">Service Deployment</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Evaluation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aisbench-benchmarking">AISBench Benchmarking</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#preparations">Preparations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#accuracy-evaluation-process">Accuracy Evaluation Process</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#performance-evaluation-process">Performance Evaluation Process</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#appendix">Appendix</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#harness-evaluation">Harness Evaluation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#usage">Usage</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#viewing-the-evaluation-results">Viewing the Evaluation Results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">FAQ</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#evaluation-after-training">Evaluation after training</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#distributed-weight-merging">Distributed Weight Merging</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#inference-configuration-development">Inference Configuration Development</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#inference-function-verification">Inference Function Verification</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#evaluation-using-aisbench">Evaluation using AISBench</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/index.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_development/index.html">Advanced Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">Excellent Practice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">Environment Variable Descriptions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Full-process Guide to Large Models</a></li>
+      <li class="breadcrumb-item active">Evaluation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/guide/evaluation.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">Deprecated</p>
+<p>This page belongs to the <strong>Static Graph (GRAPH_MODE) Implementation</strong> section and has been marked as deprecated. New features are primarily being developed in the “r2.0.0 Dynamic Graph Implementation” section. Please refer to the dynamic graph documentation first.</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="evaluation">
+<h1>Evaluation<a class="headerlink" href="#evaluation" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_en/static_graph/guide/evaluation.md"><img alt="View Source on AtomGit" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source_en.svg" /></a></p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The rapid development of Large Language Models (LLMs) has created a systematic need to evaluate their capabilities and limitations. Model evaluation has become essential infrastructure in the AI field. The mainstream model evaluation process is like an exam, where model capabilities are assessed through the accuracy rate of the model’s answers to test papers (evaluation datasets). Common datasets such as CEval contain 52 different subject professional examination multiple-choice questions in Chinese, primarily evaluating the model’s knowledge base. GSM8K consists of 8,501 high-quality elementary school math problems written by human problem setters, primarily evaluating the model’s reasoning ability, and so on.</p>
+<p>In previous versions, MindSpore Transformers adapted the Harness evaluation framework for certain legacy architecture models. The latest version now supports the AISBench evaluation framework, meaning that in theory, any model supporting service-oriented deployment can be evaluated using AISBench.</p>
+</section>
+<section id="aisbench-benchmarking">
+<h2>AISBench Benchmarking<a class="headerlink" href="#aisbench-benchmarking" title="Link to this heading"></a></h2>
+<p>For service-oriented evaluation of MindSpore Transformers, the AISBench Benchmark suite is recommended. AISBench Benchmark is a model evaluation tool built on OpenCompass, compatible with OpenCompass’s configuration system, dataset structure, and model backend implementation, while extending support for service-oriented models. It supports 30+ open-source datasets: <a class="reference external" href="https://gitee.com/aisbench/benchmark/blob/master/doc/users_guide/datasets.md#%E5%BC%80%E6%BA%90%E6%95%B0%E6%8D%AE%E9%9B%86">Evaluation datasets supported by AISBench</a>.</p>
+<p>Currently, AISBench supports two major categories of inference task evaluation scenarios:</p>
+<ul class="simple">
+<li><p><strong>Accuracy Evaluation</strong>: Supports accuracy verification and model capability assessment of service-oriented models and local models on various question-answering and reasoning benchmark datasets.</p></li>
+<li><p><strong>Performance Evaluation</strong>: Supports latency and throughput evaluation of service-oriented models, and can perform extreme performance testing under pressure testing scenarios.</p></li>
+</ul>
+<p>Both tasks follow the same evaluation paradigm. The user side sends requests and analyzes the results output by the service side to output the final evaluation results, as shown in the figure below:</p>
+<p><img alt="benchmark_illustrate" src="../../_images/benchmark_illustrate.png" /></p>
+<section id="preparations">
+<h3>Preparations<a class="headerlink" href="#preparations" title="Link to this heading"></a></h3>
+<p>The preparation phase mainly completes three tasks: installing the AISBench evaluation environment, downloading datasets, and starting the vLLM-MindSpore service.</p>
+<section id="step-1-install-aisbench-evaluation-environment">
+<h4>Step 1 Install AISBench Evaluation Environment<a class="headerlink" href="#step-1-install-aisbench-evaluation-environment" title="Link to this heading"></a></h4>
+<p>Since AISBench has dependencies on both torch and transformers, but the official vLLM-MindSpore image contains a mocked torch implementation from the msadapter package which may cause conflicts, it is recommended to set up a separate container for installing the AISBench evaluation environment. If you insist on using the vLLM-MindSpore image to create a container for installing the evaluation environment, you need to perform the following steps to remove the existing torch and transformers packages inside the container after launching it:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>rm<span class="w"> </span>-rf<span class="w"> </span>/usr/local/Python-3.11/lib/python3.11/site-packages/torch*
+pip<span class="w"> </span>uninstall<span class="w"> </span>transformers
+<span class="nb">unset</span><span class="w"> </span>USE_TORCH
+</pre></div>
+</div>
+<p>Then clone the repository and install from source:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://gitee.com/aisbench/benchmark.git
+<span class="nb">cd</span><span class="w"> </span>benchmark/
+pip3<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>./<span class="w"> </span>--use-pep517
+</pre></div>
+</div>
+</section>
+<section id="step-2-dataset-download">
+<h4>Step 2 Dataset Download<a class="headerlink" href="#step-2-dataset-download" title="Link to this heading"></a></h4>
+<p>The official documentation provides download links for each dataset. Taking CEval as an example, you can find the download link in the <a class="reference external" href="https://gitee.com/aisbench/benchmark/blob/master/ais_bench/benchmark/configs/datasets/ceval/README.md">CEval documentation,</a>, and execute the following commands to download and extract the dataset to the specified path:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>ais_bench/datasets
+mkdir<span class="w"> </span>ceval/
+mkdir<span class="w"> </span>ceval/formal_ceval
+<span class="nb">cd</span><span class="w"> </span>ceval/formal_ceval
+wget<span class="w"> </span>https://www.modelscope.cn/datasets/opencompass/ceval-exam/resolve/master/ceval-exam.zip
+unzip<span class="w"> </span>ceval-exam.zip
+rm<span class="w"> </span>ceval-exam.zip
+</pre></div>
+</div>
+<p>For other dataset downloads, you can find download links in the corresponding dataset’s official documentation.</p>
+</section>
+<section id="step-3-start-vllm-mindspore-service">
+<h4>Step 3 Start vLLM-MindSpore Service<a class="headerlink" href="#step-3-start-vllm-mindspore-service" title="Link to this heading"></a></h4>
+<p>For the specific startup process, see: <a class="reference internal" href="deployment.html"><span class="std std-doc">Service Deployment Tutorial</span></a>. Evaluation supports all service-deployable models.</p>
+</section>
+</section>
+<section id="accuracy-evaluation-process">
+<h3>Accuracy Evaluation Process<a class="headerlink" href="#accuracy-evaluation-process" title="Link to this heading"></a></h3>
+<p>Accuracy evaluation first requires determining the evaluation interface and dataset type, which is specifically selected based on model capabilities and datasets.</p>
+<section id="step-1-modify-interface-configuration">
+<h4>Step 1 Modify Interface Configuration<a class="headerlink" href="#step-1-modify-interface-configuration" title="Link to this heading"></a></h4>
+<p>AISBench supports OpenAI’s v1/chat/completions and v1/completions interfaces, which correspond to different configuration files in AISBench. Taking the v1/completions interface as an example, referred to as the general interface, you need to modify the following file <code class="docutils literal notranslate"><span class="pre">ais_bench/benchmark/configs/models/vllm_api/vllm_api_general.py</span></code>configuration:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ais_bench.benchmark.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">VLLMCustomAPIChat</span>
+
+<span class="n">models</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">attr</span><span class="o">=</span><span class="s2">&quot;service&quot;</span><span class="p">,</span>
+        <span class="nb">type</span><span class="o">=</span><span class="n">VLLMCustomAPIChat</span><span class="p">,</span>
+        <span class="n">abbr</span><span class="o">=</span><span class="s1">&#39;vllm-api-general-chat&#39;</span><span class="p">,</span>
+        <span class="n">path</span><span class="o">=</span><span class="s2">&quot;xxx/DeepSeek-R1-671B&quot;</span><span class="p">,</span>    <span class="c1"># Specify the absolute path of the model serialization vocabulary file, generally the model weight folder path</span>
+        <span class="n">model</span><span class="o">=</span><span class="s2">&quot;DeepSeek-R1&quot;</span><span class="p">,</span>            <span class="c1"># Specify the service-loaded model name, configured according to the actual VLLM inference service loaded model name (configured as an empty string will automatically obtain)</span>
+        <span class="n">request_rate</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>               <span class="c1"># Request sending frequency, send 1 request to the server every 1/request_rate seconds, if less than 0.1, send all requests at once</span>
+        <span class="n">retry</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="n">host_ip</span> <span class="o">=</span> <span class="s2">&quot;localhost&quot;</span><span class="p">,</span>          <span class="c1"># Specify the IP of the inference service</span>
+        <span class="n">host_port</span> <span class="o">=</span> <span class="mi">8080</span><span class="p">,</span>               <span class="c1"># Specify the port of the inference service</span>
+        <span class="n">max_out_len</span> <span class="o">=</span> <span class="mi">512</span><span class="p">,</span>              <span class="c1"># Maximum number of tokens output by the inference service</span>
+        <span class="n">batch_size</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>                 <span class="c1"># Maximum concurrent number of request sending, can speed up evaluation</span>
+        <span class="n">generation_kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>       <span class="c1"># Post-processing parameters, refer to model default configuration</span>
+            <span class="n">temperature</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
+            <span class="n">top_k</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+            <span class="n">top_p</span> <span class="o">=</span> <span class="mf">0.95</span><span class="p">,</span>
+            <span class="n">seed</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">repetition_penalty</span> <span class="o">=</span> <span class="mf">1.03</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>For more specific parameter descriptions, refer to <a class="reference internal" href="#interface-configuration-parameter-description-table">Interface Configuration Parameter Description</a>.</p>
+</section>
+<section id="step-2-start-evaluation-via-command-line">
+<h4>Step 2 Start Evaluation via Command Line<a class="headerlink" href="#step-2-start-evaluation-via-command-line" title="Link to this heading"></a></h4>
+<p>Determine the dataset task to be used. Taking CEval as an example, using the ceval_gen_5_shot_str dataset task, the command is as follows:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ais_bench<span class="w"> </span>--models<span class="w"> </span>vllm_api_general<span class="w"> </span>--datasets<span class="w"> </span>ceval_gen_5_shot_str<span class="w"> </span>--debug
+</pre></div>
+</div>
+<p>Parameter Description:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--models</span></code>: Specifies the model task interface, i.e., vllm_api_general, corresponding to the file name changed in the previous step. There is also vllm_api_general_chat</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--datasets</span></code>: Specifies the dataset task, i.e., the ceval_gen_4_shot_str dataset task, where 4_shot means the question will be input repeatedly four times, and str means non-chat output</p></li>
+</ul>
+<p>For more parameter configuration descriptions, see <a class="reference external" href="https://gitee.com/aisbench/benchmark/blob/master/doc/users_guide/models.md#%E6%9C%8D%E5%8A%A1%E5%8C%96%E6%8E%A8%E7%90%86%E5%90%8E%E7%AB%AF">Configuration Description</a>.</p>
+<p>After the evaluation is completed, statistical results will be displayed on the screen. The specific execution results and logs will be saved in the outputs folder under the current path. In case of execution exceptions, problems can be located based on the logs.</p>
+</section>
+</section>
+<section id="performance-evaluation-process">
+<h3>Performance Evaluation Process<a class="headerlink" href="#performance-evaluation-process" title="Link to this heading"></a></h3>
+<p>The performance evaluation process is similar to the accuracy evaluation process, but it pays more attention to the processing time of each stage of each request. By accurately recording the sending time of each request, the return time of each stage, and the response content, it systematically evaluates key performance indicators of the model service in actual deployment environments, such as response latency (such as TTFT, inter-token latency), throughput capacity (such as QPS, TPUT), and concurrent processing capabilities. The following uses the original GSM8K dataset for performance evaluation as an example.</p>
+<section id="id1">
+<h4>Step 1 Modify Interface Configuration<a class="headerlink" href="#id1" title="Link to this heading"></a></h4>
+<p>By configuring service backend parameters, request content, request intervals, concurrent numbers, etc. can be flexibly controlled to adapt to different evaluation scenarios (such as low-concurrency latency-sensitive or high-concurrency throughput-prioritized). The configuration is similar to accuracy evaluation. Taking the vllm_api_stream_chat task as an example, modify the following configuration in <code class="docutils literal notranslate"><span class="pre">ais_bench/benchmark/configs/models/vllm_api/vllm_api_stream_chat.py</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ais_bench.benchmark.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">VLLMCustomAPIChatStream</span>
+
+<span class="n">models</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">attr</span><span class="o">=</span><span class="s2">&quot;service&quot;</span><span class="p">,</span>
+        <span class="nb">type</span><span class="o">=</span><span class="n">VLLMCustomAPIChatStream</span><span class="p">,</span>
+        <span class="n">abbr</span><span class="o">=</span><span class="s1">&#39;vllm-api-stream-chat&#39;</span><span class="p">,</span>
+        <span class="n">path</span><span class="o">=</span><span class="s2">&quot;xxx/DeepSeek-R1-671B&quot;</span><span class="p">,</span>    <span class="c1"># Specify the absolute path of the model serialization vocabulary file, generally the model weight folder path</span>
+        <span class="n">model</span><span class="o">=</span><span class="s2">&quot;DeepSeek-R1&quot;</span><span class="p">,</span>            <span class="c1"># Specify the service-loaded model name, configured according to the actual VLLM inference service loaded model name (configured as an empty string will automatically obtain)</span>
+        <span class="n">request_rate</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>               <span class="c1"># Request sending frequency, send 1 request to the server every 1/request_rate seconds, if less than 0.1, send all requests at once</span>
+        <span class="n">retry</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="n">host_ip</span> <span class="o">=</span> <span class="s2">&quot;localhost&quot;</span><span class="p">,</span>          <span class="c1"># Specify the IP of the inference service</span>
+        <span class="n">host_port</span> <span class="o">=</span> <span class="mi">8080</span><span class="p">,</span>               <span class="c1"># Specify the port of the inference service</span>
+        <span class="n">max_out_len</span> <span class="o">=</span> <span class="mi">512</span><span class="p">,</span>              <span class="c1"># Maximum number of tokens output by the inference service</span>
+        <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">128</span><span class="p">,</span>               <span class="c1"># Maximum concurrent number of request sending</span>
+        <span class="n">generation_kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">temperature</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
+            <span class="n">top_k</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+            <span class="n">top_p</span> <span class="o">=</span> <span class="mf">0.95</span><span class="p">,</span>
+            <span class="n">seed</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">repetition_penalty</span> <span class="o">=</span> <span class="mf">1.03</span><span class="p">,</span>
+            <span class="n">ignore_eos</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>          <span class="c1"># Inference service output ignores eos (output length will definitely reach max_out_len)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>For specific parameter descriptions, refer to <a class="reference internal" href="#interface-configuration-parameter-description-table">Interface Configuration Parameter Description</a></p>
+</section>
+<section id="step-2-evaluation-command">
+<h4>Step 2 Evaluation Command<a class="headerlink" href="#step-2-evaluation-command" title="Link to this heading"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ais_bench<span class="w"> </span>--models<span class="w"> </span>vllm_api_stream_chat<span class="w"> </span>--datasets<span class="w"> </span>gsm8k_gen_0_shot_cot_str_perf<span class="w"> </span>--summarizer<span class="w"> </span>default_perf<span class="w"> </span>--mode<span class="w"> </span>perf
+</pre></div>
+</div>
+<p>Parameter Description:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--models</span></code>: Specifies the model task interface, i.e., vllm_api_stream_chat corresponding to the file name of the configuration changed in the previous step.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--datasets</span></code>: Specifies the dataset task, i.e., the gsm8k_gen_0_shot_cot_str_perf dataset task, with a corresponding task file of the same name, where GSM8K refers to the dataset used, 0_shot means the question will not be repeated, str means non-chat output, and perf means performance testing</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--summarizer</span></code>: Specifies task statistical data</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--mode</span></code>: Specifies the task execution mode</p></li>
+</ul>
+<p>For more parameter configuration descriptions, see <a class="reference external" href="https://gitee.com/aisbench/benchmark/blob/master/doc/users_guide/models.md#%E6%9C%8D%E5%8A%A1%E5%8C%96%E6%8E%A8%E7%90%86%E5%90%8E%E7%AB%AF">Configuration Description</a>.</p>
+</section>
+<section id="evaluation-results-description">
+<h4>Evaluation Results Description<a class="headerlink" href="#evaluation-results-description" title="Link to this heading"></a></h4>
+<p>After the evaluation is completed, performance evaluation results will be output, including single inference request performance output results and end-to-end performance output results. Parameter descriptions are as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Metric</p></th>
+<th class="head"><p>Full Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>E2EL</p></td>
+<td><p>End-to-End Latency</p></td>
+<td><p>Total latency (ms) from request sending to receiving complete response</p></td>
+</tr>
+<tr class="row-odd"><td><p>TTFT</p></td>
+<td><p>Time To First Token</p></td>
+<td><p>Latency (ms) for the first token to return</p></td>
+</tr>
+<tr class="row-even"><td><p>TPOT</p></td>
+<td><p>Time Per Output Token</p></td>
+<td><p>Average generation latency (ms) per token in the output phase (excluding the first token)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ITL</p></td>
+<td><p>Inter-token Latency</p></td>
+<td><p>Average interval latency (ms) between adjacent tokens (excluding the first token)</p></td>
+</tr>
+<tr class="row-even"><td><p>InputTokens</p></td>
+<td><p>/</p></td>
+<td><p>Number of input tokens in the request</p></td>
+</tr>
+<tr class="row-odd"><td><p>OutputTokens</p></td>
+<td><p>/</p></td>
+<td><p>Number of output tokens generated by the request</p></td>
+</tr>
+<tr class="row-even"><td><p>OutputTokenThroughput</p></td>
+<td><p>/</p></td>
+<td><p>Throughput of output tokens (Token/s)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Tokenizer</p></td>
+<td><p>/</p></td>
+<td><p>Tokenizer encoding time (ms)</p></td>
+</tr>
+<tr class="row-even"><td><p>Detokenizer</p></td>
+<td><p>/</p></td>
+<td><p>Detokenizer decoding time (ms)</p></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><p>For more evaluation tasks, such as synthetic random dataset evaluation and performance stress testing, see the following documentation: <a class="reference external" href="https://gitee.com/aisbench/benchmark/tree/master/doc/users_guide">AISBench Official Documentation</a>.</p></li>
+<li><p>For more tips on optimizing inference performance, see the following documentation: <a class="reference external" href="https://docs.qq.com/doc/DZGhMSWFCenpQZWJR">Inference Performance Optimization</a>.</p></li>
+<li><p>For more parameter descriptions, see the following documentation: <a class="reference external" href="https://gitee.com/aisbench/benchmark/blob/master/doc/users_guide/performance_metric.md">Performance Evaluation Results Description</a>.</p></li>
+</ul>
+</section>
+</section>
+<section id="appendix">
+<h3>Appendix<a class="headerlink" href="#appendix" title="Link to this heading"></a></h3>
+<section id="faq">
+<h4>FAQ<a class="headerlink" href="#faq" title="Link to this heading"></a></h4>
+<p><strong>Q: Evaluation results output does not conform to format, how to make the results output conform to expectations?</strong></p>
+<p>In some datasets, we may want the model’s output to conform to our expectations, so we can change the prompt.</p>
+<p>Taking CEval’s gen_0_shot_str as an example, if we want the first token of the output to be the selected answer, we can modify the template in the following file:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># ais_bench/benchmark/configs/datasets/ceval/ceval_gen_0_shot_str.py Line 66 to 67</span>
+<span class="k">for</span> <span class="n">_split</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;val&#39;</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">_name</span> <span class="ow">in</span> <span class="n">ceval_all_sets</span><span class="p">:</span>
+        <span class="n">_ch_name</span> <span class="o">=</span> <span class="n">ceval_subject_mapping</span><span class="p">[</span><span class="n">_name</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">ceval_infer_cfg</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">prompt_template</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                <span class="nb">type</span><span class="o">=</span><span class="n">PromptTemplate</span><span class="p">,</span>
+                <span class="n">template</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;以下是中国关于</span><span class="si">{</span><span class="n">_ch_name</span><span class="si">}</span><span class="s1">考试的单项选择题，请选出其中的正确答案。</span><span class="se">\n{{</span><span class="s1">question</span><span class="se">}}\n</span><span class="s1">A. </span><span class="se">{{</span><span class="s1">A</span><span class="se">}}\n</span><span class="s1">B. </span><span class="se">{{</span><span class="s1">B</span><span class="se">}}\n</span><span class="s1">C. </span><span class="se">{{</span><span class="s1">C</span><span class="se">}}\n</span><span class="s1">D. </span><span class="se">{{</span><span class="s1">D</span><span class="se">}}\n</span><span class="s1">答案: </span><span class="se">{{</span><span class="s1">answer</span><span class="se">}}</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">retriever</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="n">ZeroRetriever</span><span class="p">),</span>
+            <span class="n">inferencer</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="n">GenInferencer</span><span class="p">),</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+<p>For other datasets, similarly modify the template in the corresponding files to construct appropriate prompts.</p>
+<p><strong>Q: How should interface types and inference lengths be configured for different datasets?</strong></p>
+<p>This specifically depends on the comprehensive consideration of model type and dataset type. For reasoning class models, the chat interface is recommended as it can enable thinking, and the inference length should be set longer. For base models, the general interface is used.</p>
+<ul class="simple">
+<li><p>Taking the Qwen2.5 model evaluating the MMLU dataset as an example: From the dataset perspective, MMLU datasets mainly test knowledge, so the general interface is recommended. At the same time, when selecting dataset tasks, do not choose cot, i.e., do not enable the chain of thought.</p></li>
+<li><p>Taking the DeepSeek-R1 model evaluating difficult mathematical reasoning questions like AIME2025 as an example: Use the chat interface with ultra-long inference length and use datasets with cot tasks.</p></li>
+</ul>
+</section>
+<section id="common-errors">
+<h4>Common Errors<a class="headerlink" href="#common-errors" title="Link to this heading"></a></h4>
+<ol class="arabic">
+<li><p>Client returns HTML data with garbled characters</p>
+<p><strong>Error phenomenon</strong>: Return webpage HTML data<br />
+<strong>Solution</strong>: Check if the client has a proxy enabled, check proxy_https and proxy_http and turn off the proxy.</p>
+</li>
+<li><p>Server reports 400 Bad Request</p>
+<p><strong>Error phenomenon</strong>:</p>
+<div class="highlight-plaintext notranslate"><div class="highlight"><pre><span></span>INFO: 127.0.0.1:53456 - &quot;POST /v1/completions HTTP/1.1&quot; 400 Bad Request
+INFO: 127.0.0.1:53470 - &quot;POST /v1/completions HTTP/1.1&quot; 400 Bad Request
+</pre></div>
+</div>
+<p><strong>Solution</strong>: Check if the request format is correct in the client interface configuration.</p>
+</li>
+<li><p>Server reports error 404 xxx does not exist</p>
+<p><strong>Error phenomenon</strong>:</p>
+<div class="highlight-plaintext notranslate"><div class="highlight"><pre><span></span>[serving_chat.py:135] Error with model object=&#39;error&#39; message=&#39;The model &#39;Qwen3-30B-A3B-Instruct-2507&#39; does not exist.&#39; param=None code=404
+&quot;POST /v1/chat/completions HTTP/1.1&quot; 404 Not Found
+[serving_chat.py:135] Error with model object=&#39;error&#39; message=&#39;The model &#39;Qwen3-30B-A3B-Instruct-2507&#39; does not exist.&#39;
+</pre></div>
+</div>
+<p><strong>Solution</strong>: Check if the model path in the interface configuration is accessible.</p>
+</li>
+</ol>
+</section>
+<section id="interface-configuration-parameter-description-table">
+<h4>Interface Configuration Parameter Description Table<a class="headerlink" href="#interface-configuration-parameter-description-table" title="Link to this heading"></a></h4>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>type</p></td>
+<td><p>Task interface type</p></td>
+</tr>
+<tr class="row-odd"><td><p>path</p></td>
+<td><p>Absolute path of the model serialization vocabulary file, generally the model weight folder path</p></td>
+</tr>
+<tr class="row-even"><td><p>model</p></td>
+<td><p>Service-loaded model name, configured according to the actual VLLM inference service loaded model name (configured as an empty string will automatically obtain)</p></td>
+</tr>
+<tr class="row-odd"><td><p>request_rate</p></td>
+<td><p>Request sending frequency, send 1 request to the server every 1/request_rate seconds, if less than 0.1, send all requests at once</p></td>
+</tr>
+<tr class="row-even"><td><p>retry</p></td>
+<td><p>Number of retries when request fails</p></td>
+</tr>
+<tr class="row-odd"><td><p>host_ip</p></td>
+<td><p>IP of the inference service</p></td>
+</tr>
+<tr class="row-even"><td><p>host_port</p></td>
+<td><p>Port of the inference service</p></td>
+</tr>
+<tr class="row-odd"><td><p>max_out_len</p></td>
+<td><p>Maximum number of tokens output by the inference service</p></td>
+</tr>
+<tr class="row-even"><td><p>batch_size</p></td>
+<td><p>Maximum concurrent number of request sending</p></td>
+</tr>
+<tr class="row-odd"><td><p>temperature</p></td>
+<td><p>Post-processing parameter, temperature coefficient</p></td>
+</tr>
+<tr class="row-even"><td><p>top_k</p></td>
+<td><p>Post-processing parameter</p></td>
+</tr>
+<tr class="row-odd"><td><p>top_p</p></td>
+<td><p>Post-processing parameter</p></td>
+</tr>
+<tr class="row-even"><td><p>seed</p></td>
+<td><p>Random seed</p></td>
+</tr>
+<tr class="row-odd"><td><p>repetition_penalty</p></td>
+<td><p>Post-processing parameter, repetition penalty</p></td>
+</tr>
+<tr class="row-even"><td><p>ignore_eos</p></td>
+<td><p>Inference service output ignores eos (output length will definitely reach max_out_len)</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="references">
+<h4>References<a class="headerlink" href="#references" title="Link to this heading"></a></h4>
+<p>The above only introduces the basic usage of AISBench. For more tutorials and usage methods, please refer to the official materials:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://gitee.com/aisbench/benchmark">AISBench Official Tutorial</a></p></li>
+<li><p><a class="reference external" href="https://gitee.com/aisbench/benchmark/tree/master/doc/users_guide">AISBench Main Documentation</a></p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="harness-evaluation">
+<h2>Harness Evaluation<a class="headerlink" href="#harness-evaluation" title="Link to this heading"></a></h2>
+<p><a class="reference external" href="https://github.com/EleutherAI/lm-evaluation-harness">LM Evaluation Harness</a> is an open-source language model evaluation framework that provides evaluation of more than 60 standard academic datasets, supports multiple evaluation modes such as HuggingFace model evaluation, PEFT adapter evaluation, and vLLM inference evaluation, and supports customized prompts and evaluation metrics, including the evaluation tasks of the loglikelihood, generate_until, and loglikelihood_rolling types. After MindSpore Transformers is adapted based on the Harness evaluation framework, the MindSpore Transformers model can be loaded for evaluation.</p>
+<p>The currently verified models and supported evaluation tasks are shown in the table below (the remaining models and evaluation tasks are actively being verified and adapted, please pay attention to version updates):</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Verified models</p></th>
+<th class="head"><p>Supported evaluation tasks</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Llama3</p></td>
+<td><p>gsm8k, ceval-valid, mmlu, cmmlu, race, lambada</p></td>
+</tr>
+<tr class="row-odd"><td><p>Llama3.1</p></td>
+<td><p>gsm8k, ceval-valid, mmlu, cmmlu, race, lambada</p></td>
+</tr>
+<tr class="row-even"><td><p>Qwen2</p></td>
+<td><p>gsm8k, ceval-valid, mmlu, cmmlu, race, lambada</p></td>
+</tr>
+</tbody>
+</table>
+<section id="installation">
+<h3>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h3>
+<p>Harness supports two installation methods: pip installation and source code compilation installation. Pip installation is simpler and faster, source code compilation and installation are easier to debug and analyze, and users can choose the appropriate installation method according to their needs.</p>
+<section id="pip-installation">
+<h4>pip Installation<a class="headerlink" href="#pip-installation" title="Link to this heading"></a></h4>
+<p>Users can execute the following command to install Harness (It is recommended to use version 0.4.4):</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="nv">lm_eval</span><span class="o">==</span><span class="m">0</span>.4.4
+</pre></div>
+</div>
+</section>
+<section id="source-code-compilation-installation">
+<h4>Source Code Compilation Installation<a class="headerlink" href="#source-code-compilation-installation" title="Link to this heading"></a></h4>
+<p>Users can execute the following command to compile and install Harness:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>--depth<span class="w"> </span><span class="m">1</span><span class="w"> </span>-b<span class="w"> </span>v0.4.4<span class="w"> </span>https://github.com/EleutherAI/lm-evaluation-harness
+<span class="nb">cd</span><span class="w"> </span>lm-evaluation-harness
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
+</div>
+</section>
+</section>
+<section id="usage">
+<h3>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h3>
+<section id="preparations-before-evaluation">
+<h4>Preparations Before Evaluation<a class="headerlink" href="#preparations-before-evaluation" title="Link to this heading"></a></h4>
+<ol class="arabic">
+<li><p>Create a new directory with e.g. the name <code class="docutils literal notranslate"><span class="pre">model_dir</span></code> for storing the model yaml files.</p></li>
+<li><p>Place the model inference yaml configuration file (predict_xxx_.yaml) in the directory created in the previous step. The directory location of the reasoning yaml configuration file for different models refers to <a class="reference internal" href="#../introduction/models.md"><span class="xref myst">model library</span></a>.</p></li>
+<li><p>Configure the yaml file. If the model class, model Config class, and model Tokenizer class in yaml use cheat code, that is, the code files are in <a class="reference external" href="https://atomgit.com/mindspore/mindformers/tree/master/research">research</a> directory or other external directories, it is necessary to modify the yaml file: under the corresponding class <code class="docutils literal notranslate"><span class="pre">type</span></code> field, add the <code class="docutils literal notranslate"><span class="pre">auto_register</span></code> field in the format of <code class="docutils literal notranslate"><span class="pre">module.class</span></code>. (<code class="docutils literal notranslate"><span class="pre">module</span></code> is the file name of the script where the class is located, and <code class="docutils literal notranslate"><span class="pre">class</span></code> is the class name. If it already exists, there is no need to modify it.).</p>
+<p>Using <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/research/llama3_1/llama3_1_8b/predict_llama3_1_8b.yaml">predict_llama3_1_8b. yaml</a> configuration as an example, modify some of the configuration items as follows:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">run_mode</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;predict&#39;</span><span class="w">    </span><span class="c1"># Set inference mode</span>
+<span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;model.ckpt&#39;</span><span class="w">    </span><span class="c1"># path of ckpt</span>
+<span class="nt">processor</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">tokenizer</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">vocab_file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;tokenizer.model&quot;</span><span class="w">    </span><span class="c1"># path of tokenizer</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Llama3Tokenizer</span>
+<span class="w">    </span><span class="nt">auto_register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">llama3_tokenizer.Llama3Tokenizer</span>
+</pre></div>
+</div>
+<p>For detailed instructions on each configuration item, please refer to the <a class="reference internal" href="../feature/configuration.html"><span class="std std-doc">configuration description</span></a>.</p>
+</li>
+<li><p>If you use the <code class="docutils literal notranslate"><span class="pre">ceval-valid</span></code>, <code class="docutils literal notranslate"><span class="pre">mmlu</span></code>, <code class="docutils literal notranslate"><span class="pre">cmmlu</span></code>, <code class="docutils literal notranslate"><span class="pre">race</span></code>, and <code class="docutils literal notranslate"><span class="pre">lambada</span></code> datasets for evaluation, you need to set <code class="docutils literal notranslate"><span class="pre">use_flash_attention</span></code> to <code class="docutils literal notranslate"><span class="pre">False</span></code>. Using <code class="docutils literal notranslate"><span class="pre">predict_llama3_1_8b.yaml</span></code> as an example, modify the yaml as follows:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">model</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">model_config</span><span class="p">:</span>
+<span class="w">    </span><span class="c1"># ...</span>
+<span class="w">    </span><span class="nt">use_flash_attention</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span><span class="w">  </span><span class="c1"># Set to False</span>
+<span class="w">    </span><span class="c1"># ...</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="evaluation-example">
+<h4>Evaluation Example<a class="headerlink" href="#evaluation-example" title="Link to this heading"></a></h4>
+<p>Execute the script of <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/toolkit/benchmarks/run_harness.sh">run_harness.sh</a> to evaluate.</p>
+<p>The following table lists the parameters of the script of <code class="docutils literal notranslate"><span class="pre">run_harness.sh</span></code>:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Required</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--register_path</span></code></p></td>
+<td><p>str</p></td>
+<td><p>The absolute path of the directory where the cheat code is located. For example, the model directory under the <a class="reference external" href="https://atomgit.com/mindspore/mindformers/tree/master/research">research</a> directory.</p></td>
+<td><p>No(The cheat code is required)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--model</span></code></p></td>
+<td><p>str</p></td>
+<td><p>The value must be <code class="docutils literal notranslate"><span class="pre">mf</span></code>, indicating the MindSpore Transformers evaluation policy.</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--model_args</span></code></p></td>
+<td><p>str</p></td>
+<td><p>Model and evaluation parameters. For details, see MindSpore Transformers model parameters.</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--tasks</span></code></p></td>
+<td><p>str</p></td>
+<td><p>Dataset name. Multiple datasets can be specified and separated by commas (,).</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--batch_size</span></code></p></td>
+<td><p>int</p></td>
+<td><p>Number of batch processing samples.</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--help</span></code></p></td>
+<td><p></p></td>
+<td><p>Display help information and exit.</p></td>
+<td><p>No</p></td>
+</tr>
+</tbody>
+</table>
+<p>The following table lists the parameters of <code class="docutils literal notranslate"><span class="pre">model_args</span></code>:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Required</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pretrained</span></code></p></td>
+<td><p>str</p></td>
+<td><p>Model directory.</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">max_length</span></code></p></td>
+<td><p>int</p></td>
+<td><p>Maximum length of model generation.</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">use_parallel</span></code></p></td>
+<td><p>bool</p></td>
+<td><p>Enable parallel strategy (It must be enabled for multi card evaluation).</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tp</span></code></p></td>
+<td><p>int</p></td>
+<td><p>The number of parallel tensors.</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">dp</span></code></p></td>
+<td><p>int</p></td>
+<td><p>The number of parallel data.</p></td>
+<td><p>No</p></td>
+</tr>
+</tbody>
+</table>
+<p>Harness evaluation supports single-device single-card, single-device multiple-card, and multiple-device multiple-card scenarios, with sample evaluations for each scenario listed below:</p>
+<ol class="arabic">
+<li><p>Single Card Evaluation Example</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>toolkit/benchmarks/run_harness.sh<span class="w"> </span><span class="se">\</span>
+--register_path<span class="w"> </span>mindformers/research/llama3_1<span class="w"> </span><span class="se">\</span>
+--model<span class="w"> </span>mf<span class="w"> </span><span class="se">\</span>
+--model_args<span class="w"> </span><span class="nv">pretrained</span><span class="o">=</span>model_dir<span class="w"> </span><span class="se">\</span>
+--tasks<span class="w"> </span>gsm8k
+</pre></div>
+</div>
+</li>
+<li><p>Multi Card Evaluation Example</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>toolkit/benchmarks/run_harness.sh<span class="w"> </span><span class="se">\</span>
+--register_path<span class="w"> </span>mindformers/research/llama3_1<span class="w"> </span><span class="se">\</span>
+--model<span class="w"> </span>mf<span class="w"> </span><span class="se">\</span>
+--model_args<span class="w"> </span><span class="nv">pretrained</span><span class="o">=</span>model_dir,use_parallel<span class="o">=</span>True,tp<span class="o">=</span><span class="m">4</span>,dp<span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+--tasks<span class="w"> </span>ceval-valid<span class="w"> </span><span class="se">\</span>
+--batch_size<span class="w"> </span>BATCH_SIZE<span class="w"> </span>WORKER_NUM
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">BATCH_SIZE</span></code> is the sample size for batch processing of models;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">WORKER_NUM</span></code> is the number of compute devices.</p></li>
+</ul>
+</li>
+<li><p>Multi-Device and Multi-Card Example</p>
+<p>Node 0 (Master) Command:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>toolkit/benchmarks/run_harness.sh<span class="w"> </span><span class="se">\</span>
+--register_path<span class="w"> </span>mindformers/research/llama3_1<span class="w"> </span><span class="se">\</span>
+--model<span class="w"> </span>mf<span class="w"> </span><span class="se">\</span>
+--model_args<span class="w"> </span><span class="nv">pretrained</span><span class="o">=</span>model_dir,use_parallel<span class="o">=</span>True,tp<span class="o">=</span><span class="m">8</span>,dp<span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+--tasks<span class="w"> </span>lambada<span class="w"> </span><span class="se">\</span>
+--batch_size<span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="m">8</span><span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="m">192</span>.168.0.0<span class="w"> </span><span class="m">8118</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>output/msrun_log<span class="w"> </span>False<span class="w"> </span><span class="m">300</span>
+</pre></div>
+</div>
+<p>Node 1 (Secondary Node) Command:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>toolkit/benchmarks/run_harness.sh<span class="w"> </span><span class="se">\</span>
+--register_path<span class="w"> </span>mindformers/research/llama3_1<span class="w"> </span><span class="se">\</span>
+--model<span class="w"> </span>mf<span class="w"> </span><span class="se">\</span>
+--model_args<span class="w"> </span><span class="nv">pretrained</span><span class="o">=</span>model_dir,use_parallel<span class="o">=</span>True,tp<span class="o">=</span><span class="m">8</span>,dp<span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+--tasks<span class="w"> </span>lambada<span class="w"> </span><span class="se">\</span>
+--batch_size<span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="m">8</span><span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="m">192</span>.168.0.0<span class="w"> </span><span class="m">8118</span><span class="w"> </span><span class="m">1</span><span class="w"> </span>output/msrun_log<span class="w"> </span>False<span class="w"> </span><span class="m">300</span>
+</pre></div>
+</div>
+<p>Node n (Nth Node) Command:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>toolkit/benchmarks/run_harness.sh<span class="w"> </span><span class="se">\</span>
+--register_path<span class="w"> </span>mindformers/research/llama3_1<span class="w"> </span><span class="se">\</span>
+--model<span class="w"> </span>mf<span class="w"> </span><span class="se">\</span>
+--model_args<span class="w"> </span><span class="nv">pretrained</span><span class="o">=</span>model_dir,use_parallel<span class="o">=</span>True,tp<span class="o">=</span><span class="m">8</span>,dp<span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+--tasks<span class="w"> </span>lambada<span class="w"> </span><span class="se">\</span>
+--batch_size<span class="w"> </span>BATCH_SIZE<span class="w"> </span>WORKER_NUM<span class="w"> </span>LOCAL_WORKER<span class="w"> </span>MASTER_ADDR<span class="w"> </span>MASTER_PORT<span class="w"> </span>NODE_RANK<span class="w"> </span>output/msrun_log<span class="w"> </span>False<span class="w"> </span>CLUSTER_TIME_OUT
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">BATCH_SIZE</span></code> is the sample size for batch processing of models;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">WORKER_NUM</span></code> is the total number of compute devices used on all nodes;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LOCAL_WORKER</span></code> is the number of compute devices used on the current node;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MASTER_ADDR</span></code> is the IP address of the primary node to be started in distributed mode;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MASTER_PORT</span></code> is the Port number bound for distributed startup;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NODE_RANK</span></code> is the Rank ID of the current node;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CLUSTER_TIME_OUT</span></code> is the waiting time for distributed startup, in seconds.</p></li>
+</ul>
+<p>To execute the multi-node multi-device script for evaluating, you need to run the script on different nodes and set MASTER_ADDR to the IP address of the primary node. The IP address should be the same across all nodes, and only the NODE_RANK parameter varies across nodes.</p>
+</li>
+</ol>
+</section>
+</section>
+<section id="viewing-the-evaluation-results">
+<h3>Viewing the Evaluation Results<a class="headerlink" href="#viewing-the-evaluation-results" title="Link to this heading"></a></h3>
+<p>After executing the evaluation command, the evaluation results will be printed out on the terminal. Taking GSM8K as an example, the evaluation results are as follows, where Filter corresponds to the way the matching model outputs results, n-shot corresponds to content format of dataset, Metric corresponds to the evaluation metric, Value corresponds to the evaluation score, and Stderr corresponds to the score error.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Tasks</p></th>
+<th class="head text-right"><p>Version</p></th>
+<th class="head"><p>Filter</p></th>
+<th class="head text-right"><p>n-shot</p></th>
+<th class="head"><p>Metric</p></th>
+<th class="head"><p></p></th>
+<th class="head"><p>Value</p></th>
+<th class="head"><p></p></th>
+<th class="head"><p>Stderr</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>gsm8k</p></td>
+<td class="text-right"><p>3</p></td>
+<td><p>flexible-extract</p></td>
+<td class="text-right"><p>5</p></td>
+<td><p>exact_match</p></td>
+<td><p>↑</p></td>
+<td><p>0.5034</p></td>
+<td><p>±</p></td>
+<td><p>0.0138</p></td>
+</tr>
+<tr class="row-odd"><td><p></p></td>
+<td class="text-right"><p></p></td>
+<td><p>strict-match</p></td>
+<td class="text-right"><p>5</p></td>
+<td><p>exact_match</p></td>
+<td><p>↑</p></td>
+<td><p>0.5011</p></td>
+<td><p>±</p></td>
+<td><p>0.0138</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id2">
+<h3>FAQ<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p>Use Harness for evaluation, when loading the HuggingFace datasets, report <code class="docutils literal notranslate"><span class="pre">SSLError</span></code>:</p>
+<p>Refer to <a class="reference external" href="https://stackoverflow.com/questions/71692354/facing-ssl-error-with-huggingface-pretrained-models">SSL Error reporting solution</a>.</p>
+<p>Note: Turning off SSL verification is risky and may be exposed to MITM. It is only recommended to use it in the test environment or in the connection you fully trust.</p>
+</li>
+</ol>
+</section>
+</section>
+<section id="evaluation-after-training">
+<h2>Evaluation after training<a class="headerlink" href="#evaluation-after-training" title="Link to this heading"></a></h2>
+<p>After training, the model generally uses the trained model weights to run evaluation tasks to verify the training effect. This chapter introduces the necessary steps from training to evaluation, including:</p>
+<ol class="arabic simple">
+<li><p>Processing of distributed weights after training (this step can be ignored for single-card training);</p></li>
+<li><p>Writing inference configuration files for evaluation based on the training configuration;</p></li>
+<li><p>Running a simple inference task to verify the correctness of the above steps;</p></li>
+<li><p>Performing the evaluation task.</p></li>
+</ol>
+<section id="distributed-weight-merging">
+<h3>Distributed Weight Merging<a class="headerlink" href="#distributed-weight-merging" title="Link to this heading"></a></h3>
+<p>If the weights generated after training are distributed, the existing distributed weights need to be merged into complete weights first, and then the weights can be loaded through online slicing to complete the inference task.</p>
+<p>MindSpore Transformers provides a <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/toolkit/safetensors/unified_safetensors.py">safetensors weight merging script</a> that can be used to merge multiple safetensors weights obtained from distributed training to obtain the complete weights.</p>
+<p>The merging instruction is as follows (the Adam optimizer parameters are merged for the training weights in step 1000, and the redundancy removal function is enabled when saving the training weights):</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>toolkit/safetensors/unified_safetensors.py<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--src_strategy_dirs<span class="w"> </span>output/strategy<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--mindspore_ckpt_dir<span class="w"> </span>output/checkpoint<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--output_dir<span class="w"> </span>/path/to/unified_train_ckpt<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--file_suffix<span class="w"> </span><span class="s2">&quot;1000_1&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--filter_out_param_prefix<span class="w"> </span><span class="s2">&quot;adam_&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--has_redundancy<span class="w"> </span>False
+</pre></div>
+</div>
+<p>Script parameter description:</p>
+<ul>
+<li><p><strong>src_strategy_dirs</strong>: The path to the distributed strategy file corresponding to the source weights, usually saved by default in the <code class="docutils literal notranslate"><span class="pre">output/strategy/</span></code> directory after starting the training task. Distributed weights need to be filled in according to the following:</p>
+<ul class="simple">
+<li><p><strong>Source weights turn on pipeline parallelism</strong>: The weight conversion is based on the merged strategy files, fills in the path to the distributed strategies folder. The script will automatically merge all <code class="docutils literal notranslate"><span class="pre">ckpt_strategy_rank_x.ckpt</span></code> files in the folder and generate <code class="docutils literal notranslate"><span class="pre">merged_ckpt_strategy.ckpt</span></code> in the folder. If <code class="docutils literal notranslate"><span class="pre">merged_ckpt_strategy.ckpt</span></code> already exists, you can just fill in the path to that file.</p></li>
+<li><p><strong>Source weights turn off pipeline parallelism</strong>: The weight conversion can be based on any of the strategy files, just fill in the path to any of the <code class="docutils literal notranslate"><span class="pre">ckpt_strategy_rank_x.ckpt</span></code> files.</p></li>
+</ul>
+<p><strong>Note</strong>: If <code class="docutils literal notranslate"><span class="pre">merged_ckpt_strategy.ckpt</span></code> already exists in the strategy folder and the folder path is still passed in, the script will first delete the old <code class="docutils literal notranslate"><span class="pre">merged_ckpt_strategy.ckpt</span></code> and merge it to create a new <code class="docutils literal notranslate"><span class="pre">merged_ckpt_strategy.ckpt</span></code> for weight conversion. Therefore, make sure that the folder has sufficient write permissions, otherwise the operation will report an error.</p>
+</li>
+<li><p><strong>mindspore_ckpt_dir</strong>: Distributed weights path, please fill in the path of the folder where the source weights are located, the source weights should be stored in <code class="docutils literal notranslate"><span class="pre">model_dir/rank_x/xxx.safetensors</span></code> format, and fill in the folder path as <code class="docutils literal notranslate"><span class="pre">model_dir</span></code>.</p></li>
+<li><p><strong>output_dir</strong>: The path where the target weights will be saved. The default value is <code class="docutils literal notranslate"><span class="pre">&quot;/path/output_dir&quot;</span></code>. If this parameter is not configured, the target weights will be placed in the <code class="docutils literal notranslate"><span class="pre">/path/output_dir</span></code> directory by default.</p></li>
+<li><p><strong>file_suffix</strong>: The naming suffix of the target weights file. The default value is <code class="docutils literal notranslate"><span class="pre">&quot;1_1&quot;</span></code>, i.e. the target weights will be merged by searching for matching weight files in the <code class="docutils literal notranslate"><span class="pre">*1_1.safetensors</span></code> format.</p></li>
+<li><p><strong>filter_out_param_prefix</strong>: You can customize the parameters to be filtered out when merging weights, and the filtering rules are based on prefix name matching. For example, optimizer parameter <code class="docutils literal notranslate"><span class="pre">&quot;adam_&quot;</span></code>.</p></li>
+<li><p><strong>has_redundancy</strong>: Whether the merged source weights are redundant weights. The default value is <code class="docutils literal notranslate"><span class="pre">True</span></code>, which means that the original weights used for merging are redundant. If the original weights are saved as de-redundant weights, it needs to be set to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+</ul>
+</section>
+<section id="inference-configuration-development">
+<h3>Inference Configuration Development<a class="headerlink" href="#inference-configuration-development" title="Link to this heading"></a></h3>
+<p>After completing the merging of weight files, you need to develop the corresponding inference configuration file based on the training configuration file.</p>
+<p>Taking Qwen3 as an example, modify the <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/configs/qwen3/finetune_qwen3.yaml">Qwen3 training configuration</a> based on the <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/configs/qwen3/predict_qwen3.yaml">Qwen3 inference configuration</a>:</p>
+<p>Main modification points of Qwen3 training configuration include:</p>
+<ul class="simple">
+<li><p>Modify the value of <code class="docutils literal notranslate"><span class="pre">run_mode</span></code> to <code class="docutils literal notranslate"><span class="pre">&quot;predict&quot;</span></code>.</p></li>
+<li><p>Add the <code class="docutils literal notranslate"><span class="pre">pretrained_model_dir</span></code> parameter, set to the Hugging Face or ModelScope model directory path, to place model configuration, Tokenizer, and other files. If the trained weights are placed in this directory, <code class="docutils literal notranslate"><span class="pre">load_checkpoint</span></code> can be omitted in the YAML file.</p></li>
+<li><p>In <code class="docutils literal notranslate"><span class="pre">parallel_config</span></code>, only keep <code class="docutils literal notranslate"><span class="pre">data_parallel</span></code> and <code class="docutils literal notranslate"><span class="pre">model_parallel</span></code>.</p></li>
+<li><p>In <code class="docutils literal notranslate"><span class="pre">model_config</span></code>, only keep <code class="docutils literal notranslate"><span class="pre">compute_dtype</span></code>, <code class="docutils literal notranslate"><span class="pre">layernorm_compute_dtype</span></code>, <code class="docutils literal notranslate"><span class="pre">softmax_compute_dtype</span></code>, <code class="docutils literal notranslate"><span class="pre">rotary_dtype</span></code>, <code class="docutils literal notranslate"><span class="pre">params_dtype</span></code>, and keep the precision consistent with the inference configuration.</p></li>
+<li><p>In the <code class="docutils literal notranslate"><span class="pre">parallel</span></code> module, only keep <code class="docutils literal notranslate"><span class="pre">parallel_mode</span></code> and <code class="docutils literal notranslate"><span class="pre">enable_alltoall</span></code>, and modify the value of <code class="docutils literal notranslate"><span class="pre">parallel_mode</span></code> to <code class="docutils literal notranslate"><span class="pre">&quot;MANUAL_PARALLEL&quot;</span></code>.</p></li>
+</ul>
+<blockquote>
+<div><p>If the model’s parameters were customized during training, or differ from the open-source configuration, you must modify the model configuration file config.json in the <code class="docutils literal notranslate"><span class="pre">pretrained_model_dir</span></code> directory when performing inference. You can also configure the modified parameters in <code class="docutils literal notranslate"><span class="pre">model_config</span></code>. When passing the modified parameters to the <code class="docutils literal notranslate"><span class="pre">model_config</span></code> file, the values ​​in the corresponding configuration file in config.json will be overwritten when the model is passed to the inference function.
+</br>To verify that the passed configuration is correct, look for <code class="docutils literal notranslate"><span class="pre">The</span> <span class="pre">converted</span> <span class="pre">TransformerConfig</span> <span class="pre">is:</span> <span class="pre">...</span></code> or <code class="docutils literal notranslate"><span class="pre">The</span> <span class="pre">converted</span> <span class="pre">MLATransformerConfig</span> <span class="pre">is:</span> <span class="pre">...</span></code> in the logs.</p>
+</div></blockquote>
+</section>
+<section id="inference-function-verification">
+<h3>Inference Function Verification<a class="headerlink" href="#inference-function-verification" title="Link to this heading"></a></h3>
+<p>After the weights and configuration files are ready, use a single data input for inference to check whether the output content meets the expected logic. Refer to the <a class="reference internal" href="inference.html"><span class="std std-doc">inference document</span></a> to start the inference task.</p>
+<p>For example, taking Qwen3 single-card inference as an example, the command to start the inference task is:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>run_mindformer.py<span class="w"> </span><span class="se">\</span>
+--config<span class="w"> </span>configs/qwen3/predict_qwen3.yaml<span class="w"> </span><span class="se">\</span>
+--run_mode<span class="w"> </span>predict<span class="w"> </span><span class="se">\</span>
+--use_parallel<span class="w"> </span>False<span class="w"> </span><span class="se">\</span>
+--predict_data<span class="w"> </span><span class="s1">&#39;帮助我制定一份去上海的旅游攻略&#39;</span>
+</pre></div>
+</div>
+<p>If the output content appears garbled or does not meet expectations, you need to locate the precision problem.</p>
+<ol class="arabic">
+<li><p>Check the correctness of the model configuration</p>
+<p>Confirm that the model structure is consistent with the training configuration. Refer to the training configuration template usage tutorial to ensure that the configuration file complies with specifications and avoid inference exceptions caused by parameter errors.</p>
+</li>
+<li><p>Verify the completeness of weight loading</p>
+<p>Check whether the model weight files are loaded completely, and ensure that the weight names strictly match the model structure. Refer to the new model weight conversion adaptation tutorial to view the weight log, that is, whether the weight slicing method is correct, to avoid inference errors caused by mismatched weights.</p>
+</li>
+<li><p>Locate inference precision issues</p>
+<p>If the model configuration and weight loading are both correct, but the inference results still do not meet expectations, precision comparison analysis is required. Refer to the inference precision comparison document to compare the output differences between training and inference layer by layer, and troubleshoot potential data preprocessing, computational precision, or operator issues.</p>
+</li>
+</ol>
+</section>
+<section id="evaluation-using-aisbench">
+<h3>Evaluation using AISBench<a class="headerlink" href="#evaluation-using-aisbench" title="Link to this heading"></a></h3>
+<p>Refer to the <a class="reference internal" href="#aisbench-benchmarking">AISBench evaluation section</a> and use the AISBench tool for evaluation to verify model precision.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="deployment.html" class="btn btn-neutral float-left" title="Service Deployment" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../feature/index.html" class="btn btn-neutral float-right" title="Features" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

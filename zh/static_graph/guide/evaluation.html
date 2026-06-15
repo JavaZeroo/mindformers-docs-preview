@@ -1,0 +1,884 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>评测指南 &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="功能特性" href="../feature/index.html" />
+    <link rel="prev" title="服务化部署指南" href="deployment.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">介绍</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/quick_start.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">模型支持库</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">安装</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">安装指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">功能特性</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/overview.html">功能特性概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/start_task.html">启动任务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/configuration.html">配置文件说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/logging.html">日志</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/dataset.html">数据集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/training_hyperparameters.html">训练超参数与优化器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/save_and_load_checkpoint.html">权重保存与加载</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/resume_training.html">断点续训</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/monitor.html">训练指标监控与 Profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/static_graph_features.html">静态图实现特性</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">环境变量</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../env_variables.html">环境变量说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">贡献指南</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers贡献指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">魔乐社区贡献指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">模型相关 FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">功能相关 FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">静态图实现（Deprecated）</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">大模型全流程指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="llm_training.html">训练指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pre_training.html">预训练实践</a></li>
+<li class="toctree-l2"><a class="reference internal" href="supervised_fine_tuning.html">监督微调实践</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inference.html">推理指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deployment.html">服务化部署指南</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">评测指南</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">概览</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aisbench">AISBench评测</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id3">前期准备</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">精度评测流程</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id6">性能评测流程</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id10">附录</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#harness">Harness评测</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id14">安装</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id16">使用方式</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id19">查看评测结果</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id20">FAQ</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id21">训练后模型进行评测</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id22">分布式权重合并</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id23">推理配置开发</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id24">推理功能验证</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id25">使用 AISBench 进行评测</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/index.html">功能特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_development/index.html">高阶开发</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">优秀实践</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">环境变量说明</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">大模型全流程指南</a></li>
+      <li class="breadcrumb-item active">评测指南</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/guide/evaluation.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">已废弃（Deprecated）</p>
+<p>本页属于 <strong>静态图（GRAPH_MODE）实现</strong> 章节，已标记为废弃。新特性优先在「r2.0.0 动态图实现」章节演进，请优先查阅动态图相关文档。</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>评测指南<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/static_graph/guide/evaluation.md"><img alt="查看源文件" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source.svg" /></a></p>
+<section id="id2">
+<h2>概览<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p>大语言模型（LLM）的迅猛发展催生了对其能力边界与局限性的系统化评估需求。模型评测已成为AI领域不可或缺的基础设施。</p>
+<p>主流的模型评测流程就像考试，通过模型对试卷（评测数据集）的答题正确率来评估模型能力。常见数据集如CEval包含中文的52个不同学科职业考试选择题，主要评估模型的知识量；GSM8K由人类出题者编写的8500道高质量小学数学题组成，主要评估模型的推理能力等。</p>
+<p>MindSpore Transformers在之前版本，对于部分Legacy架构的模型，适配了Harness评测框架。当前最新适配了AISBench评测框架，理论上支持服务化部署的模型，都能使用AISBench进行评测。</p>
+</section>
+<section id="aisbench">
+<h2>AISBench评测<a class="headerlink" href="#aisbench" title="Link to this heading"></a></h2>
+<p>MindSpore Transformers的服务化评测推荐AISBench Benchmark套件。AISBench Benchmark是基于OpenCompass构建的模型评测工具，兼容OpenCompass的配置体系、数据集结构与模型后端实现，并在此基础上扩展了对服务化模型的支持能力。同时支持30+开源数据集：<a class="reference external" href="https://gitee.com/aisbench/benchmark/blob/master/doc/users_guide/datasets.md#%E5%BC%80%E6%BA%90%E6%95%B0%E6%8D%AE%E9%9B%86">AISBench支持的评测数据集</a>。</p>
+<p>当前，AISBench支持两大类推理任务的评测场景：</p>
+<ul class="simple">
+<li><p><strong>精度评测</strong>：支持对服务化模型和本地模型在各类问答、推理基准数据集上的精度验证以及模型能力评估。</p></li>
+<li><p><strong>性能评测</strong>：支持对服务化模型的延迟与吞吐率评估，并可进行压测场景下的极限性能测试。</p></li>
+</ul>
+<p>两项任务都遵循同一套评测范式：用户侧发送请求，对服务侧输出的结果做分析，输出最终评测结果，如下图：</p>
+<p><img alt="benchmark_illustrate" src="../../_images/benchmark_illustrate.png" /></p>
+<section id="id3">
+<h3>前期准备<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p>前期准备主要完成三件事：安装AISBench评测环境，下载数据集，启动vLLM-MindSpore服务。</p>
+<section id="step1-aisbench">
+<h4>Step1 安装AISBench评测环境<a class="headerlink" href="#step1-aisbench" title="Link to this heading"></a></h4>
+<p>因为AISBench对torch、transformers都有依赖，但是vLLM-MindSpore的官方镜像中有msadapter包mock的torch，会引起冲突，所以建议为AISBench另起容器安装评测环境。如果坚持以vLLM-MindSpore镜像起容器安装评测环境，需要在启动容器后执行以下几步删除容器内原有torch和transformers：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>rm<span class="w"> </span>-rf<span class="w"> </span>/usr/local/Python-3.11/lib/python3.11/site-packages/torch*
+pip<span class="w"> </span>uninstall<span class="w"> </span>transformers
+<span class="nb">unset</span><span class="w"> </span>USE_TORCH
+</pre></div>
+</div>
+<p>然后克隆仓库并通过源码安装：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://gitee.com/aisbench/benchmark.git
+<span class="nb">cd</span><span class="w"> </span>benchmark/
+pip3<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>./<span class="w"> </span>--use-pep517
+</pre></div>
+</div>
+</section>
+<section id="step2">
+<h4>Step2 数据集下载<a class="headerlink" href="#step2" title="Link to this heading"></a></h4>
+<p>官方文档提供各个数据集下载链接，以CEval为例可在<a class="reference external" href="https://gitee.com/aisbench/benchmark/blob/master/ais_bench/benchmark/configs/datasets/ceval/README.md">CEval文档</a>中找到下载链接，执行以下命令下载解压数据集到指定路径：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>ais_bench/datasets
+mkdir<span class="w"> </span>ceval/
+mkdir<span class="w"> </span>ceval/formal_ceval
+<span class="nb">cd</span><span class="w"> </span>ceval/formal_ceval
+wget<span class="w"> </span>https://www.modelscope.cn/datasets/opencompass/ceval-exam/resolve/master/ceval-exam.zip
+unzip<span class="w"> </span>ceval-exam.zip
+rm<span class="w"> </span>ceval-exam.zip
+</pre></div>
+</div>
+<p>其他数据集下载，可到对应的数据集官方文档中找到下载链接。</p>
+</section>
+<section id="step3-vllm-mindspore">
+<h4>Step3 启动vLLM-MindSpore服务<a class="headerlink" href="#step3-vllm-mindspore" title="Link to this heading"></a></h4>
+<p>具体启动过程见：<a class="reference internal" href="deployment.html"><span class="std std-doc">服务化部署教程</span></a>，评测支持所有可服务化部署模型。</p>
+</section>
+</section>
+<section id="id4">
+<h3>精度评测流程<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p>精度评测首先要确定评测的接口和评测的数据集类型，具体根据模型能力和数据集选定。</p>
+<section id="step1">
+<h4>Step1 更改接口配置<a class="headerlink" href="#step1" title="Link to this heading"></a></h4>
+<p>AISBench支持OpenAI的v1/chat/completions和v1/completions接口，在AISBench中分别对应不同的配置文件。以v1/completions接口为例，以下称general接口，需更改以下文件<code class="docutils literal notranslate"><span class="pre">ais_bench/benchmark/configs/models/vllm_api/vllm_api_general.py</span></code>配置：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ais_bench.benchmark.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">VLLMCustomAPIChat</span>
+
+<span class="n">models</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">attr</span><span class="o">=</span><span class="s2">&quot;service&quot;</span><span class="p">,</span>
+        <span class="nb">type</span><span class="o">=</span><span class="n">VLLMCustomAPIChat</span><span class="p">,</span>
+        <span class="n">abbr</span><span class="o">=</span><span class="s1">&#39;vllm-api-general-chat&#39;</span><span class="p">,</span>
+        <span class="n">path</span><span class="o">=</span><span class="s2">&quot;xxx/DeepSeek-R1-671B&quot;</span><span class="p">,</span>    <span class="c1"># 指定模型序列化词表文件绝对路径，一般来说就是模型权重文件夹路径</span>
+        <span class="n">model</span><span class="o">=</span><span class="s2">&quot;DeepSeek-R1&quot;</span><span class="p">,</span>            <span class="c1"># 指定服务端已加载模型名称，依据实际VLLM推理服务拉取的模型名称配置（配置成空字符串会自动获取）</span>
+        <span class="n">request_rate</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>               <span class="c1"># 请求发送频率，每1/request_rate秒发送1个请求给服务端，小于0.1则一次性发送所有请求</span>
+        <span class="n">retry</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="n">host_ip</span> <span class="o">=</span> <span class="s2">&quot;localhost&quot;</span><span class="p">,</span>          <span class="c1"># 指定推理服务的IP</span>
+        <span class="n">host_port</span> <span class="o">=</span> <span class="mi">8080</span><span class="p">,</span>               <span class="c1"># 指定推理服务的端口</span>
+        <span class="n">max_out_len</span> <span class="o">=</span> <span class="mi">512</span><span class="p">,</span>              <span class="c1"># 推理服务输出的token的最大数量</span>
+        <span class="n">batch_size</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>                 <span class="c1"># 请求发送的最大并发数，可以加快评测速度</span>
+        <span class="n">generation_kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>       <span class="c1"># 后处理参数，参考模型默认配置</span>
+            <span class="n">temperature</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
+            <span class="n">top_k</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+            <span class="n">top_p</span> <span class="o">=</span> <span class="mf">0.95</span><span class="p">,</span>
+            <span class="n">seed</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">repetition_penalty</span> <span class="o">=</span> <span class="mf">1.03</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>更多具体参数说明查看：<a class="reference internal" href="#id12">接口配置参数说明</a>。</p>
+</section>
+<section id="id5">
+<h4>Step2 命令行启动评测<a class="headerlink" href="#id5" title="Link to this heading"></a></h4>
+<p>确定采用的数据集任务，以CEval为例，采用ceval_gen_5_shot_str数据集任务，命令如下：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ais_bench<span class="w"> </span>--models<span class="w"> </span>vllm_api_general<span class="w"> </span>--datasets<span class="w"> </span>ceval_gen_5_shot_str<span class="w"> </span>--debug
+</pre></div>
+</div>
+<p>参数说明：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--models</span></code>：指定了模型任务接口，即vllm_api_general，对应上一步更改的文件名。此外还有vllm_api_general_chat。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--datasets</span></code>：指定了数据集任务，即ceval_gen_5_shot_str数据集任务，其中的5_shot指问题会重复四次输入，str是指非chat输出。</p></li>
+</ul>
+<p>其它更多的参数配置说明，见<a class="reference external" href="https://gitee.com/aisbench/benchmark/blob/master/doc/users_guide/models.md#%E6%9C%8D%E5%8A%A1%E5%8C%96%E6%8E%A8%E7%90%86%E5%90%8E%E7%AB%AF">配置说明</a>。</p>
+<p>评测结束后统计结果会打屏，具体执行结果和日志都会保存在当前路径下的outputs文件夹下，执行异常情况下可以根据日志定位问题。</p>
+</section>
+</section>
+<section id="id6">
+<h3>性能评测流程<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<p>性能与精度评测流程类似，不过更关心各请求各阶段的处理时间，通过精确记录每条请求的发送时间、各阶段返回时间及响应内容，系统地评估模型服务在实际部署环境中的响应延迟（如 TTFT、Token间延迟）、吞吐能力（如 QPS、TPUT）、并发处理能力等关键性能指标。以下以原始数据集 GSM8K 进行性能评测为例。</p>
+<section id="id7">
+<h4>Step1 更改接口配置<a class="headerlink" href="#id7" title="Link to this heading"></a></h4>
+<p>通过配置服务化后端参数，可以灵活控制请求内容、请求间隔、并发数量等，适配不同评测场景（如低并发延迟敏感型、高并发吞吐优先型等）。配置与精度评测类似，以vllm_api_stream_chat任务为例，在<code class="docutils literal notranslate"><span class="pre">ais_bench/benchmark/configs/models/vllm_api/vllm_api_stream_chat.py</span></code>更改如下配置：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ais_bench.benchmark.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">VLLMCustomAPIChatStream</span>
+
+<span class="n">models</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">attr</span><span class="o">=</span><span class="s2">&quot;service&quot;</span><span class="p">,</span>
+        <span class="nb">type</span><span class="o">=</span><span class="n">VLLMCustomAPIChatStream</span><span class="p">,</span>
+        <span class="n">abbr</span><span class="o">=</span><span class="s1">&#39;vllm-api-stream-chat&#39;</span><span class="p">,</span>
+        <span class="n">path</span><span class="o">=</span><span class="s2">&quot;xxx/DeepSeek-R1-671B&quot;</span><span class="p">,</span>    <span class="c1"># 指定模型序列化词表文件绝对路径，一般来说就是模型权重文件夹路径</span>
+        <span class="n">model</span><span class="o">=</span><span class="s2">&quot;DeepSeek-R1&quot;</span><span class="p">,</span>            <span class="c1"># 指定服务端已加载模型名称，依据实际VLLM推理服务拉取的模型名称配置（配置成空字符串会自动获取）</span>
+        <span class="n">request_rate</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>               <span class="c1"># 请求发送频率，每1/request_rate秒发送1个请求给服务端，小于0.1则一次性发送所有请求</span>
+        <span class="n">retry</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="n">host_ip</span> <span class="o">=</span> <span class="s2">&quot;localhost&quot;</span><span class="p">,</span>          <span class="c1"># 指定推理服务的IP</span>
+        <span class="n">host_port</span> <span class="o">=</span> <span class="mi">8080</span><span class="p">,</span>               <span class="c1"># 指定推理服务的端口</span>
+        <span class="n">max_out_len</span> <span class="o">=</span> <span class="mi">512</span><span class="p">,</span>              <span class="c1"># 推理服务输出的token的最大数量</span>
+        <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">128</span><span class="p">,</span>               <span class="c1"># 请求发送的最大并发数</span>
+        <span class="n">generation_kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">temperature</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
+            <span class="n">top_k</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+            <span class="n">top_p</span> <span class="o">=</span> <span class="mf">0.95</span><span class="p">,</span>
+            <span class="n">seed</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">repetition_penalty</span> <span class="o">=</span> <span class="mf">1.03</span><span class="p">,</span>
+            <span class="n">ignore_eos</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>          <span class="c1"># 推理服务输出忽略eos（输出长度一定会达到max_out_len）</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>具体参数说明查看：<a class="reference internal" href="#id12">接口配置参数说明</a>。</p>
+</section>
+<section id="id8">
+<h4>Step2 评测命令<a class="headerlink" href="#id8" title="Link to this heading"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ais_bench<span class="w"> </span>--models<span class="w"> </span>vllm_api_stream_chat<span class="w"> </span>--datasets<span class="w"> </span>gsm8k_gen_0_shot_cot_str_perf<span class="w"> </span>--summarizer<span class="w"> </span>default_perf<span class="w"> </span>--mode<span class="w"> </span>perf
+</pre></div>
+</div>
+<p>参数说明：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--models</span></code>：指定了模型任务接口，即vllm_api_stream_chat，对应上一步更改的配置的文件名。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--datasets</span></code>：指定了数据集任务，即gsm8k_gen_0_shot_cot_str_perf数据集任务，有对应的同名任务文件，其中的 GSM8K 指所用的数据集，0_shot指问题不会重复，str是指非chat输出，perf是指做性能测试。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--summarizer</span></code>：指定了任务统计数据。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--mode</span></code>：指定了任务执行模式。</p></li>
+</ul>
+<p>其它更多的参数配置说明，见<a class="reference external" href="https://gitee.com/aisbench/benchmark/blob/master/doc/users_guide/models.md#%E6%9C%8D%E5%8A%A1%E5%8C%96%E6%8E%A8%E7%90%86%E5%90%8E%E7%AB%AF">配置说明</a>。</p>
+</section>
+<section id="id9">
+<h4>评测结果说明<a class="headerlink" href="#id9" title="Link to this heading"></a></h4>
+<p>评测结束会输出性能测评结果，结果包括单个推理请求性能输出结果和端到端性能输出结果，参数说明如下：</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>指标</p></th>
+<th class="head"><p>全称</p></th>
+<th class="head"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>E2EL</p></td>
+<td><p>End-to-End Latency</p></td>
+<td><p>单个请求从发送到接收全部响应的总时延(ms)</p></td>
+</tr>
+<tr class="row-odd"><td><p>TTFT</p></td>
+<td><p>Time To First Token</p></td>
+<td><p>首个 Token 返回的时延(ms)</p></td>
+</tr>
+<tr class="row-even"><td><p>TPOT</p></td>
+<td><p>Time Per Output Token</p></td>
+<td><p>输出阶段每个 Token 的平均生成时延（不含首个 Token）</p></td>
+</tr>
+<tr class="row-odd"><td><p>ITL</p></td>
+<td><p>Inter-token Latency</p></td>
+<td><p>相邻 Token 间的平均间隔时延（不含首个 Token）</p></td>
+</tr>
+<tr class="row-even"><td><p>InputTokens</p></td>
+<td><p>/</p></td>
+<td><p>请求的输入 Token 数量</p></td>
+</tr>
+<tr class="row-odd"><td><p>OutputTokens</p></td>
+<td><p>/</p></td>
+<td><p>请求生成的输出 Token 数量</p></td>
+</tr>
+<tr class="row-even"><td><p>OutputTokenThroughput</p></td>
+<td><p>/</p></td>
+<td><p>输出 Token 的吞吐率（Token/s）</p></td>
+</tr>
+<tr class="row-odd"><td><p>Tokenizer</p></td>
+<td><p>/</p></td>
+<td><p>Tokenizer 编码耗时(ms)</p></td>
+</tr>
+<tr class="row-even"><td><p>Detokenizer</p></td>
+<td><p>/</p></td>
+<td><p>Detokenizer 解码耗时(ms)</p></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><p>更多评测任务，如合成随机数据集评测、性能压测，可查看以下文档：<a class="reference external" href="https://gitee.com/aisbench/benchmark/tree/master/doc/users_guide">AISBench官方文档</a>。</p></li>
+<li><p>更多调优推理性能技巧，可查看以下文档：<a class="reference external" href="https://docs.qq.com/doc/DZGhMSWFCenpQZWJR">推理性能调优</a>。</p></li>
+<li><p>更多参数说明请看以下文档：<a class="reference external" href="https://gitee.com/aisbench/benchmark/blob/master/doc/users_guide/performance_metric.md">性能测评结果说明</a>。</p></li>
+</ul>
+</section>
+</section>
+<section id="id10">
+<h3>附录<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
+<section id="faq">
+<h4>FAQ<a class="headerlink" href="#faq" title="Link to this heading"></a></h4>
+<p><strong>Q：评测结果输出不符合格式，如何使结果输出符合预期？</strong></p>
+<p>在某些数据集中，若希望模型的输出符合预期，那么可以更改prompt。</p>
+<p>以CEval的gen_0_shot_str为例，我们想让输出的第一个token就为选择的答案，可更改以下文件下的template：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># ais_bench/benchmark/configs/datasets/ceval/ceval_gen_0_shot_str.py 66~76行</span>
+<span class="k">for</span> <span class="n">_split</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;val&#39;</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">_name</span> <span class="ow">in</span> <span class="n">ceval_all_sets</span><span class="p">:</span>
+        <span class="n">_ch_name</span> <span class="o">=</span> <span class="n">ceval_subject_mapping</span><span class="p">[</span><span class="n">_name</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">ceval_infer_cfg</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">prompt_template</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                <span class="nb">type</span><span class="o">=</span><span class="n">PromptTemplate</span><span class="p">,</span>
+                <span class="n">template</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;以下是中国关于</span><span class="si">{</span><span class="n">_ch_name</span><span class="si">}</span><span class="s1">考试的单项选择题，请选出其中的正确答案。</span><span class="se">\n{{</span><span class="s1">question</span><span class="se">}}\n</span><span class="s1">A. </span><span class="se">{{</span><span class="s1">A</span><span class="se">}}\n</span><span class="s1">B. </span><span class="se">{{</span><span class="s1">B</span><span class="se">}}\n</span><span class="s1">C. </span><span class="se">{{</span><span class="s1">C</span><span class="se">}}\n</span><span class="s1">D. </span><span class="se">{{</span><span class="s1">D</span><span class="se">}}\n</span><span class="s1">答案: </span><span class="se">{{</span><span class="s1">answer</span><span class="se">}}</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">retriever</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="n">ZeroRetriever</span><span class="p">),</span>
+            <span class="n">inferencer</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="n">GenInferencer</span><span class="p">),</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+<p>其他数据集，也是相应地更改对应文件中的template，构造合适的prompt。</p>
+<p><strong>Q：不同数据集应该如何配置接口类型和推理长度？</strong></p>
+<p>具体取决于模型类型和数据集类型的综合考虑。像reasoning类model就推荐用chat接口，可以使能think，推理长度就要设得长一点；像base模型就用general接口。</p>
+<ul class="simple">
+<li><p>以Qwen2.5模型评测MMLU数据集为例：从数据集来看，MMLU这类数据集以知识考察为主，就推荐用general接口，同时在数据集任务时不选用带cot的，即不使能思维链。</p></li>
+<li><p>若以DeepSeek-R1模型评测AIME2025这类困难的数学推理题为例：推荐使用chat接口，并设置超长推理长度，使用带cot的数据集任务。</p></li>
+</ul>
+</section>
+<section id="id11">
+<h4>常见报错<a class="headerlink" href="#id11" title="Link to this heading"></a></h4>
+<ol class="arabic">
+<li><p>客户端返回HTML数据，包含乱码</p>
+<p><strong>报错现象</strong>：返回网页HTML数据<br />
+<strong>解决方案</strong>：检查客户端是否开了代理，检查proxy_https、proxy_http环境变量关掉代理。</p>
+</li>
+<li><p>服务端报 400 Bad Request</p>
+<p><strong>报错现象</strong>：</p>
+<div class="highlight-plaintext notranslate"><div class="highlight"><pre><span></span>INFO: 127.0.0.1:53456 - &quot;POST /v1/completions HTTP/1.1&quot; 400 Bad Request
+INFO: 127.0.0.1:53470 - &quot;POST /v1/completions HTTP/1.1&quot; 400 Bad Request
+</pre></div>
+</div>
+<p><strong>解决方案</strong>：检查客户端接口配置中，请求格式是否正确。</p>
+</li>
+<li><p>服务端报错404 xxx does not exist</p>
+<p><strong>报错现象</strong>：</p>
+<div class="highlight-plaintext notranslate"><div class="highlight"><pre><span></span>[serving_chat.py:135] Error with model object=&#39;error&#39; message=&#39;The model &#39;Qwen3-30B-A3B-Instruct-2507&#39; does not exist.&#39; param=None code=404
+&quot;POST /v1/chat/completions HTTP/1.1&quot; 404 Not Found
+[serving_chat.py:135] Error with model object=&#39;error&#39; message=&#39;The model &#39;Qwen3-30B-A3B-Instruct-2507&#39; does not exist.&#39;
+</pre></div>
+</div>
+<p><strong>解决方案</strong>：检查接口配置中的模型路径是否可达。</p>
+</li>
+</ol>
+</section>
+<section id="id12">
+<h4>请求接口配置参数说明表<a class="headerlink" href="#id12" title="Link to this heading"></a></h4>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>参数</p></th>
+<th class="head"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>type</p></td>
+<td><p>任务接口类型</p></td>
+</tr>
+<tr class="row-odd"><td><p>path</p></td>
+<td><p>模型序列化词表文件绝对路径，一般来说就是模型权重文件夹路径</p></td>
+</tr>
+<tr class="row-even"><td><p>model</p></td>
+<td><p>服务端已加载模型名称，依据实际VLLM推理服务拉取的模型名称配置（配置成空字符串会自动获取）</p></td>
+</tr>
+<tr class="row-odd"><td><p>request_rate</p></td>
+<td><p>请求发送频率，每1/request_rate秒发送1个请求给服务端，小于0.1则一次性发送所有请求</p></td>
+</tr>
+<tr class="row-even"><td><p>retry</p></td>
+<td><p>请求失败重复发送次数</p></td>
+</tr>
+<tr class="row-odd"><td><p>host_ip</p></td>
+<td><p>推理服务的IP</p></td>
+</tr>
+<tr class="row-even"><td><p>host_port</p></td>
+<td><p>推理服务的端口</p></td>
+</tr>
+<tr class="row-odd"><td><p>max_out_len</p></td>
+<td><p>推理服务输出的token的最大数量</p></td>
+</tr>
+<tr class="row-even"><td><p>batch_size</p></td>
+<td><p>请求发送的最大并发数</p></td>
+</tr>
+<tr class="row-odd"><td><p>temperature</p></td>
+<td><p>后处理参数，温度系数</p></td>
+</tr>
+<tr class="row-even"><td><p>top_k</p></td>
+<td><p>后处理参数</p></td>
+</tr>
+<tr class="row-odd"><td><p>top_p</p></td>
+<td><p>后处理参数</p></td>
+</tr>
+<tr class="row-even"><td><p>seed</p></td>
+<td><p>随机种子</p></td>
+</tr>
+<tr class="row-odd"><td><p>repetition_penalty</p></td>
+<td><p>后处理参数，重复性惩罚</p></td>
+</tr>
+<tr class="row-even"><td><p>ignore_eos</p></td>
+<td><p>推理服务输出忽略eos（输出长度一定会达到max_out_len）</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id13">
+<h4>参考资料<a class="headerlink" href="#id13" title="Link to this heading"></a></h4>
+<p>关于AISBench的更多教程和使用方式可参考官方资料：</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://gitee.com/aisbench/benchmark">AISBench官方教程</a></p></li>
+<li><p><a class="reference external" href="https://gitee.com/aisbench/benchmark/tree/master/doc/users_guide">AISBench主要文档</a></p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="harness">
+<h2>Harness评测<a class="headerlink" href="#harness" title="Link to this heading"></a></h2>
+<p><a class="reference external" href="https://github.com/EleutherAI/lm-evaluation-harness">LM Evaluation Harness</a>是一个开源语言模型评测框架，提供60多种标准学术数据集的评测，支持HuggingFace模型评测、PEFT适配器评测、vLLM推理评测等多种评测方式，支持自定义prompt和评测指标，包含loglikelihood、generate_until、loglikelihood_rolling三种类型的评测任务。基于Harness评测框架对MindSpore Transformers进行适配后，支持加载MindSpore Transformers模型进行评测。</p>
+<p>目前已验证过的模型和支持的评测任务如下表所示：</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>已验证的模型</p></th>
+<th class="head"><p>支持的评测任务</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Llama3</p></td>
+<td><p>gsm8k、ceval-valid、mmlu、cmmlu、race、lambada</p></td>
+</tr>
+<tr class="row-odd"><td><p>Llama3.1</p></td>
+<td><p>gsm8k、ceval-valid、mmlu、cmmlu、race、lambada</p></td>
+</tr>
+<tr class="row-even"><td><p>Qwen2</p></td>
+<td><p>gsm8k、ceval-valid、mmlu、cmmlu、race、lambada</p></td>
+</tr>
+</tbody>
+</table>
+<section id="id14">
+<h3>安装<a class="headerlink" href="#id14" title="Link to this heading"></a></h3>
+<p>Harness支持pip安装和源码编译安装两种方式。pip安装更简单快捷，源码编译安装更便于调试分析，用户可以根据需要选择合适的安装方式。</p>
+<section id="pip">
+<h4>pip安装<a class="headerlink" href="#pip" title="Link to this heading"></a></h4>
+<p>用户可以执行如下命令安装Harness（推荐使用0.4.4版本）：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="nv">lm_eval</span><span class="o">==</span><span class="m">0</span>.4.4
+</pre></div>
+</div>
+</section>
+<section id="id15">
+<h4>源码编译安装<a class="headerlink" href="#id15" title="Link to this heading"></a></h4>
+<p>用户可以执行如下命令编译并安装Harness：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>--depth<span class="w"> </span><span class="m">1</span><span class="w"> </span>-b<span class="w"> </span>v0.4.4<span class="w"> </span>https://github.com/EleutherAI/lm-evaluation-harness
+<span class="nb">cd</span><span class="w"> </span>lm-evaluation-harness
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id16">
+<h3>使用方式<a class="headerlink" href="#id16" title="Link to this heading"></a></h3>
+<section id="id17">
+<h4>评测前准备<a class="headerlink" href="#id17" title="Link to this heading"></a></h4>
+<ol class="arabic">
+<li><p>创建一个新目录，例如名称为<code class="docutils literal notranslate"><span class="pre">model_dir</span></code>，用于存储模型yaml文件。</p></li>
+<li><p>在上个步骤创建的目录中，放置模型推理yaml配置文件（predict_xxx_.yaml）。不同模型的推理yaml配置文件所在目录位置，请参考<a class="reference internal" href="../../introduction/models.html"><span class="std std-doc">模型库</span></a>。</p></li>
+<li><p>配置yaml文件。如果yaml中模型类、模型Config类、模型Tokenizer类使用了外挂代码，即代码文件在<a class="reference external" href="https://atomgit.com/mindspore/mindformers/tree/master/research">research</a>目录或其他外部目录下，需要修改yaml文件：在相应类的<code class="docutils literal notranslate"><span class="pre">type</span></code>字段下，添加<code class="docutils literal notranslate"><span class="pre">auto_register</span></code>字段，格式为“module.class”（其中“module”为类所在脚本的文件名，“class”为类名。如果已存在，则不需要修改）。</p>
+<p>以<a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/research/llama3_1/llama3_1_8b/predict_llama3_1_8b.yaml">predict_llama3_1_8b.yaml</a>配置为例，对其中的部分配置项进行如下修改：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">run_mode</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;predict&#39;</span><span class="w">       </span><span class="c1"># 设置推理模式</span>
+<span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;model.ckpt&#39;</span><span class="w">   </span><span class="c1"># 权重路径</span>
+<span class="nt">processor</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">tokenizer</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">vocab_file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;tokenizer.model&quot;</span><span class="w">     </span><span class="c1"># tokenizer路径</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Llama3Tokenizer</span>
+<span class="w">    </span><span class="nt">auto_register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">llama3_tokenizer.Llama3Tokenizer</span>
+</pre></div>
+</div>
+<p>关于每个配置项的详细说明请参考<a class="reference internal" href="../feature/configuration.html"><span class="std std-doc">配置文件说明</span></a>。</p>
+</li>
+<li><p>如果使用<code class="docutils literal notranslate"><span class="pre">ceval-valid</span></code>、<code class="docutils literal notranslate"><span class="pre">mmlu</span></code>、<code class="docutils literal notranslate"><span class="pre">cmmlu</span></code>、<code class="docutils literal notranslate"><span class="pre">race</span></code>、<code class="docutils literal notranslate"><span class="pre">lambada</span></code>数据集进行评测，需要将<code class="docutils literal notranslate"><span class="pre">use_flash_attention</span></code>设置为<code class="docutils literal notranslate"><span class="pre">False</span></code>，以<code class="docutils literal notranslate"><span class="pre">predict_llama3_1_8b.yaml</span></code>为例，修改yaml如下：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">model</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">model_config</span><span class="p">:</span>
+<span class="w">    </span><span class="c1"># ...</span>
+<span class="w">    </span><span class="nt">use_flash_attention</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span><span class="w">  </span><span class="c1"># 设置为False</span>
+<span class="w">    </span><span class="c1"># ...</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="id18">
+<h4>评测样例<a class="headerlink" href="#id18" title="Link to this heading"></a></h4>
+<p>执行脚本<a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/toolkit/benchmarks/run_harness.sh">run_harness.sh</a>进行评测。</p>
+<p>run_harness.sh脚本参数配置如下表：</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>参数</p></th>
+<th class="head"><p>类型</p></th>
+<th class="head"><p>参数介绍</p></th>
+<th class="head"><p>是否必须</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--register_path</span></code></p></td>
+<td><p>str</p></td>
+<td><p>外挂代码所在目录的绝对路径。比如<a class="reference external" href="https://atomgit.com/mindspore/mindformers/tree/master/research">research</a>目录下的模型目录</p></td>
+<td><p>否（外挂代码必填）</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--model</span></code></p></td>
+<td><p>str</p></td>
+<td><p>需设置为 <code class="docutils literal notranslate"><span class="pre">mf</span></code> ，对应为MindSpore Transformers评估策略</p></td>
+<td><p>是</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--model_args</span></code></p></td>
+<td><p>str</p></td>
+<td><p>模型及评估相关参数，见下方模型参数介绍</p></td>
+<td><p>是</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--tasks</span></code></p></td>
+<td><p>str</p></td>
+<td><p>数据集名称。可传入多个数据集，使用逗号（，）分隔</p></td>
+<td><p>是</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--batch_size</span></code></p></td>
+<td><p>int</p></td>
+<td><p>批处理样本数</p></td>
+<td><p>否</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--help</span></code></p></td>
+<td><p></p></td>
+<td><p>显示帮助信息并退出</p></td>
+<td><p>否</p></td>
+</tr>
+</tbody>
+</table>
+<p>其中，model_args参数配置如下表：</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>参数</p></th>
+<th class="head"><p>类型</p></th>
+<th class="head"><p>参数介绍</p></th>
+<th class="head"><p>是否必须</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pretrained</span></code></p></td>
+<td><p>str</p></td>
+<td><p>模型目录路径</p></td>
+<td><p>是</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">max_length</span></code></p></td>
+<td><p>int</p></td>
+<td><p>模型生成的最大长度</p></td>
+<td><p>否</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">use_parallel</span></code></p></td>
+<td><p>bool</p></td>
+<td><p>开启并行策略(执行多卡评测必须开启)</p></td>
+<td><p>否</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tp</span></code></p></td>
+<td><p>int</p></td>
+<td><p>张量并行数</p></td>
+<td><p>否</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">dp</span></code></p></td>
+<td><p>int</p></td>
+<td><p>数据并行数</p></td>
+<td><p>否</p></td>
+</tr>
+</tbody>
+</table>
+<p>Harness评测支持单机单卡、单机多卡、多机多卡场景，每种场景的评测样例如下：</p>
+<ol class="arabic">
+<li><p>单卡评测样例</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="w">   </span><span class="nb">source</span><span class="w"> </span>toolkit/benchmarks/run_harness.sh<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--register_path<span class="w"> </span>mindformers/research/llama3_1<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--model<span class="w"> </span>mf<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--model_args<span class="w"> </span><span class="nv">pretrained</span><span class="o">=</span>model_dir<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--tasks<span class="w"> </span>gsm8k
+</pre></div>
+</div>
+</li>
+<li><p>多卡评测样例</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="w">   </span><span class="nb">source</span><span class="w"> </span>toolkit/benchmarks/run_harness.sh<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--register_path<span class="w"> </span>mindformers/research/llama3_1<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--model<span class="w"> </span>mf<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--model_args<span class="w"> </span><span class="nv">pretrained</span><span class="o">=</span>model_dir,use_parallel<span class="o">=</span>True,tp<span class="o">=</span><span class="m">4</span>,dp<span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--tasks<span class="w"> </span>ceval-valid<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--batch_size<span class="w"> </span>BATCH_SIZE<span class="w"> </span>WORKER_NUM
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">BATCH_SIZE</span></code>为模型批处理样本数；</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">WORKER_NUM</span></code>为使用计算卡的总数。</p></li>
+</ul>
+</li>
+<li><p>多机多卡评测样例</p>
+<p>节点0（主节点）命令：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="w">   </span><span class="nb">source</span><span class="w"> </span>toolkit/benchmarks/run_harness.sh<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--register_path<span class="w"> </span>mindformers/research/llama3_1<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--model<span class="w"> </span>mf<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--model_args<span class="w"> </span><span class="nv">pretrained</span><span class="o">=</span>model_dir,use_parallel<span class="o">=</span>True,tp<span class="o">=</span><span class="m">8</span>,dp<span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--tasks<span class="w"> </span>lambada<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--batch_size<span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="m">8</span><span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="m">192</span>.168.0.0<span class="w"> </span><span class="m">8118</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>output/msrun_log<span class="w"> </span>False<span class="w"> </span><span class="m">300</span>
+</pre></div>
+</div>
+<p>节点1（副节点）命令：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="w">   </span><span class="nb">source</span><span class="w"> </span>toolkit/benchmarks/run_harness.sh<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--register_path<span class="w"> </span>mindformers/research/llama3_1<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--model<span class="w"> </span>mf<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--model_args<span class="w"> </span><span class="nv">pretrained</span><span class="o">=</span>model_dir,use_parallel<span class="o">=</span>True,tp<span class="o">=</span><span class="m">8</span>,dp<span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--tasks<span class="w"> </span>lambada<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--batch_size<span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="m">8</span><span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="m">192</span>.168.0.0<span class="w"> </span><span class="m">8118</span><span class="w"> </span><span class="m">1</span><span class="w"> </span>output/msrun_log<span class="w"> </span>False<span class="w"> </span><span class="m">300</span>
+</pre></div>
+</div>
+<p>节点n（副节点）命令：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="w">   </span><span class="nb">source</span><span class="w"> </span>toolkit/benchmarks/run_harness.sh<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--register_path<span class="w"> </span>mindformers/research/llama3_1<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--model<span class="w"> </span>mf<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--model_args<span class="w"> </span><span class="nv">pretrained</span><span class="o">=</span>model_dir,use_parallel<span class="o">=</span>True,tp<span class="o">=</span><span class="m">8</span>,dp<span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--tasks<span class="w"> </span>lambada<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--batch_size<span class="w"> </span>BATCH_SIZE<span class="w"> </span>WORKER_NUM<span class="w"> </span>LOCAL_WORKER<span class="w"> </span>MASTER_ADDR<span class="w"> </span>MASTER_PORT<span class="w"> </span>NODE_RANK<span class="w"> </span>output/msrun_log<span class="w"> </span>False<span class="w"> </span>CLUSTER_TIME_OUT
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">BATCH_SIZE</span></code>为模型批处理样本数；</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">WORKER_NUM</span></code>为所有节点中使用计算卡的总数；</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LOCAL_WORKER</span></code>为当前节点中使用计算卡的数量；</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MASTER_ADDR</span></code>为分布式启动主节点的ip；</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MASTER_PORT</span></code>为分布式启动绑定的端口号；</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NODE_RANK</span></code>为当前节点的rank id；</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CLUSTER_TIME_OUT</span></code>为分布式启动的等待时间，单位为秒。</p></li>
+</ul>
+<p>多机多卡评测需要分别在不同节点运行脚本，并将参数MASTER_ADDR设置为主节点的ip地址， 所有节点设置的ip地址相同，不同节点之间仅参数NODE_RANK不同。</p>
+</li>
+</ol>
+</section>
+</section>
+<section id="id19">
+<h3>查看评测结果<a class="headerlink" href="#id19" title="Link to this heading"></a></h3>
+<p>执行评测命令后，评测结果将会在终端打印出来。以 GSM8K 为例，评测结果如下，其中Filter对应匹配模型输出结果的方式，n-shot对应数据集内容格式，Metric对应评测指标，Value对应评测分数，Stderr对应分数误差。</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Tasks</p></th>
+<th class="head text-right"><p>Version</p></th>
+<th class="head"><p>Filter</p></th>
+<th class="head text-right"><p>n-shot</p></th>
+<th class="head"><p>Metric</p></th>
+<th class="head"><p></p></th>
+<th class="head"><p>Value</p></th>
+<th class="head"><p></p></th>
+<th class="head"><p>Stderr</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>gsm8k</p></td>
+<td class="text-right"><p>3</p></td>
+<td><p>flexible-extract</p></td>
+<td class="text-right"><p>5</p></td>
+<td><p>exact_match</p></td>
+<td><p>↑</p></td>
+<td><p>0.5034</p></td>
+<td><p>±</p></td>
+<td><p>0.0138</p></td>
+</tr>
+<tr class="row-odd"><td><p></p></td>
+<td class="text-right"><p></p></td>
+<td><p>strict-match</p></td>
+<td class="text-right"><p>5</p></td>
+<td><p>exact_match</p></td>
+<td><p>↑</p></td>
+<td><p>0.5011</p></td>
+<td><p>±</p></td>
+<td><p>0.0138</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id20">
+<h3>FAQ<a class="headerlink" href="#id20" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p>使用Harness进行评测，在加载HuggingFace数据集时，报错<code class="docutils literal notranslate"><span class="pre">SSLError</span></code>：</p>
+<p>参考<a class="reference external" href="https://stackoverflow.com/questions/71692354/facing-ssl-error-with-huggingface-pretrained-models">SSL Error报错解决方案</a>。</p>
+<p>注意：关闭SSL校验存在风险，可能暴露在中间人攻击（MITM）下。仅建议在测试环境或你完全信任的连接里使用。</p>
+</li>
+</ol>
+</section>
+</section>
+<section id="id21">
+<h2>训练后模型进行评测<a class="headerlink" href="#id21" title="Link to this heading"></a></h2>
+<p>模型在训练过程中或训练结束后，一般会将训练得到的模型权重去跑评测任务，来验证模型的训练效果。本章节介绍了从训练后到评测前的必要步骤，包括：</p>
+<ol class="arabic simple">
+<li><p>训练后的分布式权重的处理（单卡训练可忽略此步骤）；</p></li>
+<li><p>基于训练配置编写评测使用的推理配置文件；</p></li>
+<li><p>运行简单的推理任务验证上述步骤的正确性；</p></li>
+<li><p>进行评测任务。</p></li>
+</ol>
+<section id="id22">
+<h3>分布式权重合并<a class="headerlink" href="#id22" title="Link to this heading"></a></h3>
+<p>训练后产生的权重如果是分布式的，需要先将已有的分布式权重合并成完整权重后，再通过在线切分的方式进行权重加载完成推理任务。</p>
+<p>MindSpore Transformers 提供了一份 <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/toolkit/safetensors/unified_safetensors.py">safetensors 权重合并脚本</a>，使用该脚本，可以将分布式训练得到的多个 safetensors 权重进行合并，得到完整权重。</p>
+<p>合并指令参考如下（对第 1000 步训练权重进行去 adam 优化器参数合并，且训练权重在保存时开启了去冗余功能）：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>toolkit/safetensors/unified_safetensors.py<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--src_strategy_dirs<span class="w"> </span>output/strategy<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--mindspore_ckpt_dir<span class="w"> </span>output/checkpoint<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--output_dir<span class="w"> </span>/path/to/unified_train_ckpt<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--file_suffix<span class="w"> </span><span class="s2">&quot;1000_1&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--filter_out_param_prefix<span class="w"> </span><span class="s2">&quot;adam_&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--has_redundancy<span class="w"> </span>False
+</pre></div>
+</div>
+<p>脚本参数说明：</p>
+<ul>
+<li><p><strong>src_strategy_dirs</strong>：源权重对应的分布式策略文件路径，通常在启动训练任务后默认保存在 <code class="docutils literal notranslate"><span class="pre">output/strategy/</span></code> 目录下。分布式权重需根据以下情况填写：</p>
+<ul class="simple">
+<li><p><strong>源权重开启了流水线并行</strong>：权重转换基于合并的策略文件，填写分布式策略文件夹路径。脚本会自动将文件夹内的所有 <code class="docutils literal notranslate"><span class="pre">ckpt_strategy_rank_x.ckpt</span></code> 文件合并，并在文件夹下生成 <code class="docutils literal notranslate"><span class="pre">merged_ckpt_strategy.ckpt</span></code>。如果已经存在 <code class="docutils literal notranslate"><span class="pre">merged_ckpt_strategy.ckpt</span></code>，可以直接填写该文件的路径。</p></li>
+<li><p><strong>源权重未开启流水线并行</strong>：权重转换可基于任一策略文件，填写任意一个 <code class="docutils literal notranslate"><span class="pre">ckpt_strategy_rank_x.ckpt</span></code> 文件的路径即可。</p></li>
+</ul>
+<p><strong>注意</strong>：如果策略文件夹下已存在 <code class="docutils literal notranslate"><span class="pre">merged_ckpt_strategy.ckpt</span></code> 且仍传入文件夹路径，脚本会首先删除旧的 <code class="docutils literal notranslate"><span class="pre">merged_ckpt_strategy.ckpt</span></code>，再合并生成新的 <code class="docutils literal notranslate"><span class="pre">merged_ckpt_strategy.ckpt</span></code> 以用于权重转换。因此，请确保该文件夹具有足够的写入权限，否则操作将报错。</p>
+</li>
+<li><p><strong>mindspore_ckpt_dir</strong>：分布式权重路径，请填写源权重所在文件夹的路径，源权重应按 <code class="docutils literal notranslate"><span class="pre">model_dir/rank_x/xxx.safetensors</span></code> 格式存放，并将文件夹路径填写为 <code class="docutils literal notranslate"><span class="pre">model_dir</span></code>。</p></li>
+<li><p><strong>output_dir</strong>：目标权重的保存路径，默认值为 <code class="docutils literal notranslate"><span class="pre">&quot;/path/output_dir&quot;</span></code>，如若未配置该参数，目标权重将默认放置在 <code class="docutils literal notranslate"><span class="pre">/path/output_dir</span></code> 目录下。</p></li>
+<li><p><strong>file_suffix</strong>：目标权重文件的命名后缀，默认值为 <code class="docutils literal notranslate"><span class="pre">&quot;1_1&quot;</span></code>，即目标权重将按照 <code class="docutils literal notranslate"><span class="pre">*1_1.safetensors</span></code> 格式查找匹配的权重文件进行合并。</p></li>
+<li><p><strong>filter_out_param_prefix</strong>：合并权重时可自定义过滤掉部分参数，过滤规则以前缀名匹配。如优化器参数 <code class="docutils literal notranslate"><span class="pre">&quot;adam_&quot;</span></code>。</p></li>
+<li><p><strong>has_redundancy</strong>：合并的源权重是否是冗余的权重，默认为 <code class="docutils literal notranslate"><span class="pre">True</span></code>，表示用于合并的原始权重有冗余；若原始权重保存时为去冗余权重，则需设置为 <code class="docutils literal notranslate"><span class="pre">False</span></code>。</p></li>
+</ul>
+</section>
+<section id="id23">
+<h3>推理配置开发<a class="headerlink" href="#id23" title="Link to this heading"></a></h3>
+<p>在完成权重文件的合并后，需依据训练配置文件开发对应的推理配置文件。</p>
+<p>以 Qwen3 为例，基于 <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/configs/qwen3/predict_qwen3.yaml">Qwen3 推理配置</a>修改 <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/configs/qwen3/finetune_qwen3.yaml">Qwen3 训练配置</a>：</p>
+<p>Qwen3 训练配置主要修改点包括：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">run_mode</span></code> 的值修改为 <code class="docutils literal notranslate"><span class="pre">&quot;predict&quot;</span></code>。</p></li>
+<li><p>添加 <code class="docutils literal notranslate"><span class="pre">pretrained_model_dir</span></code> 参数，配置为 Hugging Face 或 ModelScope 的模型目录路径，放置模型配置、Tokenizer 等文件。如果将训练得到的完整权重放置在此目录底下，则 yaml 中可以不配置 <code class="docutils literal notranslate"><span class="pre">load_checkpoint</span></code>。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">parallel_config</span></code> 只保留 <code class="docutils literal notranslate"><span class="pre">data_parallel</span></code> 和 <code class="docutils literal notranslate"><span class="pre">model_parallel</span></code>。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">model_config</span></code> 中只保留 <code class="docutils literal notranslate"><span class="pre">compute_dtype</span></code>、<code class="docutils literal notranslate"><span class="pre">layernorm_compute_dtype</span></code>、<code class="docutils literal notranslate"><span class="pre">softmax_compute_dtype</span></code>、<code class="docutils literal notranslate"><span class="pre">rotary_dtype</span></code>、<code class="docutils literal notranslate"><span class="pre">params_dtype</span></code>，和推理配置保持精度一致。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">parallel</span></code> 模块中，只保留 <code class="docutils literal notranslate"><span class="pre">parallel_mode</span></code> 和 <code class="docutils literal notranslate"><span class="pre">enable_alltoall</span></code>，<code class="docutils literal notranslate"><span class="pre">parallel_mode</span></code> 的值修改为 <code class="docutils literal notranslate"><span class="pre">&quot;MANUAL_PARALLEL&quot;</span></code>。</p></li>
+</ul>
+<blockquote>
+<div><p>如果模型的参数量在训练时进行了自定义，或与开源配置不同，进行推理时需要同步修改 <code class="docutils literal notranslate"><span class="pre">pretrained_model_dir</span></code> 对应路径下的模型配置 config.json。也可以在 <code class="docutils literal notranslate"><span class="pre">model_config</span></code> 中配置对应修改后的参数，传入推理时，<code class="docutils literal notranslate"><span class="pre">model_config</span></code> 中的同名配置会覆盖 config.json 中对应配置的值。
+</br>如需检查传入的配置项是否正确，可以通过查找日志中的 <code class="docutils literal notranslate"><span class="pre">The</span> <span class="pre">converted</span> <span class="pre">TransformerConfig</span> <span class="pre">is:</span> <span class="pre">...</span></code> 或 <code class="docutils literal notranslate"><span class="pre">The</span> <span class="pre">converted</span> <span class="pre">MLATransformerConfig</span> <span class="pre">is:</span> <span class="pre">...</span></code> 内容，查找对应的配置项。</p>
+</div></blockquote>
+</section>
+<section id="id24">
+<h3>推理功能验证<a class="headerlink" href="#id24" title="Link to this heading"></a></h3>
+<p>在权重和配置文件都准备好的情况下，使用单条数据输入进行推理，检查输出内容是否符合预期逻辑，参考<a class="reference internal" href="inference.html"><span class="std std-doc">推理文档</span></a>，拉起推理任务。</p>
+<p>如，以 Qwen3 单卡推理为例，拉起推理任务的指令为：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>run_mindformer.py<span class="w"> </span><span class="se">\</span>
+--config<span class="w"> </span>configs/qwen3/predict_qwen3.yaml<span class="w"> </span><span class="se">\</span>
+--run_mode<span class="w"> </span>predict<span class="w"> </span><span class="se">\</span>
+--use_parallel<span class="w"> </span>False<span class="w"> </span><span class="se">\</span>
+--predict_data<span class="w"> </span><span class="s1">&#39;帮助我制定一份去上海的旅游攻略&#39;</span>
+</pre></div>
+</div>
+<p>如果输出内容出现乱码或者不符合预期，需要定位精度问题。</p>
+<ol class="arabic">
+<li><p>检查模型配置正确性</p>
+<p>确认模型结构与训练配置一致。参考训练配置模板使用教程，确保配置文件符合规范，避免因参数错误导致推理异常。</p>
+</li>
+<li><p>验证权重加载完整性</p>
+<p>检查模型权重文件是否完整加载，确保权重名称与模型结构严格匹配。参考新模型权重转换适配教程，查看权重日志即权重切分方式是否正确，避免因权重不匹配导致推理错误。</p>
+</li>
+<li><p>定位推理精度问题</p>
+<p>若模型配置与权重加载均无误，但推理结果仍不符合预期，需进行精度比对分析，参考推理精度比对文档，逐层比对训练与推理的输出差异，排查潜在的数据预处理、计算精度或算子问题。</p>
+</li>
+</ol>
+</section>
+<section id="id25">
+<h3>使用 AISBench 进行评测<a class="headerlink" href="#id25" title="Link to this heading"></a></h3>
+<p>参考 <a class="reference internal" href="#aisbench">AISBench 评测章节</a>，使用 AISBench 工具进行评测，验证模型精度。</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="deployment.html" class="btn btn-neutral float-left" title="服务化部署指南" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../feature/index.html" class="btn btn-neutral float-right" title="功能特性" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

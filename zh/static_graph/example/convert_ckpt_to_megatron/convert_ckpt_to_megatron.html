@@ -1,0 +1,386 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>转换模型权重为Megatron模型权重的实践案例 &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="MindSpore Transformers对接通用评测工具的实践案例" href="../model_test/model_test.html" />
+    <link rel="prev" title="使用DeepSeek-R1进行模型蒸馏的实践案例" href="../distilled/distilled.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">介绍</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quick_start/quick_start.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction/models.html">模型支持库</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">安装</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">安装指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">功能特性</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../feature/overview.html">功能特性概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feature/start_task.html">启动任务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feature/configuration.html">配置文件说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feature/logging.html">日志</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feature/dataset.html">数据集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feature/training_hyperparameters.html">训练超参数与优化器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feature/parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feature/memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feature/save_and_load_checkpoint.html">权重保存与加载</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feature/resume_training.html">断点续训</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feature/monitor.html">训练指标监控与 Profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feature/other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feature/static_graph_features.html">静态图实现特性</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">环境变量</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../env_variables.html">环境变量说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">贡献指南</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution/mindformers_contribution.html">MindSpore Transformers贡献指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution/modelers_contribution.html">魔乐社区贡献指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../faq/model_related.html">模型相关 FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../faq/feature_related.html">功能相关 FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">静态图实现（Deprecated）</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guide/index.html">大模型全流程指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/index.html">功能特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced_development/index.html">高阶开发</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">优秀实践</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../docker-installation.html">制作 MindSpore Transformers 的 Docker 镜像的实践案例</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../distilled/distilled.html">使用DeepSeek-R1进行模型蒸馏的实践案例</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">转换模型权重为Megatron模型权重的实践案例</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">环境准备</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id2">代码准备</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">模型权重准备</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">权重转换步骤</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">常见问题</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../model_test/model_test.html">MindSpore Transformers对接通用评测工具的实践案例</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../finetune_with_glm4/finetune_with_glm4.html">使用GLM4-9B进行多卡模型微调的实践案例</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../env_variables.html">环境变量说明</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">优秀实践</a></li>
+      <li class="breadcrumb-item active">转换模型权重为Megatron模型权重的实践案例</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/static_graph/example/convert_ckpt_to_megatron/convert_ckpt_to_megatron.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">已废弃（Deprecated）</p>
+<p>本页属于 <strong>静态图（GRAPH_MODE）实现</strong> 章节，已标记为废弃。新特性优先在「r2.0.0 动态图实现」章节演进，请优先查阅动态图相关文档。</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="megatron">
+<h1>转换模型权重为Megatron模型权重的实践案例<a class="headerlink" href="#megatron" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/static_graph/example/convert_ckpt_to_megatron/convert_ckpt_to_megatron.md"><img alt="查看源文件" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source.svg" /></a></p>
+<p>本案例提供了一个将 <a class="reference external" href="https://atomgit.com/mindspore/mindformers">MindSpore Transformers</a> 库的模型权重（safetensors格式）转换为 <a class="reference external" href="https://github.com/NVIDIA/Megatron-LM">Megatron-LM</a> 库的模型权重格式的方法，以便后续进行精度比对或迁移训练。转换后的 Megatron-LM 权重为bf16类型。</p>
+<section id="id1">
+<h2>环境准备<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<section id="id2">
+<h3>代码准备<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p>克隆Megatron-LM代码仓库，并切换到 core_r0.12.0 分支：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/NVIDIA/Megatron-LM.git<span class="w"> </span>-b<span class="w"> </span>core_r0.12.0
+</pre></div>
+</div>
+</li>
+<li><p>拷贝<a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/example/convert_ckpt_to_megatron/convert_ckpt_to_megatron/loader_core_mf.py">转换脚本</a>到 Megatron-LM/tools/checkpoint/ 目录下。</p></li>
+</ol>
+</section>
+</section>
+<section id="id3">
+<h2>模型权重准备<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<p>使用 MindSpore Transformers 保存的safetensors权重进行转换。</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>当前仅支持由SelfAttention和MLP组成的类GPT模型权重转换（如GPT、Qwen等），暂不支持MLA和MoE。</p></li>
+<li><p>仅支持未分布式切分的完整权重。如为分布式权重，请先参考<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/safetensors.html#%E6%9D%83%E9%87%8D%E5%90%88%E5%B9%B6">权重合并</a>进行合并。</p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="id4">
+<h2>权重转换步骤<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<ol class="arabic">
+<li><p>进入 Megatron-LM 目录：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>Megatron-LM
+</pre></div>
+</div>
+</li>
+<li><p>执行权重转换命令（请根据实际路径和参数填写）：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">TARGET_TP_SIZE</span><span class="o">=</span><span class="m">2</span><span class="w">  </span><span class="c1"># 目标张量并行数</span>
+<span class="nv">TARGET_PP_SIZE</span><span class="o">=</span><span class="m">2</span><span class="w">  </span><span class="c1"># 目标流水线并行数</span>
+
+python<span class="w"> </span>./tools/checkpoint/convert.py<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--megatron-path<span class="w"> </span><span class="s1">&#39;path_to_megatron&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--model-type<span class="w"> </span>GPT<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--loader<span class="w"> </span>core_mf<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--saver<span class="w"> </span>core<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--target-tensor-parallel-size<span class="w"> </span><span class="si">${</span><span class="nv">TARGET_TP_SIZE</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--target-pipeline-parallel-size<span class="w"> </span><span class="si">${</span><span class="nv">TARGET_PP_SIZE</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--load-dir<span class="w"> </span><span class="s2">&quot;path_to_ms_ckpt&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--save-dir<span class="w"> </span><span class="s2">&quot;path_to_megatron_ckpt&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--loader-transformer-impl<span class="w"> </span><span class="nb">local</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--saver-transformer-impl<span class="w"> </span><span class="nb">local</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--position-embedding-type<span class="w"> </span><span class="s2">&quot;rope&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--true-vocab-size<span class="w"> </span><span class="m">128000</span><span class="w">  </span><span class="se">\</span>
+<span class="w">    </span>--padded-vocab-size<span class="w"> </span><span class="m">128000</span><span class="w">  </span><span class="se">\</span>
+<span class="w">    </span>--num-layers<span class="w"> </span><span class="m">32</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--seq-length<span class="w"> </span><span class="m">2048</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--hidden-size<span class="w"> </span><span class="m">4096</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--ffn-hidden-size<span class="w"> </span><span class="m">16384</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--num-attention-heads<span class="w"> </span><span class="m">32</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--num-query-groups<span class="w"> </span><span class="m">16</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--normalization<span class="w"> </span><span class="s2">&quot;RMSNorm&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--add-bias-linear<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--swiglu
+</pre></div>
+</div>
+<p>参数说明：</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>名称</p></th>
+<th class="head"><p>可选/必选</p></th>
+<th class="head"><p>默认值</p></th>
+<th class="head"><p>功能介绍</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--megatron-path</span></code></p></td>
+<td><p>必选</p></td>
+<td><p>无</p></td>
+<td><p>Megatron-LM仓库的根目录路径</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--model-type</span></code></p></td>
+<td><p>必选</p></td>
+<td><p>无</p></td>
+<td><p>模型类型（如GPT）</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--loader</span></code></p></td>
+<td><p>必选</p></td>
+<td><p>无</p></td>
+<td><p>加载器类型（此处为core_mf）</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--saver</span></code></p></td>
+<td><p>必选</p></td>
+<td><p>无</p></td>
+<td><p>保存器类型（如core）</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--target-tensor-parallel-size</span></code></p></td>
+<td><p>必选</p></td>
+<td><p>无</p></td>
+<td><p>目标张量并行数（TP）</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--target-pipeline-parallel-size</span></code></p></td>
+<td><p>必选</p></td>
+<td><p>无</p></td>
+<td><p>目标流水线并行数（PP）</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--load-dir</span></code></p></td>
+<td><p>必选</p></td>
+<td><p>无</p></td>
+<td><p>MindSpore导出的safetensors权重文件路径（单文件或文件夹）</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--save-dir</span></code></p></td>
+<td><p>必选</p></td>
+<td><p>无</p></td>
+<td><p>Megatron权重输出目录</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--loader-transformer-impl</span></code></p></td>
+<td><p>可选</p></td>
+<td><p>transformer_engine</p></td>
+<td><p>加载器Transformer实现，local或transformer_engine，用于精度比对时，选择local</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--saver-transformer-impl</span></code></p></td>
+<td><p>可选</p></td>
+<td><p>transformer_engine</p></td>
+<td><p>保存器Transformer实现，local或transformer_engine，用于精度比对时，选择local</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--position-embedding-type</span></code></p></td>
+<td><p>可选</p></td>
+<td><p>learned_absolute</p></td>
+<td><p>位置编码类型（learned_absolute或rope）</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--true-vocab-size</span></code></p></td>
+<td><p>可选</p></td>
+<td><p>None</p></td>
+<td><p>模型实际词表大小，指定时会去除embedding表padding</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--padded-vocab-size</span></code></p></td>
+<td><p>可选</p></td>
+<td><p>128000</p></td>
+<td><p>pad后的词表大小，MindSpore Transformers 中一般与实际词表相同</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--num-layers</span></code></p></td>
+<td><p>可选</p></td>
+<td><p>512</p></td>
+<td><p>Transformer层数</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--seq-length</span></code></p></td>
+<td><p>可选</p></td>
+<td><p>2048</p></td>
+<td><p>最大序列长度</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--hidden-size</span></code></p></td>
+<td><p>可选</p></td>
+<td><p>512</p></td>
+<td><p>隐藏层维度</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--ffn-hidden-size</span></code></p></td>
+<td><p>可选</p></td>
+<td><p>128</p></td>
+<td><p>前馈网络隐藏层维度</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--num-attention-heads</span></code></p></td>
+<td><p>可选</p></td>
+<td><p>64</p></td>
+<td><p>注意力头数</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--num-query-groups</span></code></p></td>
+<td><p>可选</p></td>
+<td><p>None</p></td>
+<td><p>Query分组数</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--normalization</span></code></p></td>
+<td><p>可选</p></td>
+<td><p>RMSNorm</p></td>
+<td><p>归一化类型</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--add-bias-linear</span></code></p></td>
+<td><p>可选</p></td>
+<td><p>False</p></td>
+<td><p>为线性层添加bias（布尔开关，添加该参数则为True）</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--swiglu</span></code></p></td>
+<td><p>可选</p></td>
+<td><p>False</p></td>
+<td><p>使用SwiGLU激活（布尔开关，添加该参数则为True）</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--ms2torch-ckpt-path</span></code></p></td>
+<td><p>可选</p></td>
+<td><p>./ms2pt_checkpoint</p></td>
+<td><p>中间转换权重的输出路径</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>执行成功后，权重保存在<code class="docutils literal notranslate"><span class="pre">--ms2torch-ckpt-path</span></code>配置的位置，默认在<code class="docutils literal notranslate"><span class="pre">./ms2pt_checkpoint</span></code>位置。</p></li>
+</ol>
+</section>
+<section id="id5">
+<h2>常见问题<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Q: 权重转换后Megatron加载报错，怎么办？</strong><br />
+A: 请确保所有模型结构参数（如层数、隐藏维度、词表大小等）与原始模型完全一致。</p></li>
+<li><p><strong>Q: 支持MoE或其他结构吗？</strong><br />
+A: 暂不支持，仅支持标准SelfAttention+MLP结构。</p></li>
+<li><p><strong>Q: 支持分布式权重吗？</strong><br />
+A: 暂不支持，请先合并权重。</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../distilled/distilled.html" class="btn btn-neutral float-left" title="使用DeepSeek-R1进行模型蒸馏的实践案例" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../model_test/model_test.html" class="btn btn-neutral float-right" title="MindSpore Transformers对接通用评测工具的实践案例" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

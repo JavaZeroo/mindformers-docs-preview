@@ -1,0 +1,573 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Start Tasks &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Ckpt Weights" href="ckpt.html" />
+    <link rel="prev" title="Features Overview" href="overview.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">Models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contribution Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">Modelers Contribution Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">Model-Related FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">Feature-Related FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Static Graph Implementation (Deprecated)</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Full-process Guide to Large Models</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Features</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">Features Overview</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Start Tasks</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#run-mindformer-one-click-start-script">Run_mindformer One-click Start Script</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#basic-parameters">Basic Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#weight-slicing">Weight Slicing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#training">Training</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#inference">Inference</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#distributed-task-pull-up-script">Distributed Task Pull-up Script</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#task-startup-tutorial">Task Startup Tutorial</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#single-device">Single-Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#single-node">Single-Node</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#multi-node">Multi-Node</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ckpt.html">Ckpt Weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="safetensors.html">Safetensors Weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">Configuration File Descriptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="load_huggingface_config.html">Loading Hugging Face Model Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html">Logs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tokenizer.html">Using Tokenizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset.html">Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training_hyperparameters.html">Training Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monitor.html">Training Metrics Monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training.html">Resumable Training After Breakpoint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoint_saving_and_loading.html">Checkpoint Saving and Loading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training2.0.html">Resume Training2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel_training.html">Distributed Parallelism Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="high_availability.html">Training High Availability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory_optimization.html">Memory Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skip_data_and_ckpt_health_monitor.html">Data Skip And Checkpoint Health Monitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pma_fused_checkpoint.html">Pre-trained Model Average Weight Consolidation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="other_training_features.html">Other Training Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantization.html">Quantization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_development/index.html">Advanced Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">Excellent Practice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">Environment Variable Descriptions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Features</a></li>
+      <li class="breadcrumb-item active">Start Tasks</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/feature/start_tasks.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">Deprecated</p>
+<p>This page belongs to the <strong>Static Graph (GRAPH_MODE) Implementation</strong> section and has been marked as deprecated. New features are primarily being developed in the “r2.0.0 Dynamic Graph Implementation” section. Please refer to the dynamic graph documentation first.</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="start-tasks">
+<h1>Start Tasks<a class="headerlink" href="#start-tasks" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_en/static_graph/feature/start_tasks.md"><img alt="View Source on AtomGit" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source_en.svg" /></a></p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>MindSpore Transformers provides a one-click startup script <code class="docutils literal notranslate"><span class="pre">run_mindformer.py</span></code> and a distributed task launch script <code class="docutils literal notranslate"><span class="pre">msrun_launcher.sh</span></code>.</p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">run_mindformer.py</span></code> script is used to start tasks on a <strong>single device</strong>, providing one-click capabilities for pre-training, fine-tuning, and inference tasks.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">msrun_launcher.sh</span></code> script is used to start distributed tasks on <strong>multi-device within a single node</strong> or <strong>multi-device with multi-node</strong>, launching tasks on each device through the <a class="reference external" href="https://www.mindspore.cn/tutorials/en/master/parallel/msrun_launcher.html">msrun</a> tool.</p></li>
+</ul>
+</section>
+<section id="run-mindformer-one-click-start-script">
+<h2>Run_mindformer One-click Start Script<a class="headerlink" href="#run-mindformer-one-click-start-script" title="Link to this heading"></a></h2>
+<p>In the root directory of the MindSpore Transformers code, execute the <code class="docutils literal notranslate"><span class="pre">run_mindformer.py</span></code> script using Python to start the task. The supported parameters of the script are as follows. <strong>When an optional parameter is not set or is set to <code class="docutils literal notranslate"><span class="pre">None</span></code>, the configuration with the same name in the YAML configuration file will be taken</strong>.</p>
+<section id="basic-parameters">
+<h3>Basic Parameters<a class="headerlink" href="#basic-parameters" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>Parameters</p></th>
+<th class="head text-left"><p>Parameter Descriptions</p></th>
+<th class="head"><p>Value Description</p></th>
+<th class="head"><p>Applicable Scenarios</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">--config</span></code></p></td>
+<td class="text-left"><p>YAML config files.</p></td>
+<td><p>str, required</p></td>
+<td><p>pre-train/finetune/predict</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">--mode</span></code></p></td>
+<td class="text-left"><p>Set the backend execution mode.</p></td>
+<td><p>int, optional, <code class="docutils literal notranslate"><span class="pre">0</span></code> is GRAPH_MODE and <code class="docutils literal notranslate"><span class="pre">1</span></code> is PYNATIVE_MODE. Currently, only GRAPH_MODE is supported.</p></td>
+<td><p>pre-train/finetune/predict</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">--device_id</span></code></p></td>
+<td class="text-left"><p>Set the execution device ID. The value must be within the range of available devices.</p></td>
+<td><p>int, optional</p></td>
+<td><p>pre-train/finetune/predict</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">--device_target</span></code></p></td>
+<td class="text-left"><p>Set the backend execution device. MindSpore Transformers is only supported on <code class="docutils literal notranslate"><span class="pre">Ascend</span></code> devices.</p></td>
+<td><p>str, optional</p></td>
+<td><p>pre-train/finetune/predict</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">--run_mode</span></code></p></td>
+<td class="text-left"><p>Set the running mode of the model: <code class="docutils literal notranslate"><span class="pre">train</span></code>, <code class="docutils literal notranslate"><span class="pre">finetune</span></code> or <code class="docutils literal notranslate"><span class="pre">predict</span></code>.</p></td>
+<td><p>str, optional</p></td>
+<td><p>pre-train/finetune/predict</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">--load_checkpoint</span></code></p></td>
+<td class="text-left"><p>File or folder paths for loading weights. For detailed usage, please refer to <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/ckpt.html">Weight Conversion Function</a></p></td>
+<td><p>str, optional</p></td>
+<td><p>pre-train/finetune/predict</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">--use_parallel</span></code></p></td>
+<td class="text-left"><p>Whether to use parallel mode.</p></td>
+<td><p>bool, optional</p></td>
+<td><p>pre-train/finetune/predict</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">--output_dir</span></code></p></td>
+<td class="text-left"><p>Set the paths for saving logs, weights, sharding strategies, and other files.</p></td>
+<td><p>str, optional</p></td>
+<td><p>pre-train/finetune/predict</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">--register_path</span></code></p></td>
+<td class="text-left"><p>The absolute path of the directory where the external code is located. For example, the model directory under the research directory.</p></td>
+<td><p>str, optional</p></td>
+<td><p>pre-train/finetune/predict</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">--seed</span></code></p></td>
+<td class="text-left"><p>Set the global seed. For details, refer to <a class="reference external" href="https://www.mindspore.cn/docs/en/master/api_python/mindspore/mindspore.set_seed.html">mindspore.set_seed</a>.</p></td>
+<td><p>int, optional</p></td>
+<td><p>pre-train/finetune/predict</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">--trust_remote_code</span></code></p></td>
+<td class="text-left"><p>Whether Hugging Face AutoTokenizer trusts remote code.</p></td>
+<td><p>bool, optional</p></td>
+<td><p>pre-train/finetune/predict</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="weight-slicing">
+<h3>Weight Slicing<a class="headerlink" href="#weight-slicing" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>Parameters</p></th>
+<th class="head text-left"><p>Parameter Descriptions</p></th>
+<th class="head"><p>Value Description</p></th>
+<th class="head"><p>Applicable Scenarios</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">--src_strategy_path_or_dir</span></code></p></td>
+<td class="text-left"><p>The strategy of load_checkpoint.</p></td>
+<td><p>str, optional</p></td>
+<td><p>pre-train/finetune/predict</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">--auto_trans_ckpt</span></code></p></td>
+<td class="text-left"><p>Enable online weight automatic conversion. Refer to <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/ckpt.html">Weight Conversion Function</a>.</p></td>
+<td><p>bool, optional</p></td>
+<td><p>pre-train/finetune/predict</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">--transform_process_num</span></code></p></td>
+<td class="text-left"><p>The number of processes responsible for checkpoint transform.</p></td>
+<td><p>int, optional</p></td>
+<td><p>pre-train/finetune/predict</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">--only_save_strategy</span></code></p></td>
+<td class="text-left"><p>Whether to only save the strategy files.</p></td>
+<td><p>bool, optional, when it is <code class="docutils literal notranslate"><span class="pre">true</span></code>, the task exits directly after saving the strategy file.</p></td>
+<td><p>pre-train/finetune/predict</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="training">
+<h3>Training<a class="headerlink" href="#training" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>Parameters</p></th>
+<th class="head text-left"><p>Parameter Descriptions</p></th>
+<th class="head"><p>Value Description</p></th>
+<th class="head"><p>Applicable Scenarios</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">--train_dataset_dir</span></code></p></td>
+<td class="text-left"><p>Dataset directory of data loader to pre-train/finetune.</p></td>
+<td><p>str, optional</p></td>
+<td><p>pre-train/finetune</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">--resume_training</span></code></p></td>
+<td class="text-left"><p>Enable resumable training after breakpoint. For details, refer to <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/resume_training.html#resumable-training-after-breakpoint">Resumable Training After Breakpoint</a>.</p></td>
+<td><p>bool, optional</p></td>
+<td><p>pre-train/finetune</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">--epochs</span></code></p></td>
+<td class="text-left"><p>Train epochs.</p></td>
+<td><p>int, optional</p></td>
+<td><p>pre-train/finetune</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">--batch_size</span></code></p></td>
+<td class="text-left"><p>The sample size of the batch data.</p></td>
+<td><p>int, optional</p></td>
+<td><p>pre-train/finetune</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">--gradient_accumulation_steps</span></code></p></td>
+<td class="text-left"><p>The number of gradient accumulation steps.</p></td>
+<td><p>int, optional</p></td>
+<td><p>pre-train/finetune</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">--num_samples</span></code></p></td>
+<td class="text-left"><p>Number of datasets samples used.</p></td>
+<td><p>int, optional</p></td>
+<td><p>pre-train/finetune</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="inference">
+<h3>Inference<a class="headerlink" href="#inference" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>Parameters</p></th>
+<th class="head text-left"><p>Parameter Descriptions</p></th>
+<th class="head"><p>Value Description</p></th>
+<th class="head"><p>Applicable Scenarios</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">--predict_data</span></code></p></td>
+<td class="text-left"><p>Input data for inference.</p></td>
+<td><p>str, optional, It can be the input for predict (single-batch predict) or the file path of a txt file containing multiple lines of text (multi-batch predict).</p></td>
+<td><p>predict</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">--predict_batch_size</span></code></p></td>
+<td class="text-left"><p>The batch size for multi-batch inference.</p></td>
+<td><p>int, optional</p></td>
+<td><p>predict</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">--do_sample</span></code></p></td>
+<td class="text-left"><p>Whether to use random sampling when selecting tokens for inference.</p></td>
+<td><p>bool, optional, <code class="docutils literal notranslate"><span class="pre">True</span></code> means using sampling encoding, <code class="docutils literal notranslate"><span class="pre">False</span></code> means using greedy decoding.</p></td>
+<td><p>predict</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="distributed-task-pull-up-script">
+<h2>Distributed Task Pull-up Script<a class="headerlink" href="#distributed-task-pull-up-script" title="Link to this heading"></a></h2>
+<p>The distributed task pull up script <code class="docutils literal notranslate"><span class="pre">msrun_launcher.sh</span></code> is located in the <code class="docutils literal notranslate"><span class="pre">scripts/</span></code> directory and can automatically start distributed multiprocess tasks using the <a class="reference external" href="https://www.mindspore.cn/tutorials/en/master/parallel/msrun_launcher.html">msrun</a> command based on the input parameters. This script has the following several usage methods:</p>
+<ol class="arabic simple">
+<li><p>For Default 8 Devices In Single Machine:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bash<span class="w"> </span>msrun_launcher.sh<span class="w"> </span><span class="o">[</span>EXECUTE_ORDER<span class="o">]</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>For Quick Start On Multiple Devices In Single Machine:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bash<span class="w"> </span>msrun_launcher.sh<span class="w"> </span><span class="o">[</span>EXECUTE_ORDER<span class="o">]</span><span class="w"> </span><span class="o">[</span>WORKER_NUM<span class="o">]</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>For Multiple Devices In Single Machine:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bash<span class="w"> </span>msrun_launcher.sh<span class="w"> </span><span class="o">[</span>EXECUTE_ORDER<span class="o">]</span><span class="w"> </span><span class="o">[</span>WORKER_NUM<span class="o">]</span><span class="w"> </span><span class="o">[</span>MASTER_PORT<span class="o">]</span><span class="w"> </span><span class="o">[</span>LOG_DIR<span class="o">]</span><span class="w"> </span><span class="o">[</span>JOIN<span class="o">]</span><span class="w"> </span><span class="o">[</span>CLUSTER_TIME_OUT<span class="o">]</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li><p>For Multiple Devices In Multiple Machines:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bash<span class="w"> </span>msrun_launcher.sh<span class="w"> </span><span class="o">[</span>EXECUTE_ORDER<span class="o">]</span><span class="w"> </span><span class="o">[</span>WORKER_NUM<span class="o">]</span><span class="w"> </span><span class="o">[</span>LOCAL_WORKER<span class="o">]</span><span class="w"> </span><span class="o">[</span>MASTER_ADDR<span class="o">]</span><span class="w"> </span><span class="o">[</span>MASTER_PORT<span class="o">]</span><span class="w"> </span><span class="o">[</span>NODE_RANK<span class="o">]</span><span class="w"> </span><span class="o">[</span>LOG_DIR<span class="o">]</span><span class="w"> </span><span class="o">[</span>JOIN<span class="o">]</span><span class="w"> </span><span class="o">[</span>CLUSTER_TIME_OUT<span class="o">]</span>
+</pre></div>
+</div>
+<p>The parameter descriptions of the script are as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>Parameters</p></th>
+<th class="head text-left"><p>Parameter Descriptions</p></th>
+<th class="head"><p>Value Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">EXECUTE_ORDER</span></code></p></td>
+<td class="text-left"><p>The parameters of the Python script command to be executed in a distributed manner.</p></td>
+<td><p>str, required, set it to a string containing the Python script to be executed and the script parameters</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">WORKER_NUM</span></code></p></td>
+<td class="text-left"><p>The total number of Worker processes participating in the distributed task.</p></td>
+<td><p>int, optional, default: <code class="docutils literal notranslate"><span class="pre">8</span></code></p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">LOCAL_WORKER</span></code></p></td>
+<td class="text-left"><p>The number of Worker processes pulled up on the current node.</p></td>
+<td><p>int, optional, default: <code class="docutils literal notranslate"><span class="pre">8</span></code></p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">MASTER_ADDR</span></code></p></td>
+<td class="text-left"><p>Specifies the IP address or hostname of the Scheduler.</p></td>
+<td><p>str, optional, default: <code class="docutils literal notranslate"><span class="pre">&quot;127.0.0.1&quot;</span></code></p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">MASTER_PORT</span></code></p></td>
+<td class="text-left"><p>Specifies the Scheduler binding port number.</p></td>
+<td><p>int, optional, default: <code class="docutils literal notranslate"><span class="pre">8118</span></code></p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">NODE_RANK</span></code></p></td>
+<td class="text-left"><p>The index of the current node.</p></td>
+<td><p>int, optional, default: <code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">LOG_DIR</span></code></p></td>
+<td class="text-left"><p>Worker, and Scheduler log output paths.</p></td>
+<td><p>str, optional, default: <code class="docutils literal notranslate"><span class="pre">&quot;output/msrun_log&quot;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">JOIN</span></code></p></td>
+<td class="text-left"><p>Whether msrun waits for the Worker as well as the Scheduler to exit.</p></td>
+<td><p>bool, optional, default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">CLUSTER_TIME_OUT</span></code></p></td>
+<td class="text-left"><p>Cluster networking timeout in seconds.</p></td>
+<td><p>int, optional, default: <code class="docutils literal notranslate"><span class="pre">7200</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="task-startup-tutorial">
+<h2>Task Startup Tutorial<a class="headerlink" href="#task-startup-tutorial" title="Link to this heading"></a></h2>
+<p>Next, taking the fine-tuning of Qwen3-8B as an example, we will explain the usage of single-device, single-node, and multi-node tasks.</p>
+<section id="single-device">
+<h3>Single-Device<a class="headerlink" href="#single-device" title="Link to this heading"></a></h3>
+<p>Execute the Python script in the root directory of the MindSpore Transformers code to perform single-device fine-tuning. The path in the command needs to be replaced with the real path.</p>
+<ol class="arabic">
+<li><p>Modify the corresponding configuration file <code class="docutils literal notranslate"><span class="pre">configs/qwen3/finetune_qwen3.yaml</span></code> based on information such as the number of nodes used:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">pretrained_model_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/path/to/Qwen3-8B&#39;</span>
+<span class="nn">...</span>
+<span class="nt">train_dataset</span><span class="p">:</span><span class="w"> </span><span class="nl">&amp;train_dataset</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">data_loader</span><span class="p p-Indicator">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HFDataLoader</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;llm-wizard/alpaca-gpt4-data-zh&quot;</span><span class="w"> </span><span class="c1"># Alpaca-style dataset. Ensure the network environment can access huggingface to enable automatic dataset download.</span>
+<span class="w">    </span><span class="c1"># path: &quot;json&quot;  # If using local JSON files for offline dataset loading, uncomment the following two lines and comment out the line above</span>
+<span class="w">    </span><span class="c1"># data_files: &#39;/path/to/alpaca_gpt4_data_zh.json&#39;</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">    </span><span class="nt">handler</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">take</span><span class="w"> </span><span class="c1"># Call the datasets library&#39;s &#39;take&#39; method to select the first n entries for demonstration purposes</span>
+<span class="w">        </span><span class="nt">n</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2000</span><span class="w">    </span><span class="c1"># Use the first 2000 entries for demonstration. Remove this line and the line above for actual use</span>
+<span class="nt">model</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">model_config</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">num_hidden_layers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="nt">parallel_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">data_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">model_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">pipeline_stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">use_seq_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">micro_batch_num</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+</li>
+<li><p>Execute <code class="docutils literal notranslate"><span class="pre">run_mindformer.py</span></code> to start the single-GPU fine-tuning task. An example usage is provided below:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>run_mindformer.py<span class="w"> </span><span class="se">\</span>
+<span class="w"> </span>--config<span class="w"> </span>configs/qwen3/finetune_qwen3.yaml<span class="w"> </span><span class="se">\</span>
+<span class="w"> </span>--use_parallel<span class="w"> </span>False<span class="w"> </span><span class="se">\</span>
+<span class="w"> </span>--run_mode<span class="w"> </span>finetune
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="single-node">
+<h3>Single-Node<a class="headerlink" href="#single-node" title="Link to this heading"></a></h3>
+<p>Execute the msrun startup script in the root directory of the MindSpore Transformers code to perform single-node fine-tuning. The path in the command needs to be replaced with the real path.</p>
+<ol class="arabic">
+<li><p>Modify the corresponding configuration file <code class="docutils literal notranslate"><span class="pre">configs/qwen3/finetune_qwen3.yaml</span></code> based on information such as the number of nodes used:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">pretrained_model_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/path/to/Qwen3-8B&#39;</span>
+<span class="nn">...</span>
+<span class="nt">train_dataset</span><span class="p">:</span><span class="w"> </span><span class="nl">&amp;train_dataset</span>
+<span class="w">  </span><span class="nt">data_loader</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HFDataLoader</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;llm-wizard/alpaca-gpt4-data-zh&quot;</span><span class="w"> </span><span class="c1"># Alpaca-style dataset. Ensure the network environment can access HuggingFace to enable automatic dataset download.</span>
+<span class="w">    </span><span class="c1"># path: &quot;json&quot;  # If using local JSON files for offline dataset loading, uncomment the following two lines and comment out the line above</span>
+<span class="w">    </span><span class="c1"># data_files: &#39;/path/to/alpaca_gpt4_data_zh.json&#39;</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">    </span><span class="nt">handler</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">take</span><span class="w"> </span><span class="c1"># Call the datasets library&#39;s take method to select the first n entries for demonstration</span>
+<span class="w">        </span><span class="nt">n</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2000</span><span class="w">    </span><span class="c1"># Use the first 2000 entries for demonstration. Remove this line and the one above for actual use</span>
+<span class="nt">parallel_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">data_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">model_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">  </span><span class="nt">pipeline_stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">micro_batch_num</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+</pre></div>
+</div>
+</li>
+<li><p>Execute the following msrun startup script to launch 8-card distributed training:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">total_rank_num</span><span class="o">=</span><span class="m">8</span>
+bash<span class="w"> </span>scripts/msrun_launcher.sh<span class="w"> </span><span class="s2">&quot;run_mindformer.py \</span>
+<span class="s2">--config configs/qwen3/finetune_qwen3.yaml \</span>
+<span class="s2">--auto_trans_ckpt True \</span>
+<span class="s2">--use_parallel True \</span>
+<span class="s2">--run_mode finetune&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="nv">$total_rank_num</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="multi-node">
+<h3>Multi-Node<a class="headerlink" href="#multi-node" title="Link to this heading"></a></h3>
+<p>Take Qwen3-8B as an example to perform 2-node 16-device fine-tuning.</p>
+<ol class="arabic">
+<li><p>Modify the corresponding config file <code class="docutils literal notranslate"><span class="pre">configs/qwen3/finetune_qwen3.yaml</span></code> based on information such as the number of used nodes:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">pretrained_model_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/path/to/Qwen3-8B&#39;</span>
+<span class="nn">...</span>
+<span class="nt">train_dataset</span><span class="p">:</span><span class="w"> </span><span class="nl">&amp;train_dataset</span>
+<span class="w">  </span><span class="nt">data_loader</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HFDataLoader</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;llm-wizard/alpaca-gpt4-data-zh&quot;</span><span class="w"> </span><span class="c1"># Alpaca-style dataset. Ensure the network environment can access HuggingFace to enable automatic dataset download.</span>
+<span class="w">    </span><span class="c1"># path: &quot;json&quot;  # If using local JSON files for offline dataset loading, uncomment the following two lines and comment out the line above</span>
+<span class="w">    </span><span class="c1"># data_files: &#39;/path/to/alpaca_gpt4_data_zh.json&#39;</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">    </span><span class="nt">handler</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">take</span><span class="w"> </span><span class="c1"># Call the datasets library&#39;s take method to select the first n entries for demonstration</span>
+<span class="w">        </span><span class="nt">n</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2000</span><span class="w">    </span><span class="c1"># Use the first 2000 entries for demonstration. Remove this line and the one above for actual use</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>If the number of nodes and the number of devices are used to change, <code class="docutils literal notranslate"><span class="pre">data_parallel</span></code>, <code class="docutils literal notranslate"><span class="pre">model_parallel</span></code>, and <code class="docutils literal notranslate"><span class="pre">pipeline_stage</span></code> need to be modified to meet the actual number of running devices. <code class="docutils literal notranslate"><span class="pre">device_num=data_parallel×model_parallel×pipeline_stage</span></code>. Meanwhile, <code class="docutils literal notranslate"><span class="pre">micro_batch_num</span> <span class="pre">&gt;=</span> <span class="pre">pipeline_stage</span></code>.</p>
+</div></blockquote>
+</li>
+<li><p>Execute the msrun startup script:</p>
+<p>For distributed tasks by executing scripts on multiple nodes and multiple devices, it is necessary to run the scripts on different nodes respectively and set the parameter <code class="docutils literal notranslate"><span class="pre">MASTER_ADDR</span></code> to the IP address of the main node. The IP addresses set for all nodes are the same, and only the parameter <code class="docutils literal notranslate"><span class="pre">NODE_RANK</span></code> is different among different nodes.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># Node 0. Set the IP address of node 0 to the value of {master_addr}, which is used as the IP address of the primary node. There are 16 devices in total with 2 devices for each node.</span>
+bash<span class="w"> </span>scripts/msrun_launcher.sh<span class="w"> </span><span class="s2">&quot;run_mindformer.py \</span>
+<span class="s2">  --config configs/qwen3/finetune_qwen3.yaml \</span>
+<span class="s2">  --run_mode finetune&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="m">16</span><span class="w"> </span><span class="m">8</span><span class="w"> </span><span class="o">{</span>master_addr<span class="o">}</span><span class="w"> </span><span class="m">8118</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>output/msrun_log<span class="w"> </span>False<span class="w"> </span><span class="m">300</span>
+
+
+<span class="c1"># Node 1. Set the IP address of node 0 to the value of {master_addr}, which is used as the IP address of the primary node. The startup commands of node 0 and node 1 differ only in the parameter NODE_RANK.</span>
+bash<span class="w"> </span>scripts/msrun_launcher.sh<span class="w"> </span><span class="s2">&quot;run_mindformer.py \</span>
+<span class="s2">  --config configs/qwen3/finetune_qwen3.yaml \</span>
+<span class="s2">  --run_mode finetune&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="m">16</span><span class="w"> </span><span class="m">8</span><span class="w"> </span><span class="o">{</span>master_addr<span class="o">}</span><span class="w"> </span><span class="m">8118</span><span class="w"> </span><span class="m">1</span><span class="w"> </span>output/msrun_log<span class="w"> </span>False<span class="w"> </span><span class="m">300</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="overview.html" class="btn btn-neutral float-left" title="Features Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ckpt.html" class="btn btn-neutral float-right" title="Ckpt Weights" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

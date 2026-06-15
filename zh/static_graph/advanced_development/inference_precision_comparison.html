@@ -1,0 +1,308 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>推理精度比对 &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="与 Megatron-LM 比对训练精度" href="accuracy_comparison.html" />
+    <link rel="prev" title="推理配置模板使用指南" href="yaml_config_inference.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">介绍</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/quick_start.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">模型支持库</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">安装</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">安装指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">功能特性</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/overview.html">功能特性概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/start_task.html">启动任务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/configuration.html">配置文件说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/logging.html">日志</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/dataset.html">数据集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/training_hyperparameters.html">训练超参数与优化器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/save_and_load_checkpoint.html">权重保存与加载</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/resume_training.html">断点续训</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/monitor.html">训练指标监控与 Profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/static_graph_features.html">静态图实现特性</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">环境变量</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../env_variables.html">环境变量说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">贡献指南</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers贡献指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">魔乐社区贡献指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">模型相关 FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">功能相关 FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">静态图实现（Deprecated）</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">大模型全流程指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/index.html">功能特性</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">高阶开发</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">高阶开发概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="precision_optimization.html">大模型精度调优指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance_optimization.html">大模型性能调优指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev_migration.html">开发迁移</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yaml_config_inference.html">推理配置模板使用指南</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">推理精度比对</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">精度验收流程</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id4">整体流程</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id5">在线推理验证</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id6">数据集评测</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">定位精度问题</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id8">精度存在问题</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id11">精度存在误差</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="accuracy_comparison.html">与 Megatron-LM 比对训练精度</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training_template_instruction.html">训练配置模板使用说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="weight_transfer.html">权重转换开发适配</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html">API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">优秀实践</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">环境变量说明</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">高阶开发</a></li>
+      <li class="breadcrumb-item active">推理精度比对</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/advanced_development/inference_precision_comparison.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">已废弃（Deprecated）</p>
+<p>本页属于 <strong>静态图（GRAPH_MODE）实现</strong> 章节，已标记为废弃。新特性优先在「r2.0.0 动态图实现」章节演进，请优先查阅动态图相关文档。</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>推理精度比对<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/static_graph/advanced_development/inference_precision_comparison.md"><img alt="查看源文件" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source.svg" /></a></p>
+<section id="id2">
+<h2>概述<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p>对于模型来说，在适配和开发完成之后，用户如果要使用新适配或者新开发的模型来进行推理，需要确保推理精度的正确性。推理的精度验收标准主要是在于业内开源的数据集评测得分，或者用户自己准备的闭源数据集。该文档主要提供一个推理精度比对的整体流程，以及精度存在问题后的一些定位思路和手段。</p>
+</section>
+<section id="id3">
+<h2>精度验收流程<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<section id="id4">
+<h3>整体流程<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p>目前推理的开发流程中，验证精度的过程会先看在线推理的精度，如果在线推理的精度正常，才会进一步验证数据集的评测得分。下面流程图是整个精度验证的过程。</p>
+<div style="text-align: center;">
+  <img src="./images/infer_precision_comparison.png" alt="推理精度对比" width="50%"/>
+</div>
+</section>
+<section id="id5">
+<h3>在线推理验证<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<p>在线推理验证的主要目标是验证单条或者多条输入的推理输出的精度是否正常。如果所有输出都正常，并且和GPU环境下标杆的输出能够基本对齐，可以进入下一步验证数据集评测。
+关于模型如何执行在线推理任务可以参考<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/guide/inference.html">推理指南</a>。</p>
+</section>
+<section id="id6">
+<h3>数据集评测<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<p>通过在线推理验证之后，模型在保持输入相同的情况下，标杆的输出可以基本保持一致。但是数据量比较小，并且问题涉及领域不够全面，需要通过数据集评测来最终验证模型的精度。只有数据集的评测得分和标杆数据能够满足0.4%的误差，才能证明模型的精度符合验收标准。
+关于模型如何用数据集评测可以参考<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/guide/evaluation.html">评测指南</a>。</p>
+</section>
+</section>
+<section id="id7">
+<h2>定位精度问题<a class="headerlink" href="#id7" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>场景：预设模型权重没问题，即GPU环境下模型推理精度正常，将GPU的输出作为标杆。</p></li>
+<li><p>可能出现的情况：针对该文档提供的精度比对流程可能会出现的两种情况。第一种是精度存在问题，第二种是精度存在误差。</p></li>
+</ul>
+<section id="id8">
+<h3>精度存在问题<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
+<p>精度存在问题一般是指推理任务出现回答乱码或者完全没有逻辑的情况，常见的原因一般是权重加载存在问题，或者网络的代码实现存在问题。</p>
+<section id="id9">
+<h4>1. 权重加载问题<a class="headerlink" href="#id9" title="Link to this heading"></a></h4>
+<p>排查流程如下：</p>
+<ol class="arabic">
+<li><p>在执行的推理任务的日志中搜索以下关键字。</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>These parameters are not loaded in the network:
+These parameters are not loaded in the weights:
+</pre></div>
+</div>
+</li>
+<li><p>根据日志的内容分析权重的加载是否正确。两条日志冒号后面的KEY值分别代表网络需要加载的所有权重中实际没有加载的权重的KEY值，以及权重文件里的所有权重中没有加载进网络的权重的KEY值。</p></li>
+</ol>
+<p>可能出现的具体问题和解决方法：</p>
+<ul class="simple">
+<li><p>问题 1：冒号后存在KEY值，部分权重没有加载进网络。</p>
+<ul>
+<li><p>原因：网络的KEY值和权重的KEY值没有一一对应上。</p></li>
+<li><p>定位方法：结合网络结构和没有加载的权重分析，每个KEY值对应的权重没有加载是否合理。</p></li>
+<li><p>解决方法：对不合理权重KEY值的转换重新转换，具体参考<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/advanced_development/weight_transfer.html">新模型权重转换适配教程</a>。</p></li>
+</ul>
+</li>
+<li><p>问题 2：冒号后不存在任何KEY值，所有权重都加载进网络，但依旧可能存在权重融合或者拆分过程中切分不对导致加载错数据。</p>
+<ul>
+<li><p>原因：大多是开源的权重中存在融合的权重，有时候需要拆分之后再和其他权重融合，过程中有可能会涉及各种切分，容易出现问题。</p></li>
+<li><p>定位方法：先重点分析容易出错的地方，如Attention中qkv的部分，结合网络结构中的写法，分析权重加载过程中的各种操作是否正确。如果理论分析不出来，可以直接将对怀疑的部分的权重打印出来和标杆的对应位置加载的权重对比。</p></li>
+<li><p>解决方法：通过分析或者实验找到权重加载错误的模块，解决方法参考<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/advanced_development/weight_transfer.html">新模型权重转换适配教程</a>。</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="id10">
+<h4>2. 新模型的搭建存在问题<a class="headerlink" href="#id10" title="Link to this heading"></a></h4>
+<p>排查流程如下：</p>
+<p>在适配模型结构相似的新模型时，一般会直接通过替换配置文件，然后直接加载权重执行推理任务。这样容易忽略一些细节上的差别，需要逐模块排查这些差异点。</p>
+<p>可能出现的问题和解决方法：</p>
+<ul class="simple">
+<li><p>问题：不同输入的推理输出依旧不变。</p>
+<ul>
+<li><p>可能的原因：MLP模块、MoE模块以及Attention模块涉及的linear模块不需要bias，但是强加了bias，输入输出存在nan等。</p></li>
+<li><p>定位方法：可以直接打印各个模块的输入输出，观察打印结果是否正常。</p></li>
+<li><p>解决方法：确定某个模块有问题之后，对比标杆确定该模块是否需要bias。如果不需要bias，将bias的配置项设置成False即可。</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<section id="id11">
+<h3>精度存在误差<a class="headerlink" href="#id11" title="Link to this heading"></a></h3>
+<p>精度存在误差一般是指在线推理的回答符合逻辑但是不能对齐标杆的回答，或者数据集评测得分不满足验收标准的情况。</p>
+<section id="id12">
+<h4>1. 在线推理的回答符合逻辑但是不能对齐标杆的回答<a class="headerlink" href="#id12" title="Link to this heading"></a></h4>
+<p>推理任务出现回答符合逻辑但精度和标杆不一致的根本原因是某个模块引起了误差，误差的大小会决定回答和标杆对不齐的token出现的早晚。</p>
+<p>可能出现的问题和解决方法：</p>
+<ul>
+<li><p>问题：首Token一致，但是在推了10个token左右就出现精度不一致的现象。</p>
+<ul>
+<li><p>定位方法：一般采用打印和dump数据的方式去对比数据的差异。如果打印的数据无法通过肉眼观察出是否在可接受范围之内，那么可以采用dump数据，然后通过对比工具判定该模块是否符合精度标准。对比工具可以使用MindSpore Transformers提供的方法进行对比，使用方法如下：</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tests.utils.precision_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">PrecisionChecker</span>
+
+<span class="n">checker</span> <span class="o">=</span> <span class="n">PrecisionChecker</span><span class="p">()</span>
+<span class="n">gpu_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;path/to/gpu.npy&#39;</span><span class="p">)</span>
+<span class="n">npu_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;path/to/npu.npy&#39;</span><span class="p">)</span>
+<span class="n">checker</span><span class="o">.</span><span class="n">check_precision</span><span class="p">(</span><span class="n">gpu_data</span><span class="p">,</span> <span class="n">npu_data</span><span class="p">)</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>关于如何dump数据可以参考MindSpore官网提供的<a class="reference external" href="https://www.mindspore.cn/tutorials/zh-CN/master/debug/dump.html">Dump教程文档</a>。</p>
+</div></blockquote>
+</li>
+<li><p>可能的原因：某个输入的dtype类型不一致等导致的精度损失。</p></li>
+<li><p>解决方法：对齐标杆的dtype。</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="id13">
+<h4>2. 数据集评测得分不满足验收标准<a class="headerlink" href="#id13" title="Link to this heading"></a></h4>
+<p>按照精度比对的流程，数据集评测的前提是在线推理的回答已经符合逻辑，但是现在出现数据集评测得分和标杆数据存在较大差异，其原因是部分回答和标杆的回答无法对齐。</p>
+<p>定位方法：找出输出和标杆回答无法对齐的问题，将问题单独截取出来作为在线推理的输入，然后按照<a class="reference internal" href="#id12">在线推理的回答符合逻辑但是不能对齐标杆的回答</a>的定位思路去解决问题。</p>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="yaml_config_inference.html" class="btn btn-neutral float-left" title="推理配置模板使用指南" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="accuracy_comparison.html" class="btn btn-neutral float-right" title="与 Megatron-LM 比对训练精度" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

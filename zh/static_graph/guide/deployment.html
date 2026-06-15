@@ -1,0 +1,771 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>服务化部署指南 &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="评测指南" href="evaluation.html" />
+    <link rel="prev" title="推理指南" href="inference.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">介绍</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/quick_start.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">模型支持库</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">安装</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">安装指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">功能特性</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/overview.html">功能特性概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/start_task.html">启动任务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/configuration.html">配置文件说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/logging.html">日志</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/dataset.html">数据集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/training_hyperparameters.html">训练超参数与优化器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/save_and_load_checkpoint.html">权重保存与加载</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/resume_training.html">断点续训</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/monitor.html">训练指标监控与 Profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/static_graph_features.html">静态图实现特性</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">环境变量</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../env_variables.html">环境变量说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">贡献指南</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers贡献指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">魔乐社区贡献指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">模型相关 FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">功能相关 FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">静态图实现（Deprecated）</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">大模型全流程指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="llm_training.html">训练指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pre_training.html">预训练实践</a></li>
+<li class="toctree-l2"><a class="reference internal" href="supervised_fine_tuning.html">监督微调实践</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inference.html">推理指南</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">服务化部署指南</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#vllm">vLLM服务化部署</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id2">概述</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">环境搭建</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">快速开始</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mcore">Mcore模型适配</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id7">附录</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#mindie">MindIE服务化部署</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id10">MindIE介绍</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id11">环境搭建</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id14">推理服务部署基本流程</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id17">MindIE服务化部署及推理示例</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id21">模型列表</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation.html">评测指南</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/index.html">功能特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_development/index.html">高阶开发</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">优秀实践</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">环境变量说明</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">大模型全流程指南</a></li>
+      <li class="breadcrumb-item active">服务化部署指南</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/guide/deployment.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">已废弃（Deprecated）</p>
+<p>本页属于 <strong>静态图（GRAPH_MODE）实现</strong> 章节，已标记为废弃。新特性优先在「r2.0.0 动态图实现」章节演进，请优先查阅动态图相关文档。</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>服务化部署指南<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/static_graph/guide/deployment.md"><img alt="查看源文件" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source.svg" /></a></p>
+<section id="vllm">
+<h2>vLLM服务化部署<a class="headerlink" href="#vllm" title="Link to this heading"></a></h2>
+<section id="id2">
+<h3>概述<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<p>vLLM-MindSpore插件以将MindSpore大模型接入vLLM，并实现服务化部署为功能目标: <a class="reference external" href="https://www.mindspore.cn/vllm_mindspore/docs/zh-CN/master/index.html#vllm-mindspore%E6%8F%92%E4%BB%B6%E7%AE%80%E4%BB%8B">vLLM-MindSpore插件简介</a>。</p>
+<p>MindSpore Transformers 套件的目标是构建一个大模型预训练、微调、评测、推理、部署的全流程开发套件，提供业内主流的 Transformer 类大语言模型（Large Language Models, LLMs）和多模态理解模型（Multimodal Models, MMs）。</p>
+</section>
+<section id="id3">
+<h3>环境搭建<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p>环境安装步骤分为两种安装方式：</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.mindspore.cn/vllm_mindspore/docs/zh-CN/master/getting_started/installation/installation.html#docker%E5%AE%89%E8%A3%85">docker安装</a>：适合用户快速使用的场景；</p></li>
+<li><p><a class="reference external" href="https://www.mindspore.cn/vllm_mindspore/docs/zh-CN/master/getting_started/installation/installation.html#%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85">源码安装</a>：适合用户有增量开发vLLM-MindSpore插件的场景。</p></li>
+</ul>
+</section>
+<section id="id4">
+<h3>快速开始<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p>用户在环境部署完毕后，在运行模型前，需要准备模型文件，用户可通过模型下载章节的指引作模型准备，在环境变量设置后，可采用离线推理或在线服务的方式。</p>
+<p><strong>环境变量</strong></p>
+<p>用户在拉起模型前，需设置以下环境变量：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">vLLM_MODEL_BACKEND</span><span class="o">=</span>MindFormers<span class="w"> </span><span class="c1"># use MindSpore Transformers</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MINDFORMERS_MODEL_CONFIG</span><span class="o">=</span>/path/to/yaml<span class="w"> </span><span class="c1"># 非MCore模型需要</span>
+</pre></div>
+</div>
+<p>目前vLLM MindSpore可支持不同的模型后端，以上环境变量指定MindSpore Transformers 作为对接模型套件。非MCore模型需要配置模型的yaml配置文件。
+更多环境变量可参考：<a class="reference external" href="https://www.mindspore.cn/vllm_mindspore/docs/zh-CN/master/user_guide/environment_variables/environment_variables.html">环境变量</a>。</p>
+<p>准备好模型和环境变量后，即可开始推理。</p>
+<section id="id5">
+<h4>在线推理<a class="headerlink" href="#id5" title="Link to this heading"></a></h4>
+<p>vLLM在线推理面向实时服务场景，依托动态批处理和 OpenAI API，具有高并发、高吞吐、低延迟的特点，适用于企业级应用。</p>
+<ul class="simple">
+<li><p>单卡推理流程请参照：<a class="reference external" href="https://www.mindspore.cn/vllm_mindspore/docs/zh-CN/master/getting_started/tutorials/qwen2.5_7b_singleNPU/qwen2.5_7b_singleNPU.html">单卡推理</a></p></li>
+<li><p>单节点多卡推理流程请参照：<a class="reference external" href="https://www.mindspore.cn/vllm_mindspore/docs/zh-CN/master/getting_started/tutorials/qwen2.5_32b_multiNPU/qwen2.5_32b_multiNPU.html">多卡推理</a></p></li>
+<li><p>多节点的并行推理流程请参照：<a class="reference external" href="https://www.mindspore.cn/vllm_mindspore/docs/zh-CN/master/getting_started/tutorials/deepseek_parallel/deepseek_r1_671b_w8a8_dp4_tp4_ep4.html">多机并行推理</a></p></li>
+</ul>
+</section>
+<section id="id6">
+<h4>离线推理<a class="headerlink" href="#id6" title="Link to this heading"></a></h4>
+<p>vLLM的离线推理专为高效处理大规模批量请求而设计，尤其适用于非实时，数据密集型的模型推理场景。</p>
+<p>离线推理流程请参照：<a class="reference external" href="https://www.mindspore.cn/vllm_mindspore/docs/zh-CN/master/getting_started/quick_start/quick_start.html#%E7%A6%BB%E7%BA%BF%E6%8E%A8%E7%90%86">离线推理</a></p>
+</section>
+</section>
+<section id="mcore">
+<h3>Mcore模型适配<a class="headerlink" href="#mcore" title="Link to this heading"></a></h3>
+<p>vLLM MindSpore支持多种模型套件库，当其模型套件为 MindSpore Transformers 时，注册在 MindSpore Transformers 中的注册表的 Mcore 模型默认可直接通过 vLLM 实现服务化部署，借助 MindSpore Transformers 的 AutoModel 接口实现的。</p>
+<p>其原理是，在 vLLM 的模型注册表中，所有的 MindSpore Transformers 的模型统一注册为<code class="docutils literal notranslate"><span class="pre">MindFormersForCausalLM</span></code>类，然后走 MindSpore Transformers 模型的加载逻辑。在 MindSpore Transformers 界面，所有的 Mcore 的模型配置和模型在加载<code class="docutils literal notranslate"><span class="pre">mindformers</span></code>组件时已自动注册至注册表中，在加载模型的逻辑中，通过模型的<code class="docutils literal notranslate"><span class="pre">config.json</span></code>配置文件中的<code class="docutils literal notranslate"><span class="pre">model_type</span></code>或<code class="docutils literal notranslate"><span class="pre">architectures</span></code>实现在注册表中的模型或模型文件的检索，进而完成模型的配置实例化和模型的加载。</p>
+<p>vLLM MindSpore 模型注册表中，只注册<code class="docutils literal notranslate"><span class="pre">MindFormersForCausalLM</span></code>类：</p>
+<p><img alt="vllm mindspore模型注册表" src="../../_images/vllm-registry.png" /></p>
+<p>MindSpore Transformers模型注册表中，注册模型配置类和模型类等：</p>
+<p><img alt="MindSpore Transformers注册表" src="../../_images/mindspore-transformers-registry.png" /></p>
+<p>如果有涉及配置修改，可以参照 <a class="reference external" href="https://atomgit.com/mindspore/vllm-mindspore/blob/master/vllm_mindspore/model_executor/models/mf_models/config.py">配置</a> 文件。参照已有的映射关系，可将 vLLM 的 CLI 参数经过转换后，在模型侧生效。</p>
+</section>
+<section id="id7">
+<h3>附录<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<section id="id8">
+<h4>版本配套信息<a class="headerlink" href="#id8" title="Link to this heading"></a></h4>
+<p>各个组件的配套相关信息详见：<a class="reference external" href="https://www.mindspore.cn/vllm_mindspore/docs/zh-CN/master/getting_started/installation/installation.html#%E7%89%88%E6%9C%AC%E9%85%8D%E5%A5%97">版本配套</a>。</p>
+</section>
+<section id="id9">
+<h4>模型支持列表<a class="headerlink" href="#id9" title="Link to this heading"></a></h4>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>模型</p></th>
+<th class="head"><p>Mcore新架构</p></th>
+<th class="head"><p>状态</p></th>
+<th class="head"><p>下载链接</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Qwen3-32B</p></td>
+<td><p>是</p></td>
+<td><p>已支持</p></td>
+<td><p><a class="reference external" href="https://modelers.cn/models/MindSpore-Lab/Qwen3-32B">Qwen3-32B</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Qwen3-235B-A22B</p></td>
+<td><p>是</p></td>
+<td><p>已支持</p></td>
+<td><p><a class="reference external" href="https://huggingface.co/Qwen/Qwen3-235B-A22B">Qwen3-235B-A22B</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Qwen3</p></td>
+<td><p>是</p></td>
+<td><p>测试中</p></td>
+<td><p><a class="reference external" href="https://huggingface.co/Qwen/Qwen3-0.6B">Qwen3-0.6B</a>、 <a class="reference external" href="https://huggingface.co/Qwen/Qwen3-1.7B">Qwen3-1.7B</a>、 <a class="reference external" href="https://huggingface.co/Qwen/Qwen3-4B">Qwen3-4B</a>、 <a class="reference external" href="https://huggingface.co/Qwen/Qwen3-8B">Qwen3-8B</a>、 <a class="reference external" href="https://modelers.cn/models/MindSpore-Lab/Qwen3-14B">Qwen3-14B</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Qwen3-MOE</p></td>
+<td><p>是</p></td>
+<td><p>测试中</p></td>
+<td><p><a class="reference external" href="https://modelers.cn/models/MindSpore-Lab/Qwen3-30B-A3B-Instruct-2507">Qwen3-30B-A3</a></p></td>
+</tr>
+<tr class="row-even"><td><p>DeepSeek-V3</p></td>
+<td><p>是</p></td>
+<td><p>测试中</p></td>
+<td><p><a class="reference external" href="https://modelers.cn/models/MindSpore-Lab/DeepSeek-V3">DeepSeek-V3</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Qwen2.5</p></td>
+<td><p>否</p></td>
+<td><p>已支持</p></td>
+<td><p><a class="reference external" href="https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct">Qwen2.5-0.5B-Instruct</a>、 <a class="reference external" href="https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct">Qwen2.5-1.5B-Instruct</a>、 <a class="reference external" href="https://huggingface.co/Qwen/Qwen2.5-3B-Instruct">Qwen2.5-3B-Instruct</a>、 <a class="reference external" href="https://huggingface.co/Qwen/Qwen2.5-7B-Instruct">Qwen2.5-7B-Instruct</a>、 <a class="reference external" href="https://huggingface.co/Qwen/Qwen2.5-14B-Instruct">Qwen2.5-14B-Instruct</a>、 <a class="reference external" href="https://huggingface.co/Qwen/Qwen2.5-32B-Instruct">Qwen2.5-32B-Instruct</a>、 <a class="reference external" href="https://huggingface.co/Qwen/Qwen2.5-72B-Instruct">Qwen2.5-72B-Instruct</a></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+<section id="mindie">
+<h2>MindIE服务化部署<a class="headerlink" href="#mindie" title="Link to this heading"></a></h2>
+<section id="id10">
+<h3>MindIE介绍<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
+<p>MindIE，全称Mind Inference Engine，是基于昇腾硬件的高性能推理框架。详情参考<a class="reference external" href="https://www.hiascend.com/software/mindie">官方介绍文档</a>。</p>
+<p>MindSpore Transformers承载在模型应用层MindIE LLM中，通过MindIE Service可以部署MindSpore Transformers中的大模型。</p>
+<p>MindIE推理的模型支持度可参考<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/introduction/models.html">模型库</a>。</p>
+</section>
+<section id="id11">
+<h3>环境搭建<a class="headerlink" href="#id11" title="Link to this heading"></a></h3>
+<section id="id12">
+<h4>软件安装<a class="headerlink" href="#id12" title="Link to this heading"></a></h4>
+<ol class="arabic">
+<li><p>安装MindSpore Transformers</p>
+<p>参考<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/installation.html">MindSpore Transformers官方安装指南</a>进行安装。</p>
+</li>
+<li><p>安装MindIE</p>
+<p>参考<a class="reference external" href="https://www.hiascend.com/document/detail/zh/mindie/100/envdeployment/instg/mindie_instg_0010.html">MindIE安装依赖文档</a>完成依赖安装。之后前往<a class="reference external" href="https://www.hiascend.com/developer/download/community/result?module=ie%2Bpt%2Bcann">MindIE资源下载中心</a>下载软件包进行安装。</p>
+<p>MindIE与CANN版本必须配套使用，其版本配套关系如下所示。</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>MindIE</p></th>
+<th class="head text-center"><p>CANN-toolkit</p></th>
+<th class="head text-center"><p>CANN-kernels</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p><a class="reference external" href="https://www.hiascend.com/developer/download/community/result?module=ie%2Bpt%2Bcann">1.0.0</a></p></td>
+<td class="text-center"><p><a class="reference external" href="https://www.hiascend.com/developer/download/community/result?module=ie%2Bpt%2Bcann">8.0.0</a></p></td>
+<td class="text-center"><p><a class="reference external" href="https://www.hiascend.com/developer/download/community/result?module=ie%2Bpt%2Bcann">8.0.0</a></p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ol>
+</section>
+<section id="id13">
+<h4>环境变量<a class="headerlink" href="#id13" title="Link to this heading"></a></h4>
+<p>若安装路径为默认路径，可以运行以下命令初始化各组件环境变量。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Ascend</span>
+<span class="nb">source</span><span class="w"> </span>/usr/local/Ascend/ascend-toolkit/set_env.sh
+<span class="c1"># MindIE</span>
+<span class="nb">source</span><span class="w"> </span>/usr/local/Ascend/mindie/latest/mindie-llm/set_env.sh
+<span class="nb">source</span><span class="w"> </span>/usr/local/Ascend/mindie/latest/mindie-service/set_env.sh
+<span class="c1"># MindSpore</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">LCAL_IF_PORT</span><span class="o">=</span><span class="m">8129</span>
+<span class="c1"># 组网配置</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MS_SCHED_HOST</span><span class="o">=</span><span class="m">127</span>.0.0.1<span class="w">     </span><span class="c1"># scheduler节点ip地址</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MS_SCHED_PORT</span><span class="o">=</span><span class="m">8090</span><span class="w">          </span><span class="c1"># scheduler节点服务端口</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>若机器上有其他卡已启动MindIE，需要注意<code class="docutils literal notranslate"><span class="pre">MS_SCHED_PORT</span></code>参数是否冲突。日志打印中该参数报错的话，替换为其他端口号重新尝试即可。</p>
+</div></blockquote>
+</section>
+</section>
+<section id="id14">
+<h3>推理服务部署基本流程<a class="headerlink" href="#id14" title="Link to this heading"></a></h3>
+<section id="id15">
+<h4>准备模型文件<a class="headerlink" href="#id15" title="Link to this heading"></a></h4>
+<p>创建一个文件夹，用于存放MindIE后端的指定模型相关文件，如模型tokenizer文件、yaml配置文件和config文件等。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>-p<span class="w"> </span>mf_model/qwen1_5_72b
+</pre></div>
+</div>
+<p>以Qwen1.5-72B为例，文件夹目录结构如下：</p>
+<div class="highlight-reStructuredText notranslate"><div class="highlight"><pre><span></span>mf_model
+ └── qwen1_5_72b
+        ├── config.json                 # 模型json配置文件，Hugging Face上对应模型下载
+        ├── vocab.json                  # 模型vocab文件，Hugging Face上对应模型下载
+        ├── merges.txt                  # 模型merges文件，Hugging Face上对应模型下载
+        ├── predict_qwen1_5_72b.yaml    # 模型yaml配置文件
+        ├── qwen1_5_tokenizer.py        # 模型tokenizer文件，从MindSpore Transformers仓中research目录下找到对应模型复制
+        └── qwen1_5_72b_ckpt_dir        # 模型分布式权重文件夹
+</pre></div>
+</div>
+<p>predict_qwen1_5_72b.yaml需要关注以下配置：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/mf_model/qwen1_5_72b/qwen1_5_72b_ckpt_dir&#39;</span><span class="w"> </span><span class="c1"># 为存放模型分布式权重文件夹路径</span>
+<span class="nt">use_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="nt">auto_trans_ckpt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span><span class="w">    </span><span class="c1"># 是否开启自动权重转换，离线切分设置为False</span>
+<span class="nt">parallel_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">data_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">model_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span><span class="w">       </span><span class="c1"># 多卡推理配置模型切分，一般与使用卡数一致</span>
+<span class="w">  </span><span class="nt">pipeline_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="nt">processor</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">tokenizer</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">vocab_file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/path/to/mf_model/qwen1_5_72b/vocab.json&quot;</span><span class="w">  </span><span class="c1"># vocab文件绝对路径</span>
+<span class="w">    </span><span class="nt">merges_file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/path/to/mf_model/qwen1_5_72b/merges.txt&quot;</span><span class="w">  </span><span class="c1"># merges文件绝对路径</span>
+</pre></div>
+</div>
+<p>模型权重下载和转换可参考 <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/ckpt.html">权重格式转换指南</a>。</p>
+<p>不同模型的所需文件和配置可能会有差异，详情参考<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/introduction/models.html">模型库</a>中具体模型的推理章节。</p>
+</section>
+<section id="id16">
+<h4>启动MindIE<a class="headerlink" href="#id16" title="Link to this heading"></a></h4>
+<p><strong>1. 一键启动（推荐）</strong></p>
+<p>MindSpore Transformers仓上提供一键拉起MindIE脚本，脚本中已预置环境变量设置和服务化配置，仅需输入模型文件目录后即可快速拉起服务。</p>
+<p>进入<code class="docutils literal notranslate"><span class="pre">scripts</span></code>目录下，执行MindIE启动脚本：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>./scripts
+bash<span class="w"> </span>run_mindie.sh<span class="w"> </span>--model-name<span class="w"> </span>xxx<span class="w"> </span>--model-path<span class="w"> </span>/path/to/model
+
+<span class="c1"># 参数说明</span>
+--model-name:<span class="w"> </span>必传，设置MindIE后端名称
+--model-path:<span class="w"> </span>必传，设置模型文件夹路径，如/path/to/mf_model/qwen1_5_72b
+--help<span class="w">      </span>:<span class="w"> </span>脚本使用说明
+--max-seq-len:<span class="w"> </span>最大序列长度。默认值：2560。
+--max-iter-times:<span class="w"> </span>模型全局最大输出长度。默认值：512。
+--max-input-token-len:<span class="w"> </span>输入token<span class="w"> </span>id最大长度。默认值：2048。
+--truncation:<span class="w"> </span>是否进行参数合理化校验拦截。false：校验，true：不校验。默认值：false。
+--world-size:<span class="w"> </span>启用几张卡推理。多机推理场景下该值无效，worldSize根据ranktable计算获得。默认值：4。
+--template-type:<span class="w"> </span>推理类型。Standard：PD混部场景，Prefill请求和Decode请求各自组batch。Mix：Splitfuse特性相关参数，Prefill请求和Decode请求可以一起组batch。PD分离场景下该字段配置不生效。默认值：<span class="s2">&quot;Standard&quot;</span>。
+--max-preempt-count:<span class="w"> </span>每一批次最大可抢占请求的上限，即限制一轮调度最多抢占请求的数量，最大上限为maxBatchSize，取值大于0则表示开启可抢占功能。默认值：0。
+--support-select-batch:<span class="w"> </span>batch选择策略。PD分离场景下该字段不生效。false：表示每一轮调度时，优先调度和执行Prefill阶段的请求。true：表示每一轮调度时，根据当前Prefill与Decode请求的数量，自适应调整Prefill和Decode阶段请求调度和执行的先后顺序。默认值：false。
+--npu-mem-size:<span class="w"> </span>单个NPU中可以用来申请KV<span class="w"> </span>Cache的size上限。默认值：-1。
+--max-prefill-batch-size:<span class="w"> </span>最大prefill<span class="w"> </span>batch<span class="w"> </span>size。默认值：50。
+--ip:<span class="w"> </span>EndPoint提供的业务面RESTful接口绑定的IP地址。默认值：<span class="s2">&quot;127.0.0.1&quot;</span>。
+--port:<span class="w"> </span>EndPoint提供的业务面RESTful接口绑定的端口号。默认值：1025。
+--management-ip:<span class="w"> </span>EndPoint提供的管理面RESTful接口绑定的IP地址。默认值：<span class="s2">&quot;127.0.0.2&quot;</span>。
+--management-port:<span class="w"> </span>EndPoint提供的管理面（管理面接口请参见表1）接口绑定的端口号。默认值：1026。
+--metrics-port:<span class="w"> </span>服务管控指标接口（普罗格式）端口号。默认值：1027。
+--ms-sched-host:<span class="w"> </span>scheduler节点ip地址。默认值：127.0.0.1。
+--ms-sched-port:<span class="w"> </span>scheduler节点服务端口。默认值：8090。
+</pre></div>
+</div>
+<p>查看日志：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tail<span class="w"> </span>-f<span class="w"> </span>output.log
+</pre></div>
+</div>
+<p>当log日志中出现<code class="docutils literal notranslate"><span class="pre">Daemon</span> <span class="pre">start</span> <span class="pre">success!</span></code>，表示服务启动成功。</p>
+<p><strong>脚本参数</strong></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>参数</p></th>
+<th class="head text-left"><p>参数说明</p></th>
+<th class="head"><p>取值说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--model-name</span></code></p></td>
+<td class="text-left"><p>设置MindIE 服务后端模型命名。</p></td>
+<td><p>str，必选。</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--model-path</span></code></p></td>
+<td class="text-left"><p>设置MindIE 服务后端模型路径，包含必要文件如yaml/config.json/tokenizer/vocab等。</p></td>
+<td><p>str，必选。</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--ip</span></code></p></td>
+<td class="text-left"><p>EndPoint提供的业务面RESTful接口绑定的IP地址。</p></td>
+<td><p>str，可选。默认值：”127.0.0.1”</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--port</span></code></p></td>
+<td class="text-left"><p>EndPoint提供的业务面RESTful接口绑定的端口号。</p></td>
+<td><p>int，可选。默认值：1025</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--management-ip</span></code></p></td>
+<td class="text-left"><p>EndPoint提供的管理面RESTful接口绑定的IP地址。</p></td>
+<td><p>str，可选。默认值：”127.0.0.2”</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--management-port</span></code></p></td>
+<td class="text-left"><p>EndPoint提供的管理面RESTful接口绑定的端口号。</p></td>
+<td><p>int，可选。默认值：1026</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--metrics-port</span></code></p></td>
+<td class="text-left"><p>服务监控指标接口（普罗格式）端口号。</p></td>
+<td><p>int，可选。默认值：1027</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--max-seq-len</span></code></p></td>
+<td class="text-left"><p>最大序列长度。</p></td>
+<td><p>int，可选。默认值：2560</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--max-iter-times</span></code></p></td>
+<td class="text-left"><p>模型全局最大输出长度。与请求级最大输出token个数max_tokens（或max_new_tokens）取较小值作为最大可生成长度。</p></td>
+<td><p>int，可选。默认值：512</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--max-input-token-len</span></code></p></td>
+<td class="text-left"><p>输入token id最大长度。</p></td>
+<td><p>int，可选。默认值：2048</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--max-prefill-tokens</span></code></p></td>
+<td class="text-left"><p>每次Prefill时，当前batch中所有input token总数，不能超过maxPrefillTokens。</p></td>
+<td><p>int，可选。默认值：8192</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--truncation</span></code></p></td>
+<td class="text-left"><p>是否进行参数合理化校验拦截。</p></td>
+<td><p>bool，可选。默认值：false</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--template-type</span></code></p></td>
+<td class="text-left"><p>推理类型。<br />Standard：PD混合部署场景，Prefill请求和Decode请求各自组成batch处理。<br />Mix：Splitfuse特性相关参数，Prefill请求和Decode请求可以合并组成batch处理。</p></td>
+<td><p>str，可选。默认值：”Standard”。</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--max-preempt-count</span></code></p></td>
+<td class="text-left"><p>每一批次最大可抢占请求的上限。</p></td>
+<td><p>int，可选。默认值：0</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--support-select-batch</span></code></p></td>
+<td class="text-left"><p>batch选择策略。<br />false：表示每一轮调度时，优先调度和执行Prefill阶段的请求。<br />true：表示每一轮调度时，根据当前Prefill与Decode请求的数量，自适应调整Prefill和Decode阶段请求调度和执行的先后顺序。</p></td>
+<td><p>bool，可选。默认值：false</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--npu-mem-size</span></code></p></td>
+<td class="text-left"><p>单个NPU中可以用来申请KV Cache的size上限。</p></td>
+<td><p>int，可选。默认值：50</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--max-prefill-batch-size</span></code></p></td>
+<td class="text-left"><p>最大prefill batch size。</p></td>
+<td><p>int，可选。默认值：50</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--world-size</span></code></p></td>
+<td class="text-left"><p>启用的推理卡数。默认不设置，以yaml中配置的parallel_config为准；设置后将覆盖yaml中并行配置中的model_parallel参数。</p></td>
+<td><p>str，可选。</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--ms-sched-host</span></code></p></td>
+<td class="text-left"><p>MindSpore scheduler节点ip地址。</p></td>
+<td><p>str，可选。默认值：”127.0.0.1”</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--ms-sched-port</span></code></p></td>
+<td class="text-left"><p>MindSpore scheduler节点服务端口。</p></td>
+<td><p>int，可选。默认值：8119</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--help</span></code></p></td>
+<td class="text-left"><p>展示脚本入参介绍。</p></td>
+<td><p>str，可选。</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>2. 自定义启动</strong></p>
+<p>MindIE安装路径均为默认路径<code class="docutils literal notranslate"><span class="pre">/usr/local/Ascend/.</span></code>。如自定义安装路径，需同步修改以下例子中的路径。</p>
+<p>打开mindie-service目录中的config.json，修改server相关配置。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>vim<span class="w"> </span>/usr/local/Ascend/mindie/latest/mindie-service/conf/config.json
+</pre></div>
+</div>
+<p>其中<code class="docutils literal notranslate"><span class="pre">modelWeightPath</span></code>和<code class="docutils literal notranslate"><span class="pre">backendType</span></code>必须修改配置为：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;modelWeightPath&quot;</span>:<span class="w"> </span><span class="s2">&quot;/path/to/mf_model/qwen1_5_72b&quot;</span>
+<span class="s2">&quot;backendType&quot;</span>:<span class="w"> </span><span class="s2">&quot;ms&quot;</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">modelWeightPath</span></code>为上一步创建出的模型文件夹，放置模型和tokenizer等相关文件；<code class="docutils literal notranslate"><span class="pre">backendType</span></code>后端启动方式必须为<code class="docutils literal notranslate"><span class="pre">ms</span></code>。</p>
+<p>其他相关参数如下：</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>可选配置项</p></th>
+<th class="head"><p>取值类型</p></th>
+<th class="head"><p>取值范围</p></th>
+<th class="head"><p>配置说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>httpsEnabled</p></td>
+<td><p>Bool</p></td>
+<td><p>True/False</p></td>
+<td><p>是否开启HTTPS通信安全认证，默认为True。便于启动，建议设置为False。</p></td>
+</tr>
+<tr class="row-odd"><td><p>maxSeqLen</p></td>
+<td><p>int32</p></td>
+<td><p>按用户需求自定义，&gt;0</p></td>
+<td><p>最大序列长度。输入的长度+输出的长度&lt;=maxSeqLen，用户根据自己的推理场景选择maxSeqLen。</p></td>
+</tr>
+<tr class="row-even"><td><p>npuDeviceIds</p></td>
+<td><p>list</p></td>
+<td><p>按模型需求自定义</p></td>
+<td><p>此配置项暂不生效。实际运行的卡由可见卡环境变量和worldSize配置控制。可见卡需调整资源参考<a class="reference external" href="https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/80RC3alpha003/apiref/envref/envref_07_0029.html">CANN环境变量</a>。</p></td>
+</tr>
+<tr class="row-odd"><td><p>worldSize</p></td>
+<td><p>int32</p></td>
+<td><p>按模型需求自定义</p></td>
+<td><p>可见卡的使用卡数。例：ASCEND_RT_VISIBLE_DEVICES=4,0,1,2且worldSize=2，则取第4，0卡运行。</p></td>
+</tr>
+<tr class="row-even"><td><p>npuMemSize</p></td>
+<td><p>int32</p></td>
+<td><p>按显存自定义</p></td>
+<td><p>NPU中可以用来申请KVCache的size上限（GB），可按部署模型的实际大小计算得出：npuMemSize=(总空闲-权重/mp数量)*系数，其中系数取0.8。建议值：8。</p></td>
+</tr>
+<tr class="row-odd"><td><p>cpuMemSize</p></td>
+<td><p>int32</p></td>
+<td><p>按内存自定义</p></td>
+<td><p>CPU中可以用来申请KVCache的size上限（GB），和swap功能有关，cpuMemSize不足时会将Cache释放进行重计算。建议值：5。</p></td>
+</tr>
+<tr class="row-even"><td><p>maxPrefillBatchSize</p></td>
+<td><p>int32</p></td>
+<td><p>[1, maxBatchSize]</p></td>
+<td><p>最大prefill batch size。maxPrefillBatchSize和maxPrefillTokens谁先达到各自的取值就完成本次组batch。该参数主要是在明确需要限制prefill阶段batch size的场景下使用，否则可以设置为0（此时引擎将默认取maxBatchSize值）或与maxBatchSize值相同。必填，默认值：50。</p></td>
+</tr>
+<tr class="row-odd"><td><p>maxPrefillTokens</p></td>
+<td><p>int32</p></td>
+<td><p>[5120, 409600]</p></td>
+<td><p>每次prefill时，当前batch中所有input token总数，不能超过maxPrefillTokens。maxPrefillTokens和maxPrefillBatchSize谁先达到各自的取值就完成本次组batch。必填，默认值：8192。</p></td>
+</tr>
+<tr class="row-even"><td><p>maxBatchSize</p></td>
+<td><p>int32</p></td>
+<td><p>[1, 5000]</p></td>
+<td><p>最大decode batch size，根据模型规模和NPU显存估算得出。</p></td>
+</tr>
+<tr class="row-odd"><td><p>maxIterTimes</p></td>
+<td><p>int32</p></td>
+<td><p>[1, maxSeqLen-1]</p></td>
+<td><p>可以进行的decode次数，即一句话最大可生成长度。请求级别里面有一个max_output_length参数，maxIterTimes是一个全局设置，与max_output_length取小作为最终output的最长length。</p></td>
+</tr>
+</tbody>
+</table>
+<p>全量配置参数可查阅 <a class="reference external" href="https://www.hiascend.com/document/detail/zh/mindie/10RC3/mindieservice/servicedev/mindie_service0285.html">MindIE Service开发指南-快速开始-配置参数说明</a>。</p>
+<p>运行启动脚本：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/path/to/mindie/latest/mindie-service
+nohup<span class="w"> </span>./bin/mindieservice_daemon<span class="w"> </span>&gt;<span class="w"> </span>output.log<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">&amp;</span>
+tail<span class="w"> </span>-f<span class="w"> </span>output.log
+</pre></div>
+</div>
+<p>当log日志中出现<code class="docutils literal notranslate"><span class="pre">Daemon</span> <span class="pre">start</span> <span class="pre">success!</span></code>，表示服务启动成功。</p>
+<p>Python相关日志：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">MINDIE_LLM_PYTHON_LOG_TO_FILE</span><span class="o">=</span><span class="m">1</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MINDIE_LLM_PYTHON_LOG_PATH</span><span class="o">=</span>/usr/local/Ascend/mindie/latest/mindie-service/logs/pythonlog.log
+tail<span class="w"> </span>-f<span class="w"> </span>/usr/local/Ascend/mindie/latest/mindie-service/logs/pythonlog.log
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id17">
+<h3>MindIE服务化部署及推理示例<a class="headerlink" href="#id17" title="Link to this heading"></a></h3>
+<p>以下例子各组件安装路径均为默认路径<code class="docutils literal notranslate"><span class="pre">/usr/local/Ascend/.</span></code>，模型使用<code class="docutils literal notranslate"><span class="pre">Qwen1.5-72B</span></code>。</p>
+<section id="id18">
+<h4>准备模型文件<a class="headerlink" href="#id18" title="Link to this heading"></a></h4>
+<p>以Qwen1.5-72B为例，准备模型文件目录。目录结构及配置详情可参考<a class="reference internal" href="#id15">准备模型文件</a>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>-p<span class="w"> </span>mf_model/qwen1_5_72b
+</pre></div>
+</div>
+</section>
+<section id="id19">
+<h4>启动MindIE<a class="headerlink" href="#id19" title="Link to this heading"></a></h4>
+<p><strong>1. 一键启动（推荐）</strong></p>
+<p>进入<code class="docutils literal notranslate"><span class="pre">scripts</span></code>目录下，执行mindie启动脚本：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>./scripts
+bash<span class="w"> </span>run_mindie.sh<span class="w"> </span>--model-name<span class="w"> </span>qwen1_5_72b<span class="w"> </span>--model-path<span class="w"> </span>/path/to/mf_model/qwen1_5_72b
+</pre></div>
+</div>
+<p>查看日志：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tail<span class="w"> </span>-f<span class="w"> </span>output.log
+</pre></div>
+</div>
+<p>当log日志中出现<code class="docutils literal notranslate"><span class="pre">Daemon</span> <span class="pre">start</span> <span class="pre">success!</span></code>，表示服务启动成功。</p>
+<p><strong>2. 自定义启动</strong></p>
+<p>打开mindie-service目录中的config.json，修改server相关配置。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>vim<span class="w"> </span>/usr/local/Ascend/mindie/latest/mindie-service/conf/config.json
+</pre></div>
+</div>
+<p>修改完后的config.json如下：</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;Version&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1.0.0&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;LogConfig&quot;</span><span class="w"> </span><span class="p">:</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;logLevel&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Info&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;logFileSize&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;logFileNum&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;logPath&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;logs/mindservice.log&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+
+<span class="w">    </span><span class="nt">&quot;ServerConfig&quot;</span><span class="w"> </span><span class="p">:</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;ipAddress&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;managementIpAddress&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;127.0.0.2&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;port&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1025</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;managementPort&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1026</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;metricsPort&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1027</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;allowAllZeroIpListening&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;maxLinkNum&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;httpsEnabled&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;fullTextEnabled&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;tlsCaPath&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;security/ca/&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;tlsCaFile&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;ca.pem&quot;</span><span class="p">],</span>
+<span class="w">        </span><span class="nt">&quot;tlsCert&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;security/certs/server.pem&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;tlsPk&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;security/keys/server.key.pem&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;tlsPkPwd&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;security/pass/key_pwd.txt&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;tlsCrl&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;security/certs/server_crl.pem&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;managementTlsCaFile&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;management_ca.pem&quot;</span><span class="p">],</span>
+<span class="w">        </span><span class="nt">&quot;managementTlsCert&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;security/certs/management/server.pem&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;managementTlsPk&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;security/keys/management/server.key.pem&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;managementTlsPkPwd&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;security/pass/management/key_pwd.txt&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;managementTlsCrl&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;security/certs/management/server_crl.pem&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;kmcKsfMaster&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tools/pmt/master/ksfa&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;kmcKsfStandby&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tools/pmt/standby/ksfb&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;inferMode&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;standard&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;interCommTLSEnabled&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;interCommPort&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1121</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;interCommTlsCaFile&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;security/grpc/ca/ca.pem&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;interCommTlsCert&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;security/grpc/certs/server.pem&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;interCommPk&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;security/grpc/keys/server.key.pem&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;interCommPkPwd&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;security/grpc/pass/key_pwd.txt&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;interCommTlsCrl&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;security/certs/server_crl.pem&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;openAiSupport&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;vllm&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+
+<span class="w">    </span><span class="nt">&quot;BackendConfig&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;backendName&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;mindieservice_llm_engine&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;modelInstanceNumber&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;npuDeviceIds&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]],</span>
+<span class="w">        </span><span class="nt">&quot;tokenizerProcessNumber&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;multiNodesInferEnabled&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;multiNodesInferPort&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1120</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;interNodeTLSEnabled&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;interNodeTlsCaFile&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;security/grpc/ca/ca.pem&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;interNodeTlsCert&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;security/grpc/certs/server.pem&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;interNodeTlsPk&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;security/grpc/keys/server.key.pem&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;interNodeTlsPkPwd&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;security/grpc/pass/mindie_server_key_pwd.txt&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;interNodeTlsCrl&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;security/grpc/certs/server_crl.pem&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;interNodeKmcKsfMaster&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tools/pmt/master/ksfa&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;interNodeKmcKsfStandby&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tools/pmt/standby/ksfb&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;ModelDeployConfig&quot;</span><span class="w"> </span><span class="p">:</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;maxSeqLen&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">8192</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;maxInputTokenLen&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">8192</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;truncation&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;ModelConfig&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="nt">&quot;modelInstanceType&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Standard&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;modelName&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Qwen1.5-72B-Chat&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;modelWeightPath&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/mf_model/qwen1_5_72b&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;worldSize&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;cpuMemSize&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;npuMemSize&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;backendType&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ms&quot;</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">]</span>
+<span class="w">        </span><span class="p">},</span>
+
+<span class="w">        </span><span class="nt">&quot;ScheduleConfig&quot;</span><span class="w"> </span><span class="p">:</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;templateType&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Standard&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;templateName&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Standard_LLM&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;cacheBlockSize&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span>
+
+<span class="w">            </span><span class="nt">&quot;maxPrefillBatchSize&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">50</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;maxPrefillTokens&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">8192</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;prefillTimeMsPerReq&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">150</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;prefillPolicyType&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+
+<span class="w">            </span><span class="nt">&quot;decodeTimeMsPerReq&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">50</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;decodePolicyType&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+
+<span class="w">            </span><span class="nt">&quot;maxBatchSize&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;maxIterTimes&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">4096</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;maxPreemptCount&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;supportSelectBatch&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;maxQueueDelayMicroseconds&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">5000</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>为便于测试，<code class="docutils literal notranslate"><span class="pre">httpsEnabled</span></code>参数设置为<code class="docutils literal notranslate"><span class="pre">false</span></code>，忽略后续https通信相关参数。</p>
+</div></blockquote>
+<p>进入mindie-service目录启动服务：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/usr/local/Ascend/mindie/1.0.RC3/mindie-service
+nohup<span class="w"> </span>./bin/mindieservice_daemon<span class="w"> </span>&gt;<span class="w"> </span>output.log<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">&amp;</span>
+tail<span class="w"> </span>-f<span class="w"> </span>output.log
+</pre></div>
+</div>
+<p>打印如下信息，启动成功。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Daemon<span class="w"> </span>start<span class="w"> </span>success!
+</pre></div>
+</div>
+</section>
+<section id="id20">
+<h4>请求测试<a class="headerlink" href="#id20" title="Link to this heading"></a></h4>
+<p>服务启动成功后，可使用curl命令发送请求验证，样例如下：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-w<span class="w"> </span><span class="s2">&quot;\ntime_total=%{time_total}\n&quot;</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Accept: application/json&quot;</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Content-type: application/json&quot;</span><span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;inputs&quot;: &quot;I love Beijing, because&quot;,&quot;stream&quot;: false}&#39;</span><span class="w"> </span>http://127.0.0.1:1025/generate
+</pre></div>
+</div>
+<p>返回推理结果，验证成功：</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;generated_text&quot;</span><span class="p">:</span><span class="s2">&quot; it is a city with a long history and rich culture.....&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id21">
+<h3>模型列表<a class="headerlink" href="#id21" title="Link to this heading"></a></h3>
+<p>其他模型的MindIE推理示例可参考<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/introduction/models.html">模型库</a>中各模型的介绍文档。</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="inference.html" class="btn btn-neutral float-left" title="推理指南" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="evaluation.html" class="btn btn-neutral float-right" title="评测指南" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,9 @@
+/* 占满整屏：解除 RTD 主题正文区 800px 宽度限制 */
+.wy-nav-content {
+    max-width: none;
+}
+/* 表格随宽度自适应换行（RTD 默认 nowrap，宽屏下长表格更易读） */
+.wy-table-responsive table td,
+.wy-table-responsive table th {
+    white-space: normal;
+}

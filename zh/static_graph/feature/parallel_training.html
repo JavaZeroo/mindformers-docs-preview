@@ -1,0 +1,443 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>分布式并行训练 &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="训练高可用" href="high_availability.html" />
+    <link rel="prev" title="断点续训2.0" href="resume_training2.0.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">介绍</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/quick_start.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">模型支持库</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">安装</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">安装指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">功能特性</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/overview.html">功能特性概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/start_task.html">启动任务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/configuration.html">配置文件说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/logging.html">日志</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/dataset.html">数据集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/training_hyperparameters.html">训练超参数与优化器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/save_and_load_checkpoint.html">权重保存与加载</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/resume_training.html">断点续训</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/monitor.html">训练指标监控与 Profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/static_graph_features.html">静态图实现特性</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">环境变量</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../env_variables.html">环境变量说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">贡献指南</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers贡献指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">魔乐社区贡献指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">模型相关 FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">功能相关 FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">静态图实现（Deprecated）</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">大模型全流程指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">功能特性</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">功能特性概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="start_tasks.html">启动任务</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ckpt.html">Ckpt权重</a></li>
+<li class="toctree-l2"><a class="reference internal" href="safetensors.html">Safetensors权重</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">配置文件说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="load_huggingface_config.html">加载 Hugging Face 模型配置</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html">日志</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tokenizer.html">使用Tokenizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset.html">数据集</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training_hyperparameters.html">训练超参数</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monitor.html">训练指标监控</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training.html">断点续训</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoint_saving_and_loading.html">checkpoint保存和加载</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training2.0.html">断点续训2.0</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">分布式并行训练</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">并行模式与应用场景</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mindspore-transformers">MindSpore Transformers 支持的并行特性</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id3">数据并行</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">模型并行</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id5">序列并行</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id6">长序列并行</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id8">流水线并行</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id10">优化器并行</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id11">多副本并行</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id12">MindSpore Transformers 分布式并行应用实践</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="high_availability.html">训练高可用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skip_data_and_ckpt_health_monitor.html">数据跳过和健康监测</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pma_fused_checkpoint.html">Pre-trained Model Average 权重合并</a></li>
+<li class="toctree-l2"><a class="reference internal" href="other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantization.html">量化</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_development/index.html">高阶开发</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">优秀实践</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">环境变量说明</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">功能特性</a></li>
+      <li class="breadcrumb-item active">分布式并行训练</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/feature/parallel_training.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">已废弃（Deprecated）</p>
+<p>本页属于 <strong>静态图（GRAPH_MODE）实现</strong> 章节，已标记为废弃。新特性优先在「r2.0.0 动态图实现」章节演进，请优先查阅动态图相关文档。</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>分布式并行训练<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/static_graph/feature/parallel_training.md"><img alt="查看源文件" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source.svg" /></a></p>
+<section id="id2">
+<h2>并行模式与应用场景<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p>在大规模深度学习模型的训练中，尤其是面对庞大的数据集和复杂的模型架构时，单一设备的算力往往不足以应对这种需求。为了解决这个问题，MindSpore 提供了一套强大的并行策略配置，通过灵活的并行策略可以大幅提升训练效率、降低计算资源的消耗。</p>
+<p>MindSpore 的并行模式包括数据并行、模型并行、流水线并行、序列并行等。这些模式可以单独使用，也可以结合在一起，形成复杂的混合并行策略，以应对不同的模型训练需求。通过合理配置这些并行策略，开发者可以有效利用多设备的计算资源，极大地提升训练效率。</p>
+<p>在实际应用中，不同的并行策略适用于不同的场景：</p>
+<ul class="simple">
+<li><p><strong>数据并行</strong>：适用于数据量大，模型相对简单的场景。</p></li>
+<li><p><strong>模型并行</strong>：适用于模型参数量巨大，单个设备无法容纳整个模型的场景。</p></li>
+<li><p><strong>流水线并行</strong>：适用于超大规模模型训练，需多设备共同计算的场景。</p></li>
+<li><p><strong>序列并行</strong>：适用于长序列输入的模型，减少单设备显存占用的场景。</p></li>
+<li><p><strong>多副本并行</strong>：通过执行序调度算法控制细粒度多分支的并行，提高计算与通信的相互掩盖。</p></li>
+<li><p><strong>优化器并行</strong>：将优化器的计算任务分散到多个设备上，以减少内存占用并提高训练效率。</p></li>
+</ul>
+<blockquote>
+<div><p>仓库中提供的 YAML 文件中并行策略配置已经优化，当前推荐用户使用半自动并行，以确保最佳性能和稳定性。</p>
+</div></blockquote>
+</section>
+<section id="mindspore-transformers">
+<h2>MindSpore Transformers 支持的并行特性<a class="headerlink" href="#mindspore-transformers" title="Link to this heading"></a></h2>
+<p>MindSpore Transformers 支持多种并行特性，开发者可以利用这些特性来优化不同模型架构和硬件配置的训练。以下内容概述了这些并行特性，并提供了指向 MindSpore 文档中详细说明的链接。</p>
+<section id="id3">
+<h3>数据并行<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p>数据并行是每个设备（worker）都持有一份完整的模型权重，将输入的数据分片并分配到不同的计算设备上并行处理。各设备基于分配到的局部数据进行前向传播和反向传播计算，在反向传播完成后，所有设备上计算的梯度会通过全局规约（AllReduce）操作进行聚合，确保各设备上的模型参数保持一致性。多路数据同时训练时，仅在梯度更新进行一次通信，性能最优，但内存不会减少。数据并行适用于数据量大且模型规模较小的场景。关于数据并行的框架侧实现，参见 <a class="reference external" href="https://www.mindspore.cn/docs/zh-CN/master/features/parallel/data_parallel.html">MindSpore 数据并行</a> 的具体内容。</p>
+<p>MindSpore Transformers已支持数据并行方案，可通过以下配置项使能：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">parallel_config</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">data_parallel</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+<p>参数说明：</p>
+<ul class="simple">
+<li><p>data_parallel：数据并行切分数量，默认为1，根据用户需求配置。</p></li>
+</ul>
+<p>关于分布式并行参数的配置方法，参见 <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/configuration.html">MindSpore Transformers 配置说明</a> 中的并行配置章节下的具体内容。</p>
+</section>
+<section id="id4">
+<h3>模型并行<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p>数据并行训练中，每个设备均存储全部模型参数，显存占用较高，在模型规模较大时可能存在瓶颈。模型并行将整个模型切分并分布在一个设备阵列上，每个设备仅维护模型的一部分权重。网络并行计算各自部分，并在LayerNorm等位置进行通信，最省内存，但通信量较大。模型并行适用于模型规模较大，单个设备无法容纳整个模型的场景。关于模型并行的框架侧实现，参见 <a class="reference external" href="https://www.mindspore.cn/docs/zh-CN/master/features/parallel/operator_parallel.html">MindSpore 模型并行</a> 的具体内容。</p>
+<p>MindSpore Transformers已支持模型并行方案，可通过以下配置项使能：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">parallel_config</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">model_parallel</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+<p>参数说明：</p>
+<ul class="simple">
+<li><p>model_parallel：模型并行切分数量，默认为1，根据用户需求配置。</p></li>
+</ul>
+<p>关于分布式并行参数的配置方法，参见 <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/configuration.html">MindSpore Transformers 配置说明</a> 中的并行配置章节下的具体内容。</p>
+</section>
+<section id="id5">
+<h3>序列并行<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<p>序列并行设计用于分摊模型并行无法切分的显存和计算，将Transformer层中的LayerNorm及Dropout的输入按照序列维度进行切分，减少单设备的显存压力。</p>
+<p>MindSpore Transformers已支持序列并行方案，可通过以下配置项使能：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">parallel_config</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">use_seq_parallel</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+<p>参数说明：</p>
+<ul class="simple">
+<li><p>use_seq_parallel：是否开启序列并行，默认为False。</p></li>
+</ul>
+<p>关于分布式并行参数的配置方法，参见 <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/configuration.html">MindSpore Transformers 配置说明</a> 中的并行配置章节下的具体内容。</p>
+</section>
+<section id="id6">
+<h3>长序列并行<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<p>从生成性AI到科研模型，长序列训练正在变得非常重要。现有的数据、张量和流水线等并行方法无法在序列维度进行切分。当序列维度（S）增长时，训练内存开销会以O（<span class="math notranslate nohighlight">\(S^2\)</span>）的速度增长。序列并行对所有的input输入和所有的输出activation在sequence维度上进行切分，用于减少输入序列长度的限制，有效地支持超长序列训练。</p>
+<section id="ring-attention">
+<h4>Ring Attention序列并行<a class="headerlink" href="#ring-attention" title="Link to this heading"></a></h4>
+<blockquote>
+<div><p>本功能已废弃，将在后续版本中下架，可使用其他序列并行方法。如有任何问题或建议，请通过 <strong><a class="reference external" href="https://gitee.com/mindspore/mindformers/issues/new">社区Issue</a></strong> 提交反馈，感谢您的理解和支持！</p>
+</div></blockquote>
+<p>长序列并行算法 Ring Attention 是当前业界长序列并行的代表性技术，用于解决长序列训练时的内存开销问题，同时实现计算与通信掩盖。Ring Attention 算法利用 Attention 的分块计算性质，当序列并行度为 N 时，将 Q、K、V 分别切分为 N 个子块，每张卡分别调用 Flash Attention 算子来计算本地 QKV 子块的 Attention 结果。由于每张卡只需要计算切分后 QKV 子块的 Attention，其内存占用大幅降低。Ring Attention 在做 FA 计算的同时采用环形通信向相邻卡收集和发送子块，实现计算与通信的最大化掩盖，保障了长序列并行的整体性能。</p>
+<p>MindSpore Transformers已支持配置Ring Attention序列并行方案，可通过以下配置项使能：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">model</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">model_config</span><span class="p">:</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">use_ring_attention</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="nt">parallel_config</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">context_parallel</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+<p>参数说明：</p>
+<ul class="simple">
+<li><p>use_ring_attention：是否开启Ring Attention，默认为False。</p></li>
+<li><p>context_parallel：序列并行切分数量，默认为1，根据用户需求配置。</p></li>
+</ul>
+<p>关于分布式并行参数的配置方法，参见 <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/configuration.html">MindSpore Transformers 配置说明</a> 中的并行配置章节下的具体内容。</p>
+</section>
+<section id="ulysses">
+<h4>Ulysses序列并行<a class="headerlink" href="#ulysses" title="Link to this heading"></a></h4>
+<p>DeepSpeed提出的<a class="reference external" href="https://arxiv.org/abs/2309.14509">Ulysses长序列并行方案</a>，将各个样本在seq维度切分给不同的计算卡；然后，在attention计算之前，对QKV执行all-to-all通信操作，以使每个计算卡接收完整的序列，使得各计算卡可以并行计算不同的注意力头；最后，在attention计算后使用另一个all-to-all来在注意力头上收集结果，同时重新在seq维度上进行切分。该方案可以有效扩展训练的序列长度，同时保持相对较低的通信量。</p>
+<p>MindSpore Transformers已支持配置Ulysses序列并行方案，可通过以下配置项使能：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">model</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">model_config</span><span class="p">:</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">use_attn_mask_compression</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w"> </span><span class="c1">#使能attention_mask压缩</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="nt">parallel</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">enable_alltoall</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w">  </span><span class="c1"># 允许插入alltoall算子</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="nt">parallel_config</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">context_parallel</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">context_parallel_algo</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ulysses_cp</span><span class="w">  </span><span class="c1"># 使能Ulysses序列并行</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+<p>参数说明：</p>
+<ul class="simple">
+<li><p>use_attn_mask_compression：是否对Self-Attention中的Score矩阵进行掩码操作，默认为False，Ulysses序列并行方案下建议开启减少显存占用。</p></li>
+<li><p>enable_alltoall：生成alltoall通信算子，默认为False，不启用时将会由allgather等其他算子组合完成等价替代，可参考MindSpore <code class="docutils literal notranslate"><span class="pre">set_auto_parallel_context</span></code><a class="reference external" href="https://www.mindspore.cn/docs/zh-CN/master/api_python/mindspore/mindspore.set_auto_parallel_context.html">接口文档</a>；启用Ulysses方案时我们期望能够直接插入alltoall通信算子，因此将该配置项打开。</p></li>
+<li><p>context_parallel_algo：设置为<code class="docutils literal notranslate"><span class="pre">ulysses_cp</span></code>开启Ulysses序列并行。</p></li>
+</ul>
+<p>关于分布式并行参数的配置方法，参见 <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/configuration.html">MindSpore Transformers 配置说明</a> 中的并行配置章节下的具体内容。</p>
+</section>
+<section id="id7">
+<h4>混合序列并行<a class="headerlink" href="#id7" title="Link to this heading"></a></h4>
+<p>目前Ulysses和Ring Attention序列并行方案均存在一定局限性，Ring Attention序列并行方案虽然理论上序列长度能够无限拓展，但通信和计算带宽利用率较低，在序列块大小较低时性能劣于Ulysses序列并行方案。而Ulysses在GQA、MQA场景下的序列并行受Head数量限制，序列长度的扩展有限。混合序列并行融合了Ulysses序列并行方案（不再包含已经废弃的Ring Attention），可以解决上述缺陷。</p>
+<p>MindSpore Transformers已支持配置混合序列并行方案，可通过以下配置项使能：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">parallel</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">enable_alltoall</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w">  </span><span class="c1"># 允许插入alltoall算子</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="nt">parallel_config</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">context_parallel</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">16</span>
+<span class="w">  </span><span class="nt">context_parallel_algo</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hybrid_cp</span><span class="w">  </span><span class="c1"># 使能混合序列并行</span>
+<span class="w">  </span><span class="nt">ulysses_degree_in_cp</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+<p>参数说明：</p>
+<ul class="simple">
+<li><p>context_parallel_algo：设置为<code class="docutils literal notranslate"><span class="pre">hybrid_cp</span></code>时开启混合序列并行。</p></li>
+<li><p>ulysses_degree_in_cp：Ulysses序列并行切分数量。</p></li>
+</ul>
+<p>关于分布式并行参数的配置方法，参见 <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/configuration.html">MindSpore Transformers 配置说明</a> 中的并行配置章节下的具体内容。</p>
+</section>
+</section>
+<section id="id8">
+<h3>流水线并行<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
+<section id="id9">
+<h4>多流水线并行交织<a class="headerlink" href="#id9" title="Link to this heading"></a></h4>
+<p>多流水线并行（virtual pipeline）通过数据交织、层间交织、正反向交织，降低流水线气泡（bubble）。通过配置流水线调度策略，模型输入按sequence维度进行切分，展开为多个序列块（Sequence Chunk）。在原有的1F1B和1F1B-Interleave上，将调度单位缩小为Sequence Chunk。<code class="docutils literal notranslate"><span class="pre">seq_split_num</span></code>为切分个数，当<code class="docutils literal notranslate"><span class="pre">seq_split_num</span></code>=1时，退化为1F1B或1F1B-Interleave。多流水交织并行在限制全局批量大小（global_batch_size）的情况下，如果bubble较大，可以显著降低集群空闲时间，同时会导致内存占用变大，产生额外通信。关于流水线并行的框架侧实现，参见 <a class="reference external" href="https://www.mindspore.cn/docs/zh-CN/master/features/parallel/pipeline_parallel.html">MindSpore 流水线并行</a> 的具体内容。</p>
+<p>MindSpore Transformers已支持配置多流水线交织并行方案，可通过以下配置项使能：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># parallel context</span>
+<span class="nt">parallel</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">pipeline_config</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">pipeline_interleave</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">pipeline_scheduler</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;seqpipe&#39;</span>
+
+<span class="c1"># parallel config</span>
+<span class="nt">parallel_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">seq_split_num</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+
+<span class="c1"># model config</span>
+<span class="nt">model</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">model_config</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">offset</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+</pre></div>
+</div>
+<p>参数说明：</p>
+<ul class="simple">
+<li><p>pipeline_interleave：是否开启多流水交织并行。</p></li>
+<li><p>pipeline_scheduler：流水线的调度策略，目前MindSpore Transformers只支持设置为<code class="docutils literal notranslate"><span class="pre">'seqpipe'</span></code>。</p></li>
+<li><p>seq_split_num：输入按序列维度的切分个数。</p></li>
+<li><p>offset：开启 pp 并行时，设置每个stage层数的偏移量。详情请参考<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/configuration.html">MindSpore Transformers配置说明</a>。</p></li>
+</ul>
+<p>注意：</p>
+<ul class="simple">
+<li><p>目前仅支持Llama和DeepSeek系列模型。</p></li>
+<li><p>目前暂不支持使用Megatron的多源数据集进行训练的场景。</p></li>
+</ul>
+<p>关于分布式并行参数的配置方法，参见 <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/configuration.html">MindSpore Transformers配置说明</a> 中的并行配置章节下的具体内容。</p>
+</section>
+</section>
+<section id="id10">
+<h3>优化器并行<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
+<p>在进行数据并行训练时，模型的参数更新部分在各卡间存在冗余计算。通过优化器并行，可以将优化器的计算量分散到数据并行维度的卡上，在大规模网络上有效减少内存消耗并提升网络性能。关于优化器并行的框架侧实现，参见 <a class="reference external" href="https://www.mindspore.cn/docs/zh-CN/master/features/parallel/optimizer_parallel.html">MindSpore 优化器并行</a> 的具体内容。</p>
+<p>MindSpore Transformers已支持优化器并行方案，可通过以下配置项使能：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">parallel</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">enable_parallel_optimizer</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+<p>参数说明：</p>
+<ul class="simple">
+<li><p>enable_parallel_optimizer：是否开启优化器并行，默认为<code class="docutils literal notranslate"><span class="pre">False</span></code>。</p></li>
+</ul>
+<p>关于分布式并行参数的配置方法，参见 <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/configuration.html">MindSpore Transformers 配置说明</a> 中的并行配置章节下的具体内容。</p>
+</section>
+<section id="id11">
+<h3>多副本并行<a class="headerlink" href="#id11" title="Link to this heading"></a></h3>
+<p>多副本并行用于在多个副本之间实现精细的并行控制，优化性能和资源利用率，适合大规格模型的高效训练。关于多副本并行的框架侧实现，参见 <a class="reference external" href="https://www.mindspore.cn/docs/zh-CN/master/features/parallel/pipeline_parallel.html#mindspore%E4%B8%AD%E7%9A%84interleaved-pipeline%E8%B0%83%E5%BA%A6">MindSpore 多副本并行</a> 的具体内容。</p>
+<p>MindSpore Transformers已支持多副本并行方案，可通过以下配置项使能：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">model_config</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">fine_grain_interleave</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+<p>参数说明：</p>
+<ul class="simple">
+<li><p>fine_grain_interleave：细粒度多副本的数量。</p></li>
+</ul>
+<p>注意：</p>
+<ul class="simple">
+<li><p>目前仅支持Llama和Qwen系列模型。</p></li>
+</ul>
+<p>关于分布式并行参数的配置方法，参见 <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/configuration.html">MindSpore Transformers 配置说明</a> 中的并行配置章节下的具体内容。</p>
+</section>
+</section>
+<section id="id12">
+<h2>MindSpore Transformers 分布式并行应用实践<a class="headerlink" href="#id12" title="Link to this heading"></a></h2>
+<p>在官网提供的<a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/configs/qwen3/finetune_qwen3.yaml">Qwen3微调配置</a>文件中，使用了多种分布式并行策略，以提升多机多卡环境中的训练效率。以下是该配置文件中涉及的主要并行参数：</p>
+<ul class="simple">
+<li><p><strong>数据并行</strong>：输入的数据分片并分配到不同的计算设备上并行处理。</p></li>
+<li><p><strong>模型并行</strong>：模型被切分成多个部分，在不同设备上计算。</p></li>
+<li><p><strong>流水线并行</strong>：模型分为多个流水线阶段，按顺序在不同设备上运行。</p></li>
+<li><p><strong>序列并行</strong>：开启序列并行，将Transformer层中的LayerNorm及Dropout的输入按照序列维度进行切分，使各设备只需处理部分的LayerNorm和Dropout，减少模型显存占用。</p></li>
+<li><p><strong>多副本并行</strong>：通过执行序调度算法控制细粒度多分支的并行，提高计算与通信的相互掩盖。</p></li>
+<li><p><strong>优化器并行</strong>：优化器计算分散到多个设备上，以减少内存占用。</p></li>
+</ul>
+<blockquote>
+<div><p>开启细粒度多副本并行的同时必须开启序列并行。</p>
+</div></blockquote>
+<p>通过以上配置，Qwen3的分布式训练在多机多卡环境中可以有效利用硬件资源，实现高效、稳定的模型训练。</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="resume_training2.0.html" class="btn btn-neutral float-left" title="断点续训2.0" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="high_availability.html" class="btn btn-neutral float-right" title="训练高可用" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

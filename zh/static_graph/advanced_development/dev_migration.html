@@ -1,0 +1,326 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>开发迁移 &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="推理配置模板使用指南" href="yaml_config_inference.html" />
+    <link rel="prev" title="大模型性能调优指南" href="performance_optimization.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">介绍</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/quick_start.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">模型支持库</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">安装</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">安装指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">功能特性</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/overview.html">功能特性概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/start_task.html">启动任务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/configuration.html">配置文件说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/logging.html">日志</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/dataset.html">数据集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/training_hyperparameters.html">训练超参数与优化器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/save_and_load_checkpoint.html">权重保存与加载</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/resume_training.html">断点续训</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/monitor.html">训练指标监控与 Profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/static_graph_features.html">静态图实现特性</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">环境变量</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../env_variables.html">环境变量说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">贡献指南</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers贡献指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">魔乐社区贡献指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">模型相关 FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">功能相关 FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">静态图实现（Deprecated）</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">大模型全流程指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/index.html">功能特性</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">高阶开发</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">高阶开发概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="precision_optimization.html">大模型精度调优指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance_optimization.html">大模型性能调优指南</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">开发迁移</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mindspore-transformers">基于MindSpore Transformers构建大模型</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id2">编写配置</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">编写模型</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">编写分词器（适用于大语言模型）</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id5">准备权重和数据集</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#yaml">准备<code class="docutils literal notranslate"><span class="pre">YAML</span></code>配置文件</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id6">将模型贡献给MindSpore Transformers开源仓库</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">MindSpore Transformers大模型迁移实践</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#llama2-7bllama3-8b">基于Llama2-7B迁移Llama3-8B</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="yaml_config_inference.html">推理配置模板使用指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inference_precision_comparison.html">推理精度比对</a></li>
+<li class="toctree-l2"><a class="reference internal" href="accuracy_comparison.html">与 Megatron-LM 比对训练精度</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training_template_instruction.html">训练配置模板使用说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="weight_transfer.html">权重转换开发适配</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html">API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">优秀实践</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">环境变量说明</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">高阶开发</a></li>
+      <li class="breadcrumb-item active">开发迁移</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/advanced_development/dev_migration.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">已废弃（Deprecated）</p>
+<p>本页属于 <strong>静态图（GRAPH_MODE）实现</strong> 章节，已标记为废弃。新特性优先在「r2.0.0 动态图实现」章节演进，请优先查阅动态图相关文档。</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>开发迁移<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/static_graph/advanced_development/dev_migration.md"><img alt="查看源文件" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source.svg" /></a></p>
+<p>本文档将指导用户如何基于MindSpore Transformers构建一个大模型，并完成最基本的适配，以拉起训练和推理流程。</p>
+<section id="mindspore-transformers">
+<h2>基于MindSpore Transformers构建大模型<a class="headerlink" href="#mindspore-transformers" title="Link to this heading"></a></h2>
+<p>MindSpore Transformers中大模型的基本组成包含配置、模型、分词器（适用于大语言模型）。此外，为了使用run_mindformer.py统一脚本拉起训练或推理流程，还需要准备用于训练或推理的<code class="docutils literal notranslate"><span class="pre">YAML</span></code>配置文件。</p>
+<section id="id2">
+<h3>编写配置<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<p>模型配置是一个实例，包含模型的所有信息。MindSpore Transformers中所有模型的<code class="docutils literal notranslate"><span class="pre">__init__</span></code>方法都接收一个模型配置的实例作为入参，模型的所有子模块都通过这个配置实例中所包含的信息来初始化。</p>
+<p>MindSpore Transformers提供了<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/models/mindformers.models.PretrainedConfig.html">PretrainedConfig</a>类，负责提供一些配置的通用方法。所有模型的配置类都应该继承于PretrainedConfig类，开发者只需关心定义所有帮助构建大模型的配置参数：Transformer类大模型通常拥有<code class="docutils literal notranslate"><span class="pre">seq_length</span></code>、<code class="docutils literal notranslate"><span class="pre">hidden_size</span></code>、<code class="docutils literal notranslate"><span class="pre">num_layers</span></code>、<code class="docutils literal notranslate"><span class="pre">num_heads</span></code>等配置参数，文本类的大模型通常还有<code class="docutils literal notranslate"><span class="pre">vocab_size</span></code>等。</p>
+<p>可以参考MindSpore Transformers中Llama模型的配置类<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/models/mindformers.models.LlamaConfig.html">LlamaConfig</a>。</p>
+<blockquote>
+<div><p>如果您的模型与库内的模型非常相似，可以复用与该模型相同的配置。</p>
+</div></blockquote>
+</section>
+<section id="id3">
+<h3>编写模型<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p>MindSpore Transformers的大模型基于MindSpore框架进行开发，其中开发者只需要关心模型网络本身的实现。</p>
+<p>MindSpore Transformers提供了<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/models/mindformers.models.PreTrainedModel.html">PreTrainedModel</a>类，负责存储模型配置并处理加载、保存模型的方法。所有模型的类都应该继承于PreTrainedModel类，并且模型的输入应该是统一的，即模型的<code class="docutils literal notranslate"><span class="pre">construct</span></code>方法的入参应该一致，具体入参和含义可以参考MindSpore Transformers中的Llama模型类<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/models/mindformers.models.LlamaForCausalLM.html">LlamaForCausalLM</a>。同时，模型类必须实现基类的一些抽象方法，包括：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">prepare_inputs_for_generation</span></code>：为模型推理构建输入的方法。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">prepare_inputs_for_predict_layout</span></code>：为分布式加载模型权重构建虚拟输入的方法。</p></li>
+</ul>
+<p>关于它们的具体含义，可以参考<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/models/mindformers.models.LlamaForCausalLM.html">LlamaForCausalLM</a>中的描述。</p>
+<blockquote>
+<div><p>如果您的模型结构与库内的模型非常相似，可以复用该模型的实现。</p>
+</div></blockquote>
+</section>
+<section id="id4">
+<h3>编写分词器（适用于大语言模型）<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p>分词器（Tokenizer）的作用是处理大语言模型的输入与输出。它在大语言模型的工作流程中是必需的。</p>
+<p>MindSpore Transformers提供了<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/models/mindformers.models.PreTrainedTokenizer.html">PreTrainedTokenizer</a>类和<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/models/mindformers.models.PreTrainedTokenizerFast.html">PreTrainedTokenizerFast</a>类，分别是纯Python的实现和使用Rust库的实现。后者实现的区别是：</p>
+<ul class="simple">
+<li><p>在进行批量处理时速度显著提高；</p></li>
+<li><p>额外包含一些在文本字符串和词元空间映射的方法（例如，获取包含给定字符的词元的索引或与给定词元相对应的字符跨度）</p></li>
+</ul>
+<p>所有分词器的类应该继承于PreTrainedTokenizer类或PreTrainedTokenizerFast类，具体实现可以参考<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/models/mindformers.models.LlamaTokenizer.html">LlamaTokenizer</a>和<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/models/mindformers.models.LlamaTokenizerFast.html">LlamaTokenizerFast</a>。</p>
+<blockquote>
+<div><p>如果您的分词器与库内的分词器非常相似，可以复用该分词器的实现。</p>
+</div></blockquote>
+</section>
+<section id="id5">
+<h3>准备权重和数据集<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<p>如已有基于PyTorch的模型权重，可以参考<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/ckpt.html#%E6%9D%83%E9%87%8D%E6%A0%BC%E5%BC%8F%E8%BD%AC%E6%8D%A2">权重转换文档</a>将权重转换为MindSpore格式的权重。</p>
+<p>数据集的准备可以参考<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/dataset.html">数据集文档</a>。</p>
+</section>
+<section id="yaml">
+<h3>准备<code class="docutils literal notranslate"><span class="pre">YAML</span></code>配置文件<a class="headerlink" href="#yaml" title="Link to this heading"></a></h3>
+<p>MindSpore Transformers使用<code class="docutils literal notranslate"><span class="pre">YAML</span></code>配置文件配置一个任务所需的所有参数，包括模型的配置参数、训练所需的配置参数（优化器、学习率、数据集等）、推理所需的配置参数（分词器等）、分布式并行的配置参数、上下文环境的配置参数等。</p>
+<p>由于自定义模型的代码不在MindSpore Transformers库内，代码中的自定义模块没有注册在MindSpore Transformers中，因而不能被自动实例化。这些代码也称为外挂代码（如<code class="docutils literal notranslate"><span class="pre">research</span></code>目录下代码）。因此需要在编写的<code class="docutils literal notranslate"><span class="pre">YAML</span></code>配置文件中的对应模块配置下添加自动注册任意模块的配置项<code class="docutils literal notranslate"><span class="pre">auto_register</span></code>，设置为要注册的API接口的相对导入路径。后续在执行run_mindformer.py脚本拉起任务时添加注册路径的入参<code class="docutils literal notranslate"><span class="pre">--register_path</span></code>，设置为外挂代码所在目录的相对路径。</p>
+<p>例如，<code class="docutils literal notranslate"><span class="pre">research</span></code>目录下的Llama3.1-8B模型的推理<code class="docutils literal notranslate"><span class="pre">YAML</span></code>配置文件<a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/research/llama3_1/llama3_1_8b/predict_llama3_1_8b.yaml"><code class="docutils literal notranslate"><span class="pre">research/llama3_1/predict_llama3_1_8b.yaml</span></code></a>中，添加了自动注册的配置项<code class="docutils literal notranslate"><span class="pre">auto_register</span></code>，以注册<a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/research/llama3_1/llama3_1_tokenizer.py"><code class="docutils literal notranslate"><span class="pre">research/llama3_1/llama3_1_tokenizer.py</span></code></a>中自定义的<code class="docutils literal notranslate"><span class="pre">Llama3Tokenizer</span></code>：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">...</span>
+<span class="nt">processor</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">return_tensors</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ms</span>
+<span class="w">  </span><span class="nt">tokenizer</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">model_max_length</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8192</span>
+<span class="w">    </span><span class="nt">vocab_file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/path/tokenizer.model&quot;</span>
+<span class="w">    </span><span class="nt">pad_token</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&lt;|reserved_special_token_0|&gt;&quot;</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Llama3Tokenizer</span>
+<span class="w">    </span><span class="nt">auto_register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">llama3_1_tokenizer.Llama3Tokenizer</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LlamaProcessor</span>
+<span class="nn">...</span>
+</pre></div>
+</div>
+<p>其中在<code class="docutils literal notranslate"><span class="pre">tokenizer</span></code>下配置了<code class="docutils literal notranslate"><span class="pre">Llama3Tokenizer</span></code>的相对导入路径<code class="docutils literal notranslate"><span class="pre">auto_register:</span> <span class="pre">llama3_1_tokenizer.Llama3Tokenizer</span></code>。</p>
+<p>另外，需要在<code class="docutils literal notranslate"><span class="pre">tokenizer</span></code>下设置<code class="docutils literal notranslate"><span class="pre">vocab_file</span></code>为模型分词器<code class="docutils literal notranslate"><span class="pre">tokenizer.model</span></code>的真实路径。</p>
+<p>可以运行如下命令拉起推理任务：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>run_mindformer.py<span class="w"> </span>--config<span class="w"> </span>research/llama3_1/predict_llama3_1_8b.yaml<span class="w"> </span>--load_checkpoint<span class="w"> </span>path/to/llama3_1_8b.ckpt<span class="w"> </span>--register_path<span class="w"> </span>research/llama3_1<span class="w"> </span>--predict_data<span class="w"> </span><span class="s2">&quot;hello&quot;</span>
+</pre></div>
+</div>
+<p><strong>参数说明</strong></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>参数</p></th>
+<th class="head text-left"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p>config</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">YAML</span></code>配置文件的路径</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>load_checkpoint</p></td>
+<td class="text-left"><p>加载的权重路径</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>register_path</p></td>
+<td class="text-left"><p>外挂代码所在目录的路径</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>predict_data</p></td>
+<td class="text-left"><p>推理的输入数据</p></td>
+</tr>
+</tbody>
+</table>
+<p>其中设置了<code class="docutils literal notranslate"><span class="pre">register_path</span></code>为外挂代码所在目录的路径<code class="docutils literal notranslate"><span class="pre">research/llama3_1</span></code>，模型权重的准备参考<a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/research/llama3_1/README.md#%E6%A8%A1%E5%9E%8B%E6%9D%83%E9%87%8D%E4%B8%8B%E8%BD%BD">Llama3.1说明文档——模型权重下载</a>。</p>
+<p>配置文件的详细内容及可配置项可以参考<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/configuration.html">配置文件说明</a>。在实际编写配置文件时，也可以参考库内已有的配置文件，例如<a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/research/llama3_1/llama3_1_8b/finetune_llama3_1_8b.yaml">Llama3_1-8B微调的配置文件</a>。</p>
+<p>在准备完上述所有基本要素之后，可以参考MindSpore Transformers使用教程中的其余文档进行模型训练、微调、推理等流程的实践。后续模型调试调优可以参考<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/advanced_development/precision_optimization.html">大模型精度调优指南</a>和<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/advanced_development/performance_optimization.html">大模型性能调优指南</a>。</p>
+</section>
+<section id="id6">
+<h3>将模型贡献给MindSpore Transformers开源仓库<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<p>可以参考<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/contribution/mindformers_contribution.html">MindSpore Transformers贡献指南</a>，将模型贡献到MindSpore Transformers的开源仓库，供广大开发者研究和使用。</p>
+</section>
+</section>
+<section id="id7">
+<h2>MindSpore Transformers大模型迁移实践<a class="headerlink" href="#id7" title="Link to this heading"></a></h2>
+<section id="llama2-7bllama3-8b">
+<h3>基于Llama2-7B迁移Llama3-8B<a class="headerlink" href="#llama2-7bllama3-8b" title="Link to this heading"></a></h3>
+<p>Llama3-8B与Llama2-7B拥有相同的模型结构，只有部分模型参数、分词器和权重不同。</p>
+<section id="id8">
+<h4>模型配置<a class="headerlink" href="#id8" title="Link to this heading"></a></h4>
+<p>以下对比了Llama2-7B和Llama3-8B的模型配置：</p>
+<p><img alt="model_config_comparison" src="../../_images/model_config_comparison.png" /></p>
+<p>其中的区别有：</p>
+<ul class="simple">
+<li><p>Llama3-8B的序列长度为8192，将<code class="docutils literal notranslate"><span class="pre">seq_length</span></code>修改为<code class="docutils literal notranslate"><span class="pre">8192</span></code>。</p></li>
+<li><p>Llama3-8B使用GQA，每个key-value组的head数量为8，设置<code class="docutils literal notranslate"><span class="pre">n_kv_head</span></code>为<code class="docutils literal notranslate"><span class="pre">8</span></code>。</p></li>
+<li><p>Llama3-8B的词表大小为128256，将<code class="docutils literal notranslate"><span class="pre">vocab_size</span></code>修改为<code class="docutils literal notranslate"><span class="pre">128256</span></code>。</p></li>
+<li><p>Llama3-8B扩充了Feed-Forward Network的隐藏层大小至14336，设置<code class="docutils literal notranslate"><span class="pre">intermediate_size</span></code>为<code class="docutils literal notranslate"><span class="pre">14336</span></code>。</p></li>
+<li><p>Llama3-8B修改了特殊词元索引，修改<code class="docutils literal notranslate"><span class="pre">bos_token_id</span></code>为<code class="docutils literal notranslate"><span class="pre">128000</span></code>、<code class="docutils literal notranslate"><span class="pre">eos_token_id</span></code>为<code class="docutils literal notranslate"><span class="pre">128001</span></code>、<code class="docutils literal notranslate"><span class="pre">pad_token_id</span></code>为<code class="docutils literal notranslate"><span class="pre">128002</span></code>。</p></li>
+<li><p>Llama3-8B修改了旋转位置编码中的theta值为500000，修改<code class="docutils literal notranslate"><span class="pre">theta</span></code>为<code class="docutils literal notranslate"><span class="pre">500000</span></code>。</p></li>
+</ul>
+<p>修改Llama2-7B的<code class="docutils literal notranslate"><span class="pre">YAML</span></code>配置文件中的对应内容即可得到Llama3-8B的配置文件。</p>
+</section>
+<section id="id9">
+<h4>分词器<a class="headerlink" href="#id9" title="Link to this heading"></a></h4>
+<p>Llama3-8B重新实现了分词器。对照官方的实现，继承MindSpore Transformers中的PreTrainedTokenizer实现Llama3Tokenizer。</p>
+</section>
+<section id="id10">
+<h4>权重转换<a class="headerlink" href="#id10" title="Link to this heading"></a></h4>
+<p>Llama3-8B的参数命名和Llama2-7B一致，因此可以复用Llama2-7B的权重转换流程。</p>
+</section>
+<section id="id11">
+<h4>数据集处理<a class="headerlink" href="#id11" title="Link to this heading"></a></h4>
+<p>由于Llama3-8B的分词器与Llama2-7B不同，因此Llama3-8B需要在Llama2-7B的数据集处理脚本的基础上，替换Llama3-8B的分词器对数据进行预处理。</p>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="performance_optimization.html" class="btn btn-neutral float-left" title="大模型性能调优指南" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="yaml_config_inference.html" class="btn btn-neutral float-right" title="推理配置模板使用指南" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

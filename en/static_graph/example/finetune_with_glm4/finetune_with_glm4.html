@@ -1,0 +1,402 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Practice Case: Using GLM4-9B for Multi-Device Model Fine-Tuning &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Environment Variable Descriptions" href="../../env_variables.html" />
+    <link rel="prev" title="Practice Case: Interconnecting MindSpore Transformers with General Evaluation Tools" href="../model_test/model_test.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction/models.html">Models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contribution Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution/mindformers_contribution.html">MindSpore Transformers Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution/modelers_contribution.html">Modelers Contribution Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../faq/model_related.html">Model-Related FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../faq/feature_related.html">Feature-Related FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Static Graph Implementation (Deprecated)</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guide/index.html">Full-process Guide to Large Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/index.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced_development/index.html">Advanced Development</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Excellent Practice</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../docker-installation.html">Practical Case: Creating a Docker Image for MindSpore Transformers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../distilled/distilled.html">Practice Case of Using DeepSeek-R1 for Model Distillation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../convert_ckpt_to_megatron/convert_ckpt_to_megatron.html">Practical Case: Converting Model Weights to Megatron Model Weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model_test/model_test.html">Practice Case: Interconnecting MindSpore Transformers with General Evaluation Tools</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Practice Case: Using GLM4-9B for Multi-Device Model Fine-Tuning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#environment-setup">1. Environment Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dataset-preparations">2. Dataset Preparations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#multi-device-training">3. Multi-Device Training</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#weight-conversion">3.1 Weight Conversion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parallel-strategy-configuration-and-training-startup">3.2 Parallel Strategy Configuration and Training Startup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#weight-merging">3.3 Weight Merging</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#reverse-weight-conversion">3.4 Reverse Weight Conversion</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#inference-test">Inference Test</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../env_variables.html">Environment Variable Descriptions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Excellent Practice</a></li>
+      <li class="breadcrumb-item active">Practice Case: Using GLM4-9B for Multi-Device Model Fine-Tuning</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/static_graph/example/finetune_with_glm4/finetune_with_glm4.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">Deprecated</p>
+<p>This page belongs to the <strong>Static Graph (GRAPH_MODE) Implementation</strong> section and has been marked as deprecated. New features are primarily being developed in the “r2.0.0 Dynamic Graph Implementation” section. Please refer to the dynamic graph documentation first.</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="practice-case-using-glm4-9b-for-multi-device-model-fine-tuning">
+<h1>Practice Case: Using GLM4-9B for Multi-Device Model Fine-Tuning<a class="headerlink" href="#practice-case-using-glm4-9b-for-multi-device-model-fine-tuning" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_en/static_graph/example/finetune_with_glm4/finetune_with_glm4.md"><img alt="View Source on AtomGit" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source_en.svg" /></a></p>
+<p>This article is contributed by Killjoy, chen-xialei, fuyao-15989607593, laozhuang, and oacjiewen.</p>
+<p>This case uses the MindSpore framework and MindSpore Transformers LLM suite to guide users through fine-tuning the GLM4-9B model to improve its performance on custom tasks. It covers the entire process of environment configuration, data preparation, weight conversion, model training, weight merging, inversion, and inference testing. The following steps will help you understand how to use MindSpore Transformers to train a model.</p>
+<section id="environment-setup">
+<h2>1. Environment Setup<a class="headerlink" href="#environment-setup" title="Link to this heading"></a></h2>
+<p>Set up the environment by referring to <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/installation.html">MindSpore Transformers Installation Guidelines</a>.</p>
+</section>
+<section id="dataset-preparations">
+<h2>2. Dataset Preparations<a class="headerlink" href="#dataset-preparations" title="Link to this heading"></a></h2>
+<p>One of the input dataset formats supported by MindSpore Transformers is <code class="docutils literal notranslate"><span class="pre">MindRecord</span></code>. The following demonstrates how to convert the format of an original dataset. The original dataset can be either an open-source dataset (such as Alpaca) or a custom dataset. First, convert the dataset into the JSON format, and ensure that each line of data in the dataset is processed into a dialog format, that is, a question-answer pair between the user and the model. Then, use the script provided by MindSpore Transformers to convert the dataset into the MindRecord format. The following uses the <code class="docutils literal notranslate"><span class="pre">Alpaca</span></code> dataset as an example to demonstrate the processing procedure. The Alpaca dataset contains 52,000 instruction data records, which is suitable for instruction fine-tuning of pre-trained LLMs.</p>
+<ol class="arabic simple">
+<li><p>Download the <a class="reference external" href="https://www.modelscope.cn/datasets/AI-ModelScope/alpaca-gpt4-data-en/files">Alpaca dataset</a>.</p></li>
+<li><p>Open the <code class="docutils literal notranslate"><span class="pre">train.csv</span></code> file. You can see that the Alpaca dataset contains four attributes: <code class="docutils literal notranslate"><span class="pre">instruction</span></code>, <code class="docutils literal notranslate"><span class="pre">input</span></code>, <code class="docutils literal notranslate"><span class="pre">output</span></code>, and <code class="docutils literal notranslate"><span class="pre">text</span></code>. <code class="docutils literal notranslate"><span class="pre">text</span></code> is the explanation of the dataset and can be ignored.</p></li>
+<li><p>To convert the dataset into the format of dialogs between users and models, you can concatenate <code class="docutils literal notranslate"><span class="pre">instruction</span></code> and <code class="docutils literal notranslate"><span class="pre">input</span></code> as the user input, and use <code class="docutils literal notranslate"><span class="pre">output</span></code> as the model output. Set the dialog format to <code class="docutils literal notranslate"><span class="pre">chatml</span></code>, the dialog input side to <code class="docutils literal notranslate"><span class="pre">human</span></code>, and the outputs side to <code class="docutils literal notranslate"><span class="pre">gpt</span></code>.</p></li>
+</ol>
+<p>For example, the first line of the <code class="docutils literal notranslate"><span class="pre">Alpaca</span></code> dataset is as follows:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>&quot;instruction&quot;: &quot;Give three tips for staying healthy.&quot;
+&quot;input&quot;: &quot;&quot;
+&quot;output&quot;: &quot;1. Eat a balanced and nutritious diet...&quot;
+&quot;text&quot;: &quot;Below is an instruction that describes a task. Write a response...&quot;
+</pre></div>
+</div>
+<p>The processed dataset should be in the following format:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;chatml&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;conversations&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;from&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;human&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Give three tips for staying healthy.&quot;</span>
+<span class="w">            </span><span class="p">},</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;from&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;gpt&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1. Eat a balanced and nutritious diet...&quot;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">]</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="err">#</span><span class="w">  </span><span class="s2">&quot;Second data record...&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="err">...</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>After the dataset is processed, use the data processing script provided by MindSpore Transformers to generate a dataset in MindRecord format.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>mindformers/tools/dataset_preprocess/glm4/glm4_preprocess.py<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--input_glob<span class="w"> </span>/path/to/dataset<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--vocab_file<span class="w"> </span>/path/tokenizer.model<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--seq_length<span class="w"> </span><span class="m">8192</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--output_file<span class="w"> </span>/path/output_dataset.mindrecord
+</pre></div>
+</div>
+<p>Note that the <code class="docutils literal notranslate"><span class="pre">--seq_length</span></code> parameter must be adjusted based on the actual situation of the dataset to ensure that the value is greater than the length of all dialogs in the dataset.</p>
+</section>
+<section id="multi-device-training">
+<h2>3. Multi-Device Training<a class="headerlink" href="#multi-device-training" title="Link to this heading"></a></h2>
+<section id="weight-conversion">
+<h3>3.1 Weight Conversion<a class="headerlink" href="#weight-conversion" title="Link to this heading"></a></h3>
+<p>During multi-device training of MindSpore Transformers, you need to convert the weight to the weight representation format of MindSpore in advance. First, download the <a class="reference external" href="https://huggingface.co/zai-org/glm-4-9b-chat-hf">GLM4-9B model</a>. The downloaded files are as follows:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>- config.json
+- configuration.json
+- generation_config.json
+- model-00001-of-00004.safetensors
+- model-00002-of-00004.safetensors
+- model-00003-of-00004.safetensors
+- model-00004-of-00004.safetensors
+- model.safetensors.index.json
+- tokenizer.json
+- tokenizer_config.json
+</pre></div>
+</div>
+<p>The weight conversion script depends on torch. Before running the script, run the following command to install torch:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>torch&gt;<span class="o">=</span><span class="m">2</span>.10.0
+</pre></div>
+</div>
+<p>Then, convert the weight.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>convert_weight.py<span class="w"> </span>--model<span class="w"> </span>glm4<span class="w"> </span>--input_path<span class="w"> </span>HF_CKPT_PATH<span class="w"> </span>--output_path<span class="w"> </span>MS_NOT_CONCAT_CKPT_PATH<span class="w"> </span>--dtype<span class="w"> </span>bf16<span class="w"> </span>--config<span class="w"> </span>YAML_PATH
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">convert_weight.py</span></code> file is stored in the root directory of the <a class="reference external" href="https://atomgit.com/mindspore/mindformers">MindSpore Transformers repository</a>.</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--model</span></code>: Name of the model to be converted. Set this parameter to <code class="docutils literal notranslate"><span class="pre">glm4</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--input_path</span></code>: Path of the model weight to be converted. Set this parameter to the downloaded Hugging Face weight path of GLM4.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--output_path</span></code>: Path for storing the converted weights. Set this parameter as required.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--dtype</span></code>: Value type of the weights. You can view the <code class="docutils literal notranslate"><span class="pre">config</span></code> file of the downloaded model. The type must be the same as that of the Hugging Face weights.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--config</span></code>: Path of the parameter configuration file for weight conversion. You can adjust the parameter configuration file by referring to <code class="docutils literal notranslate"><span class="pre">mindformers/configs/glm4/finetune_glm4_9b.yaml</span></code>. Note that the <code class="docutils literal notranslate"><span class="pre">seq_length</span></code> attribute in the file must be the same as the length used during MindRecord conversion. Then, change the path to the adjusted path.</p></li>
+</ul>
+<p>After the weight conversion, the output is the CKPT file of the entire model weights. If an error related to <code class="docutils literal notranslate"><span class="pre">trust_remote_code</span></code> is displayed, set <code class="docutils literal notranslate"><span class="pre">trust_remote_code</span></code> to <code class="docutils literal notranslate"><span class="pre">True</span></code> as prompted.</p>
+</section>
+<section id="parallel-strategy-configuration-and-training-startup">
+<h3>3.2 Parallel Strategy Configuration and Training Startup<a class="headerlink" href="#parallel-strategy-configuration-and-training-startup" title="Link to this heading"></a></h3>
+<p>Start the first fine-tuning job.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bash<span class="w"> </span>scripts/msrun_launcher.sh<span class="w"> </span><span class="s2">&quot;run_mindformer.py \</span>
+<span class="s2"> --config configs/glm4/finetune_glm4_9b.yaml \</span>
+<span class="s2"> --load_checkpoint /path/to/ckpt \</span>
+<span class="s2"> --auto_trans_ckpt True \</span>
+<span class="s2"> --train_dataset /path/to/dataset \</span>
+<span class="s2"> --run_mode finetune&quot;</span><span class="w"> </span><span class="m">8</span>
+</pre></div>
+</div>
+<p>If <code class="docutils literal notranslate"><span class="pre">--auto_trans_ckpt</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, the weight is automatically split or merged based on <code class="docutils literal notranslate"><span class="pre">parallel</span> <span class="pre">config</span></code> in <code class="docutils literal notranslate"><span class="pre">finetune_glm4_9b.yaml</span></code>, and the weight folder <code class="docutils literal notranslate"><span class="pre">transformed_checkpoint</span></code> and distributed policy folder <code class="docutils literal notranslate"><span class="pre">strategy</span></code> are generated. The last <code class="docutils literal notranslate"><span class="pre">8</span></code> indicates 8-device training. If other number of devices is used, change the value accordingly.</p>
+<blockquote>
+<div><p>If automatic weight conversion is enabled (<code class="docutils literal notranslate"><span class="pre">auto_trans_ckpt</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>), the original <code class="docutils literal notranslate"><span class="pre">strategy</span></code> and <code class="docutils literal notranslate"><span class="pre">transformed_checkpoint</span></code> folders will be cleared, and the conversion result of the latest task will be saved. If necessary, save it to a custom folder.</p>
+</div></blockquote>
+<p>When resuming training from a checkpoint, you can add or modify the following parameters in the previous command:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>--load_checkpoint /path/to/last_checkpoint \
+--resume_training True \
+--auto_trans_ckpt False
+</pre></div>
+</div>
+<p>When distributed training starts, the training log is generated in the <code class="docutils literal notranslate"><span class="pre">/mindformers/output/msrun_log/</span></code> folder. You can open the <code class="docutils literal notranslate"><span class="pre">worker_0.log</span></code> file to check whether the training process is normal.</p>
+</section>
+<section id="weight-merging">
+<h3>3.3 Weight Merging<a class="headerlink" href="#weight-merging" title="Link to this heading"></a></h3>
+<p>As the weights are split during multi-device training, you need to run the following script to merge the weights after the training is complete:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>mindformers/tools/transform_ckpt.py<span class="w"> </span>--src_ckpt_strategy<span class="w"> </span>SRC_CKPT_STRATEGY<span class="w"> </span>--dst_ckpt_strategy<span class="w"> </span>None<span class="w"> </span>--src_ckpt_dir<span class="w"> </span>SRC_CKPT_DIR<span class="w"> </span>--dst_ckpt_dir<span class="w"> </span>DST_CKPT_DIR
+</pre></div>
+</div>
+<p>Some important parameters:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--src_ckpt_strategy</span></code>: path of the distributed policy file of the weights to be converted. (This file is generated during training.)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--src_ckpt_dir</span></code>: path of the weights to be converted. (This file is generated during training.)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--dst_ckpt_strategy</span></code>: path of the distributed policy file of the target weights. In this case, the merged weights are complete weights and do not have a distributed policy. Therefore, set this parameter to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--dst_ckpt_dir</span></code>: user-defined path for saving the target weights.</p></li>
+</ul>
+<p>For details about the parameters, see <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/ckpt.html">Ckpt Weights | MindSpore Transformers Documentation | MindSpore Community</a>.</p>
+</section>
+<section id="reverse-weight-conversion">
+<h3>3.4 Reverse Weight Conversion<a class="headerlink" href="#reverse-weight-conversion" title="Link to this heading"></a></h3>
+<p>The weight format used in the training process is the MindSpore version. If you need to deploy the model using an inference framework such as vLLM, you need to convert the weight format to the Hugging Face format. The essence of weight conversion is to make the weight dictionary one-to-one correspond to the Hugging Face model dictionary. Therefore, the official script <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/mindformers/models/glm2/convert_reversed.py">convert_reversed.py</a> is modified to implement the conversion of the weight format and the mapping between dictionary names. Only the saving part needs to be modified. First, analyze the code. The function to be modified is <code class="docutils literal notranslate"><span class="pre">convert_ms_to_pt</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;saving pt ckpt....&#39;</span><span class="p">)</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">pt_param</span><span class="p">,</span> <span class="n">output_path</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Convert finished, the output is saved to </span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This section describes the process of saving the original file model. Now, the function is modified to save the model in the Safetensors format.</p>
+<p>First, delete the preceding three lines and import the library for saving the model in the Safetensors format to the header file.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">safetensors.torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">save_file</span>
+</pre></div>
+</div>
+<p>A Safetensors file cannot be too large. Therefore, you need to set a value in advance to save the model in <code class="docutils literal notranslate"><span class="pre">split_num</span></code> parts. This parameter can be specified through the <code class="docutils literal notranslate"><span class="pre">--safetensor_split_num</span></code> parameter. The variable that stores all weights in the script is the dictionary <code class="docutils literal notranslate"><span class="pre">pt_param</span></code>. First, divide the dictionary into <code class="docutils literal notranslate"><span class="pre">split_num</span></code> parts.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">split_dict</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Divide the dictionary d evenly into n parts.</span>
+<span class="sd">    A list is returned, in which each element is a dictionary.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">items</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+    <span class="n">k</span><span class="p">,</span> <span class="n">m</span> <span class="o">=</span> <span class="nb">divmod</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">),</span> <span class="n">n</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="nb">dict</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="n">k</span> <span class="o">+</span> <span class="nb">min</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">m</span><span class="p">):(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">k</span> <span class="o">+</span> <span class="nb">min</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">m</span><span class="p">)])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+
+<span class="n">split_dicts</span> <span class="o">=</span> <span class="n">split_dict</span><span class="p">(</span><span class="n">pt_param</span><span class="p">,</span> <span class="n">split_num</span><span class="p">)</span> <span class="c1"># Split the weights of the entire model into multiple Safetensors files for saving.</span>
+</pre></div>
+</div>
+<p>When the model is converted to the Safetensors format, a <code class="docutils literal notranslate"><span class="pre">model.safetensors.index.json</span></code> file is required to record where the weights of each layer of the model are saved. Therefore, you need to record the following information when saving the weights:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">converted_st_map</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">()</span>
+<span class="n">converted_st_map</span><span class="p">[</span><span class="s2">&quot;weight_map&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">()</span>
+<span class="n">converted_st_map</span><span class="p">[</span><span class="s2">&quot;metadata&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">split_id</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">split_dicts</span><span class="p">)):</span>
+    <span class="n">saving_file_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;model-</span><span class="si">{</span><span class="n">split_id</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">:</span><span class="s2">05d</span><span class="si">}</span><span class="s2">-of-</span><span class="si">{</span><span class="n">split_num</span><span class="si">:</span><span class="s2">05d</span><span class="si">}</span><span class="s2">.safetensors&quot;</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;saving weights in split-</span><span class="si">{</span><span class="n">split_id</span><span class="w">  </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2"> to file </span><span class="si">{</span><span class="n">saving_file_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">split_dicts</span><span class="p">[</span><span class="n">split_id</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">ckpt_dict</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Processing checkpoints&quot;</span><span class="p">):</span>
+        <span class="n">converted_st_map</span><span class="p">[</span><span class="s2">&quot;weight_map&quot;</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">saving_file_name</span>
+        <span class="n">total_size</span> <span class="o">+=</span> <span class="n">get_torch_storage_size</span><span class="p">(</span><span class="n">split_dicts</span><span class="p">[</span><span class="n">split_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+    <span class="n">save_file</span><span class="p">(</span><span class="n">split_dicts</span><span class="p">[</span><span class="n">split_id</span><span class="p">],</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="n">saving_file_name</span><span class="p">))</span>
+
+<span class="n">converted_st_map</span><span class="p">[</span><span class="s2">&quot;metadata&quot;</span><span class="p">][</span><span class="s2">&quot;total_size&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">total_size</span>
+<span class="n">converted_model_index_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;model.safetensors.index.json&quot;</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">converted_model_index_file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">json_string</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">converted_st_map</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json_string</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Run the reverse conversion script. The converted weight file in the Safetensors format and a <code class="docutils literal notranslate"><span class="pre">model.safetensors.index.json</span></code> file have been saved in the directory. The following is an example of the directory (assuming that the weight file is split into 40 storage copies, that is, the value of <code class="docutils literal notranslate"><span class="pre">--safetensor_split_num</span></code> is <code class="docutils literal notranslate"><span class="pre">40</span></code>):</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>- model-00001-of-00040.safetensors
+- model-00002-of-00040.safetensors
+- model-00003-of-00040.safetensors
+...
+- model-00039-of-00040.safetensors
+- model-00040-of-00040.safetensors
+- model.safetensors.index.json
+</pre></div>
+</div>
+<p>In this case, you need to find the original repository of the model and copy the remaining files such as the tokenizer to the directory. The copied files in the directory are as follows:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>- model-00001-of-00040.safetensors
+- model-00002-of-00040.safetensors
+- model-00003-of-00040.safetensors
+...
+- model-00039-of-00040.safetensors
+- model-00040-of-00040.safetensors
+- model.safetensors.index.json
+- config.json
+- configuration_chatglm.py
+- generation_config.json
+- modeling_chatglm.py
+- tokenization_chatglm.py
+- tokenizer_config.json
+- tokenizer.model
+</pre></div>
+</div>
+</section>
+</section>
+<section id="inference-test">
+<h2>Inference Test<a class="headerlink" href="#inference-test" title="Link to this heading"></a></h2>
+<p>You can use the PyTorch framework to test the reversed weight on the NPU or GPU. The following is a simple example program of NPU + PyTorch. After installing related dependencies by referring to <a class="reference external" href="https://www.hiascend.com/document/detail/zh/Pytorch/710/index/index.html">Documentation</a>, run the program to test whether the reversed model weight can be properly loaded and whether inference can be performed.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoModelForCausalLM</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch_npu</span>  <span class="c1"># Import the PyTorch NPU adaptation library.</span>
+
+<span class="c1"># Load the model and tokenizer.</span>
+<span class="n">model_name</span> <span class="o">=</span> <span class="s2">&quot;/path/to/model&quot;</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;npu:0&quot;</span><span class="p">)</span>
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForCausalLM</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">half</span><span class="p">()</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="c1"># Set the model to evaluation mode.</span>
+<span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+<span class="c1"># Input texts.</span>
+<span class="n">input_text</span> <span class="o">=</span> <span class="s2">&quot;Future development of artificial intelligence&quot;</span>
+<span class="c1"># Encode the input.</span>
+<span class="n">input_ids</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">input_text</span><span class="p">,</span> <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span>
+        <span class="n">input_ids</span><span class="p">,</span>
+        <span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>  <span class="c1"># Maximum generation length.</span>
+        <span class="n">num_return_sequences</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>  <span class="c1"># Number of returned sequences.</span>
+        <span class="n">no_repeat_ngram_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>  <span class="c1"># Avoid repeated n-grams.</span>
+        <span class="c1"># early_stopping=True  # Stop in advance.</span>
+    <span class="p">)</span>
+
+<span class="c1"># Decode the output.</span>
+<span class="n">generated_text</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Generated text:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">generated_text</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Example of the running result:</p>
+<p><img alt="Execution result" src="../../../_images/execution_result.jpg" /></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../model_test/model_test.html" class="btn btn-neutral float-left" title="Practice Case: Interconnecting MindSpore Transformers with General Evaluation Tools" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../env_variables.html" class="btn btn-neutral float-right" title="Environment Variable Descriptions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

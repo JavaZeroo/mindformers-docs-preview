@@ -1,0 +1,322 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>预训练实践 &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="监督微调实践" href="supervised_fine_tuning.html" />
+    <link rel="prev" title="训练指南" href="llm_training.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">介绍</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/quick_start.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">模型支持库</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">安装</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">安装指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">功能特性</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/overview.html">功能特性概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/start_task.html">启动任务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/configuration.html">配置文件说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/logging.html">日志</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/dataset.html">数据集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/training_hyperparameters.html">训练超参数与优化器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/save_and_load_checkpoint.html">权重保存与加载</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/resume_training.html">断点续训</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/monitor.html">训练指标监控与 Profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/static_graph_features.html">静态图实现特性</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">环境变量</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../env_variables.html">环境变量说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">贡献指南</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers贡献指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">魔乐社区贡献指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">模型相关 FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">功能相关 FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">静态图实现（Deprecated）</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">大模型全流程指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="llm_training.html">训练指南</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">预训练实践</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mindspore-transformers">MindSpore Transformers 的预训练流程</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id3">1. 数据集准备</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">2. 配置文件准备</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id5">3. 启动训练任务</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id6">4. 模型保存</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id7">5. 故障恢复</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">基于 MindSpore Transformers 的预训练实践</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id9">数据集准备</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id10">数据预处理</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id11">执行预训练任务</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id12">单机训练</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id13">多机训练</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="supervised_fine_tuning.html">监督微调实践</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inference.html">推理指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deployment.html">服务化部署指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation.html">评测指南</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/index.html">功能特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_development/index.html">高阶开发</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">优秀实践</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">环境变量说明</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">大模型全流程指南</a></li>
+      <li class="breadcrumb-item active">预训练实践</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/guide/pre_training.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">已废弃（Deprecated）</p>
+<p>本页属于 <strong>静态图（GRAPH_MODE）实现</strong> 章节，已标记为废弃。新特性优先在「r2.0.0 动态图实现」章节演进，请优先查阅动态图相关文档。</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>预训练实践<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/static_graph/guide/pre_training.md"><img alt="查看源文件" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source.svg" /></a></p>
+<section id="id2">
+<h2>概述<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p>预训练是指在大规模无标注数据上训练模型，使其能够全面捕捉语言的广泛特性。通过预训练，模型可以学习到词汇、句法和语义等层面的知识，这些知识在下游任务中通过微调得到应用，从而优化特定任务的性能。MindSpore Transformers框架的预训练目标是帮助开发者快速、便捷地构建和训练基于Transformer架构的预训练模型。</p>
+</section>
+<section id="mindspore-transformers">
+<h2>MindSpore Transformers 的预训练流程<a class="headerlink" href="#mindspore-transformers" title="Link to this heading"></a></h2>
+<p>结合实际操作，预训练的基本流程可以分解为以下步骤：</p>
+<section id="id3">
+<h3>1. 数据集准备<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p>MindSpore Transformers 预训练阶段当前已支持<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/dataset.html#megatron%E6%95%B0%E6%8D%AE%E9%9B%86">Megatron 格式</a>和<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/dataset.html#mindrecord%E6%95%B0%E6%8D%AE%E9%9B%86">MindRecord格式</a>的数据集。用户可根据任务需求完成数据准备。</p>
+</section>
+<section id="id4">
+<h3>2. 配置文件准备<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p>预训练任务通过<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/configuration.html">配置文件</a>统一控制，用户可灵活调整<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/training_hyperparameters.html">模型训练超参数</a>。另外可以通过<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/parallel_training.html">分布式并行训练</a>、<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/memory_optimization.html">内存优化特性</a>以及<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/other_training_features.html">其它训练特性</a>对预训练性能进行调优。</p>
+</section>
+<section id="id5">
+<h3>3. 启动训练任务<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<p>MindSpore Transformers 提供<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/start_tasks.html">一键启动脚本</a>启动预训练任务。训练过程中可结合<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/logging.html">日志</a>与<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/monitor.html">可视化工具</a>监控训练情况。</p>
+</section>
+<section id="id6">
+<h3>4. 模型保存<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<p>在中间保存检查点或训练完成后，模型权重将保存至指定路径。当前支持保存为<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/ckpt.html">Ckpt 格式</a>或<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/safetensors.html">Safetensors 格式</a>，后续可以使用保存的权重进行续训或微调等。</p>
+</section>
+<section id="id7">
+<h3>5. 故障恢复<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<p>为应对训练中断等异常情况，MindSpore Transformers 具备临终保存、自动恢复等<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/high_availability.html">训练高可用</a>特性，并支持<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/resume_training.html">断点续训</a>，提升训练稳定性。</p>
+</section>
+</section>
+<section id="id8">
+<h2>基于 MindSpore Transformers 的预训练实践<a class="headerlink" href="#id8" title="Link to this heading"></a></h2>
+<p>MindSpore Transformers 目前已经支持业界主流大模型，本实践流程选择以 Qwen3-32B 展示单机训练和多机训练。更多训练示例与各场景下的推荐配置，请参阅 <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/introduction/models.html">模型库</a>。</p>
+<section id="id9">
+<h3>数据集准备<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
+<p>MindSpore Transformers 目前已经支持加载 Megatron 数据集，该数据集通常经过预处理，序列化为二进制格式（例如<code class="docutils literal notranslate"><span class="pre">.bin</span></code>或<code class="docutils literal notranslate"><span class="pre">.idx</span></code>文件），并配套特定索引机制，便于在分布式集群环境下高效并行加载与数据切分。</p>
+<ul class="simple">
+<li><p>数据集下载：<a class="reference external" href="https://dagshub.com/DagsHub/WIkiText-103/src/main/dataset/tokens">wikitext-103数据集</a></p></li>
+<li><p>分词模型下载：分词模型<a class="reference external" href="https://huggingface.co/Qwen/Qwen3-32B/blob/main/tokenizer.json">tokenizer.json</a></p></li>
+</ul>
+</section>
+<section id="id10">
+<h3>数据预处理<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
+<p>MindSpore Transformers 预训练阶段当前已支持<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/dataset.html#megatron%E6%95%B0%E6%8D%AE%E9%9B%86">Megatron格式的数据集</a>。用户可以参考<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/dataset.html">数据集</a>章节，使用 MindSpore 提供的工具将原始数据集转换为 Megatron 格式。</p>
+<p>制作Megatron格式数据集，需要经过两个步骤。首先将原始文本数据集转换为jsonl格式数据，然后使用MindSpore Transformers提供的脚本将jsonl格式数据转换为Megatron格式的.bin和.idx文件。</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">wiki.train.tokens</span></code> 转为 <code class="docutils literal notranslate"><span class="pre">jsonl</span></code>格式数据</p>
+<p>用户需要<strong>自行将<code class="docutils literal notranslate"><span class="pre">wiki.train.tokens</span></code>数据集处理成jsonl格式的文件</strong>。作为参考，<a class="reference external" href="https://gitee.com/mindspore/mindformers/issues/ICOKGY">社区issue</a>提供了一个转换方案，用户需要根据实际需求自行开发和验证转换逻辑。</p>
+<p>下面是jsonl格式文件的示例：</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;src&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;www.nvidia.com&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;text&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;The quick brown fox&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Eng&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;0&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;First Part&quot;</span><span class="p">}</span>
+<span class="p">{</span><span class="nt">&quot;src&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;The Internet&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;text&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;jumps over the lazy dog&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Eng&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;42&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Second Part&quot;</span><span class="p">}</span>
+<span class="err">...</span>
+</pre></div>
+</div>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">jsonl</span></code>格式数据 转为 <code class="docutils literal notranslate"><span class="pre">bin</span></code>格式数据</p>
+<p>MindSpore Transformers提供了数据预处理脚本<code class="docutils literal notranslate"><span class="pre">toolkit/data_preprocess/megatron/preprocess_indexed_dataset.py</span></code>用于将jsonl格式的原始文本语料转换成.bin或.idx文件。</p>
+<blockquote>
+<div><p>这里需要提前下载<a class="reference external" href="https://huggingface.co/Qwen/Qwen3-32B/blob/main/tokenizer.json">Qwen3-32B</a>模型的tokenizer文件。</p>
+</div></blockquote>
+<p>示例：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>toolkit/data_preprocess/megatron/preprocess_indexed_dataset.py<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--input<span class="w"> </span>/path/to/data.jsonl<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--output-prefix<span class="w"> </span>/path/to/wiki103-megatron<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--tokenizer-type<span class="w"> </span>HuggingFaceTokenizer<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--tokenizer-dir<span class="w"> </span>/path/to/Qwen3-32B<span class="w"> </span><span class="c1"># 其他规格的模型可以调整为对应的tokenizer路径</span>
+</pre></div>
+</div>
+<p>运行完成后会生成<code class="docutils literal notranslate"><span class="pre">/path/to/wiki103-megatron_text_document.bin</span></code>和<code class="docutils literal notranslate"><span class="pre">/path/to/wiki103-megatron_text_document.idx</span></code>文件。</p>
+<p>填写数据集路径时需要使用<code class="docutils literal notranslate"><span class="pre">/path/to/wiki103-megatron_text_document</span></code>，不需要带后缀名。</p>
+</li>
+</ul>
+</section>
+</section>
+<section id="id11">
+<h2>执行预训练任务<a class="headerlink" href="#id11" title="Link to this heading"></a></h2>
+<section id="id12">
+<h3>单机训练<a class="headerlink" href="#id12" title="Link to this heading"></a></h3>
+<p>通过指定模型路径和配置文件<a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/configs/qwen3/pretrain_qwen3_32b_4k.yaml">pretrain_qwen3_32b_4k.yaml</a>，修改配置后以msrun的方式启动<a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/run_mindformer.py">run_mindformer.py</a>脚本，进行8卡分布式训练。</p>
+<p>仓上提供的配置为32B模型，参数量较大，无法直接在单机环境启动预训练。本例中缩减模型规模至0.6B，以演示单机训练。修改配置文件中的如下参数，其余参数保持不变：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># model_config</span>
+<span class="nt">model</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">model_config</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">hidden_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1024</span>
+<span class="w">    </span><span class="nt">num_attention_heads</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">16</span>
+<span class="w">    </span><span class="nt">num_hidden_layers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">28</span>
+</pre></div>
+</div>
+<p>启动命令如下：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span><span class="nv">$MINDFORMERS_HOME</span>
+bash<span class="w"> </span>scripts/msrun_launcher.sh<span class="w"> </span><span class="s2">&quot;run_mindformer.py \</span>
+<span class="s2">--config configs/qwen3/pretrain_qwen3_32b_4k.yaml \</span>
+<span class="s2">--parallel_config.data_parallel 1 \</span>
+<span class="s2">--parallel_config.model_parallel 2 \</span>
+<span class="s2">--parallel_config.pipeline_stage 4 \</span>
+<span class="s2">--parallel_config.micro_batch_num 4&quot;</span>
+</pre></div>
+</div>
+<p>其中：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">config</span></code>：模型的配置文件，文件在MindSpore Transformers代码仓中config目录下。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">parallel_config.data_parallel</span></code>：设置数据并行数。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">parallel_config.model_parallel</span></code>：设置模型并行数。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">parallel_config.pipeline_stage</span></code>：设置流水线并行数。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">parallel_config.micro_batch_num</span></code>：设置流水线并行的微批次大小，在<code class="docutils literal notranslate"><span class="pre">parallel_config.pipeline_stage</span></code>大于1时，应满足<code class="docutils literal notranslate"><span class="pre">parallel_config.micro_batch_num</span></code> &gt;= <code class="docutils literal notranslate"><span class="pre">parallel_config.pipeline_stage</span></code>。</p></li>
+</ul>
+<p>启动详细介绍详见<a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/configs/qwen3/README.md#3-%E5%90%AF%E5%8A%A8%E9%A2%84%E8%AE%AD%E7%BB%83%E4%BB%BB%E5%8A%A1">启动预训练任务</a>。</p>
+<p>任务执行完成后，在 mindformers/output 目录下，会生成 checkpoint 文件夹，同时模型文件（<code class="docutils literal notranslate"><span class="pre">.safetensors</span></code>）会保存在该文件夹下。</p>
+</section>
+<section id="id13">
+<h3>多机训练<a class="headerlink" href="#id13" title="Link to this heading"></a></h3>
+<p>如果服务器资源充足，可以参考如下方式拉起多台Atlas 800T A2（64G）训练。</p>
+<p>在每台服务器上执行如下命令。设置<code class="docutils literal notranslate"><span class="pre">master_ip</span></code>为主节点IP地址，即<code class="docutils literal notranslate"><span class="pre">Rank</span> <span class="pre">0</span></code>服务器的IP；<code class="docutils literal notranslate"><span class="pre">node_rank</span></code>为每个节点的Rank序号，从<code class="docutils literal notranslate"><span class="pre">0</span></code>到<code class="docutils literal notranslate"><span class="pre">1023</span></code>。</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">master_ip</span><span class="o">=</span><span class="m">192</span>.168.1.1
+<span class="nv">node_rank</span><span class="o">=</span><span class="m">0</span>
+<span class="nv">port</span><span class="o">=</span><span class="m">50001</span>
+
+<span class="nb">cd</span><span class="w"> </span><span class="nv">$MINDFORMERS_HOME</span>
+bash<span class="w"> </span>scripts/msrun_launcher.sh<span class="w"> </span><span class="s2">&quot;run_mindformer.py \</span>
+<span class="s2">--config configs/qwen3/pretrain_qwen3_32b_4k.yaml&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="m">16</span><span class="w"> </span><span class="m">8</span><span class="w"> </span><span class="nv">$master_ip</span><span class="w"> </span><span class="nv">$port</span><span class="w"> </span><span class="nv">$node_rank</span><span class="w"> </span>output/msrun_log<span class="w"> </span>False<span class="w"> </span><span class="m">7200</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>此处样例代码假设主节点为<code class="docutils literal notranslate"><span class="pre">192.168.1.1</span></code>、当前Rank序号为<code class="docutils literal notranslate"><span class="pre">0</span></code>。实际执行时，请将<code class="docutils literal notranslate"><span class="pre">master_ip</span></code>设置为实际的主节点IP地址；将<code class="docutils literal notranslate"><span class="pre">node_rank</span></code>设置为当前节点的Rank序号。</p>
+</div></blockquote>
+<p><strong>注意</strong>：在多机分布式训练的过程中，可能会遇到一些性能问题。为了确保训练过程的高效性和稳定性，建议参考<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/advanced_development/performance_optimization.html">大模型性能调优指南</a>，进行必要的性能优化和调整。</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="llm_training.html" class="btn btn-neutral float-left" title="训练指南" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="supervised_fine_tuning.html" class="btn btn-neutral float-right" title="监督微调实践" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

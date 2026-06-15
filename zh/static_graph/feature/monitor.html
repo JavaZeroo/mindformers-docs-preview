@@ -1,0 +1,709 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>训练指标监控 &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="断点续训" href="resume_training.html" />
+    <link rel="prev" title="训练超参数" href="training_hyperparameters.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">介绍</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/quick_start.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">模型支持库</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">安装</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">安装指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">功能特性</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/overview.html">功能特性概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/start_task.html">启动任务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/configuration.html">配置文件说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/logging.html">日志</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/dataset.html">数据集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/training_hyperparameters.html">训练超参数与优化器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/save_and_load_checkpoint.html">权重保存与加载</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/resume_training.html">断点续训</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/monitor.html">训练指标监控与 Profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/static_graph_features.html">静态图实现特性</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">环境变量</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../env_variables.html">环境变量说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">贡献指南</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers贡献指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">魔乐社区贡献指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">模型相关 FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">功能相关 FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">静态图实现（Deprecated）</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">大模型全流程指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">功能特性</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">功能特性概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="start_tasks.html">启动任务</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ckpt.html">Ckpt权重</a></li>
+<li class="toctree-l2"><a class="reference internal" href="safetensors.html">Safetensors权重</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">配置文件说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="load_huggingface_config.html">加载 Hugging Face 模型配置</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html">日志</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tokenizer.html">使用Tokenizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset.html">数据集</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training_hyperparameters.html">训练超参数</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">训练指标监控</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">配置说明</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#yaml"><code class="docutils literal notranslate"><span class="pre">yaml</span></code>文件配置样例</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">专家负载监控</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">查看训练数据</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id5">指标可视化说明</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id7">文本数据可视化说明</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training.html">断点续训</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoint_saving_and_loading.html">checkpoint保存和加载</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training2.0.html">断点续训2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l2"><a class="reference internal" href="high_availability.html">训练高可用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skip_data_and_ckpt_health_monitor.html">数据跳过和健康监测</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pma_fused_checkpoint.html">Pre-trained Model Average 权重合并</a></li>
+<li class="toctree-l2"><a class="reference internal" href="other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantization.html">量化</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_development/index.html">高阶开发</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">优秀实践</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">环境变量说明</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">功能特性</a></li>
+      <li class="breadcrumb-item active">训练指标监控</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/feature/monitor.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">已废弃（Deprecated）</p>
+<p>本页属于 <strong>静态图（GRAPH_MODE）实现</strong> 章节，已标记为废弃。新特性优先在「r2.0.0 动态图实现」章节演进，请优先查阅动态图相关文档。</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>训练指标监控<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/static_graph/feature/monitor.md"><img alt="查看源文件" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source.svg" /></a></p>
+<p>MindSpore Transformers 支持 TensorBoard 作为可视化工具，用于监控和分析训练过程中的各种指标和信息。TensorBoard 是一个独立的可视化库，需要用户手动安装，它提供了一种交互式的方式来查看训练中的损失、精度、学习率、梯度分布等多种内容。用户在训练<code class="docutils literal notranslate"><span class="pre">yaml</span></code>文件中配置 TensorBoard 后，在大模型训练过程中会实时生成并更新事件文件，可以通过命令查看训练数据。</p>
+<section id="id2">
+<h2>配置说明<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p>在训练<code class="docutils literal notranslate"><span class="pre">yaml</span></code>文件中配置”monitor_config”、”tensorboard”和”callbacks”关键字，训练中会在配置的保存地址下保存tensorboard事件文件。
+配置示例如下：</p>
+<section id="yaml">
+<h3><code class="docutils literal notranslate"><span class="pre">yaml</span></code>文件配置样例<a class="headerlink" href="#yaml" title="Link to this heading"></a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">seed</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="nt">output_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;./output&#39;</span>
+
+<span class="nt">monitor_config</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">monitor_on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">    </span><span class="nt">dump_path</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;./dump&#39;</span>
+<span class="w">    </span><span class="nt">target</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;layers.0.&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;layers.1.&#39;</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="c1"># 只监控第一、二层的参数</span>
+<span class="w">    </span><span class="nt">invert</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">    </span><span class="nt">step_interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">    </span><span class="nt">local_loss_format</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;log&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;tensorboard&#39;</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">device_local_loss_format</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;log&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;tensorboard&#39;</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">local_norm_format</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;log&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;tensorboard&#39;</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">device_local_norm_format</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;log&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;tensorboard&#39;</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">optimizer_state_format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="w">    </span><span class="nt">weight_state_format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="w">    </span><span class="nt">throughput_baseline</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="w">    </span><span class="nt">print_struct</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">    </span><span class="nt">check_for_global_norm</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">    </span><span class="nt">global_norm_spike_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0</span>
+<span class="w">    </span><span class="nt">global_norm_spike_count_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+
+<span class="nt">tensorboard</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">tensorboard_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;worker/tensorboard&#39;</span>
+<span class="w">    </span><span class="nt">tensorboard_queue_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="w">    </span><span class="nt">log_loss_scale_to_tensorboard</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">    </span><span class="nt">log_timers_to_tensorboard</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+
+<span class="nt">callbacks</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MFLossMonitor</span>
+<span class="w">      </span><span class="nt">per_print_times</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>monitor_config字段参数名称</p></th>
+<th class="head"><p>说明</p></th>
+<th class="head"><p>类型</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>monitor_config.monitor_on</p></td>
+<td><p>设置是否开启监控。默认为<code class="docutils literal notranslate"><span class="pre">False</span></code>，此时以下所有参数不生效</p></td>
+<td><p>bool</p></td>
+</tr>
+<tr class="row-odd"><td><p>monitor_config.dump_path</p></td>
+<td><p>设置训练过程中<code class="docutils literal notranslate"><span class="pre">local_norm</span></code>、<code class="docutils literal notranslate"><span class="pre">device_local_norm</span></code>、<code class="docutils literal notranslate"><span class="pre">local_loss</span></code>、<code class="docutils literal notranslate"><span class="pre">device_local_loss</span></code>指标文件的保存路径。未设置或设置为<code class="docutils literal notranslate"><span class="pre">null</span></code>时取默认值’./dump’</p></td>
+<td><p>str</p></td>
+</tr>
+<tr class="row-even"><td><p>monitor_config.target</p></td>
+<td><p>设置指标<code class="docutils literal notranslate"><span class="pre">优化器状态</span></code>和<code class="docutils literal notranslate"><span class="pre">local_norm</span></code>所监控的目标参数的名称（片段），可为正则表达式。未设置或设置为<code class="docutils literal notranslate"><span class="pre">null</span></code>时取默认值[‘.*’]，即指定所有参数</p></td>
+<td><p>list[str]</p></td>
+</tr>
+<tr class="row-odd"><td><p>monitor_config.invert</p></td>
+<td><p>设置反选<code class="docutils literal notranslate"><span class="pre">monitor_config.target</span></code>所指定的参数。默认为<code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+<td><p>bool</p></td>
+</tr>
+<tr class="row-even"><td><p>monitor_config.step_interval</p></td>
+<td><p>设置记录指标的频率。默认为1，即每个step记录一次</p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-odd"><td><p>monitor_config.local_loss_format</p></td>
+<td><p>设置指标<code class="docutils literal notranslate"><span class="pre">local_loss</span></code>的记录形式</p></td>
+<td><p>str或list[str]</p></td>
+</tr>
+<tr class="row-even"><td><p>monitor_config.device_local_loss_format</p></td>
+<td><p>设置指标<code class="docutils literal notranslate"><span class="pre">device_local_loss</span></code>的记录形式</p></td>
+<td><p>str或list[str]</p></td>
+</tr>
+<tr class="row-odd"><td><p>monitor_config.local_norm_format</p></td>
+<td><p>设置指标<code class="docutils literal notranslate"><span class="pre">local_norm</span></code>的记录形式</p></td>
+<td><p>str或list[str]</p></td>
+</tr>
+<tr class="row-even"><td><p>monitor_config.device_local_norm_format</p></td>
+<td><p>设置指标<code class="docutils literal notranslate"><span class="pre">device_local_norm</span></code>的记录形式</p></td>
+<td><p>str或list[str]</p></td>
+</tr>
+<tr class="row-odd"><td><p>monitor_config.optimizer_state_format</p></td>
+<td><p>设置指标<code class="docutils literal notranslate"><span class="pre">optimizer_state</span></code>的记录形式</p></td>
+<td><p>str或list[str]</p></td>
+</tr>
+<tr class="row-even"><td><p>monitor_config.weight_state_format</p></td>
+<td><p>设置指标<code class="docutils literal notranslate"><span class="pre">权重L2-norm</span></code>的记录形式</p></td>
+<td><p>str或list[str]</p></td>
+</tr>
+<tr class="row-odd"><td><p>monitor_config.throughput_baseline</p></td>
+<td><p>设置指标<code class="docutils literal notranslate"><span class="pre">吞吐量线性度</span></code>的基线值，需要为正数。会同时写入到 TensorBoard 和日志。未设置时默认为<code class="docutils literal notranslate"><span class="pre">null</span></code>，表示不监控该指标</p></td>
+<td><p>int或float</p></td>
+</tr>
+<tr class="row-even"><td><p>monitor_config.print_struct</p></td>
+<td><p>设置是否打印模型的全部可训练参数名。若为<code class="docutils literal notranslate"><span class="pre">True</span></code>，则会在第一个step开始时打印所有可训练参数的名称，并在step结束后退出训练。默认为<code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+<td><p>bool</p></td>
+</tr>
+<tr class="row-odd"><td><p>monitor_config.check_for_global_norm</p></td>
+<td><p>设置是否开启指标<code class="docutils literal notranslate"><span class="pre">global</span> <span class="pre">norm</span></code>的异常监测。默认为<code class="docutils literal notranslate"><span class="pre">False</span></code>。详情请见 <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/skip_data_and_ckpt_health_monitor.html">数据跳过和健康监测</a> 和 <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/high_availability.html#%E6%95%85%E9%9A%9C%E5%BF%AB%E9%80%9F%E6%81%A2%E5%A4%8D">故障快速恢复</a></p></td>
+<td><p>bool</p></td>
+</tr>
+<tr class="row-even"><td><p>monitor_config.global_norm_spike_threshold</p></td>
+<td><p>设置指标<code class="docutils literal notranslate"><span class="pre">global</span> <span class="pre">norm</span></code>的相对阈值，大于该值即判定为异常。默认值为<code class="docutils literal notranslate"><span class="pre">1.0</span></code>。详情请见 <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/skip_data_and_ckpt_health_monitor.html">数据跳过和健康监测</a> 和 <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/high_availability.html#%E6%95%85%E9%9A%9C%E5%BF%AB%E9%80%9F%E6%81%A2%E5%A4%8D">故障快速恢复</a></p></td>
+<td><p>float</p></td>
+</tr>
+<tr class="row-odd"><td><p>monitor_config.global_norm_spike_count_threshold</p></td>
+<td><p>设置连续异常指标<code class="docutils literal notranslate"><span class="pre">global</span> <span class="pre">norm</span></code>累计的次数，当次数达到该阈值则触发异常中断，终止训练。默认值为<code class="docutils literal notranslate"><span class="pre">10</span></code>。详情请见 <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/skip_data_and_ckpt_health_monitor.html">数据跳过和健康监测</a> 和 <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/high_availability.html#%E6%95%85%E9%9A%9C%E5%BF%AB%E9%80%9F%E6%81%A2%E5%A4%8D">故障快速恢复</a></p></td>
+<td><p>int</p></td>
+</tr>
+</tbody>
+</table>
+<p>上述 xxx_format 形式的参数的可选值为字符串’tensorboard’和’log’（分别表示写入 TensorBoard 和写入日志），或由两者组成的列表，或<code class="docutils literal notranslate"><span class="pre">null</span></code>。未设置时均默认为<code class="docutils literal notranslate"><span class="pre">null</span></code>，表示不监控对应指标。</p>
+<p><strong>注意</strong>：当前开启对<code class="docutils literal notranslate"><span class="pre">优化器状态</span></code>和<code class="docutils literal notranslate"><span class="pre">权重L2</span> <span class="pre">norm</span></code>指标的监控时会极大增加训练进程的耗时，请根据需要谨慎选择。<code class="docutils literal notranslate"><span class="pre">monitor_config.dump_path</span></code>路径下对应的”rank_x”目录将被清空，请确保所设置路径下没有需要保留的文件。</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>tensorboard字段参数名称</p></th>
+<th class="head"><p>说明</p></th>
+<th class="head"><p>类型</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>tensorboard.tensorboard_dir</p></td>
+<td><p>设置 TensorBoard 事件文件的保存路径</p></td>
+<td><p>str</p></td>
+</tr>
+<tr class="row-odd"><td><p>tensorboard.tensorboard_queue_size</p></td>
+<td><p>设置采集队列的最大缓存值，超过该值便会写入事件文件，默认值为10</p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-even"><td><p>tensorboard.log_loss_scale_to_tensorboard</p></td>
+<td><p>设置是否将 loss scale 信息记录到事件文件，默认为<code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+<td><p>bool</p></td>
+</tr>
+<tr class="row-odd"><td><p>tensorboard.log_timers_to_tensorboard</p></td>
+<td><p>设置是否将计时器信息记录到事件文件，计时器信息包含当前训练步骤（或迭代）的时长以及吞吐量，默认为<code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+<td><p>bool</p></td>
+</tr>
+<tr class="row-even"><td><p>tensorboard.log_expert_load_to_tensorboard</p></td>
+<td><p>设置是否将专家负载记录到事件文件（见<a class="reference internal" href="#id3">专家负载监控</a>小节），默认为<code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+<td><p>bool</p></td>
+</tr>
+</tbody>
+</table>
+<p>需要注意的是，在没有<code class="docutils literal notranslate"><span class="pre">tensorboard</span></code>配置时，<code class="docutils literal notranslate"><span class="pre">monitor_config</span></code>在xxx_format中设置的”tensorboard”将被替换为”log”，即从写入tensorboard事件文件改为在日志中进行相应信息的打印。</p>
+</section>
+<section id="id3">
+<h3>专家负载监控<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p>专家负载均衡和监控功能通过回调函数TopkBiasBalanceCallback实现，目前仅支持mcore接口Deepseek-V3模型。用户需要手动在训练<code class="docutils literal notranslate"><span class="pre">yaml</span></code>文件中对”model.model_config”、”tensorboard”和”callbacks”关键字进行补充配置：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">model</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">model_config</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">moe_router_enable_expert_bias</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">        </span><span class="nt">moe_router_bias_update_rate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.001</span><span class="w">              </span><span class="c1"># 0.001为Deepseek-V3官方开源配置</span>
+
+<span class="nt">tensorboard</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">log_expert_load_to_tensorboard</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+
+<span class="nt">callbacks</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TopkBiasBalanceCallback</span>
+</pre></div>
+</div>
+<p><strong>注意</strong>：若此前没有指定<code class="docutils literal notranslate"><span class="pre">tensorboard.tensorboard_dir</span></code>，则仍然需要对其进行设置。</p>
+</section>
+</section>
+<section id="id4">
+<h2>查看训练数据<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<p>进行上述配置后，训练期间将会在路径 <code class="docutils literal notranslate"><span class="pre">./worker/tensorboard/rank_{id}</span></code> 下保存每张卡的事件文件，其中 <code class="docutils literal notranslate"><span class="pre">{id}</span></code> 为每张卡对应的rank号。事件文件以 <code class="docutils literal notranslate"><span class="pre">events.*</span></code> 命名。文件中包含 <code class="docutils literal notranslate"><span class="pre">scalars</span></code> 和 <code class="docutils literal notranslate"><span class="pre">text</span></code> 数据，其中 <code class="docutils literal notranslate"><span class="pre">scalars</span></code> 为训练过程中关键指标的标量，如学习率、损失等； <code class="docutils literal notranslate"><span class="pre">text</span></code> 为训练任务所有配置的文本数据，如并行配置、数据集配置等。此外，根据具体配置，部分指标将在日志中进行展示。</p>
+<p>使用以下命令可以启动 TensorBoard Web 可视化服务：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tensorboard<span class="w"> </span>--logdir<span class="o">=</span>./worker/tensorboard/<span class="w"> </span>--host<span class="o">=</span><span class="m">0</span>.0.0.0<span class="w"> </span>--port<span class="o">=</span><span class="m">6006</span>
+</pre></div>
+</div>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>参数名称</p></th>
+<th class="head"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>logdir</p></td>
+<td><p>TensorBoard保存事件文件的文件夹路径</p></td>
+</tr>
+<tr class="row-odd"><td><p>host</p></td>
+<td><p>默认是 127.0.0.1，表示只允许本机访问；设置为 0.0.0.0 可以允许外部设备访问，请注意信息安全</p></td>
+</tr>
+<tr class="row-even"><td><p>port</p></td>
+<td><p>设置服务监听的端口，默认是 6006</p></td>
+</tr>
+</tbody>
+</table>
+<p>输入样例中的命令后会显示：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>TensorBoard<span class="w"> </span><span class="m">2</span>.18.0<span class="w"> </span>at<span class="w"> </span>http://0.0.0.0:6006/<span class="w"> </span><span class="o">(</span>Press<span class="w"> </span>CTRL+C<span class="w"> </span>to<span class="w"> </span>quit<span class="o">)</span>
+</pre></div>
+</div>
+<p>其中 <code class="docutils literal notranslate"><span class="pre">2.18.0</span></code> 表示 TensorBoard 当前安装的版本号（推荐版本为 <code class="docutils literal notranslate"><span class="pre">2.18.0</span></code> ）， <code class="docutils literal notranslate"><span class="pre">0.0.0.0</span></code> 和 <code class="docutils literal notranslate"><span class="pre">6006</span></code> 分别对应输入的 <code class="docutils literal notranslate"><span class="pre">--host</span></code> 和 <code class="docutils literal notranslate"><span class="pre">--port</span></code> ，之后可以在本地PC的浏览器中访问 <code class="docutils literal notranslate"><span class="pre">服务器公共ip:端口号</span></code> 查看可视化页面，例如服务器的公共IP为 <code class="docutils literal notranslate"><span class="pre">192.168.1.1</span></code> ，则访问 <code class="docutils literal notranslate"><span class="pre">192.168.1.1:6006</span></code> 。</p>
+<section id="id5">
+<h3>指标可视化说明<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<p>回调函数<code class="docutils literal notranslate"><span class="pre">MFLossMonitor</span></code>、<code class="docutils literal notranslate"><span class="pre">TrainingStateMonitor</span></code>和<code class="docutils literal notranslate"><span class="pre">TopkBiasBalanceCallback</span></code>将分别对不同的标量指标进行监控。其中<code class="docutils literal notranslate"><span class="pre">TrainingStateMonitor</span></code>不需要用户在配置文件中设置，会根据monitor_config自动进行添加。</p>
+<section id="mflossmonitor">
+<h4>MFLossMonitor监控指标<a class="headerlink" href="#mflossmonitor" title="Link to this heading"></a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">MFLossMonitor</span></code>监控的指标名称和说明如下：</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>标量名</p></th>
+<th class="head"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>learning-rate</p></td>
+<td><p>学习率</p></td>
+</tr>
+<tr class="row-odd"><td><p>batch-size</p></td>
+<td><p>批次大小</p></td>
+</tr>
+<tr class="row-even"><td><p>loss</p></td>
+<td><p>损失</p></td>
+</tr>
+<tr class="row-odd"><td><p>loss-scale</p></td>
+<td><p>损失缩放因子，记录需要设置<code class="docutils literal notranslate"><span class="pre">log_loss_scale_to_tensorboard</span></code>为<code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>grad-norm</p></td>
+<td><p>梯度范数</p></td>
+</tr>
+<tr class="row-odd"><td><p>iteration-time</p></td>
+<td><p>训练迭代所需的时间，记录需要设置<code class="docutils literal notranslate"><span class="pre">log_timers_to_tensorboard</span></code>为<code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>throughput</p></td>
+<td><p>数据吞吐量，记录需要设置<code class="docutils literal notranslate"><span class="pre">log_timers_to_tensorboard</span></code>为<code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>model-flops-throughput-per-npu</p></td>
+<td><p>模型算力吞吐量，单位为TFLOPS/npu（万亿次浮点数运算每秒每卡）</p></td>
+</tr>
+<tr class="row-even"><td><p>B-samples-per-day</p></td>
+<td><p>集群数据吞吐量，单位为B samples/day（十亿样本每天），记录需要设置<code class="docutils literal notranslate"><span class="pre">log_timers_to_tensorboard</span></code>为<code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p>在 TensorBoard 的 SCALARS 页面中，上述指标（假设名为 <code class="docutils literal notranslate"><span class="pre">scalar_name</span></code>）除了最后两个，其他都存在 <code class="docutils literal notranslate"><span class="pre">scalar_name</span></code> 和 <code class="docutils literal notranslate"><span class="pre">scalar_name-vs-samples</span></code> 两个下拉标签页。其中 <code class="docutils literal notranslate"><span class="pre">scalar_name</span></code> 下展示了该标量随训练迭代步数进行变化的折线图； <code class="docutils literal notranslate"><span class="pre">scalar_name-vs-samples</span></code> 下展示了该标量随样本数进行变化的折线图。如下图所示为学习率<code class="docutils literal notranslate"><span class="pre">learning-rate</span></code>的曲线图示例：</p>
+<p><img alt="/tensorboard_scalar" src="../../_images/tensorboard_scalar.png" /></p>
+</section>
+<section id="trainingstatemonitor">
+<h4>TrainingStateMonitor监控指标<a class="headerlink" href="#trainingstatemonitor" title="Link to this heading"></a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">TrainingStateMonitor</span></code>监控的指标名称和说明如下：</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>标量名</p></th>
+<th class="head"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>local_norm</p></td>
+<td><p>单卡上各参数的梯度范数，记录需要设置<code class="docutils literal notranslate"><span class="pre">local_norm_format</span></code>非null</p></td>
+</tr>
+<tr class="row-odd"><td><p>device_local_norm</p></td>
+<td><p>单卡上的总梯度范数，记录需要设置<code class="docutils literal notranslate"><span class="pre">device_local_norm_format</span></code>非null</p></td>
+</tr>
+<tr class="row-even"><td><p>local_loss</p></td>
+<td><p>单卡上的局部损失，记录需要设置<code class="docutils literal notranslate"><span class="pre">local_loss_format</span></code>非null</p></td>
+</tr>
+<tr class="row-odd"><td><p>device_accum_local_loss</p></td>
+<td><p>单卡上的总局部损失，记录需要设置<code class="docutils literal notranslate"><span class="pre">device_local_loss_format</span></code>非null</p></td>
+</tr>
+<tr class="row-even"><td><p>adam_m_norm</p></td>
+<td><p>优化器一阶矩估计各参数的范数，记录需要设置<code class="docutils literal notranslate"><span class="pre">optimizer_state_format</span></code>非null</p></td>
+</tr>
+<tr class="row-odd"><td><p>adam_v_norm</p></td>
+<td><p>优化器二阶矩估计各参数的范数，记录需要设置<code class="docutils literal notranslate"><span class="pre">optimizer_state_format</span></code>非null</p></td>
+</tr>
+<tr class="row-even"><td><p>weight_norm</p></td>
+<td><p>权重L2范数，记录需要设置<code class="docutils literal notranslate"><span class="pre">weight_state_format</span></code>非null</p></td>
+</tr>
+<tr class="row-odd"><td><p>throughput_linearity</p></td>
+<td><p>数据吞吐线性度，记录需要设置<code class="docutils literal notranslate"><span class="pre">throughput_baseline</span></code>非null</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>注意</strong>，对于<code class="docutils literal notranslate"><span class="pre">local_loss</span></code>指标和<code class="docutils literal notranslate"><span class="pre">device_accum_local_loss</span></code>指标：</p>
+<ol class="arabic simple">
+<li><p>实际写入日志或tensorboard的指标名会添加标签（例如<code class="docutils literal notranslate"><span class="pre">local_lm_loss</span></code>、<code class="docutils literal notranslate"><span class="pre">device_accum_local_lm_loss</span></code>）以表示损失的来源。当前存在两种可能的标签<code class="docutils literal notranslate"><span class="pre">lm</span></code>和<code class="docutils literal notranslate"><span class="pre">mtp</span></code>，其中<code class="docutils literal notranslate"><span class="pre">lm</span></code>表示常规的模型交叉熵损失，<code class="docutils literal notranslate"><span class="pre">mtp</span></code>表示模型MultiTokenPrediction层的损失。</p></li>
+<li><p>在流水线并行或梯度累积场景，<code class="docutils literal notranslate"><span class="pre">local_loss</span></code>指标在写入tensorboard时会记录单卡上所有micro batch的平均局部损失，在写入日志时则会记录每个micro batch的局部损失（指标名带前缀”micro”，例如<code class="docutils literal notranslate"><span class="pre">micro_local_lm_loss</span></code>）；而上述场景以外时，<code class="docutils literal notranslate"><span class="pre">local_loss</span></code>与<code class="docutils literal notranslate"><span class="pre">device_accum_local_loss</span></code>等价。</p></li>
+</ol>
+</section>
+<section id="topkbiasbalancecallback">
+<h4>TopkBiasBalanceCallback监控指标<a class="headerlink" href="#topkbiasbalancecallback" title="Link to this heading"></a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">TopkBiasBalanceCallback</span></code>将对MoE模型的专家负载情况进行监控和动态均衡（相关配置见<a class="reference internal" href="#id3">专家负载监控</a>小节）。动态均衡功能本文不涉及，监控的指标名称和说明如下：</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>标量名</p></th>
+<th class="head"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>expert_load</p></td>
+<td><p>所有MoE层各专家的训练负载占比，记录需要设置<code class="docutils literal notranslate"><span class="pre">log_expert_load_to_tensorboard</span></code>为True</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id6">
+<h4>指标可视化样例<a class="headerlink" href="#id6" title="Link to this heading"></a></h4>
+<p>根据具体的设置，上述指标将在 TensorBoard 或日志中进行展示，如下：</p>
+<p><strong>日志效果示例</strong></p>
+<p><img alt="/TrainingStateMonitor_log" src="../../_images/TrainingStateMonitor_log.png" /></p>
+<p><strong>tensorboard可视化效果示例</strong></p>
+<p>adam_m_norm：</p>
+<p><img alt="/adam_m_norm" src="../../_images/adam_m_norm.png" /></p>
+<p>local_loss与local_norm：</p>
+<p><img alt="/local_loss&amp;local_norm" src="../../_images/local_loss%26local_norm.png" /></p>
+<p>expert_load（图中为3个MoE层的各自16个专家的负载变化曲线）：</p>
+<p><img alt="/expert_load" src="../../_images/expert_load.png" /></p>
+</section>
+</section>
+<section id="id7">
+<h3>文本数据可视化说明<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<p>在 TEXT 页面中，每个训练配置存在一个标签页，其中记录了该配置的值。如下图所示：</p>
+<p><img alt="/tensorboard_text" src="../../_images/tensorboard_text.png" /></p>
+<p>所有配置名和说明如下：</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>配置名</p></th>
+<th class="head"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>seed</p></td>
+<td><p>随机种子</p></td>
+</tr>
+<tr class="row-odd"><td><p>output_dir</p></td>
+<td><p>保存checkpoint、strategy的路径</p></td>
+</tr>
+<tr class="row-even"><td><p>run_mode</p></td>
+<td><p>运行模式</p></td>
+</tr>
+<tr class="row-odd"><td><p>use_parallel</p></td>
+<td><p>是否开启并行</p></td>
+</tr>
+<tr class="row-even"><td><p>resume_training</p></td>
+<td><p>是否开启断点续训功能</p></td>
+</tr>
+<tr class="row-odd"><td><p>ignore_data_skip</p></td>
+<td><p>是否忽略断点续训时跳过数据的机制，而从头开始读取数据集。只在 <code class="docutils literal notranslate"><span class="pre">resume_training</span></code> 值为<code class="docutils literal notranslate"><span class="pre">True</span></code>时记录</p></td>
+</tr>
+<tr class="row-even"><td><p>data_skip_steps</p></td>
+<td><p>数据集跳过步数。只在 <code class="docutils literal notranslate"><span class="pre">ignore_data_skip</span></code> 被记录且值为<code class="docutils literal notranslate"><span class="pre">False</span></code>时记录</p></td>
+</tr>
+<tr class="row-odd"><td><p>load_checkpoint</p></td>
+<td><p>加载权重的模型名或权重路径</p></td>
+</tr>
+<tr class="row-even"><td><p>load_ckpt_format</p></td>
+<td><p>加载权重的文件格式。只在 <code class="docutils literal notranslate"><span class="pre">load_checkpoint</span></code> 值不为空时记录</p></td>
+</tr>
+<tr class="row-odd"><td><p>auto_trans_ckpt</p></td>
+<td><p>是否开启自动在线权重切分或转换。只在 <code class="docutils literal notranslate"><span class="pre">load_checkpoint</span></code> 值不为空时记录</p></td>
+</tr>
+<tr class="row-even"><td><p>transform_process_num</p></td>
+<td><p>转换checkpoint的进程数。只在 <code class="docutils literal notranslate"><span class="pre">auto_trans_ckpt</span></code> 被记录且值为<code class="docutils literal notranslate"><span class="pre">True</span></code>时记录</p></td>
+</tr>
+<tr class="row-odd"><td><p>src_strategy_path_or_dir</p></td>
+<td><p>源权重分布式策略文件路径。只在 <code class="docutils literal notranslate"><span class="pre">auto_trans_ckpt</span></code> 被记录且值为<code class="docutils literal notranslate"><span class="pre">True</span></code>时记录</p></td>
+</tr>
+<tr class="row-even"><td><p>load_ckpt_async</p></td>
+<td><p>是否异步加载权重。只在 <code class="docutils literal notranslate"><span class="pre">load_checkpoint</span></code> 值不为空时记录</p></td>
+</tr>
+<tr class="row-odd"><td><p>only_save_strategy</p></td>
+<td><p>任务是否仅保存分布式策略文件</p></td>
+</tr>
+<tr class="row-even"><td><p>profile</p></td>
+<td><p>是否开启性能分析工具</p></td>
+</tr>
+<tr class="row-odd"><td><p>profile_communication</p></td>
+<td><p>是否在多设备训练中收集通信性能数据。只在 <code class="docutils literal notranslate"><span class="pre">profile</span></code> 值为<code class="docutils literal notranslate"><span class="pre">True</span></code>时记录</p></td>
+</tr>
+<tr class="row-even"><td><p>profile_level</p></td>
+<td><p>采集性能数据级别。只在 <code class="docutils literal notranslate"><span class="pre">profile</span></code> 值为<code class="docutils literal notranslate"><span class="pre">True</span></code>时记录</p></td>
+</tr>
+<tr class="row-odd"><td><p>profile_memory</p></td>
+<td><p>是否收集Tensor内存数据。只在 <code class="docutils literal notranslate"><span class="pre">profile</span></code> 值为<code class="docutils literal notranslate"><span class="pre">True</span></code>时记录</p></td>
+</tr>
+<tr class="row-even"><td><p>profile_start_step</p></td>
+<td><p>性能分析开始的step。只在 <code class="docutils literal notranslate"><span class="pre">profile</span></code> 值为<code class="docutils literal notranslate"><span class="pre">True</span></code>时记录</p></td>
+</tr>
+<tr class="row-odd"><td><p>profile_stop_step</p></td>
+<td><p>性能分析结束的step。只在 <code class="docutils literal notranslate"><span class="pre">profile</span></code> 值为<code class="docutils literal notranslate"><span class="pre">True</span></code>时记录</p></td>
+</tr>
+<tr class="row-even"><td><p>profile_rank_ids</p></td>
+<td><p>指定rank ids开启profiling。只在 <code class="docutils literal notranslate"><span class="pre">profile</span></code> 值为<code class="docutils literal notranslate"><span class="pre">True</span></code>时记录</p></td>
+</tr>
+<tr class="row-odd"><td><p>profile_pipeline</p></td>
+<td><p>是否按流水线并行每个stage的其中一张卡开启profiling。只在 <code class="docutils literal notranslate"><span class="pre">profile</span></code> 值为<code class="docutils literal notranslate"><span class="pre">True</span></code>时记录</p></td>
+</tr>
+<tr class="row-even"><td><p>init_start_profile</p></td>
+<td><p>是否在Profiler初始化的时候开启数据采集。只在 <code class="docutils literal notranslate"><span class="pre">profile</span></code> 值为<code class="docutils literal notranslate"><span class="pre">True</span></code>时记录</p></td>
+</tr>
+<tr class="row-odd"><td><p>layer_decay</p></td>
+<td><p>层衰减系数</p></td>
+</tr>
+<tr class="row-even"><td><p>layer_scale</p></td>
+<td><p>是否启用层缩放</p></td>
+</tr>
+<tr class="row-odd"><td><p>lr_scale</p></td>
+<td><p>是否开启学习率缩放</p></td>
+</tr>
+<tr class="row-even"><td><p>lr_scale_factor</p></td>
+<td><p>学习率缩放系数。只在 <code class="docutils literal notranslate"><span class="pre">lr_scale</span></code> 值为<code class="docutils literal notranslate"><span class="pre">True</span></code>时记录</p></td>
+</tr>
+<tr class="row-odd"><td><p>micro_batch_interleave_num</p></td>
+<td><p>batch_size的拆分份数，多副本并行开关</p></td>
+</tr>
+<tr class="row-even"><td><p>remote_save_url</p></td>
+<td><p>使用AICC训练作业时，目标桶的回传文件夹路径</p></td>
+</tr>
+<tr class="row-odd"><td><p>callbacks</p></td>
+<td><p>回调函数配置</p></td>
+</tr>
+<tr class="row-even"><td><p>context</p></td>
+<td><p>环境配置</p></td>
+</tr>
+<tr class="row-odd"><td><p>data_size</p></td>
+<td><p>数据集长度</p></td>
+</tr>
+<tr class="row-even"><td><p>device_num</p></td>
+<td><p>设备数量（卡数）</p></td>
+</tr>
+<tr class="row-odd"><td><p>do_eval</p></td>
+<td><p>是否开启边训练边评估</p></td>
+</tr>
+<tr class="row-even"><td><p>eval_callbacks</p></td>
+<td><p>评估回调函数配置。只在 <code class="docutils literal notranslate"><span class="pre">do_eval</span></code> 值为<code class="docutils literal notranslate"><span class="pre">True</span></code>时记录</p></td>
+</tr>
+<tr class="row-odd"><td><p>eval_step_interval</p></td>
+<td><p>评估step间隔。只在 <code class="docutils literal notranslate"><span class="pre">do_eval</span></code> 值为<code class="docutils literal notranslate"><span class="pre">True</span></code>时记录</p></td>
+</tr>
+<tr class="row-even"><td><p>eval_epoch_interval</p></td>
+<td><p>评估epoch间隔。只在 <code class="docutils literal notranslate"><span class="pre">do_eval</span></code> 值为<code class="docutils literal notranslate"><span class="pre">True</span></code>时记录</p></td>
+</tr>
+<tr class="row-odd"><td><p>eval_dataset</p></td>
+<td><p>评估数据集配置。只在 <code class="docutils literal notranslate"><span class="pre">do_eval</span></code> 值为<code class="docutils literal notranslate"><span class="pre">True</span></code>时记录</p></td>
+</tr>
+<tr class="row-even"><td><p>eval_dataset_task</p></td>
+<td><p>评估任务配置。只在 <code class="docutils literal notranslate"><span class="pre">do_eval</span></code> 值为<code class="docutils literal notranslate"><span class="pre">True</span></code>时记录</p></td>
+</tr>
+<tr class="row-odd"><td><p>lr_schedule</p></td>
+<td><p>学习率</p></td>
+</tr>
+<tr class="row-even"><td><p>metric</p></td>
+<td><p>评估函数</p></td>
+</tr>
+<tr class="row-odd"><td><p>model</p></td>
+<td><p>模型配置</p></td>
+</tr>
+<tr class="row-even"><td><p>moe_config</p></td>
+<td><p>混合专家配置</p></td>
+</tr>
+<tr class="row-odd"><td><p>optimizer</p></td>
+<td><p>优化器</p></td>
+</tr>
+<tr class="row-even"><td><p>parallel_config</p></td>
+<td><p>并行策略配置</p></td>
+</tr>
+<tr class="row-odd"><td><p>parallel</p></td>
+<td><p>自动并行配置</p></td>
+</tr>
+<tr class="row-even"><td><p>recompute_config</p></td>
+<td><p>重计算配置</p></td>
+</tr>
+<tr class="row-odd"><td><p>remove_redundancy</p></td>
+<td><p>checkpoint保存时是否去除冗余</p></td>
+</tr>
+<tr class="row-even"><td><p>runner_config</p></td>
+<td><p>运行配置</p></td>
+</tr>
+<tr class="row-odd"><td><p>runner_wrapper</p></td>
+<td><p>wrapper配置</p></td>
+</tr>
+<tr class="row-even"><td><p>monitor_config</p></td>
+<td><p>训练指标监控配置</p></td>
+</tr>
+<tr class="row-odd"><td><p>tensorboard</p></td>
+<td><p>TensorBoard配置</p></td>
+</tr>
+<tr class="row-even"><td><p>train_dataset_task</p></td>
+<td><p>训练任务配置</p></td>
+</tr>
+<tr class="row-odd"><td><p>train_dataset</p></td>
+<td><p>训练数据集配置</p></td>
+</tr>
+<tr class="row-even"><td><p>trainer</p></td>
+<td><p>训练流程配置</p></td>
+</tr>
+<tr class="row-odd"><td><p>swap_config</p></td>
+<td><p>细粒度激活值SWAP配置</p></td>
+</tr>
+<tr class="row-even"><td><p>checkpoint</p></td>
+<td><p>Checkpoint2.0下权重保存和加载相关配置</p></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<div><p>上述训练配置来源于：</p>
+<ol class="arabic simple">
+<li><p>用户在训练启动命令 <code class="docutils literal notranslate"><span class="pre">run_mindformer.py</span></code> 中传入的配置参数；</p></li>
+<li><p>用户在训练配置文件 <code class="docutils literal notranslate"><span class="pre">yaml</span></code> 中设置的配置参数；</p></li>
+<li><p>训练默认的配置参数。</p></li>
+</ol>
+<p>可配置的所有参数请参考<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/configuration.html">配置文件说明</a>。</p>
+</div></blockquote>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="training_hyperparameters.html" class="btn btn-neutral float-left" title="训练超参数" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="resume_training.html" class="btn btn-neutral float-right" title="断点续训" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

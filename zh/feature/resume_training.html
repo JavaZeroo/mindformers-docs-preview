@@ -1,0 +1,593 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>断点续训 &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="训练指标监控与 Profiling" href="monitor.html" />
+    <link rel="prev" title="权重保存与加载" href="save_and_load_checkpoint.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">介绍</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/quick_start.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/models.html">模型支持库</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">安装</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">安装指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">功能特性</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">功能特性概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="start_task.html">启动任务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">配置文件说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logging.html">日志</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dataset.html">数据集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="training_hyperparameters.html">训练超参数与优化器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l1"><a class="reference internal" href="memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="save_and_load_checkpoint.html">权重保存与加载</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">断点续训</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">一、续训机制</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">1.1 加载入口与触发条件</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#load-path">1.2 <code class="docutils literal notranslate"><span class="pre">load_path</span></code> 如何定位到具体权重</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#common-json">1.3 <code class="docutils literal notranslate"><span class="pre">common.json</span></code> 元信息与续训闭环</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#batch-size-step">1.4 batch size 变化时的 step 缩放</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">1.5 仅加载权重时的主权重对齐</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">二、续训配置项详解</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id6">2.1 保存侧配置项（决定能否续训）</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#enable-save-true"><code class="docutils literal notranslate"><span class="pre">enable_save</span></code>（默认 <code class="docutils literal notranslate"><span class="pre">True</span></code>）</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#save-path"><code class="docutils literal notranslate"><span class="pre">save_path</span></code>（默认 <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>）</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#save-interleaved-steps-1000"><code class="docutils literal notranslate"><span class="pre">save_interleaved_steps</span></code>（默认 <code class="docutils literal notranslate"><span class="pre">1000</span></code>）</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#no-save-optim-false"><code class="docutils literal notranslate"><span class="pre">no_save_optim</span></code>（默认 <code class="docutils literal notranslate"><span class="pre">False</span></code>）</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#save-max-5"><code class="docutils literal notranslate"><span class="pre">save_max</span></code>（默认 <code class="docutils literal notranslate"><span class="pre">5</span></code>）</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">2.2 加载侧配置项（决定续训行为）</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id8"><code class="docutils literal notranslate"><span class="pre">load_path</span></code>（默认 <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>）</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#no-load-optim-false"><code class="docutils literal notranslate"><span class="pre">no_load_optim</span></code>（默认 <code class="docutils literal notranslate"><span class="pre">False</span></code>）</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#load-balanced-false"><code class="docutils literal notranslate"><span class="pre">load_balanced</span></code>（默认 <code class="docutils literal notranslate"><span class="pre">False</span></code>）</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#load-balanced">2.3 <code class="docutils literal notranslate"><span class="pre">load_balanced</span></code>：均衡加载（与并行强相关）</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id9">三、续训与加载权重训练的区别</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id10">四、场景化配置示例</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#a">场景 A：标准续训（恢复优化器 + 步数 + 数据游标）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#b">场景 B：仅以权重做初始化的再训练 / 微调</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#c-global-batch-size">场景 C：改 <code class="docutils literal notranslate"><span class="pre">global_batch_size</span></code> 续训</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#d">场景 D：分布式并行下的均衡加载</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id11">相关文档</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="monitor.html">训练指标监控与 Profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="static_graph_features.html">静态图实现特性</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">环境变量</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">环境变量说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">贡献指南</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contribution/mindformers_contribution.html">MindSpore Transformers贡献指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution/modelers_contribution.html">魔乐社区贡献指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../faq/model_related.html">模型相关 FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/feature_related.html">功能相关 FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">静态图实现（Deprecated）</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/guide/index.html">大模型全流程指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/feature/index.html">功能特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/advanced_development/index.html">高阶开发</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/example/index.html">优秀实践</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/env_variables.html">环境变量说明</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">断点续训</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/feature/resume_training.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>断点续训<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<p>MindSpore Transformers 动态图（PyNative）支持 <strong>step 级断点续训</strong>：训练中断后，框架从已保存的权重目录恢复模型与优化器状态，将训练进度回拨到中断时的训练步，并将数据集游标跳转到对应位置，从而避免从头重训造成的算力浪费。</p>
+<p>续训不需要额外的训练入口，它与首次训练复用同一套 <code class="docutils literal notranslate"><span class="pre">checkpoint</span></code> 配置。差别仅在于<strong>加载侧</strong>的几个开关：将 <code class="docutils literal notranslate"><span class="pre">load_path</span></code> 指向上一次的保存根目录、用 <code class="docutils literal notranslate"><span class="pre">no_load_optim</span></code> 决定是否恢复优化器与训练进度。本页按「机制 → 配置项 → 场景化 YAML」的顺序展开。</p>
+<blockquote>
+<div><p>续训依赖中断前已经将权重和优化器状态落盘。请确认上一次训练满足：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">enable_save:</span> <span class="pre">True</span></code>（默认开启）——否则训练过程中不会产生任何 checkpoint；</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">no_save_optim:</span> <span class="pre">False</span></code>（默认）——若保存时跳过了优化器状态，则续训时无法恢复优化器，只能退化为「以权重做初始化」的再训练。</p></li>
+</ul>
+</div></blockquote>
+<section id="id2">
+<h2>一、续训机制<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<section id="id3">
+<h3>1.1 加载入口与触发条件<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p>训练启动时，<code class="docutils literal notranslate"><span class="pre">Trainer</span></code> 会读取 <code class="docutils literal notranslate"><span class="pre">checkpoint.load_path</span></code>（或显式传入的 <code class="docutils literal notranslate"><span class="pre">checkpoint_path</span></code>）作为加载目录；<strong>只要该值非空就会触发加载</strong>。是否恢复优化器与训练进度，则由 <code class="docutils literal notranslate"><span class="pre">no_load_optim</span></code> 进一步决定。</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><code class="docutils literal notranslate"><span class="pre">no_load_optim</span></code></p></th>
+<th class="head"><p>加载内容</p></th>
+<th class="head"><p>训练进度</p></th>
+<th class="head"><p>数据游标</p></th>
+<th class="head"><p>典型用途</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+<td><p>模型权重 + 优化器状态</p></td>
+<td><p>从 <code class="docutils literal notranslate"><span class="pre">common.json</span></code> 的 <code class="docutils literal notranslate"><span class="pre">global_step</span></code> 恢复</p></td>
+<td><p>跳转到恢复步</p></td>
+<td><p>中断后继续同一次训练</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p>仅模型权重</p></td>
+<td><p>从 0 开始</p></td>
+<td><p>从头开始</p></td>
+<td><p>以已有权重做初始化的再训练/微调</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="load-path">
+<h3>1.2 <code class="docutils literal notranslate"><span class="pre">load_path</span></code> 如何定位到具体权重<a class="headerlink" href="#load-path" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">load_path</span></code> 指向的是<strong>保存根目录</strong>，而非某个具体步的子目录。框架在 <code class="docutils literal notranslate"><span class="pre">get_checkpoint_path</span></code> 中按以下规则定位真正要加载的目录：</p>
+<ol class="arabic simple">
+<li><p>校验 <code class="docutils literal notranslate"><span class="pre">load_path</span></code> 存在且是目录；</p></li>
+<li><p><strong>自训练权重定位</strong>：读取根目录下的 tracker 文件 <code class="docutils literal notranslate"><span class="pre">latest_checkpointed_iteration.txt</span></code>，取出最新的迭代号，拼出 <code class="docutils literal notranslate"><span class="pre">iteration_XXXXXXXX</span></code>（8 位补零）子目录并加载。这意味着续训时<strong>无需手动指定步数，框架会自动选取最近一次保存的 iteration</strong>。</p></li>
+</ol>
+<p>MindSpore Transformers 的训练 checkpoint 默认存储于 <code class="docutils literal notranslate"><span class="pre">output/checkpoint</span></code> 目录，每个 checkpoint 独立保存为以 <code class="docutils literal notranslate"><span class="pre">iteration</span></code> 命名的子文件夹。以 8 卡任务生成的 checkpoint 为例，其保存格式如下：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>output
+    ├── checkpoint
+        ├── latest_checkpointed_iteration.txt               # tracker：记录最新迭代号，假设此时为 2000
+        ├── iteration_00001000/                             # 第 1000 步权重目录
+            ├── metadata.json                               # 权重切分信息
+            ├── common.json                                 # 续训元信息
+            ├── {prefix}-model-0000000-0000008.safetensor   # 0 号卡权重分片
+            ...
+            ├── {prefix}-model-0000007-0000008.safetensor   # 7 号卡权重分片
+            ├── {prefix}-opt-0000000-0000008.safetensor     # 0 号卡优化器分片
+            ...
+            └── {prefix}-opt-0000007-0000008.safetensor     # 7 号卡优化器分片
+        ...
+        └── iteration_00002000/                             # 第 2000 步权重目录（最新，且所有权重文件都已保存完毕）
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">load_path</span></code> 填写 <code class="docutils literal notranslate"><span class="pre">output/checkpoint</span></code>（根目录）即可，框架会根据 <code class="docutils literal notranslate"><span class="pre">latest_checkpointed_iteration.txt</span></code> 中的内容，自动选择 <code class="docutils literal notranslate"><span class="pre">iteration_00002000</span></code> 下的权重进行加载。</p>
+</section>
+<section id="common-json">
+<h3>1.3 <code class="docutils literal notranslate"><span class="pre">common.json</span></code> 元信息与续训闭环<a class="headerlink" href="#common-json" title="Link to this heading"></a></h3>
+<p>每个 iteration 子目录都包含一个 <code class="docutils literal notranslate"><span class="pre">common.json</span></code>，记录续训所需的元信息。其配置项由 <code class="docutils literal notranslate"><span class="pre">CommonInfo</span></code> 定义：</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>配置项</p></th>
+<th class="head"><p>含义</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">global_step</span></code></p></td>
+<td><p>全局训练步（<strong>续训据此恢复进度</strong>）</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">global_batch_size</span></code></p></td>
+<td><p>保存时的全局批大小（<strong>用于 step 缩放</strong>）</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">step_num</span></code></p></td>
+<td><p>当前 epoch 内的步号</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">epoch_num</span></code></p></td>
+<td><p>已训练的 epoch 数</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">loss_scale</span></code></p></td>
+<td><p>梯度缩放系数</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ckpt_status</span></code></p></td>
+<td><p>checkpoint 健康状态标记</p></td>
+</tr>
+</tbody>
+</table>
+<p>续训时（<code class="docutils literal notranslate"><span class="pre">no_load_optim=False</span></code>），<code class="docutils literal notranslate"><span class="pre">Trainer</span></code> 会从 <code class="docutils literal notranslate"><span class="pre">common.json</span></code> 读取 <code class="docutils literal notranslate"><span class="pre">global_step</span></code>，将其写入训练状态 <code class="docutils literal notranslate"><span class="pre">state.global_step</span></code>，并调用 <code class="docutils literal notranslate"><span class="pre">train_dataset.set_init_step(global_step)</span></code> 将数据集游标跳到恢复步，确保数据<strong>不重复、不遗漏</strong>。</p>
+</section>
+<section id="batch-size-step">
+<h3>1.4 batch size 变化时的 step 缩放<a class="headerlink" href="#batch-size-step" title="Link to this heading"></a></h3>
+<p>如果续训时配置的 <code class="docutils literal notranslate"><span class="pre">global_batch_size</span></code> 与保存时不同，直接沿用旧 <code class="docutils literal notranslate"><span class="pre">global_step</span></code> 会导致「已消耗的训练数据量」不一致。为此，<code class="docutils literal notranslate"><span class="pre">Trainer</span></code> 会按照<strong>保存在 <code class="docutils literal notranslate"><span class="pre">common.json</span></code> 中的 <code class="docutils literal notranslate"><span class="pre">global_batch_size</span></code></strong> 进行等比缩放：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>恢复步 = 保存步 × (保存时 global_batch_size / 当前 global_batch_size)
+</pre></div>
+</div>
+<blockquote>
+<div><p><strong>缩放算例</strong></p>
+<p>保存时 <code class="docutils literal notranslate"><span class="pre">global_batch_size=64</span></code>、<code class="docutils literal notranslate"><span class="pre">global_step=1000</span></code>（已消耗 64000 个样本）。若续训时改为 <code class="docutils literal notranslate"><span class="pre">global_batch_size=128</span></code>：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>恢复步 = 1000 × (64 / 128) = 500
+</pre></div>
+</div>
+<p>即从第 500 步继续，对应的累计数据集消耗量 500 × 128 = 64000，与中断时一致。</p>
+</div></blockquote>
+</section>
+<section id="id4">
+<h3>1.5 仅加载权重时的主权重对齐<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p>当 <code class="docutils literal notranslate"><span class="pre">no_load_optim:</span> <span class="pre">True</span></code> 时，不加载优化器状态，但混合精度下的 fp32 主权重仍停留在加载前的初始值。为避免主权重与刚加载的模型参数错位，框架会调用 <code class="docutils literal notranslate"><span class="pre">optimizer.reload_main_params_from_model()</span></code>，用模型参数刷新 fp32 主权重，使两者从同一起点开始。</p>
+</section>
+</section>
+<section id="id5">
+<h2>二、续训配置项详解<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
+<p>续训涉及的配置项都在 <code class="docutils literal notranslate"><span class="pre">checkpoint</span></code> 段，由 <code class="docutils literal notranslate"><span class="pre">CheckpointConfig</span></code> 定义。下表先给出速查，随后逐项展开。</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>配置项</p></th>
+<th class="head"><p>默认值</p></th>
+<th class="head"><p>作用侧</p></th>
+<th class="head"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">enable_save</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p>保存</p></td>
+<td><p>是否保存 checkpoint</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">save_path</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p></td>
+<td><p>保存</p></td>
+<td><p>权重保存在此目录下</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">save_interleaved_steps</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1000</span></code></p></td>
+<td><p>保存</p></td>
+<td><p>每间隔多少步保存一次</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">no_save_optim</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+<td><p>保存</p></td>
+<td><p>是否跳过保存优化器状态</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">save_max</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">5</span></code></p></td>
+<td><p>保存</p></td>
+<td><p>当前任务开始后，最多新保存多少份 checkpoint</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">load_path</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p></td>
+<td><p>加载</p></td>
+<td><p>续训加载的保存根目录</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">no_load_optim</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+<td><p>加载</p></td>
+<td><p>是否跳过加载优化器状态（决定续训/仅权重初始化）</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">load_balanced</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+<td><p>加载</p></td>
+<td><p>是否启用均衡加载（与并行配合使用，见 2.3）</p></td>
+</tr>
+</tbody>
+</table>
+<section id="id6">
+<h3>2.1 保存侧配置项（决定能否续训）<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<p>当前任务进行续训时，需要确保这些配置在上次训练时开启，而且权重被完整地保存到磁盘中。</p>
+<section id="enable-save-true">
+<h4><code class="docutils literal notranslate"><span class="pre">enable_save</span></code>（默认 <code class="docutils literal notranslate"><span class="pre">True</span></code>）<a class="headerlink" href="#enable-save-true" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p><strong>是什么</strong>：是否开启权重保存。关闭后整个训练过程不落盘。</p></li>
+<li><p><strong>何时用</strong>：保持默认 <code class="docutils literal notranslate"><span class="pre">True</span></code>。仅在调试、不需要中断恢复时才会关掉。</p></li>
+<li><p><strong>怎么配</strong>：<code class="docutils literal notranslate"><span class="pre">enable_save:</span> <span class="pre">True</span></code>。</p></li>
+</ul>
+</section>
+<section id="save-path">
+<h4><code class="docutils literal notranslate"><span class="pre">save_path</span></code>（默认 <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>）<a class="headerlink" href="#save-path" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p><strong>是什么</strong>：保存根目录，每次保存会在其下生成 <code class="docutils literal notranslate"><span class="pre">iteration_XXXXXXXX</span></code> 子目录与 tracker 文件。</p></li>
+<li><p><strong>何时用</strong>：开启保存时必填。续训时一般把 <code class="docutils literal notranslate"><span class="pre">load_path</span></code> 设为同一目录。</p></li>
+<li><p><strong>怎么配</strong>：<code class="docutils literal notranslate"><span class="pre">save_path:</span> <span class="pre">&quot;./output/ckpt&quot;</span></code>。</p></li>
+</ul>
+</section>
+<section id="save-interleaved-steps-1000">
+<h4><code class="docutils literal notranslate"><span class="pre">save_interleaved_steps</span></code>（默认 <code class="docutils literal notranslate"><span class="pre">1000</span></code>）<a class="headerlink" href="#save-interleaved-steps-1000" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p><strong>是什么</strong>：保存间隔步数。仅当 <code class="docutils literal notranslate"><span class="pre">global_step</span> <span class="pre">%</span> <span class="pre">save_interleaved_steps</span> <span class="pre">==</span> <span class="pre">0</span></code> 时才会落盘。</p></li>
+<li><p><strong>何时用</strong>：步数越小越能抵抗中断风险，但 IO 开销越大；大规模预训练通常设置为几百到几千步。</p></li>
+<li><p><strong>怎么配</strong>：<code class="docutils literal notranslate"><span class="pre">save_interleaved_steps:</span> <span class="pre">1000</span></code>。</p></li>
+</ul>
+</section>
+<section id="no-save-optim-false">
+<h4><code class="docutils literal notranslate"><span class="pre">no_save_optim</span></code>（默认 <code class="docutils literal notranslate"><span class="pre">False</span></code>）<a class="headerlink" href="#no-save-optim-false" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p><strong>是什么</strong>：保存时是否跳过优化器状态。<code class="docutils literal notranslate"><span class="pre">True</span></code> 时只存模型权重。</p></li>
+<li><p><strong>何时用</strong>：默认 <code class="docutils literal notranslate"><span class="pre">False</span></code>，保证后续可以恢复优化器、完整续训。只有当你确定不再需要继续优化（如只想导出权重）时才设 <code class="docutils literal notranslate"><span class="pre">True</span></code>。</p></li>
+<li><p><strong>怎么配</strong>：<code class="docutils literal notranslate"><span class="pre">no_save_optim:</span> <span class="pre">False</span></code>。</p></li>
+</ul>
+</section>
+<section id="save-max-5">
+<h4><code class="docutils literal notranslate"><span class="pre">save_max</span></code>（默认 <code class="docutils literal notranslate"><span class="pre">5</span></code>）<a class="headerlink" href="#save-max-5" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p><strong>是什么</strong>：当前训练任务最多保留的 checkpoint 份数，超出后自动清理最旧的（<code class="docutils literal notranslate"><span class="pre">keep_max_num</span></code>）。</p></li>
+<li><p><strong>何时用</strong>：按磁盘容量与回退需求设置。</p></li>
+<li><p><strong>怎么配</strong>：<code class="docutils literal notranslate"><span class="pre">save_max:</span> <span class="pre">5</span></code>。</p></li>
+</ul>
+</section>
+</section>
+<section id="id7">
+<h3>2.2 加载侧配置项（决定续训行为）<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<section id="id8">
+<h4><code class="docutils literal notranslate"><span class="pre">load_path</span></code>（默认 <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>）<a class="headerlink" href="#id8" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p><strong>是什么</strong>：续训加载的<strong>保存根目录</strong>。非空即触发加载，框架会自动通过 tracker 选择最新 iteration（见 1.2）。</p></li>
+<li><p><strong>何时用</strong>：续训时必填。指向上一次训练的 <code class="docutils literal notranslate"><span class="pre">save_path</span></code>（自训练权重目录，需包含 <code class="docutils literal notranslate"><span class="pre">common.json</span></code>/<code class="docutils literal notranslate"><span class="pre">metadata.json</span></code>）。</p></li>
+<li><p><strong>怎么配</strong>：<code class="docutils literal notranslate"><span class="pre">load_path:</span> <span class="pre">&quot;./output/ckpt&quot;</span></code>。</p></li>
+</ul>
+</section>
+<section id="no-load-optim-false">
+<h4><code class="docutils literal notranslate"><span class="pre">no_load_optim</span></code>（默认 <code class="docutils literal notranslate"><span class="pre">False</span></code>）<a class="headerlink" href="#no-load-optim-false" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p><strong>是什么</strong>：加载时是否跳过优化器状态。它是「续训」与「仅权重初始化」的总开关（见 1.1）。</p></li>
+<li><p><strong>何时用</strong>：</p>
+<ul>
+<li><p>续训中断的训练 → <code class="docutils literal notranslate"><span class="pre">False</span></code>（恢复优化器 + 步数 + 数据游标）；</p></li>
+<li><p>以已有权重重新训练/微调 → <code class="docutils literal notranslate"><span class="pre">True</span></code>（只取权重作初始化）。</p></li>
+</ul>
+</li>
+<li><p><strong>怎么配</strong>：<code class="docutils literal notranslate"><span class="pre">no_load_optim:</span> <span class="pre">False</span></code>。</p></li>
+<li><p><strong>注意</strong>：<code class="docutils literal notranslate"><span class="pre">no_load_optim:</span> <span class="pre">False</span></code> 时优化器对象必须存在，否则会报错。</p></li>
+</ul>
+</section>
+<section id="load-balanced-false">
+<h4><code class="docutils literal notranslate"><span class="pre">load_balanced</span></code>（默认 <code class="docutils literal notranslate"><span class="pre">False</span></code>）<a class="headerlink" href="#load-balanced-false" title="Link to this heading"></a></h4>
+<p>详见 2.3 中的详细说明。</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">CheckpointConfig</span></code> 中存在 <code class="docutils literal notranslate"><span class="pre">load_worker_number</span></code> 配置项，但<strong>当前动态图续训并不使用该配置项</strong>，加载并发由 <code class="docutils literal notranslate"><span class="pre">reshard_worker_num</span></code> 等内部参数控制。请勿将其写入续训配置以期影响加载性能，以免产生误解和预期外行为。</p>
+</div></blockquote>
+</section>
+</section>
+<section id="load-balanced">
+<h3>2.3 <code class="docutils literal notranslate"><span class="pre">load_balanced</span></code>：均衡加载（与并行强相关）<a class="headerlink" href="#load-balanced" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>是什么</strong>：开启后，加载阶段会先使用 shard 均衡策略（<code class="docutils literal notranslate"><span class="pre">apply_balance_shard_strategy</span></code>）计算各 rank 间的冗余参数映射，再通过 <code class="docutils literal notranslate"><span class="pre">single_parameter_broadcast</span></code> 将参数在 rank 之间广播（包括网络参数和优化器参数），从而<strong>消除冗余参数的重复加载</strong>。这能降低分布式加载时的显存与 IO 开销。</p></li>
+<li><p><strong>何时用</strong>：仅在<strong>分布式并行</strong>训练中有意义，因为它依赖多 rank 间的 shard 划分与广播。</p></li>
+<li><p><strong>不适用</strong>：单卡或非并行场景下没有可均衡的冗余分片，开启<strong>无收益</strong>，保持默认 <code class="docutils literal notranslate"><span class="pre">False</span></code> 即可。</p></li>
+<li><p><strong>怎么配</strong>：并行训练下设置 <code class="docutils literal notranslate"><span class="pre">load_balanced:</span> <span class="pre">True</span></code>；并行维度的含义与配置见 <a class="reference internal" href="parallel_training.html"><span class="std std-doc">分布式并行训练</span></a>。</p></li>
+</ul>
+</section>
+</section>
+<section id="id9">
+<h2>三、续训与加载权重训练的区别<a class="headerlink" href="#id9" title="Link to this heading"></a></h2>
+<p>下表对比了加载权重训练与断点续训的配置差异，并补充了<strong>默认值</strong>，帮助区分「配置项默认值」与「实际应当如何配置」：</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>项目</p></th>
+<th class="head"><p>加载权重训练</p></th>
+<th class="head"><p>断点续训</p></th>
+<th class="head"><p>默认值</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">load_path</span></code></p></td>
+<td><p>为空（随机初始化）或指向预训练权重目录</p></td>
+<td><p>指向上一次的保存根目录</p></td>
+<td><p>默认值： <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>；非空即加载。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">no_load_optim</span></code></p></td>
+<td><p>通常显式置 <code class="docutils literal notranslate"><span class="pre">True</span></code>（加载权重进行预训练时，不需要优化器信息）</p></td>
+<td><p>必须为 <code class="docutils literal notranslate"><span class="pre">False</span></code>（恢复优化器）</p></td>
+<td><p><strong>默认值： <code class="docutils literal notranslate"><span class="pre">False</span></code></strong></p></td>
+</tr>
+<tr class="row-even"><td><p>起始 <code class="docutils literal notranslate"><span class="pre">global_step</span></code></p></td>
+<td><p>从 0 开始</p></td>
+<td><p>从 <code class="docutils literal notranslate"><span class="pre">common.json</span></code> 的 <code class="docutils literal notranslate"><span class="pre">global_step</span></code> 恢复</p></td>
+<td><p>默认值： <code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>数据集游标</p></td>
+<td><p>从头开始</p></td>
+<td><p>跳转到恢复步</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">set_init_step</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>fp32 主权重</p></td>
+<td><p>随网络初始化</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">no_load_optim=True</span></code> 时从模型参数中获取</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">reload_main_params_from_model</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<div><p><strong>不要被 no_load_optim 的默认值误导</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">no_load_optim</span></code> 的源码默认值是 <code class="docutils literal notranslate"><span class="pre">False</span></code>。这对「续训」恰好正确（默认就会恢复优化器），但对「首次预训练」并不合适——首次训练通常根本没有可加载的优化器状态，常见做法是<strong>不设 <code class="docutils literal notranslate"><span class="pre">load_path</span></code></strong>（不加载），或在以预训练权重做初始化时<strong>显式将 <code class="docutils literal notranslate"><span class="pre">no_load_optim</span></code> 设为 <code class="docutils literal notranslate"><span class="pre">True</span></code></strong>。</p>
+<p>即：<code class="docutils literal notranslate"><span class="pre">no_load_optim</span></code> 的默认值会默认走入续训流程，若为加载权重训练，则需要对改配置按场景进行调整。</p>
+</div></blockquote>
+</section>
+<section id="id10">
+<h2>四、场景化配置示例<a class="headerlink" href="#id10" title="Link to this heading"></a></h2>
+<p>下面按三类典型场景给出可直接使用的完整 <code class="docutils literal notranslate"><span class="pre">checkpoint</span></code> 段 YAML。其余段（模型、数据集、并行等）参见 <a class="reference internal" href="configuration.html"><span class="std std-doc">配置文件说明</span></a>。</p>
+<section id="a">
+<h3>场景 A：标准续训（恢复优化器 + 步数 + 数据游标）<a class="headerlink" href="#a" title="Link to this heading"></a></h3>
+<p>最常见的场景：训练意外中断，从最近一次保存继续。<code class="docutils literal notranslate"><span class="pre">no_load_optim:</span> <span class="pre">False</span></code>，框架自动选最新 iteration、恢复 <code class="docutils literal notranslate"><span class="pre">global_step</span></code> 并跳转数据游标。</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">checkpoint</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># 保存配置（沿用上一次训练，确保中断前已落盘）</span>
+<span class="w">  </span><span class="nt">enable_save</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">save_path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;./output/ckpt&quot;</span>
+<span class="w">  </span><span class="nt">save_interleaved_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span>
+<span class="w">  </span><span class="nt">no_save_optim</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">save_max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+
+<span class="w">  </span><span class="c1"># 续训加载配置</span>
+<span class="w">  </span><span class="nt">load_path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;./output/ckpt&quot;</span><span class="w">   </span><span class="c1"># 指向保存根目录，框架自动取最新 iteration</span>
+<span class="w">  </span><span class="nt">no_load_optim</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span><span class="w">         </span><span class="c1"># 恢复优化器状态、训练步与数据游标</span>
+<span class="w">  </span><span class="nt">load_balanced</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span><span class="w">         </span><span class="c1"># 单机/非均衡场景保持 False</span>
+</pre></div>
+</div>
+</section>
+<section id="b">
+<h3>场景 B：仅以权重做初始化的再训练 / 微调<a class="headerlink" href="#b" title="Link to this heading"></a></h3>
+<p>只想复用已有权重作为起点（例如使用预训练权重进行微调），不沿用旧的优化器状态与训练进度。设置 <code class="docutils literal notranslate"><span class="pre">no_load_optim:</span> <span class="pre">True</span></code>，训练将从第 0 步重新开始，并触发 fp32 主权重对齐。</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">checkpoint</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enable_save</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">save_path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;./output/finetune_ckpt&quot;</span>
+<span class="w">  </span><span class="nt">save_interleaved_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">500</span>
+<span class="w">  </span><span class="nt">no_save_optim</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">save_max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+
+<span class="w">  </span><span class="c1"># 仅加载权重作为初始化</span>
+<span class="w">  </span><span class="nt">load_path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;./pretrained/ckpt&quot;</span><span class="w">  </span><span class="c1"># 自训练权重根目录（具体 iteration 下的文件包含 common.json/metadata.json）</span>
+<span class="w">  </span><span class="nt">no_load_optim</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w">             </span><span class="c1"># 不恢复优化器/训练步数/数据游标，从 step 0 开始</span>
+<span class="w">  </span><span class="nt">load_balanced</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>当前动态图不支持直接加载 HuggingFace 权重目录。</p>
+</div></blockquote>
+</section>
+<section id="c-global-batch-size">
+<h3>场景 C：改 <code class="docutils literal notranslate"><span class="pre">global_batch_size</span></code> 续训<a class="headerlink" href="#c-global-batch-size" title="Link to this heading"></a></h3>
+<p>续训时调整了全局批大小（例如扩展或缩减节点数量）。配置保持不变，框架会按照 1.4 节的公式自动缩放恢复步，无需手动修改 <code class="docutils literal notranslate"><span class="pre">global_step</span></code>。</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># training 段：续训时把 global_batch_size 从 64 改为 128</span>
+<span class="nt">training</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">global_batch_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">128</span>
+
+<span class="nt">checkpoint</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enable_save</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">save_path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;./output/ckpt&quot;</span>
+<span class="w">  </span><span class="nt">save_interleaved_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span>
+<span class="w">  </span><span class="nt">no_save_optim</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">save_max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+
+<span class="w">  </span><span class="nt">load_path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;./output/ckpt&quot;</span>
+<span class="w">  </span><span class="nt">no_load_optim</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span><span class="w">    </span><span class="c1"># 必须为 False，缩放逻辑只在恢复优化器时生效</span>
+<span class="w">  </span><span class="nt">load_balanced</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+</pre></div>
+</div>
+<p>按算例，若保存时 <code class="docutils literal notranslate"><span class="pre">global_batch_size=64</span></code>、<code class="docutils literal notranslate"><span class="pre">global_step=1000</span></code>，续训改为 <code class="docutils literal notranslate"><span class="pre">128</span></code> 后将从第 <code class="docutils literal notranslate"><span class="pre">1000</span> <span class="pre">×</span> <span class="pre">64</span> <span class="pre">/</span> <span class="pre">128</span> <span class="pre">=</span> <span class="pre">500</span></code> 步继续，累计数据集消耗量保持 64000 不变。</p>
+<blockquote>
+<div><p>缩放仅在续训路径生效。
+step 缩放仅发生在 <code class="docutils literal notranslate"><span class="pre">no_load_optim:</span> <span class="pre">False</span></code> 时。若配置 <code class="docutils literal notranslate"><span class="pre">no_load_optim:</span> <span class="pre">True</span></code>（即不加载优化器权重），训练则从 0 开始，不进行数据集缩放。</p>
+</div></blockquote>
+</section>
+<section id="d">
+<h3>场景 D：分布式并行下的均衡加载<a class="headerlink" href="#d" title="Link to this heading"></a></h3>
+<p>使用多卡进行分布式并行续训时，开启 <code class="docutils literal notranslate"><span class="pre">load_balanced</span></code> 可以消除冗余参数的重复加载，降低加载时的显存占用与 IO 开销。</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">checkpoint</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enable_save</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">save_path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;./output/ckpt&quot;</span>
+<span class="w">  </span><span class="nt">save_interleaved_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span>
+<span class="w">  </span><span class="nt">no_save_optim</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">save_max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+
+<span class="w">  </span><span class="nt">load_path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;./output/ckpt&quot;</span>
+<span class="w">  </span><span class="nt">no_load_optim</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">load_balanced</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w">      </span><span class="c1"># 仅并行场景有意义：shard 均衡 + 参数广播</span>
+</pre></div>
+</div>
+<p>并行维度的设置见 <a class="reference internal" href="parallel_training.html"><span class="std std-doc">分布式并行训练</span></a>。</p>
+</section>
+</section>
+<section id="id11">
+<h2>相关文档<a class="headerlink" href="#id11" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>权重格式与保存机制：<a class="reference internal" href="#./safetensors.md"><span class="xref myst">Safetensors 权重</span></a></p></li>
+<li><p>配置项总览：<a class="reference internal" href="configuration.html"><span class="std std-doc">配置文件说明</span></a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">load_balanced</span></code> 与并行维度：<a class="reference internal" href="parallel_training.html"><span class="std std-doc">分布式并行训练</span></a></p></li>
+<li><p>数据游标恢复与 <code class="docutils literal notranslate"><span class="pre">set_init_step</span></code>：<a class="reference internal" href="dataset.html"><span class="std std-doc">数据集</span></a></p></li>
+<li><p>端到端训练流程：<a class="reference internal" href="#../guide/training.md"><span class="xref myst">训练指南</span></a></p></li>
+<li><p>快速上手：<a class="reference internal" href="../quick_start/quick_start.html"><span class="std std-doc">快速开始</span></a></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="save_and_load_checkpoint.html" class="btn btn-neutral float-left" title="权重保存与加载" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="monitor.html" class="btn btn-neutral float-right" title="训练指标监控与 Profiling" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

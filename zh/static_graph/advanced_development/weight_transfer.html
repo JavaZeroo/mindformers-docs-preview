@@ -1,0 +1,277 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>权重转换开发适配 &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="API" href="api.html" />
+    <link rel="prev" title="训练配置模板使用说明" href="training_template_instruction.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">介绍</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/quick_start.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">模型支持库</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">安装</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">安装指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">功能特性</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/overview.html">功能特性概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/start_task.html">启动任务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/configuration.html">配置文件说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/logging.html">日志</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/dataset.html">数据集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/training_hyperparameters.html">训练超参数与优化器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/save_and_load_checkpoint.html">权重保存与加载</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/resume_training.html">断点续训</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/monitor.html">训练指标监控与 Profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/static_graph_features.html">静态图实现特性</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">环境变量</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../env_variables.html">环境变量说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">贡献指南</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers贡献指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">魔乐社区贡献指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">模型相关 FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">功能相关 FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">静态图实现（Deprecated）</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">大模型全流程指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/index.html">功能特性</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">高阶开发</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">高阶开发概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="precision_optimization.html">大模型精度调优指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance_optimization.html">大模型性能调优指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev_migration.html">开发迁移</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yaml_config_inference.html">推理配置模板使用指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inference_precision_comparison.html">推理精度比对</a></li>
+<li class="toctree-l2"><a class="reference internal" href="accuracy_comparison.html">与 Megatron-LM 比对训练精度</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training_template_instruction.html">训练配置模板使用说明</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">权重转换开发适配</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mcorehugging-face">Mcore模型网络加载Hugging Face权重流程图</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">开发步骤</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#qwen3">Qwen3模型权重转换适配样例</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">验证权重加载是否成功</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.html">API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">优秀实践</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">环境变量说明</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">高阶开发</a></li>
+      <li class="breadcrumb-item active">权重转换开发适配</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/advanced_development/weight_transfer.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">已废弃（Deprecated）</p>
+<p>本页属于 <strong>静态图（GRAPH_MODE）实现</strong> 章节，已标记为废弃。新特性优先在「r2.0.0 动态图实现」章节演进，请优先查阅动态图相关文档。</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>权重转换开发适配<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/static_graph/advanced_development/weight_transfer.md"><img alt="查看源文件" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source.svg" /></a></p>
+<p>本文档将指导开发者在开发适配模型时，如何将新模型适配MindSpore Transformers的权重转换功能，让使用者能够通过MindSpore Transformers统一的自动转换流程，将新模型的Hugging Face权重转换成MindSpore Transformers的权重，以拉起推理流程。</p>
+<section id="mcorehugging-face">
+<h2>Mcore模型网络加载Hugging Face权重流程图<a class="headerlink" href="#mcorehugging-face" title="Link to this heading"></a></h2>
+<p><img alt="weight_loader" src="../../_images/weight_loader.png" /></p>
+<p>上述流程图描述了将<code class="docutils literal notranslate"><span class="pre">Hugging</span> <span class="pre">Face</span></code>格式的<code class="docutils literal notranslate"><span class="pre">.safetensors</span></code>权重文件加载到<code class="docutils literal notranslate"><span class="pre">Mcore</span></code>模型中的完整权重转换与加载流程。</p>
+<p>主要分为以下几个步骤：</p>
+<ol class="arabic simple">
+<li><p>读取所有<code class="docutils literal notranslate"><span class="pre">.safetensors</span></code>文件，获取每个权重的<code class="docutils literal notranslate"><span class="pre">key</span></code>名称；</p></li>
+<li><p>调用<code class="docutils literal notranslate"><span class="pre">convert_name</span></code>方法转换权重 key。这步也是权重转换开发必须适配的一步，同时返回权重<code class="docutils literal notranslate"><span class="pre">key</span></code>和对应的权重值；</p></li>
+<li><p>遍历权重<code class="docutils literal notranslate"><span class="pre">key</span></code>和对应的权重值，判断权重<code class="docutils literal notranslate"><span class="pre">key</span></code>类型：</p>
+<ul class="simple">
+<li><p>不属于<code class="docutils literal notranslate"><span class="pre">MoE</span></code>或特殊结构的<code class="docutils literal notranslate"><span class="pre">key</span></code>，可直接用<code class="docutils literal notranslate"><span class="pre">weight_loader</span></code>加载；</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MoE</span></code>中和路由专家相关的<code class="docutils literal notranslate"><span class="pre">key</span></code>，生成相应处理规则<code class="docutils literal notranslate"><span class="pre">expert_params_mapping</span></code>，遍历<code class="docutils literal notranslate"><span class="pre">expert_params_mapping</span></code>，匹配名称，最终调用相应的<code class="docutils literal notranslate"><span class="pre">weight_loader</span></code>处理；</p></li>
+<li><p>非<code class="docutils literal notranslate"><span class="pre">MoE</span></code>路由专家但需特殊处理的<code class="docutils literal notranslate"><span class="pre">key</span></code>，需要生成相应处理规则<code class="docutils literal notranslate"><span class="pre">stacked_params_mapping</span></code>，遍历<code class="docutils literal notranslate"><span class="pre">stacked_params_mapping</span></code>，匹配名称，最终调用相应的<code class="docutils literal notranslate"><span class="pre">weight_loader</span></code>处理。</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="id2">
+<h2>开发步骤<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p>根据上述流程图可以看出，权重转换适配只需要完成一项修改：调用convert_name方法，完成Hugging Face权重key至中间态key的转换。</p>
+<p>操作步骤如下：</p>
+<ol class="arabic">
+<li><p>在模型实现目录下创建utils.py公共工具文件，用于封装模型基类的通用功能方法。</p></li>
+<li><p>在utils.py中创建类：</p>
+<ul class="simple">
+<li><p>类命名采用[ModelName]PreTrainedModel格式</p></li>
+<li><p>继承PreTrainedModel和ModelMixin基类</p></li>
+</ul>
+</li>
+<li><p>定义类属性config_class和base_model_prefix：</p>
+<ul class="simple">
+<li><p>config_class：指定为对应模型的Config类</p></li>
+<li><p>base_model_prefix：设置为模型名称字符串标识</p></li>
+</ul>
+</li>
+<li><p>实现调用convert_name()方法需实现的key值映射表weight_mapping：</p>
+<p>weight_mapping示例如下：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">weight_mapping</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s1">&#39;model.embed_tokens.&#39;</span><span class="p">,</span> <span class="s1">&#39;embedding.word_embeddings.&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;.self_attn.q_proj.&#39;</span><span class="p">,</span> <span class="s1">&#39;.self_attention.linear_q.&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;.self_attn.k_proj.&#39;</span><span class="p">,</span> <span class="s1">&#39;.self_attention.linear_k.&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;.self_attn.v_proj.&#39;</span><span class="p">,</span> <span class="s1">&#39;.self_attention.linear_v.&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;.self_attn.o_proj.&#39;</span><span class="p">,</span> <span class="s1">&#39;.self_attention.linear_proj.&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;.mlp.gate_proj.&#39;</span><span class="p">,</span> <span class="s1">&#39;.mlp.gating.&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;.mlp.down_proj.&#39;</span><span class="p">,</span> <span class="s1">&#39;.mlp.linear_fc2.&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;.mlp.up_proj.&#39;</span><span class="p">,</span> <span class="s1">&#39;.mlp.hidden.&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;.post_attention_layernorm.&#39;</span><span class="p">,</span> <span class="s1">&#39;.pre_mlp_layernorm.&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;model.norm.&#39;</span><span class="p">,</span> <span class="s1">&#39;decoder.final_layernorm.&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;lm_head.&#39;</span><span class="p">,</span> <span class="s1">&#39;output_layer.&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;model.layers.&#39;</span><span class="p">,</span> <span class="s1">&#39;decoder.layers.&#39;</span><span class="p">)</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>其中，元组的第一个元素为Hugging Face权重key，第二个元素为中间态权重key。</p>
+</li>
+</ol>
+</section>
+<section id="qwen3">
+<h2>Qwen3模型权重转换适配样例<a class="headerlink" href="#qwen3" title="Link to this heading"></a></h2>
+<p>在models/qwen3目录下新建utils.py文件，具体可参考<a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/mindformers/models/qwen3/utils.py">utils.py</a>。</p>
+<p>Qwen3PreTrainedModel部分代码如下：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Qwen3PreTrainedModel</span><span class="p">(</span><span class="n">PreTrainedModel</span><span class="p">,</span> <span class="n">ModelMixin</span><span class="p">):</span>
+
+    <span class="n">config_class</span> <span class="o">=</span> <span class="n">Qwen3Config</span>
+    <span class="n">base_model_prefix</span> <span class="o">=</span> <span class="s2">&quot;Qwen3&quot;</span>
+
+    <span class="n">weight_mapping</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s1">&#39;model.embed_tokens.&#39;</span><span class="p">,</span> <span class="s1">&#39;embedding.word_embeddings.&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;.self_attn.q_proj.&#39;</span><span class="p">,</span> <span class="s1">&#39;.self_attention.linear_q.&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;.self_attn.k_proj.&#39;</span><span class="p">,</span> <span class="s1">&#39;.self_attention.linear_k.&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;.self_attn.v_proj.&#39;</span><span class="p">,</span> <span class="s1">&#39;.self_attention.linear_v.&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;.self_attn.o_proj.&#39;</span><span class="p">,</span> <span class="s1">&#39;.self_attention.linear_proj.&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;.self_attn.q_norm.&#39;</span><span class="p">,</span> <span class="s1">&#39;.self_attention.q_layernorm.&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;.self_attn.k_norm.&#39;</span><span class="p">,</span> <span class="s1">&#39;.self_attention.k_layernorm.&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;.mlp.gate_proj.&#39;</span><span class="p">,</span> <span class="s1">&#39;.mlp.gating.&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;.mlp.down_proj.&#39;</span><span class="p">,</span> <span class="s1">&#39;.mlp.linear_fc2.&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;.mlp.up_proj.&#39;</span><span class="p">,</span> <span class="s1">&#39;.mlp.hidden.&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;.post_attention_layernorm.&#39;</span><span class="p">,</span> <span class="s1">&#39;.pre_mlp_layernorm.&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;model.norm.&#39;</span><span class="p">,</span> <span class="s1">&#39;decoder.final_layernorm.&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;lm_head.&#39;</span><span class="p">,</span> <span class="s1">&#39;output_layer.&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;model.layers.&#39;</span><span class="p">,</span> <span class="s1">&#39;decoder.layers.&#39;</span><span class="p">)</span>
+    <span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="id3">
+<h2>验证权重加载是否成功<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<p>参考<a class="reference internal" href="../guide/inference.html"><span class="std std-doc">推理文档</span></a>执行推理流程，然后查看日志。如果日志中出现以下内容，表明权重和网络完全匹配，权重已经完全加入到网络中。检验模型推理结果是否符合预期，若出现乱码情况，需要进一步定位，参考推理精度比对文档：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>These parameters are not loaded in the network: {}
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="training_template_instruction.html" class="btn btn-neutral float-left" title="训练配置模板使用说明" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="api.html" class="btn btn-neutral float-right" title="API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

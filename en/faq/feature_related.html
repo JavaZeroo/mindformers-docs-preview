@@ -1,0 +1,176 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Feature-Related FAQ &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Overall Structure" href="../static_graph/introduction/overview.html" />
+    <link rel="prev" title="Model-Related FAQ" href="model_related.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/models.html">Models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contribution Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contribution/mindformers_contribution.html">MindSpore Transformers Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution/modelers_contribution.html">Modelers Contribution Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="model_related.html">Model-Related FAQ</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Feature-Related FAQ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#q-what-is-the-difference-between-the-names-mindspore-transformers-and-mindformers">Q: What is the difference between the names MindSpore Transformers and MindFormers?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#q-what-is-the-difference-between-the-mindspore-transformers-and-mindspore-nlp-suites">Q: What is the difference between the MindSpore Transformers and MindSpore NLP suites?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#q-the-wikitext-dataset-download-link-is-not-available">Q: The WikiText dataset download link is not available.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#q-how-do-i-generate-a-model-sharding-strategy-file">Q: How Do I Generate a Model Sharding Strategy File?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#q-what-should-i-do-when-socket-gaierror-errno-2-name-or-service-not-known-or-socket-gaierror-errno-3-temporary-failure-in-name-resolution-is-reported-in-ranktable-generation-file">Q: What Should I Do When <code class="docutils literal notranslate"><span class="pre">socket.gaierror:</span> <span class="pre">[Errno</span> <span class="pre">-2]</span> <span class="pre">Name</span> <span class="pre">or</span> <span class="pre">service</span> <span class="pre">not</span> <span class="pre">known</span></code> or <code class="docutils literal notranslate"><span class="pre">socket.gaierror:</span> <span class="pre">[Errno</span> <span class="pre">-3]</span> <span class="pre">Temporary</span> <span class="pre">failure</span> <span class="pre">in</span> <span class="pre">name</span> <span class="pre">resolution</span></code> is Reported in <code class="docutils literal notranslate"><span class="pre">ranktable</span></code> Generation File?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#q-when-installing-mindspore-transformers-from-source-code-the-download-speed-of-dependency-packages-is-slow-how-can-this-be-resolved">Q: When installing MindSpore Transformers from source code, the download speed of dependency packages is slow. How can this be resolved?</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Static Graph Implementation (Deprecated)</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/guide/index.html">Full-process Guide to Large Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/feature/index.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/advanced_development/index.html">Advanced Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/example/index.html">Excellent Practice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/env_variables.html">Environment Variable Descriptions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Feature-Related FAQ</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/faq/feature_related.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="feature-related-faq">
+<h1>Feature-Related FAQ<a class="headerlink" href="#feature-related-faq" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_en/faq/feature_related.md"><img alt="View Source on AtomGit" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source_en.svg" /></a></p>
+<section id="q-what-is-the-difference-between-the-names-mindspore-transformers-and-mindformers">
+<h2>Q: What is the difference between the names MindSpore Transformers and MindFormers?<a class="headerlink" href="#q-what-is-the-difference-between-the-names-mindspore-transformers-and-mindformers" title="Link to this heading"></a></h2>
+<p>A: Both refer to the same suite. MindSpore Transformers is the suite’s official name; MindFormers is its abbreviated name, serving as both the repository name and the designation used within the code.</p>
+<br/>
+</section>
+<section id="q-what-is-the-difference-between-the-mindspore-transformers-and-mindspore-nlp-suites">
+<h2>Q: What is the difference between the MindSpore Transformers and MindSpore NLP suites?<a class="headerlink" href="#q-what-is-the-difference-between-the-mindspore-transformers-and-mindspore-nlp-suites" title="Link to this heading"></a></h2>
+<p>A: MindSpore Transformers is MindSpore’s large-model suite, primarily designed for training and inference of large language models (LLMs) and Multi-modal models (MMs) in large-scale scenarios. MindSpore NLP is MindSpore’s domain-specific suite, primarily designed for training small-to-medium-sized models in the natural language processing (NLP) domain. The two differ in their positioning; users may select the appropriate one based on their requirements.</p>
+<br/>
+</section>
+<section id="q-the-wikitext-dataset-download-link-is-not-available">
+<h2>Q: The WikiText dataset download link is not available.<a class="headerlink" href="#q-the-wikitext-dataset-download-link-is-not-available" title="Link to this heading"></a></h2>
+<p>A: The official download link is not available, please follow the community Issue <a class="reference external" href="https://gitee.com/mindspore/mindformers/issues/IBV35D">#IBV35D</a>.</p>
+<br/>
+</section>
+<section id="q-how-do-i-generate-a-model-sharding-strategy-file">
+<h2>Q: How Do I Generate a Model Sharding Strategy File?<a class="headerlink" href="#q-how-do-i-generate-a-model-sharding-strategy-file" title="Link to this heading"></a></h2>
+<p>A: The model sharding strategy file documents the sharding strategy for model weights in distributed scenarios and is generally used when slicing weights offline. Configure <code class="docutils literal notranslate"><span class="pre">only_save_strategy:</span> <span class="pre">True</span></code> in the network <code class="docutils literal notranslate"><span class="pre">yaml</span></code> file, and then start the distributed task normally, then the distributed strategy file can be generated in the <code class="docutils literal notranslate"><span class="pre">output/strategy/</span></code> directory. For details, please refer to the <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/ckpt.html">Tutorial on Slicing and Merging Distributed Weights</a>.</p>
+<br/>
+</section>
+<section id="q-what-should-i-do-when-socket-gaierror-errno-2-name-or-service-not-known-or-socket-gaierror-errno-3-temporary-failure-in-name-resolution-is-reported-in-ranktable-generation-file">
+<h2>Q: What Should I Do When <code class="docutils literal notranslate"><span class="pre">socket.gaierror:</span> <span class="pre">[Errno</span> <span class="pre">-2]</span> <span class="pre">Name</span> <span class="pre">or</span> <span class="pre">service</span> <span class="pre">not</span> <span class="pre">known</span></code> or <code class="docutils literal notranslate"><span class="pre">socket.gaierror:</span> <span class="pre">[Errno</span> <span class="pre">-3]</span> <span class="pre">Temporary</span> <span class="pre">failure</span> <span class="pre">in</span> <span class="pre">name</span> <span class="pre">resolution</span></code> is Reported in <code class="docutils literal notranslate"><span class="pre">ranktable</span></code> Generation File?<a class="headerlink" href="#q-what-should-i-do-when-socket-gaierror-errno-2-name-or-service-not-known-or-socket-gaierror-errno-3-temporary-failure-in-name-resolution-is-reported-in-ranktable-generation-file" title="Link to this heading"></a></h2>
+<p>A: Starting from <code class="docutils literal notranslate"><span class="pre">MindSpore</span> <span class="pre">Transformers</span> <span class="pre">r1.2.0</span></code> version, cluster startup is unified using <code class="docutils literal notranslate"><span class="pre">msrun</span></code> method, and <code class="docutils literal notranslate"><span class="pre">ranktable</span></code> startup method is deprecated.</p>
+<br/>
+</section>
+<section id="q-when-installing-mindspore-transformers-from-source-code-the-download-speed-of-dependency-packages-is-slow-how-can-this-be-resolved">
+<h2>Q: When installing MindSpore Transformers from source code, the download speed of dependency packages is slow. How can this be resolved?<a class="headerlink" href="#q-when-installing-mindspore-transformers-from-source-code-the-download-speed-of-dependency-packages-is-slow-how-can-this-be-resolved" title="Link to this heading"></a></h2>
+<p>A: The <code class="docutils literal notranslate"><span class="pre">build.sh</span></code> script uses the <a class="reference external" href="https://mirrors.tuna.tsinghua.edu.cn/help/pypi/">Tsinghua Mirror</a> to download the Python packages required by MindSpore Transformers. To change the mirror source, you can modify the download command in <code class="docutils literal notranslate"><span class="pre">build.sh</span></code>: <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">mindformers*whl</span> <span class="pre">-i</span> <span class="pre">https://pypi.tuna.tsinghua.edu.cn/simple</span></code> , replace the URL after <code class="docutils literal notranslate"><span class="pre">-i</span></code> with the address of your desired mirror source.</p>
+<br/></section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="model_related.html" class="btn btn-neutral float-left" title="Model-Related FAQ" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../static_graph/introduction/overview.html" class="btn btn-neutral float-right" title="Overall Structure" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

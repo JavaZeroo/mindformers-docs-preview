@@ -1,0 +1,634 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>其它训练特性 &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="量化" href="quantization.html" />
+    <link rel="prev" title="Pre-trained Model Average 权重合并" href="pma_fused_checkpoint.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">介绍</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/quick_start.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">模型支持库</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">安装</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">安装指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">功能特性</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/overview.html">功能特性概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/start_task.html">启动任务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/configuration.html">配置文件说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/logging.html">日志</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/dataset.html">数据集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/training_hyperparameters.html">训练超参数与优化器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/save_and_load_checkpoint.html">权重保存与加载</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/resume_training.html">断点续训</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/monitor.html">训练指标监控与 Profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/static_graph_features.html">静态图实现特性</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">环境变量</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../env_variables.html">环境变量说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">贡献指南</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers贡献指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">魔乐社区贡献指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">模型相关 FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">功能相关 FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">静态图实现（Deprecated）</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">大模型全流程指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">功能特性</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">功能特性概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="start_tasks.html">启动任务</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ckpt.html">Ckpt权重</a></li>
+<li class="toctree-l2"><a class="reference internal" href="safetensors.html">Safetensors权重</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">配置文件说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="load_huggingface_config.html">加载 Hugging Face 模型配置</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html">日志</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tokenizer.html">使用Tokenizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset.html">数据集</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training_hyperparameters.html">训练超参数</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monitor.html">训练指标监控</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training.html">断点续训</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoint_saving_and_loading.html">checkpoint保存和加载</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training2.0.html">断点续训2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l2"><a class="reference internal" href="high_availability.html">训练高可用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skip_data_and_ckpt_health_monitor.html">数据跳过和健康监测</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pma_fused_checkpoint.html">Pre-trained Model Average 权重合并</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">其它训练特性</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">梯度累积</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id3">概述</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">配置与使用</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">梯度裁剪</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id9">概述</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id10">配置与使用</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#groupedmatmul">GroupedMatmul</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id13">概述</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id14">配置与使用</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#faq">FAQ</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#moe-droprate">MoE DropRate 打印</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id16">概述</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id17">配置与使用</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#rope">RoPE融合算子</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id20">概述</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id21">配置与使用</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#swiglu">SwiGLU融合算子</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id23">概述</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id24">配置与使用</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#cpu">CPU绑核配置</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id26">概述</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id27">配置与使用</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id30">位置编码</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id31">概述</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id32">配置与使用</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#slidingwindowattention">SlidingWindowAttention</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id34">概述</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id35">配置与使用</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="quantization.html">量化</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_development/index.html">高阶开发</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">优秀实践</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">环境变量说明</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">功能特性</a></li>
+      <li class="breadcrumb-item active">其它训练特性</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/feature/other_training_features.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">已废弃（Deprecated）</p>
+<p>本页属于 <strong>静态图（GRAPH_MODE）实现</strong> 章节，已标记为废弃。新特性优先在「r2.0.0 动态图实现」章节演进，请优先查阅动态图相关文档。</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>其它训练特性<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/static_graph/feature/other_training_features.md"><img alt="查看源文件" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source.svg" /></a></p>
+<p>在大规模的深度学习模型训练中，会遇到诸多挑战，如：内存限制、计算资源的有效利用、分布式训练中的同步问题等，需要使用训练优化算法来提高训练效率、加速收敛速度以及改善最终模型性能。</p>
+<p>MindSpore Transformers 提供了梯度累积、梯度裁剪等训练优化算法，可供开发者进行训练时使用。</p>
+<section id="id2">
+<h2>梯度累积<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<section id="id3">
+<h3>概述<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p>MindSpore 在 2.1.1 之后的版本中增加了 <code class="docutils literal notranslate"><span class="pre">mindspore.nn.wrap.cell_wrapper.GradAccumulationCell</span></code> 这一梯度累积实现接口，通过拆分 MiniBatch 的形式提供了梯度累加的能力。MindSpore Transformers 将其封装进了统一的训练流程，通过 yaml 配置进行使能。关于梯度累积的原理和框架侧的能力可以参考 <a class="reference external" href="https://www.mindspore.cn/tutorials/zh-CN/master/parallel/distributed_gradient_accumulation.html">MindSpore 文档：梯度累加</a>。</p>
+</section>
+<section id="id4">
+<h3>配置与使用<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<section id="yaml">
+<h4>YAML 参数配置<a class="headerlink" href="#yaml" title="Link to this heading"></a></h4>
+<p>用户在需要开启梯度累积的场景下，只需在配置文件中的 <code class="docutils literal notranslate"><span class="pre">runner_config</span></code> 项下配置 <code class="docutils literal notranslate"><span class="pre">gradient_accumulation_steps</span></code> 项，设置为所需的梯度累积步数即可：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># runner config</span>
+<span class="nt">runner_config</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">gradient_accumulation_steps</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+</section>
+<section id="id5">
+<h4>主要配置参数介绍<a class="headerlink" href="#id5" title="Link to this heading"></a></h4>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>参数</p></th>
+<th class="head"><p>描述</p></th>
+<th class="head"><p>取值说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>gradient_accumulation_steps</p></td>
+<td><p>在执行反向传播前，累积梯度的步数。</p></td>
+<td><p>(int, 必选) - 默认值：<code class="docutils literal notranslate"><span class="pre">1</span></code> 。</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id6">
+<h4>其他方式使用梯度累积<a class="headerlink" href="#id6" title="Link to this heading"></a></h4>
+<p>除配置文件外，当采用 <code class="docutils literal notranslate"><span class="pre">run_mindformer.py</span></code> 脚本启动时，可指定 <code class="docutils literal notranslate"><span class="pre">--gradient_accumulation_steps</span></code> 入参来使用梯度累积功能。</p>
+</section>
+<section id="id7">
+<h4>梯度累积使用限制<a class="headerlink" href="#id7" title="Link to this heading"></a></h4>
+<blockquote>
+<div><p>开启梯度累积会增大内存开销，请注意内存管理，防止发生内存溢出（OOM）。</p>
+</div></blockquote>
+<ol class="arabic simple">
+<li><p>由于 <code class="docutils literal notranslate"><span class="pre">GradAccumulationCell</span></code> 的实现依赖并行特性，梯度累积当前仅支持在<strong>半自动并行模式</strong>下使用；</p></li>
+<li><p>此外，在 pipeline 并行场景下，梯度累积含义与 micro_batch 相同，将不会生效，请配置 <code class="docutils literal notranslate"><span class="pre">micro_batch_num</span></code> 项以增大训练 batch_size。</p></li>
+</ol>
+</section>
+</section>
+</section>
+<section id="id8">
+<h2>梯度裁剪<a class="headerlink" href="#id8" title="Link to this heading"></a></h2>
+<section id="id9">
+<h3>概述<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
+<p>梯度裁剪算法可以避免反向梯度过大导致的梯度爆炸，从而帮助模型训练更稳定地收敛。</p>
+</section>
+<section id="id10">
+<h3>配置与使用<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
+<section id="id11">
+<h4>YAML 参数配置<a class="headerlink" href="#id11" title="Link to this heading"></a></h4>
+<p>在 MindSpore Transformers 中，默认的训练流程 <code class="docutils literal notranslate"><span class="pre">MFTrainOneStepCell</span></code> 中集成了梯度裁剪逻辑。</p>
+<p>可使用如下示例，以开启梯度裁剪：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># wrapper cell config</span>
+<span class="nt">runner_wrapper</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MFTrainOneStepCell</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="nt">use_clip_grad</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">max_grad_norm</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+</section>
+<section id="id12">
+<h4>主要配置参数介绍<a class="headerlink" href="#id12" title="Link to this heading"></a></h4>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>参数</p></th>
+<th class="head"><p>描述</p></th>
+<th class="head"><p>取值说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>use_clip_grad</p></td>
+<td><p>控制在训练过程中是否开启梯度裁剪。</p></td>
+<td><p>(bool, 可选) - 默认值：<code class="docutils literal notranslate"><span class="pre">False</span></code> 。</p></td>
+</tr>
+<tr class="row-odd"><td><p>max_grad_norm</p></td>
+<td><p>控制梯度裁剪的最大 norm 值。</p></td>
+<td><p>(float, 可选) - 默认值：<code class="docutils literal notranslate"><span class="pre">1.0</span></code> 。</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+<section id="groupedmatmul">
+<h2>GroupedMatmul<a class="headerlink" href="#groupedmatmul" title="Link to this heading"></a></h2>
+<section id="id13">
+<h3>概述<a class="headerlink" href="#id13" title="Link to this heading"></a></h3>
+<p>针对MoE单卡多专家计算，存在细碎的专家计算操作与通信，通过GroupedMatmul算子对多专家计算进行合并，提升MoE单卡多专家训练性能。通过调用GroupedMatmul算子，对多个专家计算进行融合达到加速效果。</p>
+<p><code class="docutils literal notranslate"><span class="pre">token_dispatcher</span></code>可以根据计算后的路由策略，将不同的 token（输入的子词/子单元）路由分派给不同的专家（Expert）、计算单元或分支进行独立处理。该模块主要由<code class="docutils literal notranslate"><span class="pre">all_to_all</span></code>通信构成。</p>
+</section>
+<section id="id14">
+<h3>配置与使用<a class="headerlink" href="#id14" title="Link to this heading"></a></h3>
+<section id="id15">
+<h4>YAML 参数配置<a class="headerlink" href="#id15" title="Link to this heading"></a></h4>
+<p>用户在需要MoE开启GroupedMatmul的场景下，只需在配置文件中的 <code class="docutils literal notranslate"><span class="pre">moe_config</span></code> 项下配置 <code class="docutils literal notranslate"><span class="pre">use_gmm</span></code> 项，设置为<code class="docutils literal notranslate"><span class="pre">True</span></code>。如果需要使用<code class="docutils literal notranslate"><span class="pre">token_permute</span></code>融合算子，配置<code class="docutils literal notranslate"><span class="pre">use_fused_ops_permute</span></code>为<code class="docutils literal notranslate"><span class="pre">True</span></code>：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">moe_config</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">use_gmm</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">use_fused_ops_permute</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="faq">
+<h3>FAQ<a class="headerlink" href="#faq" title="Link to this heading"></a></h3>
+<p>使用GroupedMatmul融合算子，在负载不均衡时可能会出现某张卡上的专家未被分配任何token的情况，导致程序报错。报错如下：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>ValueError: For primitive[Reshape]， the accumulate of x_shape must be equal to out_shape, but got x_shape: [const vector]{}, and output_shape: [const vector]{0, hiddensize}
+</pre></div>
+</div>
+<p>此时，可以配置<code class="docutils literal notranslate"><span class="pre">enable_gmm_safe_tokens:</span> <span class="pre">True</span></code>，保证每个专家至少分配1个tokens，避免程序报错。</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">moe_config</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">enable_gmm_safe_tokens</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="moe-droprate">
+<h2>MoE DropRate 打印<a class="headerlink" href="#moe-droprate" title="Link to this heading"></a></h2>
+<section id="id16">
+<h3>概述<a class="headerlink" href="#id16" title="Link to this heading"></a></h3>
+<p>在使用MoE（Mixture of Experts）容量方案进行模型训练时，为了提高效率和性能，系统可能会对某些token执行drop操作。通过启用 DropRate 打印功能，用户可以在训练过程中实时监控这些drop操作的发生率，从而更好地理解模型的行为，并据此调整训练策略。此功能允许用户在训练过程中查看每一层的 DropRate 情况。DropRate 是指在特定层中被drop掉的token的比例。通过观察 DropRate 的变化趋势，可以帮助用户评估当前的训练参数设置是否合理，以及模型是否有效地利用了专家资源。</p>
+</section>
+<section id="id17">
+<h3>配置与使用<a class="headerlink" href="#id17" title="Link to this heading"></a></h3>
+<section id="id18">
+<h4>YAML 参数配置<a class="headerlink" href="#id18" title="Link to this heading"></a></h4>
+<p>用户要启用 DropRate 打印功能，需在配置文件中的 <code class="docutils literal notranslate"><span class="pre">moe_config</span></code> 项下配置 <code class="docutils literal notranslate"><span class="pre">callback_moe_droprate</span></code> 项，设置为<code class="docutils literal notranslate"><span class="pre">True</span></code>，在callback部分添加<code class="docutils literal notranslate"><span class="pre">MoEDropRateCallback</span></code>配置项，并设置模型相关参数<code class="docutils literal notranslate"><span class="pre">expert_num</span></code>、<code class="docutils literal notranslate"><span class="pre">capacity_factor</span></code>、<code class="docutils literal notranslate"><span class="pre">num_layers</span></code>、<code class="docutils literal notranslate"><span class="pre">mtp_depth</span></code>。示例：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">moe_config</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">callback_moe_droprate</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+
+<span class="nt">callback</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">- type</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MoEDropRateCallback</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">expert_num</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">capacity_factor</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.5</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">num_layers</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mtp_depth</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+</section>
+<section id="id19">
+<h4>主要配置参数介绍<a class="headerlink" href="#id19" title="Link to this heading"></a></h4>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>参数</p></th>
+<th class="head"><p>描述</p></th>
+<th class="head"><p>取值说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>callback_moe_droprate</p></td>
+<td><p>是否在callback中打印MoE DropRate。</p></td>
+<td><p>(bool, 可选) - 默认值：<code class="docutils literal notranslate"><span class="pre">False</span></code> 。</p></td>
+</tr>
+<tr class="row-odd"><td><p>expert_num</p></td>
+<td><p>专家数量。</p></td>
+<td><p>(int, 必选) - 默认值：<code class="docutils literal notranslate"><span class="pre">None</span></code>。</p></td>
+</tr>
+<tr class="row-even"><td><p>capacity_factor</p></td>
+<td><p>容量因子。</p></td>
+<td><p>(float, 必选) - 默认值：<code class="docutils literal notranslate"><span class="pre">None</span></code>。</p></td>
+</tr>
+<tr class="row-odd"><td><p>num_layers</p></td>
+<td><p>模型层数。</p></td>
+<td><p>(int, 必选) - 默认值：<code class="docutils literal notranslate"><span class="pre">None</span></code>。</p></td>
+</tr>
+<tr class="row-even"><td><p>mtp_depth</p></td>
+<td><p>mtp层层数。</p></td>
+<td><p>(int, 必选) - 默认值：<code class="docutils literal notranslate"><span class="pre">None</span></code>。</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+<section id="rope">
+<h2>RoPE融合算子<a class="headerlink" href="#rope" title="Link to this heading"></a></h2>
+<section id="id20">
+<h3>概述<a class="headerlink" href="#id20" title="Link to this heading"></a></h3>
+<p>网络中使用RoPE（Rotary Position Embedding）作为位置编码时，可以启用该融合算子提升整网性能。该功能提供RoPE的融合算子实现，提升整网性能。算子的接口可参考：
+<a class="reference external" href="https://www.mindspore.cn/docs/zh-CN/master/api_python/ops/mindspore.ops.rotary_position_embedding.html">mindspore.ops.rotary_position_embedding</a>。</p>
+</section>
+<section id="id21">
+<h3>配置与使用<a class="headerlink" href="#id21" title="Link to this heading"></a></h3>
+<section id="id22">
+<h4>YAML 参数配置<a class="headerlink" href="#id22" title="Link to this heading"></a></h4>
+<p>用户需要使用rotary_position_embedding融合算子，需在配置文件中的 <code class="docutils literal notranslate"><span class="pre">model_config</span></code> 项下配置 <code class="docutils literal notranslate"><span class="pre">use_fused_rope</span></code> 项，设置为<code class="docutils literal notranslate"><span class="pre">True</span></code>。示例：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">model_config</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">use_fused_rope</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="swiglu">
+<h2>SwiGLU融合算子<a class="headerlink" href="#swiglu" title="Link to this heading"></a></h2>
+<section id="id23">
+<h3>概述<a class="headerlink" href="#id23" title="Link to this heading"></a></h3>
+<p>网络中使用SwiGLU作为激活函数时可以启用该融合算子提升整网性能。该功能提供SwiGLU的融合算子实现，提升整网性能。算子的功能可参考：
+<a class="reference external" href="https://www.mindspore.cn/docs/zh-CN/master/api_python/ops/mindspore.ops.swiglu.html">mindspore.ops.swiglu</a>。</p>
+</section>
+<section id="id24">
+<h3>配置与使用<a class="headerlink" href="#id24" title="Link to this heading"></a></h3>
+<section id="id25">
+<h4>YAML 参数配置<a class="headerlink" href="#id25" title="Link to this heading"></a></h4>
+<p>用户需要使用SwiGLU融合算子，需在配置文件中的 <code class="docutils literal notranslate"><span class="pre">model_config</span></code> 项下配置 <code class="docutils literal notranslate"><span class="pre">use_fused_swiglu</span></code> 项，设置为<code class="docutils literal notranslate"><span class="pre">True</span></code>。示例：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">model_config</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">use_fused_swiglu</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="cpu">
+<h2>CPU绑核配置<a class="headerlink" href="#cpu" title="Link to this heading"></a></h2>
+<section id="id26">
+<h3>概述<a class="headerlink" href="#id26" title="Link to this heading"></a></h3>
+<p>MindSpore提供线程级CPU绑核功能，允许给MindSpore的主要模块（主线程、pynative、runtime、minddata）分配特定的CPU核，防止MindSpore线程抢占CPU导致性能不稳定的情况。</p>
+</section>
+<section id="id27">
+<h3>配置与使用<a class="headerlink" href="#id27" title="Link to this heading"></a></h3>
+<section id="id28">
+<h4>YAML 参数配置<a class="headerlink" href="#id28" title="Link to this heading"></a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">context</span></code>字段下有两处可以配置CPU亲和度。分别是<code class="docutils literal notranslate"><span class="pre">affinity_cpu_list</span></code>与<code class="docutils literal notranslate"><span class="pre">affinity_config</span></code>，<code class="docutils literal notranslate"><span class="pre">affinity_cpu_list</span></code>已合并至<code class="docutils literal notranslate"><span class="pre">affinity_config</span></code>，因此不做赘述。他们同时配置时以<code class="docutils literal notranslate"><span class="pre">affinity_config</span></code>为准。</p>
+<p>在<code class="docutils literal notranslate"><span class="pre">context</span></code>字段的<code class="docutils literal notranslate"><span class="pre">affinity_config</span></code>字段中写入配置项，<code class="docutils literal notranslate"><span class="pre">affinity_config</span></code>及其子项都是可选的。也支持传入一个以“.json”结尾的字符串，将JSON配置文件传给MindSpore的接口。详情参考 <a class="reference external" href="https://www.mindspore.cn/docs/zh-CN/master/api_python/runtime/mindspore.runtime.set_cpu_affinity.html">mindspore.runtime.set_cpu_affinity</a>。以下是一个两卡示例，分别以自定义配置项和传入JSON文件方式做绑定，两者达到相同的绑定效果（device0的main线程绑定CPU0和CPU1，minddata线程绑定CPU10和CPU11；device1的main线程绑定CPU20和CPU21，minddata线程绑定CPU30和CPU31）：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">context</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">affinity_config</span><span class="p p-Indicator">:</span>
+<span class="w">    </span><span class="nt">device_0</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">affinity_cpu_list</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;0-3&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;8-11&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">module_to_cpu_dict</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">main</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1</span><span class="p p-Indicator">]</span>
+<span class="w">        </span><span class="nt">minddata</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">6</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">7</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">device_1</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">affinity_cpu_list</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;20-23&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;28-31&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">module_to_cpu_dict</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">main</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1</span><span class="p p-Indicator">]</span>
+<span class="w">        </span><span class="nt">minddata</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">6</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">7</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+
+<span class="c1"># 或者传入JSON文件路径</span>
+<span class="nt">context</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">affinity_config</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;path_to_file.json&quot;</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+<p>JSON配置文件示例如下，详细配置可参考 <a class="reference external" href="https://www.mindspore.cn/tutorials/zh-CN/master/parallel/msrun_launcher.html">使用 JSON 统一配置 CPU/NUMA 亲和</a>：</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;bind_config&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;bind_cpu_mode&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;cpu&quot;</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">&quot;bind_cpu&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;device0&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;main&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;0-1&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;minddata&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;10-11&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;device1&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;main&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;20-21&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;minddata&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;30-31&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>在 JSON 文件中， CPU 的配置方式使用 <strong>绝对 CPU ID</strong> ，例如 JSON 中 <code class="docutils literal notranslate"><span class="pre">&quot;main&quot;:</span> <span class="pre">&quot;10-12&quot;</span></code> 表示直接绑定到物理 CPU ID 10、11、12；自定义配置（<code class="docutils literal notranslate"><span class="pre">affinity_cpu_list</span></code> + <code class="docutils literal notranslate"><span class="pre">module_to_cpu_dict</span></code>）使用 <strong>绝对CPU范围段 + 相对索引机制</strong> ，<code class="docutils literal notranslate"><span class="pre">affinity_cpu_list</span></code> 定义可用范围（绝对 ID），<code class="docutils literal notranslate"><span class="pre">module_to_cpu_dict</span></code> 在该范围内使用索引，例如 <code class="docutils literal notranslate"><span class="pre">affinity_cpu_list:</span> <span class="pre">[&quot;10-20&quot;]</span></code>，<code class="docutils literal notranslate"><span class="pre">module_to_cpu_dict:</span> <span class="pre">{main:</span> <span class="pre">[0,</span> <span class="pre">1,</span> <span class="pre">2]}</span></code> 表示在范围 10-20 中选择索引 0、1、2，即绑定到物理 CPU ID 10、11、12。</p>
+</div></blockquote>
+</section>
+<section id="id29">
+<h4>主要配置参数介绍<a class="headerlink" href="#id29" title="Link to this heading"></a></h4>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>参数</p></th>
+<th class="head"><p>描述</p></th>
+<th class="head"><p>取值说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>device_X</p></td>
+<td><p>需要配置的设备<code class="docutils literal notranslate"><span class="pre">id</span></code></p></td>
+<td><p>将<code class="docutils literal notranslate"><span class="pre">X</span></code>替换为有效数字</p></td>
+</tr>
+<tr class="row-odd"><td><p>affinity_cpu_list</p></td>
+<td><p>自定义指定本进程的绑核CPU范围。传入列表需要为<code class="docutils literal notranslate"><span class="pre">[&quot;cpuidX-cpuidY&quot;]</span></code> 格式，例如 <code class="docutils literal notranslate"><span class="pre">[&quot;0-3&quot;,</span> <span class="pre">&quot;8-11&quot;]</span></code></p></td>
+<td><p>(list, 可选) - 默认值：<code class="docutils literal notranslate"><span class="pre">None</span></code>。</p></td>
+</tr>
+<tr class="row-even"><td><p>module_to_cpu_dict</p></td>
+<td><p>自定义指定的绑核策略。传入字典的key需要为模块名称字符串，目前支持传入<code class="docutils literal notranslate"><span class="pre">main</span></code> 、 <code class="docutils literal notranslate"><span class="pre">runtime</span></code> 、 <code class="docutils literal notranslate"><span class="pre">pynative</span></code> 、 <code class="docutils literal notranslate"><span class="pre">minddata</span></code>；value需要为包含 <code class="docutils literal notranslate"><span class="pre">int</span></code> 元素的列表，表示绑核CPU范围中的索引，例如 <code class="docutils literal notranslate"><span class="pre">{&quot;main&quot;:</span> <span class="pre">[0,1],</span> <span class="pre">&quot;minddata&quot;:</span> <span class="pre">[6,7]}</span></code></p></td>
+<td><p>(dict, 可选) - 默认值：<code class="docutils literal notranslate"><span class="pre">None</span></code>。</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+<section id="id30">
+<h2>位置编码<a class="headerlink" href="#id30" title="Link to this heading"></a></h2>
+<section id="id31">
+<h3>概述<a class="headerlink" href="#id31" title="Link to this heading"></a></h3>
+<p>位置编码是为Transformer架构引入序列顺序信息的关键机制。在MindSpore Transformers中，位置编码通过 <code class="docutils literal notranslate"><span class="pre">position_embedding_type</span></code> 参数进行配置，支持多种主流的位置编码方案，以增强模型对token位置的感知能力。具体支持的编码类型包括：</p>
+<ul class="simple">
+<li><p>RoPE（Rotary Position Embedding）：通过旋转矩阵编码位置信息，具有良好的外推性。</p></li>
+<li><p>YaRN：改进的RoPE变体，能更好地处理长序列。</p></li>
+<li><p>可学习绝对位置编码：将位置信息作为可训练参数。</p></li>
+<li><p>无位置编码：不使用显式位置编码。</p></li>
+</ul>
+</section>
+<section id="id32">
+<h3>配置与使用<a class="headerlink" href="#id32" title="Link to this heading"></a></h3>
+<section id="id33">
+<h4>YAML 参数配置<a class="headerlink" href="#id33" title="Link to this heading"></a></h4>
+<p>用户在配置文件中的 <code class="docutils literal notranslate"><span class="pre">model_config</span></code> 项下配置 <code class="docutils literal notranslate"><span class="pre">position_embedding_type</span></code> 项，设置位置编码。当前 <code class="docutils literal notranslate"><span class="pre">position_embedding_type</span></code> 的可选值和含义如下所示：</p>
+<ul class="simple">
+<li><p>‘none’：所有层都不使用位置编码。</p></li>
+<li><p>‘rope’：所有层都使用 RoPE 位置编码。如果需要实现 RoPE 层与无位置编码层的交替模式，可以将 <code class="docutils literal notranslate"><span class="pre">nope_layer_interval</span></code> 参数配置为正整数。<code class="docutils literal notranslate"><span class="pre">nope_layer_interval</span></code> 表示相邻无位置编码层之间间隔有编码层的数量。</p></li>
+<li><p>‘yarn’：所有层都使用 YaRN 位置编码。</p></li>
+<li><p>‘learned_absolute’：所有层都使用可学习绝对位置编码。</p></li>
+</ul>
+<p>示例：</p>
+<ul>
+<li><p>所有层都使用 YaRN 位置编码:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">model_config</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">position_embedding_type</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&#39;yarn&#39;</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+</li>
+<li><p>每两层无位置编码层之间插入四层 RoPE 位置编码层:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">model_config</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">position_embedding_type</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&#39;rope&#39;</span>
+<span class="w">  </span><span class="nt">nope_layer_interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+</section>
+</section>
+<section id="slidingwindowattention">
+<h2>SlidingWindowAttention<a class="headerlink" href="#slidingwindowattention" title="Link to this heading"></a></h2>
+<section id="id34">
+<h3>概述<a class="headerlink" href="#id34" title="Link to this heading"></a></h3>
+<p>SlidingWindowAttention是一种稀疏注意力机制，通过限制每个token仅关注局部窗口内的其他token，解决标准Transformer模型计算复杂度随序列长度二次增长的问题。其核心思想是将注意力范围从全局缩小到固定窗口大小。</p>
+</section>
+<section id="id35">
+<h3>配置与使用<a class="headerlink" href="#id35" title="Link to this heading"></a></h3>
+<section id="id36">
+<h4>YAML 参数配置<a class="headerlink" href="#id36" title="Link to this heading"></a></h4>
+<p>用户在使用SlidingWindowAttention模块时，需要配置文件中的 <code class="docutils literal notranslate"><span class="pre">model_config</span></code> 项下配置<code class="docutils literal notranslate"><span class="pre">window_size</span></code> 项和<code class="docutils literal notranslate"><span class="pre">window_attn_skip_freq</span></code> 项。</p>
+<p><code class="docutils literal notranslate"><span class="pre">window_size</span></code>类型为<code class="docutils literal notranslate"><span class="pre">Tuple[int,</span> <span class="pre">int]</span></code>，此参数代表每个注意力操作中，一个token能够“关注”到的前后邻近token的数量范围；<code class="docutils literal notranslate"><span class="pre">window_size[0]</span></code>代表向前“关注”的token数量，<code class="docutils literal notranslate"><span class="pre">window_size[1]</span></code>代表向后“关注”的token数量。任何一个设置成<code class="docutils literal notranslate"><span class="pre">-1</span></code>，表示向前或向后“关注”的token数量无限制。默认起点为右下角，如下图所示：</p>
+<p><img alt="/expert_load" src="../../_images/sliding_window.png" /></p>
+<p><code class="docutils literal notranslate"><span class="pre">window_attn_skip_freq</span></code>类型为<code class="docutils literal notranslate"><span class="pre">Union[int,</span> <span class="pre">List[int]]</span></code>，用于设定滑动窗口注意力（SWA）层中全注意力（Full Attention）层的插入频率。支持两种配置模式：</p>
+<ul class="simple">
+<li><p>等间隔模式：指定一个整数 <code class="docutils literal notranslate"><span class="pre">N</span></code> ，以 <code class="docutils literal notranslate"><span class="pre">(N-1)</span> <span class="pre">:</span> <span class="pre">1</span></code> 的比例插入全注意力层。即每经过 <code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">−</span> <span class="pre">1</span></code> 个滑动窗口注意力层后，插入一个全注意力层。</p></li>
+<li><p>自定义模式：通过布尔值列表自由定义注意力层的交替顺序。例如： <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">1,</span> <span class="pre">1,</span> <span class="pre">1,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">0]</span></code> 其中 <code class="docutils literal notranslate"><span class="pre">1</span></code> 代表滑动窗口注意力层，<code class="docutils literal notranslate"><span class="pre">0</span></code> 代表全注意力层。该列表按顺序决定网络中每一层的类型。</p></li>
+</ul>
+<p>配置示例：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">model_config</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">window_size</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">10</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0</span><span class="p p-Indicator">]</span><span class="w">  </span><span class="c1"># 每个token向前关注10个tokens，向后不关注</span>
+<span class="w">  </span><span class="nt">window_attn_skip_freq</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w">  </span><span class="c1"># 每2层有一个全注意力层</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pma_fused_checkpoint.html" class="btn btn-neutral float-left" title="Pre-trained Model Average 权重合并" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="quantization.html" class="btn btn-neutral float-right" title="量化" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

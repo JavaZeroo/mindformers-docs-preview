@@ -1,0 +1,361 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>断点续训2.0 &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="分布式并行训练" href="parallel_training.html" />
+    <link rel="prev" title="checkpoint保存和加载" href="checkpoint_saving_and_loading.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">介绍</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/quick_start.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">模型支持库</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">安装</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">安装指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">功能特性</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/overview.html">功能特性概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/start_task.html">启动任务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/configuration.html">配置文件说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/logging.html">日志</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/dataset.html">数据集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/training_hyperparameters.html">训练超参数与优化器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/save_and_load_checkpoint.html">权重保存与加载</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/resume_training.html">断点续训</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/monitor.html">训练指标监控与 Profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/static_graph_features.html">静态图实现特性</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">环境变量</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../env_variables.html">环境变量说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">贡献指南</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers贡献指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">魔乐社区贡献指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">模型相关 FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">功能相关 FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">静态图实现（Deprecated）</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">大模型全流程指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">功能特性</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">功能特性概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="start_tasks.html">启动任务</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ckpt.html">Ckpt权重</a></li>
+<li class="toctree-l2"><a class="reference internal" href="safetensors.html">Safetensors权重</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">配置文件说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="load_huggingface_config.html">加载 Hugging Face 模型配置</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html">日志</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tokenizer.html">使用Tokenizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset.html">数据集</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training_hyperparameters.html">训练超参数</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monitor.html">训练指标监控</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training.html">断点续训</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoint_saving_and_loading.html">checkpoint保存和加载</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">断点续训2.0</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#checkpoint">checkpoint介绍</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">配置说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">权重保存声明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">场景介绍</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id6">中断续训</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id7">扩缩容续训</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id8">增量续训</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id9">自动恢复续训</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id10">约束说明</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l2"><a class="reference internal" href="high_availability.html">训练高可用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skip_data_and_ckpt_health_monitor.html">数据跳过和健康监测</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pma_fused_checkpoint.html">Pre-trained Model Average 权重合并</a></li>
+<li class="toctree-l2"><a class="reference internal" href="other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantization.html">量化</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_development/index.html">高阶开发</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">优秀实践</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">环境变量说明</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">功能特性</a></li>
+      <li class="breadcrumb-item active">断点续训2.0</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/feature/resume_training2.0.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">已废弃（Deprecated）</p>
+<p>本页属于 <strong>静态图（GRAPH_MODE）实现</strong> 章节，已标记为废弃。新特性优先在「r2.0.0 动态图实现」章节演进，请优先查阅动态图相关文档。</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>断点续训2.0<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/static_graph/feature/resume_training2.0.md"><img alt="查看源文件" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source.svg" /></a></p>
+<section id="id2">
+<h2>概述<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p>MindSpore Transformers 具备完备的断点续训能力，核心功能与适用场景如下：</p>
+<ol class="arabic simple">
+<li><p><strong>核心功能</strong>：支持加载已保存的checkpoint，快速恢复训练进度，无需从零开始；</p></li>
+<li><p><strong>多场景适配</strong>：覆盖四大主流续训场景</p>
+<ul class="simple">
+<li><p><strong>中断续训</strong>：正常训练任务异常中断（如设备故障、网络波动）后，基于已保存的checkpoint重新恢复训练流程；</p></li>
+<li><p><strong>扩缩容续训</strong>：训练过程中调整卡数（扩容 / 缩容），基于已保存的checkpoint继续训练；</p></li>
+<li><p><strong>增量续训</strong>：在已有训练成果基础上，补充训练数据集，基于已保存的checkpoint继续训练；</p></li>
+<li><p><strong>自动恢复续训</strong>：支持平台无需人工干预自动拉起断点续训；</p></li>
+</ul>
+</li>
+</ol>
+<p>对于大规模训练任务（训练周期长、资源投入大），可避免意外中断导致的进度丢失，显著减少时间与计算资源浪费。</p>
+<blockquote>
+<div><p>本文档仅适用于使用 <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/checkpoint_saving_and_loading.html">Checkpoint 2.0 版本</a>进行续训的场景；若用户使用Checkpoint 1.0 版本，需参考旧版<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/resume_training.html">断点续训文档</a>。</p>
+</div></blockquote>
+</section>
+<section id="checkpoint">
+<h2>checkpoint介绍<a class="headerlink" href="#checkpoint" title="Link to this heading"></a></h2>
+<p>MindSpore Transformers 的训练checkpoint默认存储于 <code class="docutils literal notranslate"><span class="pre">output/checkpoint</span></code> 目录，每个checkpoint独立保存为以 <code class="docutils literal notranslate"><span class="pre">iteration</span></code> 命名的子文件夹。以 8 卡任务第 1 步生成的checkpoint为例，其保存格式如下：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>output
+    ├── checkpoint
+        ├── iteration_0000001
+            ├── metadata.json
+            ├── common.json
+            ├── {prefix}-model-0000000-0000008.safetensor
+            ...
+            ├── {prefix}-model-0000007-0000008.safetensor
+            ├── {prefix}-opt-0000000-0000008.safetensor
+            ...
+            └── {prefix}-opt-0000007-0000008.safetensor
+        ...
+        └── latest_checkpointed_iteration.txt
+</pre></div>
+</div>
+<p>可参考<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/checkpoint_saving_and_loading.html">checkpoint保存和加载</a>，获取更多checkpoint相关信息。</p>
+</section>
+<section id="id3">
+<h2>配置说明<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>参数名称</p></th>
+<th class="head"><p>描述</p></th>
+<th class="head"><p>取值说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>load_checkpoint</p></td>
+<td><p>checkpoint文件夹路径，可<strong>填写<code class="docutils literal notranslate"><span class="pre">output/checkpoint</span></code>文件夹路径或<code class="docutils literal notranslate"><span class="pre">iteration</span></code>子文件夹路径</strong>。<br />若为<code class="docutils literal notranslate"><span class="pre">checkpoint</span></code>文件夹路径，将会按照<code class="docutils literal notranslate"><span class="pre">latest_checkpointed_iteration.txt</span></code>中记录的迭代步数，加载对应<code class="docutils literal notranslate"><span class="pre">iteration</span></code>子文件夹checkpoint。</p></td>
+<td><p>(str，可选) - 默认值：<code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>resume_training</p></td>
+<td><p>断点续训功能开关，设置为 <code class="docutils literal notranslate"><span class="pre">True</span></code> 时，将从待加载checkpoint对应的迭代步数继续训练。</p></td>
+<td><p>(bool，可选) - 默认值：<code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id4">
+<h2>权重保存声明<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>当在保存权重时，MindSpore Transformers在除特殊场景外仅对本轮次训练的权重进行保存和删除（删除逻辑：当保存的权重数目达到设定的最大值时，会删除旧权重文件）。</p></li>
+<li><p>特殊场景：当保存权重时遇到同名目录时，旧的权重目录会被覆盖。所以请及时做好权重目录的备份工作。</p></li>
+</ul>
+</section>
+<section id="id5">
+<h2>场景介绍<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
+<section id="id6">
+<h3>中断续训<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<p><strong>概述</strong>：正常训练任务异常中断后，在不改变分布式策略的前提下，基于已保存的checkpoint重新恢复训练流程。</p>
+<p>MindSpore Transformers 支持用户使用以下两种方式启动断点续训：</p>
+<ul>
+<li><p>基于<code class="docutils literal notranslate"><span class="pre">latest_checkpointed_iteration.txt</span></code>中记录的迭代步数续训</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/checkpoint</span>
+<span class="nt">resume_training</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+</div>
+</li>
+<li><p>基于指定迭代步数续训</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/checkpoint/iteration_{x}</span>
+<span class="nt">resume_training</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>x 代表checkpoint对应的训练迭代步数，例如 “0000001” 即表示第 1 步训练对应的checkpoint。</p>
+</div></blockquote>
+</li>
+</ul>
+</section>
+<section id="id7">
+<h3>扩缩容续训<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<p><strong>概述</strong>：需要<strong>扩大/缩小集群规模</strong>或<strong>修改分布式策略</strong>继续训练任务，配置方式和<a class="reference internal" href="#id6">中断续训</a>一致。MindSpore Transformers 依托在线 Reshard 机制，可确保checkpoint权重自动适配任意分布式策略，保障续训顺畅。</p>
+<ul>
+<li><p>基于<code class="docutils literal notranslate"><span class="pre">latest_checkpointed_iteration.txt</span></code>中记录的迭代步数续训</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/checkpoint</span>
+<span class="nt">resume_training</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+</div>
+</li>
+<li><p>基于指定迭代步数续训</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/checkpoint/iteration_{x}</span>
+<span class="nt">resume_training</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>x 代表checkpoint对应的训练迭代步数，例如 “0000001” 即表示第 1 步训练对应的checkpoint。</p>
+</div></blockquote>
+</li>
+</ul>
+</section>
+<section id="id8">
+<h3>增量续训<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
+<p><strong>概述</strong>：训练数据集需要<strong>边生产边训练</strong>，当前数据集训练结束后，加入新生产的数据集继续训练，直到所有数据集训练完毕。该场景需要用户根据训练的总数据量，提前预设学习率曲线的总步数。</p>
+<p>假设一共训练10T tokens数据，每次生产的数据集只包含1T tokens数据，整个训练过程分10个epoch训完，一共需要花费100000steps。</p>
+<ul>
+<li><p>步骤1：预设总训练步数，固定整个训练流程的学习率曲线</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">lr_schedule</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">total_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100000</span>
+</pre></div>
+</div>
+</li>
+<li><p>步骤2：设置足够大的epoch值，确保能够训完所有数据集</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">runner_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">epochs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">15</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>整个训练过程的学习率曲线已固定，epochs值设置不会影响学习率，可以设置较大值，确保能训完10个数据集。</p>
+</div></blockquote>
+</li>
+<li><p>步骤3：数据集训完1个epoch后，可以更换数据集续训，如下为基于<code class="docutils literal notranslate"><span class="pre">latest_checkpointed_iteration.txt</span></code>中记录的迭代步数续训，其他续训方式请参考<a class="reference internal" href="#id6">中断续训</a>或<a class="reference internal" href="#id7">扩缩容续训</a>。</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/checkpoint</span>
+<span class="nt">resume_training</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>更换数据集续训时，因各数据集样本数量不同，显示的 epoch 和单批次 step 可能变化，但训练总 step 数保持不变，这属于正常现象。</p>
+</div></blockquote>
+</li>
+</ul>
+</section>
+<section id="id9">
+<h3>自动恢复续训<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
+<p><strong>概述</strong>：为支持平台无人工干预自动拉起断点续训，可将 <code class="docutils literal notranslate"><span class="pre">load_checkpoint</span></code> 配置为checkpoint保存目录路径：首次训练时目录为空，模型随机初始化参数；续训时则基于该目录下最后保存的完整checkpoint恢复训练。</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/output/checkpoint</span>
+<span class="nt">resume_training</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id10">
+<h2>约束说明<a class="headerlink" href="#id10" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>多机场景下，断点续训需将所有checkpoint文件存放于同一共享目录，用户需将该共享路径配置至环境变量 <code class="docutils literal notranslate"><span class="pre">SHARED_PATHS</span></code>；建议优先配置最上层共享目录，示例：共享目录为 <code class="docutils literal notranslate"><span class="pre">/data01</span></code> 时，执行 <code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">SHARED_PATHS=/data01</span></code> 即可。</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="checkpoint_saving_and_loading.html" class="btn btn-neutral float-left" title="checkpoint保存和加载" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="parallel_training.html" class="btn btn-neutral float-right" title="分布式并行训练" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

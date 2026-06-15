@@ -1,0 +1,342 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Training Guide &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Pretraining" href="pre_training.html" />
+    <link rel="prev" title="Full-process Guide to Large Models" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">Models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contribution Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">Modelers Contribution Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">Model-Related FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">Feature-Related FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Static Graph Implementation (Deprecated)</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Full-process Guide to Large Models</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Training Guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#training-process">Training Process</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#preparing-for-the-task">1. Preparing for the Task</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#preparing-configuration-files">2. Preparing Configuration Files</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#starting-a-training-task">3. Starting a Training Task</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#monitoring-training-status">4. Monitoring Training Status</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#training-practices">Training Practices</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pre_training.html">Pretraining</a></li>
+<li class="toctree-l2"><a class="reference internal" href="supervised_fine_tuning.html">Supervised Fine-Tuning (SFT)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inference.html">Inference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deployment.html">Service Deployment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation.html">Evaluation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/index.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_development/index.html">Advanced Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">Excellent Practice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">Environment Variable Descriptions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Full-process Guide to Large Models</a></li>
+      <li class="breadcrumb-item active">Training Guide</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/guide/llm_training.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">Deprecated</p>
+<p>This page belongs to the <strong>Static Graph (GRAPH_MODE) Implementation</strong> section and has been marked as deprecated. New features are primarily being developed in the “r2.0.0 Dynamic Graph Implementation” section. Please refer to the dynamic graph documentation first.</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="training-guide">
+<h1>Training Guide<a class="headerlink" href="#training-guide" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_en/static_graph/guide/llm_training.md"><img alt="Source file" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source_en.svg" /></a></p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>Pretraining is the core phase of building high-performance LLMs. The essence of pretraining is to enable models to learn general language rules and knowledge from massive amounts of unlabeled data. Many pretrained models (such as Llama, Qwen, and DeepSeek series models) with excellent metrics have been open-sourced in the industry. By learning the probability distributions of languages from massive text data, these models possess general capabilities such as vocabulary, grammar, and semantics, providing a solid foundation for downstream tasks (such as Q&amp;A and writing).</p>
+<p>LLM fine-tuning is a process of further adjusting model parameters based on a pretrained model by using a small amount of labeled domain/task data. The core objective is to adapt the model to specific application scenarios (such as medical Q&amp;A and legal document generation) and improve the performance on specific tasks. Generally, the following methods are used for fine-tuning:</p>
+<p>a. Full-parameter fine-tuning: Adjusts all parameters of the model (high computational cost, suitable for small-scale models).</p>
+<p>b. Low-parameter fine-tuning: Modifies only some parameters to save resources. Low-rank adaptation (LoRA) is a prominent example of this method.</p>
+<p>Fine-tuning relies on the general language capabilities of pretrained models and optimizes the models’ “understanding” and “output” for specific tasks through targeted data (such as labeled dialog records and professional documents).</p>
+<p>As mentioned above, the differences between pretraining and fine-tuning mainly come from data and parameters, and their training processes are similar. In essence, both pretraining and fine-tuning optimize model parameters through the backpropagation algorithm to minimize the loss function, thereby improving the models’ ability to predict or generate content based on the input data. MindSpore Transformers provides a unified pretraining and fine-tuning training process, and provides easy-to-use solutions based on the differences and ecosystem. In the unified training process, the key steps for starting a training task are as follows.</p>
+<p><img alt="/overview" src="../../_images/overview.png" /></p>
+<ol class="arabic simple">
+<li><p><strong>Preparing for the task</strong>: Determine the configurations of the model to be trained and prepare the training dataset. These two points are critical.</p></li>
+<li><p><strong>Modifying training configurations</strong>: Set configuration items based on the existing hardware resources, models, and data. The configuration items include basic, high-level, and advanced configurations. Different levels of configuration items allow training tasks to achieve different objectives.</p></li>
+<li><p><strong>Starting a training task</strong>: Start a training task across different cluster scales based on the existing hardware resources and training configurations.</p></li>
+<li><p><strong>Monitoring training status</strong>: After the task is executed, monitor the training status using various methods provided by MindSpore Transformers for subsequent debugging and optimization.</p></li>
+</ol>
+<p>The following describes the key processes of MindSpore Transformers in LLM pretraining and fine-tuning tasks.</p>
+</section>
+<section id="training-process">
+<h2>Training Process<a class="headerlink" href="#training-process" title="Link to this heading"></a></h2>
+<section id="preparing-for-the-task">
+<h3>1. Preparing for the Task<a class="headerlink" href="#preparing-for-the-task" title="Link to this heading"></a></h3>
+<section id="specifying-the-model-specifications">
+<h4>Specifying the Model Specifications<a class="headerlink" href="#specifying-the-model-specifications" title="Link to this heading"></a></h4>
+<p>MindSpore Transformers supports different series of pretraining models, such as some typical specifications of Llama, DeepSeek, and Qwen3 series. In addition, the open-source community also has a series of models with different specifications. MindSpore Transformers provides different levels of specifications to distinguish the support for different model specifications. The following describes these levels and explains how to use models at different levels.</p>
+<table>
+  <tr>
+    <th>Level</th>
+    <th>Description</th>
+    <th>Usage Notes</th>
+  </tr>
+  <tr>
+    <td><strong>Released</strong></td>
+    <td>The model is accepted by the test team. The fitting degree between loss and grad norm precision and established benchmarks meet the standards under deterministic conditions.</td>
+    <td>The corresponding YAML configuration file is provided in the configs/xxx directory of the MindSpore Transformers repository. <strong>Generally, it includes the typical specification configurations of open-source models.</strong> You can read the configs/xxx/README.md file to learn how to use the configuration file.</td>
+  </tr>
+  <tr>
+    <td><strong>Validated</strong></td>
+    <td>The model is validated by the development team. The fitting degree between loss and grad norm precision and established benchmarks meet the standards under deterministic conditions.</td>
+    <td rowspan="3">The MindSpore Transformers repository does not provide a configuration file that can be directly run. You can customize a training configuration file by referring to the YAML configuration file and training configuration template usage tutorial of the release-level model specifications. The training configuration template usage tutorial also provides the corresponding pretraining configuration template.</td>
+  </tr>
+  <tr>
+    <td><strong>Preliminary</strong></td>
+    <td>The model has been preliminarily verified by developers. Its functions are complete and can be used for trial. The training converges properly, but precision is not strictly verified.</td>
+  </tr>
+  <tr>
+    <td><strong>Untested</strong></td>
+    <td>Functions are available but not tested, and precision and convergence are not verified. User-defined development is supported.</td>
+  </tr>
+  <tr>
+    <td><strong>Community</strong></td>
+    <td>It is a MindSpore-native model contributed by the community, and is developed and maintained by the community.</td>
+    <td>You need to use the model based on the community description.</td>
+  </tr>
+</table>
+<p>In the preceding table, MindSpore Transformers provides out-of-the-box model configurations for released-level models. For other levels of models, MindSpore Transformers provides not only basic framework capabilities to support model development, but also a set of training configuration templates for developers. With these configuration templates, developers can quickly define and adjust model parameters (such as the number of layers, number of heads, and hidden layer dimension), implementing quick migration from released-level models to unsupported models and quick startup of pretraining tasks for custom models. For details, see <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/advanced_development/training_template_instruction.html">Training Configuration Template Instructions</a>.</p>
+</section>
+<section id="preprocessing-the-dataset">
+<h4>Preprocessing the Dataset<a class="headerlink" href="#preprocessing-the-dataset" title="Link to this heading"></a></h4>
+<p>In natural language processing (NLP) tasks, data preprocessing is a key prerequisite for model training. It not only solves problems like noises and inconsistent formats (which contain special characters and garbled characters) in the raw data, but also converts the original text into a numerical form that can be understood by the model through structured conversion (such as tokenization and vectorization). Although general data preprocessing may include full-process operations such as collection, cleaning, and tokenization, the input data in this phase is assumed to have basic quality (that is, “clean” data). Therefore, the focus is on the core objective of <strong>token conversion</strong>.</p>
+<p><strong>Processing Pretraining Data</strong></p>
+<p>In the Megatron-LM training framework, a multi-source mixed dataset solution is provided for pretraining tasks. This solution converts raw data into tokens and uses the lightweight bin file format for persistent storage. This solution supports the following features:</p>
+<ul class="simple">
+<li><p><strong>Flexible configuration</strong>: Multiple bin data files can be loaded at the same time, and the sampling ratio parameter can be used to control the mixed weight of different data sources.</p></li>
+<li><p><strong>Efficient training</strong>: The binary storage format greatly improves I/O efficiency, which is especially suitable for large-scale pretraining scenarios.</p></li>
+</ul>
+<p>MindSpore Transformers can directly load the multi-source mixed dataset format for Megatron in pretraining tasks. Users of Megatron-LM do not need to repeat the data preprocessing step. They only need to specify the bin file path to quickly start training. If the bin file already exists, users can configure the file in the YAML training configuration file by referring to the subsequent sections. If no bin file exists, users need to convert the raw training data into a bin file. MindSpore Transformers provides a script tool for processing the raw dataset in JSON format into a bin file. The Wiki 103 dataset is used as an example to provide the entire preprocessing process. For details, see <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/dataset.html#megatron-dataset">Dataset &gt; Megatron Dataset</a>.</p>
+<p><strong>Processing Fine-Tuning Data</strong></p>
+<p>In fine-tuning tasks of NLP models, the <a class="reference external" href="https://huggingface.co/">Hugging Face community</a> hosts a wide range of open-source fine-tuning datasets. These datasets cover many fields and task types such as text classification, named entity recognition, and Q&amp;A system, meeting fine-tuning requirements in different scenarios. These open-source datasets are usually implemented using the <a class="reference external" href="https://huggingface.co/docs/datasets/en/index">datasets</a> library, which provides convenient data loading, preprocessing, and management features, greatly simplifying data processing. MindSpore Transformers fully considers the usage habits and requirements of the community and supports online or offline loading of datasets from the <a class="reference external" href="https://huggingface.co/">Hugging Face community</a>, ensuring good compatibility.</p>
+<ul class="simple">
+<li><p><strong>Online loading</strong>: You can configure the YAML file to conveniently obtain the required dataset from the Hugging Face dataset repository, without the need to manually download or manage data files.</p></li>
+<li><p><strong>Offline loading</strong>: You can download the required dataset to the local PC in advance or process your own dataset, and then load the local data during fine-tuning. This way, fine-tuning tasks can proceed as usual even in the presence of adverse factors like unstable networks.</p></li>
+</ul>
+<p>For details, see <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/dataset.html#hugging-face-dataset">Dataset &gt; Hugging Face Dataset</a>.</p>
+</section>
+</section>
+<section id="preparing-configuration-files">
+<h3>2. Preparing Configuration Files<a class="headerlink" href="#preparing-configuration-files" title="Link to this heading"></a></h3>
+<p>Each pretraining task involves a high number of LLM parameters (usually ranging from billions to trillions). Distributed computing resources are required for efficient training and hyperparameter modification to ensure the normal execution of the task and the final performance metrics of the model. The following lists the types of configurations that can be modified during a pretraining task:</p>
+<ul class="simple">
+<li><p><strong>Model configuration</strong>: Modify the parameters related to the model architecture in the configuration file based on the predefined model specifications, such as the number of layers, number of heads, and hidden layer dimension.</p></li>
+<li><p><strong>Data configuration</strong>: Specify the dataset obtained after preprocessing, and configure the dataset path, data loading mode, and other necessary information.</p></li>
+<li><p><strong>Hyperparameter training</strong>: Specify the optimizer type, loss function, learning rate, data batch size, and number of training epochs based on the model training strategy.</p></li>
+<li><p><strong>Parallelism strategy</strong>: Configure data parallelism, model parallelism, and pipeline parallelism based on the cluster scale and model parameters to support ultra-large model training or performance optimization.</p></li>
+<li><p><strong>Status monitoring</strong>: Set the loss printing interval, configure TensorBoard to record key status values for visualization, and configure the printing/visualization of key values in precision debugging tasks to locate precision problems such as local norm, local loss, and optimizer status.</p></li>
+<li><p><strong>High availability</strong>: Set the number of steps for saving weights, resumable training weights, fault detection, dying gasp, and other HA features to ensure stable training.</p></li>
+</ul>
+<p>After completing the pretraining preparations, you can set MindSpore Transformers parameters at multiple levels, categorized by configuration type and pretraining scenario. The following describes the application scenarios of different configurations and the overall objectives that can be achieved.</p>
+<table>
+  <tr>
+    <th>Configuration Type</th>
+    <th>Description</th>
+    <th>Configuration Item</th>
+    <th>Configuration Guide</th>
+  </tr>
+  <tr>
+    <td rowspan="3">Basic configurations</td>
+    <td rowspan="3">You can specify the corresponding configuration items to start a simple training task based on the current model structure.</td>
+    <td>Dataset</td>
+    <td><a href=https://www.mindspore.cn/mindformers/docs/en/master/feature/dataset.html target="_blank">Dataset usage</a></td>
+  </tr>
+  <tr>
+    <td>Parallelism configurations</td>
+    <td>
+    <a href=https://www.mindspore.cn/mindformers/docs/en/master/feature/configuration.html#parallel-configuration target="_blank">Parallelism configuration items</a><br>
+    <a href=https://www.mindspore.cn/mindformers/docs/en/master/feature/parallel_training.html target="_blank">Parallelism configuration guide</a>
+    </td>
+  </tr>
+  <tr>
+    <td>Hyperparameter training</td>
+    <td>
+    <a href=https://www.mindspore.cn/mindformers/docs/en/master/feature/configuration.html#model-training-configuration target="_blank">Model training configuration</a>
+    </td>
+  </tr>
+  <tr>
+    <td rowspan="3">High-level configurations</td>
+    <td rowspan="3">After the configurations are complete, the training status of executed training tasks can be detected to ensure continuity across multiple training tasks.</td>
+    <td>Weight saving</td>
+    <td>
+      <a href=https://www.mindspore.cn/mindformers/docs/en/master/feature/configuration.html#callbacks-configuration target="_blank">CheckPointMonitor under Callbacks configuration</a><br>
+      <a href=https://www.mindspore.cn/mindformers/docs/en/master/feature/safetensors.html target="_blank">Safetensors weight usage</a>
+    </td>
+  </tr>
+  <tr>
+    <td>Resumable training</td>
+    <td>
+      <a href=https://www.mindspore.cn/mindformers/docs/en/master/feature/resume_training.html target="_blank">Examples for resumable training after breakpoint</a><br>
+      <a href=https://www.mindspore.cn/mindformers/docs/en/master/feature/safetensors.html target="_blank">Safetensors weight usage</a>
+    </td>
+  </tr>
+  <tr>
+    <td>Online monitoring</td>
+    <td>
+      <a href=https://www.mindspore.cn/mindformers/docs/en/master/feature/monitor.html target="_blank">Training metrics monitoring</a>
+    </td>
+  </tr>
+  <tr>
+    <td rowspan="4">Advanced configurations</td>
+    <td rowspan="4">By specifying these configuration items, you can monitor the health status of the training process, perform fast fault recovery, and optimize performance to ensure stable and high-performance training across different cluster scales.</td>
+    <td>Health monitoring</td>
+    <td>
+      <a href=https://www.mindspore.cn/mindformers/docs/en/master/feature/skip_data_and_ckpt_health_monitor.html target="_blank">Data skip and checkpoint health monitoring</a>
+    </td>
+  </tr>
+  <tr>
+    <td>Performance optimization</td>
+    <td>
+      <a href=https://www.mindspore.cn/mindformers/docs/en/master/feature/memory_optimization.html target="_blank">Memory optimization</a><br>
+      <a href=https://www.mindspore.cn/mindformers/docs/en/master/advanced_development/performance_optimization.html target="_blank">Performance optimization guide</a>
+    </td>
+  </tr>
+  <tr>
+    <td>Fast fault recovery</td>
+    <td>
+      <a href=https://www.mindspore.cn/mindformers/docs/en/master/feature/high_availability.html target="_blank">High availability feature</a><br>
+    </td>
+  </tr>
+</table>
+<p>Except the preceding configuration items, all configuration items of training tasks are controlled by the <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/configuration.html">configuration file</a>. You can adjust them based on the configuration item description.</p>
+</section>
+<section id="starting-a-training-task">
+<h3>3. Starting a Training Task<a class="headerlink" href="#starting-a-training-task" title="Link to this heading"></a></h3>
+<p>MindSpore Transformers supports single-node multi-device and multi-node multi-device distributed training. The cluster scale supports ultra-large-scale distributed training from single-node 8-device to single-node 10,000-device. For details about how to start a training task, see <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/start_tasks.html">Start Tasks</a>.</p>
+</section>
+<section id="monitoring-training-status">
+<h3>4. Monitoring Training Status<a class="headerlink" href="#monitoring-training-status" title="Link to this heading"></a></h3>
+<p>The pretraining phase may last for several weeks or months. You need to monitor key metrics in real time and dynamically adjust them to ensure that the trained model can achieve the expected effect. During training, the following status items may deserve attention:</p>
+<ul class="simple">
+<li><p><strong>Performance</strong>: number of training tokens/samples per second (throughput), NPU usage (computing power usage), and time consumed per step</p></li>
+<li><p><strong>Precision</strong>: loss function value and gradient norm (explosion/collapse prevention)</p></li>
+<li><p><strong>Checkpoint</strong>: saves the intermediate model status periodically (for example, every <em>N</em> steps) to prevent data loss caused by training interruption.</p></li>
+</ul>
+<p>MindSpore Transformers prints detailed logs for different monitoring values during training to check the intermediate status, and provides TensorBoard tools for online visualization. For details, see <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/logging.html">Logs</a> and <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/monitor.html">Visualization tools</a>. After weights are saved at checkpoints or after the training is complete, the model weights will be saved to the specified directory. Currently, weights can be saved in <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/ckpt.html">ckpt format</a> or <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/safetensors.html">Safetensors format</a>. The saved weights can be used for resumable retraining or fine-tuning.</p>
+</section>
+</section>
+<section id="training-practices">
+<h2>Training Practices<a class="headerlink" href="#training-practices" title="Link to this heading"></a></h2>
+<p>MindSpore Transformers provides detailed pretraining and fine-tuning processes and practices. For details, see <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/guide/pre_training.html">Pretraining</a> and <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/guide/supervised_fine_tuning.html">Fine-Tuning</a>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Full-process Guide to Large Models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pre_training.html" class="btn btn-neutral float-right" title="Pretraining" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

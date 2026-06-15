@@ -1,0 +1,750 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Service Deployment &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Evaluation" href="evaluation.html" />
+    <link rel="prev" title="Inference" href="inference.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">Models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contribution Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">Modelers Contribution Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">Model-Related FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">Feature-Related FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Static Graph Implementation (Deprecated)</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Full-process Guide to Large Models</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="llm_training.html">Training Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pre_training.html">Pretraining</a></li>
+<li class="toctree-l2"><a class="reference internal" href="supervised_fine_tuning.html">Supervised Fine-Tuning (SFT)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inference.html">Inference</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Service Deployment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#vllm-service-deployment">vLLM Service Deployment</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#environment-setup">Environment Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#quick-start">Quick Start</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mcore-model-adaptation">Mcore Model Adaptation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#appendix">Appendix</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#mindie-service-deployment">MindIE Service Deployment</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Environment Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#basic-process-of-inference-service-deployment">Basic Process of Inference Service Deployment</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mindie-service-deployment-and-inference-example">MindIE Service Deployment and Inference Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#model-list">Model List</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation.html">Evaluation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/index.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_development/index.html">Advanced Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">Excellent Practice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">Environment Variable Descriptions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Full-process Guide to Large Models</a></li>
+      <li class="breadcrumb-item active">Service Deployment</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/guide/deployment.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">Deprecated</p>
+<p>This page belongs to the <strong>Static Graph (GRAPH_MODE) Implementation</strong> section and has been marked as deprecated. New features are primarily being developed in the “r2.0.0 Dynamic Graph Implementation” section. Please refer to the dynamic graph documentation first.</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="service-deployment">
+<h1>Service Deployment<a class="headerlink" href="#service-deployment" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_en/static_graph/guide/deployment.md"><img alt="View Source on AtomGit" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source_en.svg" /></a></p>
+<section id="vllm-service-deployment">
+<h2>vLLM Service Deployment<a class="headerlink" href="#vllm-service-deployment" title="Link to this heading"></a></h2>
+<section id="overview">
+<h3>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h3>
+<p>The vLLM-MindSpore plugin is designed with the functional goal of integrating MindSpore large models into vLLM and enabling their servitized deployment: <a class="reference external" href="https://www.mindspore.cn/vllm_mindspore/docs/en/master/index.html#overview">Introduction to the vLLM-MindSpore Plugin</a>.</p>
+<p>The MindSpore Transformers suite aims to build a full-cycle development toolkit for large-scale models, covering pre-training, fine-tuning, evaluation, inference, and deployment. It provides mainstream Transformer-based large language models (LLMs) and multimodal understanding models (MMs) in the industry.</p>
+</section>
+<section id="environment-setup">
+<h3>Environment Setup<a class="headerlink" href="#environment-setup" title="Link to this heading"></a></h3>
+<p>The environment installation steps are divided into two methods:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.mindspore.cn/vllm_mindspore/docs/en/master/getting_started/installation/installation.html#docker-installation">Docker Installation</a>: Suitable for scenarios where users need quick deployment and use.</p></li>
+<li><p><a class="reference external" href="https://www.mindspore.cn/vllm_mindspore/docs/en/master/getting_started/installation/installation.html#source-code-installation">Source Code Installation</a>: Suitable for users who require incremental development of the vLLM-MindSpore plugin.</p></li>
+</ul>
+</section>
+<section id="quick-start">
+<h3>Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading"></a></h3>
+<p>After completing the environment deployment and before running the model, users need to prepare the model files. They can follow the guidelines in the Model Download section to prepare the model. Once the environment variables are configured, they can proceed with either offline inference or online services.</p>
+<p><strong>Environment Variables</strong></p>
+<p>Before launching the model, users need to configure the following environment variables:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">vLLM_MODEL_BACKEND</span><span class="o">=</span>MindFormers<span class="w"> </span><span class="c1"># use MindSpore Transformers</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MINDFORMERS_MODEL_CONFIG</span><span class="o">=</span>/path/to/yaml<span class="w"> </span><span class="c1"># Required for non-Mcore models</span>
+</pre></div>
+</div>
+<p>Currently, vLLM MindSpore supports different model backends. The environment variables specified above designate MindSpore Transformers as the integrated model suite. For non-MCore models, it is necessary to configure the model’s YAML configuration file.</p>
+<p>For more environment variables, please refer to: <a class="reference external" href="https://www.mindspore.cn/vllm_mindspore/docs/en/master/user_guide/environment_variables/environment_variables.html">Environment Variables</a>.</p>
+<p>After preparing the model and environment variables, you can proceed with inference.</p>
+<section id="online-inference">
+<h4>Online Inference<a class="headerlink" href="#online-inference" title="Link to this heading"></a></h4>
+<p>vLLM online inference is designed for real-time service scenarios, leveraging dynamic batching and the OpenAI API to deliver high concurrency, high throughput, and low latency, making it suitable for enterprise-level applications.</p>
+<ul class="simple">
+<li><p>Please refer to the single-GPU inference process: <a class="reference external" href="https://www.mindspore.cn/vllm_mindspore/docs/en/master/getting_started/tutorials/qwen2.5_7b_singleNPU/qwen2.5_7b_singleNPU.html">Single-Card Inference</a></p></li>
+<li><p>Please refer to the single-node multi-GPU inference process: <a class="reference external" href="https://www.mindspore.cn/vllm_mindspore/docs/en/master/getting_started/tutorials/qwen2.5_32b_multiNPU/qwen2.5_32b_multiNPU.html">Multi-Card Inference</a></p></li>
+<li><p>Please refer to the multi-node parallel inference process: <a class="reference external" href="https://www.mindspore.cn/vllm_mindspore/docs/en/master/getting_started/tutorials/deepseek_parallel/deepseek_r1_671b_w8a8_dp4_tp4_ep4.html">Multi-machine Parallel Inference</a></p></li>
+</ul>
+</section>
+<section id="offline-inference">
+<h4>Offline Inference<a class="headerlink" href="#offline-inference" title="Link to this heading"></a></h4>
+<p>vLLM’s offline inference is designed for efficiently processing large-scale batch requests, making it particularly suitable for non-real-time, data-intensive model inference scenarios.</p>
+<p>For the offline inference process, please refer to: <a class="reference external" href="https://www.mindspore.cn/vllm_mindspore/docs/en/master/getting_started/quick_start/quick_start.html#offline-inference">Offline Inference</a></p>
+</section>
+</section>
+<section id="mcore-model-adaptation">
+<h3>Mcore Model Adaptation<a class="headerlink" href="#mcore-model-adaptation" title="Link to this heading"></a></h3>
+<p>vLLM MindSpore supports multiple model suite libraries. When the model suite is MindSpore Transformers, the Mcore models registered in the MindSpore Transformers registry can be directly deployed as services through vLLM by default. This implementation leverages the AutoModel interface of MindSpore Transformers.</p>
+<p>The principle is as follows: In vLLM’s model registry, all MindSpore Transformers models are uniformly registered under the <code class="docutils literal notranslate"><span class="pre">MindFormersForCausalLM</span></code> class, following MindSpore Transformers’ model loading logic. On the MindSpore Transformers side, all Mcore model configurations and models are automatically registered in the registry when the <code class="docutils literal notranslate"><span class="pre">mindformers</span></code> component is loaded. During the model loading process, the model or model file is retrieved from the registry based on the <code class="docutils literal notranslate"><span class="pre">model_type</span></code> or <code class="docutils literal notranslate"><span class="pre">architectures</span></code> specified in the model’s <code class="docutils literal notranslate"><span class="pre">config.json</span></code> configuration file, thereby completing model configuration instantiation and model loading.</p>
+<p>In the vLLM MindSpore model registry, only the <code class="docutils literal notranslate"><span class="pre">MindFormersForCausalLM</span></code> class is registered:</p>
+<p><img alt="vLLM MindSpore Model Registry" src="../../_images/vllm-registry.png" /></p>
+<p>In the MindSpore Transformers model registry, model configuration classes and model classes are registered:</p>
+<p><img alt="MindSpore Transformers Registry" src="../../_images/mindspore-transformers-registry.png" /></p>
+<p>If configuration modifications are required, please refer to the <a class="reference external" href="https://atomgit.com/mindspore/vllm-mindspore/blob/master/vllm_mindspore/model_executor/models/mf_models/config.py">Configuration</a> file. Based on existing mapping relationships, vLLM’s CLI parameters can be converted and applied to take effect on the model side.</p>
+</section>
+<section id="appendix">
+<h3>Appendix<a class="headerlink" href="#appendix" title="Link to this heading"></a></h3>
+<section id="compatible-versions">
+<h4>Compatible Versions<a class="headerlink" href="#compatible-versions" title="Link to this heading"></a></h4>
+<p>For supporting information on each component, please refer to: <a class="reference external" href="https://www.mindspore.cn/vllm_mindspore/docs/en/master/getting_started/installation/installation.html">Compatible Versions</a></p>
+</section>
+<section id="supported-models-list">
+<h4>Supported Models List<a class="headerlink" href="#supported-models-list" title="Link to this heading"></a></h4>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Model</p></th>
+<th class="head"><p>Mcore New Architecture</p></th>
+<th class="head"><p>Status</p></th>
+<th class="head"><p>Download Link</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Qwen3-32B</p></td>
+<td><p>YES</p></td>
+<td><p>Supported</p></td>
+<td><p><a class="reference external" href="https://modelers.cn/models/MindSpore-Lab/Qwen3-32B">Qwen3-32B</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Qwen3-235B-A22B</p></td>
+<td><p>YES</p></td>
+<td><p>Supported</p></td>
+<td><p><a class="reference external" href="https://huggingface.co/Qwen/Qwen3-235B-A22B">Qwen3-235B-A22B</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Qwen3</p></td>
+<td><p>YES</p></td>
+<td><p>testing</p></td>
+<td><p><a class="reference external" href="https://huggingface.co/Qwen/Qwen3-0.6B">Qwen3-0.6B</a>, <a class="reference external" href="https://huggingface.co/Qwen/Qwen3-1.7B">Qwen3-1.7B</a>, <a class="reference external" href="https://huggingface.co/Qwen/Qwen3-4B">Qwen3-4B</a>, <a class="reference external" href="https://huggingface.co/Qwen/Qwen3-8B">Qwen3-8B</a>, <a class="reference external" href="https://modelers.cn/models/MindSpore-Lab/Qwen3-14B">Qwen3-14B</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Qwen3-MOE</p></td>
+<td><p>YES</p></td>
+<td><p>testing</p></td>
+<td><p><a class="reference external" href="https://modelers.cn/models/MindSpore-Lab/Qwen3-30B-A3B-Instruct-2507">Qwen3-30B-A3</a></p></td>
+</tr>
+<tr class="row-even"><td><p>deepSeek-V3</p></td>
+<td><p>YES</p></td>
+<td><p>testing</p></td>
+<td><p><a class="reference external" href="https://modelers.cn/models/MindSpore-Lab/DeepSeek-V3">deepSeek-V3</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Qwen2.5</p></td>
+<td><p>NO</p></td>
+<td><p>Supported</p></td>
+<td><p><a class="reference external" href="https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct">Qwen2.5-0.5B-Instruct</a>, <a class="reference external" href="https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct">Qwen2.5-1.5B-Instruct</a>, <a class="reference external" href="https://huggingface.co/Qwen/Qwen2.5-3B-Instruct">Qwen2.5-3B-Instruct</a>, <a class="reference external" href="https://huggingface.co/Qwen/Qwen2.5-7B-Instruct">Qwen2.5-7B-Instruct</a>, <a class="reference external" href="https://huggingface.co/Qwen/Qwen2.5-14B-Instruct">Qwen2.5-14B-Instruct</a>, <a class="reference external" href="https://huggingface.co/Qwen/Qwen2.5-32B-Instruct">Qwen2.5-32B-Instruct</a>, <a class="reference external" href="https://huggingface.co/Qwen/Qwen2.5-72B-Instruct">Qwen2.5-72B-Instruct</a></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+<section id="mindie-service-deployment">
+<h2>MindIE Service Deployment<a class="headerlink" href="#mindie-service-deployment" title="Link to this heading"></a></h2>
+<section id="introduction">
+<h3>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h3>
+<p>MindIE, full name Mind Inference Engine, is a high-performance inference framework based on Ascend hardware. For more information, please refer to <a class="reference external" href="https://www.hiascend.com/software/mindie">Official Document</a>.</p>
+<p>MindSpore Transformers are hosted in the model application layer MindIE LLM, and large models in MindSpore Transformers can be deployed through MindIE Service.</p>
+<p>The model support for MindIE inference can be found in <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/introduction/models.html">model repository</a>.</p>
+</section>
+<section id="id1">
+<h3>Environment Setup<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<section id="software-installation">
+<h4>Software Installation<a class="headerlink" href="#software-installation" title="Link to this heading"></a></h4>
+<ol class="arabic">
+<li><p>Install MindSpore Transformers</p>
+<p>Refer to <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/installation.html">MindSpore Transformers Official Installation Guide</a> for installation.</p>
+</li>
+<li><p>Install MindIE</p>
+<p>Refer to <a class="reference external" href="https://www.hiascend.com/document/detail/zh/mindie/100/envdeployment/instg/mindie_instg_0010.html">MindIE Installation Dependencies Documentation</a> to complete the dependency installation. After that, go to <a class="reference external" href="https://www.hiascend.com/developer/download/community/result?module=ie%2Bpt%2Bcann">MindIE Resource Download Center</a> to download the package and install it.</p>
+<p>MindIE and CANN versions must be matched, and version matching relationship is as follows.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>MindIE</p></th>
+<th class="head text-center"><p>CANN-toolkit</p></th>
+<th class="head text-center"><p>CANN-kernels</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p><a class="reference external" href="https://www.hiascend.com/developer/download/community/result?module=ie%2Bpt%2Bcann">1.0.0</a></p></td>
+<td class="text-center"><p><a class="reference external" href="https://www.hiascend.com/developer/download/community/result?module=ie%2Bpt%2Bcann">8.0.0</a></p></td>
+<td class="text-center"><p><a class="reference external" href="https://www.hiascend.com/developer/download/community/result?module=ie%2Bpt%2Bcann">8.0.0</a></p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ol>
+</section>
+<section id="environment-variables">
+<h4>Environment Variables<a class="headerlink" href="#environment-variables" title="Link to this heading"></a></h4>
+<p>If the installation path is the default path, you can run the following command to initialize the environment variables of each component.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Ascend</span>
+<span class="nb">source</span><span class="w"> </span>/usr/local/Ascend/ascend-toolkit/set_env.sh
+<span class="c1"># MindIE</span>
+<span class="nb">source</span><span class="w"> </span>/usr/local/Ascend/mindie/latest/mindie-llm/set_env.sh
+<span class="nb">source</span><span class="w"> </span>/usr/local/Ascend/mindie/latest/mindie-service/set_env.sh
+<span class="c1"># MindSpore</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">LCAL_IF_PORT</span><span class="o">=</span><span class="m">8129</span>
+<span class="c1"># Networking Configuration</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MS_SCHED_HOST</span><span class="o">=</span><span class="m">127</span>.0.0.1<span class="w">     </span><span class="c1"># scheduler node IP address</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MS_SCHED_PORT</span><span class="o">=</span><span class="m">8090</span><span class="w">          </span><span class="c1"># Scheduler node service port</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>If there are other cards on the machine that have MindIE enabled, you need to be aware of any conflicts with the <code class="docutils literal notranslate"><span class="pre">MS_SCHED_PORT</span></code> parameter. If you get an error on this parameter in the log printout, try again with a different port number.</p>
+</div></blockquote>
+</section>
+</section>
+<section id="basic-process-of-inference-service-deployment">
+<h3>Basic Process of Inference Service Deployment<a class="headerlink" href="#basic-process-of-inference-service-deployment" title="Link to this heading"></a></h3>
+<section id="preparing-model-files">
+<h4>Preparing Model Files<a class="headerlink" href="#preparing-model-files" title="Link to this heading"></a></h4>
+<p>Create a folder for the specified model related files in the MindIE backend, such as model tokenizer files, yaml configuration files and config files.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>-p<span class="w"> </span>mf_model/qwen1_5_72b
+</pre></div>
+</div>
+<p>Taking Qwen1.5-72B as an example, the folder directory structure is as follows:</p>
+<div class="highlight-reStructuredText notranslate"><div class="highlight"><pre><span></span>mf_model
+ └── qwen1_5_72b
+        ├── config.json                 # Model json configuration file, corresponding model download on Hugging Face
+        ├── vocab.json                  # Model vocab file, corresponding model download on Hugging Face
+        ├── merges.txt                  # Model merges file, corresponding model download on Hugging Face
+        ├── predict_qwen1_5_72b.yaml    # Model yaml configuration file
+        ├── qwen1_5_tokenizer.py        # Model tokenizer file, copy the corresponding model from the search directory in the mindformers repository
+        └── qwen1_5_72b_ckpt_dir        # Model distributed weight folder
+</pre></div>
+</div>
+<p>predict_qwen1_5_72b.yaml needs to be concerned with the following configuration:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/mf_model/qwen1_5_72b/qwen1_5_72b_ckpt_dir&#39;</span><span class="w"> </span><span class="c1"># Path to the folder that holds the model distributed weight</span>
+<span class="nt">use_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="nt">auto_trans_ckpt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span><span class="w">    </span><span class="c1"># Whether to enable automatic weight conversion, with offline splitting set to False</span>
+<span class="nt">parallel_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">data_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">model_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span><span class="w">       </span><span class="c1"># Multi-card inference configures the model splitting, which generally corresponds to the number of cards used</span>
+<span class="w">  </span><span class="nt">pipeline_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="nt">processor</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">tokenizer</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">vocab_file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/path/to/mf_model/qwen1_5_72b/vocab.json&quot;</span><span class="w">  </span><span class="c1"># vocab file absolute path</span>
+<span class="w">    </span><span class="nt">merges_file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/path/to/mf_model/qwen1_5_72b/merges.txt&quot;</span><span class="w">  </span><span class="c1"># merges file absolute path</span>
+</pre></div>
+</div>
+<p>For model weight downloading and conversions, refer to the <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/ckpt.html">Weight Format Conversion Guide</a>.</p>
+<p>Required files and configurations may vary from model to model. Refer to the model-specific inference sections in <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/introduction/models.html">Model Repository</a> for details.</p>
+</section>
+<section id="starting-mindie">
+<h4>Starting MindIE<a class="headerlink" href="#starting-mindie" title="Link to this heading"></a></h4>
+<p><strong>1. One-click Start (Recommended)</strong></p>
+<p>The mindformers repository provides a one-click pull-up MindIE script with preconfigured environment variable settings and servitization configurations, which allows you to quickly pull up the service by simply entering the directory of the model file.</p>
+<p>Go to the <code class="docutils literal notranslate"><span class="pre">scripts</span></code> directory and execute the MindIE startup script:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>./scripts
+bash<span class="w"> </span>run_mindie.sh<span class="w"> </span>--model-name<span class="w"> </span>xxx<span class="w"> </span>--model-path<span class="w"> </span>/path/to/model
+
+<span class="c1"># Parameter descriptions</span>
+--model-name:<span class="w"> </span>Mandatory,<span class="w"> </span><span class="nb">set</span><span class="w"> </span>MindIE<span class="w"> </span>backend<span class="w"> </span>name
+--model-path:<span class="w"> </span>Mandatory,<span class="w"> </span><span class="nb">set</span><span class="w"> </span>model<span class="w"> </span>folder<span class="w"> </span>path,<span class="w"> </span>such<span class="w"> </span>as<span class="w"> </span>/path/to/mf_model/qwen1_5_72b
+--help<span class="w">      </span>:<span class="w"> </span>Instructions<span class="w"> </span><span class="k">for</span><span class="w"> </span>using<span class="w"> </span>the<span class="w"> </span>script
+--max-seq-len:<span class="w"> </span>Maximum<span class="w"> </span>sequence<span class="w"> </span>length.<span class="w"> </span>Default<span class="w"> </span>value:<span class="w"> </span><span class="m">2560</span>.
+--max-iter-times:<span class="w"> </span>Global<span class="w"> </span>maximum<span class="w"> </span>output<span class="w"> </span>length<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>model.<span class="w"> </span>Default<span class="w"> </span>value:<span class="w"> </span><span class="m">512</span>.
+--max-input-token-len:<span class="w"> </span>Maximum<span class="w"> </span>length<span class="w"> </span>of<span class="w"> </span>input<span class="w"> </span>token<span class="w"> </span>IDs.<span class="w"> </span>Default<span class="w"> </span>value:<span class="w"> </span><span class="m">2048</span>.
+--truncation:<span class="w"> </span>Whether<span class="w"> </span>to<span class="w"> </span>perform<span class="w"> </span>parameter<span class="w"> </span>rationality<span class="w"> </span>check<span class="w"> </span>and<span class="w"> </span>interception.<span class="w"> </span>false:<span class="w"> </span>check,<span class="w"> </span>true:<span class="w"> </span>no<span class="w"> </span>check.<span class="w"> </span>Default<span class="w"> </span>value:<span class="w"> </span>false.
+--world-size:<span class="w"> </span>Number<span class="w"> </span>of<span class="w"> </span>cards<span class="w"> </span>used<span class="w"> </span><span class="k">for</span><span class="w"> </span>inference.<span class="w"> </span>In<span class="w"> </span>multi-node<span class="w"> </span>inference<span class="w"> </span>scenarios,<span class="w"> </span>this<span class="w"> </span>value<span class="w"> </span>is<span class="w"> </span>invalid,<span class="w"> </span>and<span class="w"> </span>worldSize<span class="w"> </span>is<span class="w"> </span>calculated<span class="w"> </span>based<span class="w"> </span>on<span class="w"> </span>the<span class="w"> </span>ranktable.<span class="w"> </span>Default<span class="w"> </span>value:<span class="w"> </span><span class="m">4</span>.
+--template-type:<span class="w"> </span>Inference<span class="w"> </span>type.<span class="w"> </span>Standard:<span class="w"> </span>PD<span class="w"> </span>mixed<span class="w"> </span>deployment<span class="w"> </span>scenario,<span class="w"> </span>Prefill<span class="w"> </span>requests<span class="w"> </span>and<span class="w"> </span>Decode<span class="w"> </span>requests<span class="w"> </span>are<span class="w"> </span>batched<span class="w"> </span>separately.<span class="w"> </span>Mix:<span class="w"> </span>Splitfuse<span class="w"> </span>feature-related<span class="w"> </span>parameter,<span class="w"> </span>Prefill<span class="w"> </span>requests<span class="w"> </span>and<span class="w"> </span>Decode<span class="w"> </span>requests<span class="w"> </span>can<span class="w"> </span>be<span class="w"> </span>batched<span class="w"> </span>together.<span class="w"> </span>This<span class="w"> </span>field<span class="w"> </span>configuration<span class="w"> </span>does<span class="w"> </span>not<span class="w"> </span>take<span class="w"> </span>effect<span class="w"> </span><span class="k">in</span><span class="w"> </span>PD<span class="w"> </span>separation<span class="w"> </span>scenarios.<span class="w"> </span>Default<span class="w"> </span>value:<span class="w"> </span><span class="s2">&quot;Standard&quot;</span>.
+--max-preempt-count:<span class="w"> </span>The<span class="w"> </span>upper<span class="w"> </span>limit<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>maximum<span class="w"> </span>preemptible<span class="w"> </span>requests<span class="w"> </span>per<span class="w"> </span>batch,<span class="w"> </span>i.e.,<span class="w"> </span>limits<span class="w"> </span>the<span class="w"> </span>number<span class="w"> </span>of<span class="w"> </span>requests<span class="w"> </span>that<span class="w"> </span>can<span class="w"> </span>be<span class="w"> </span>preempted<span class="w"> </span><span class="k">in</span><span class="w"> </span>one<span class="w"> </span>round<span class="w"> </span>of<span class="w"> </span>scheduling.<span class="w"> </span>The<span class="w"> </span>maximum<span class="w"> </span>limit<span class="w"> </span>is<span class="w"> </span>maxBatchSize.<span class="w"> </span>A<span class="w"> </span>value<span class="w"> </span>greater<span class="w"> </span>than<span class="w"> </span><span class="m">0</span><span class="w"> </span>indicates<span class="w"> </span>that<span class="w"> </span>the<span class="w"> </span>preemptible<span class="w"> </span><span class="k">function</span><span class="w"> </span>is<span class="w"> </span>enabled.<span class="w"> </span>Default<span class="w"> </span>value:<span class="w"> </span><span class="m">0</span>.
+--support-select-batch:<span class="w"> </span>Batch<span class="w"> </span>selection<span class="w"> </span>strategy.<span class="w"> </span>This<span class="w"> </span>field<span class="w"> </span>does<span class="w"> </span>not<span class="w"> </span>take<span class="w"> </span>effect<span class="w"> </span><span class="k">in</span><span class="w"> </span>PD<span class="w"> </span>separation<span class="w"> </span>scenarios.<span class="w"> </span>false:<span class="w"> </span>indicates<span class="w"> </span>that<span class="w"> </span>during<span class="w"> </span>each<span class="w"> </span>round<span class="w"> </span>of<span class="w"> </span>scheduling,<span class="w"> </span>Prefill<span class="w"> </span>stage<span class="w"> </span>requests<span class="w"> </span>are<span class="w"> </span>prioritized<span class="w"> </span><span class="k">for</span><span class="w"> </span>scheduling<span class="w"> </span>and<span class="w"> </span>execution.<span class="w"> </span>true:<span class="w"> </span>indicates<span class="w"> </span>that<span class="w"> </span>during<span class="w"> </span>each<span class="w"> </span>round<span class="w"> </span>of<span class="w"> </span>scheduling,<span class="w"> </span>the<span class="w"> </span>scheduling<span class="w"> </span>and<span class="w"> </span>execution<span class="w"> </span>order<span class="w"> </span>of<span class="w"> </span>Prefill<span class="w"> </span>and<span class="w"> </span>Decode<span class="w"> </span>stage<span class="w"> </span>requests<span class="w"> </span>is<span class="w"> </span>adaptively<span class="w"> </span>adjusted<span class="w"> </span>based<span class="w"> </span>on<span class="w"> </span>the<span class="w"> </span>current<span class="w"> </span>number<span class="w"> </span>of<span class="w"> </span>Prefill<span class="w"> </span>and<span class="w"> </span>Decode<span class="w"> </span>requests.<span class="w"> </span>Default<span class="w"> </span>value:<span class="w"> </span>false.
+--npu-mem-size:<span class="w"> </span>The<span class="w"> </span>upper<span class="w"> </span>limit<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>size<span class="w"> </span>that<span class="w"> </span>can<span class="w"> </span>be<span class="w"> </span>used<span class="w"> </span>to<span class="w"> </span>apply<span class="w"> </span><span class="k">for</span><span class="w"> </span>KV<span class="w"> </span>Cache<span class="w"> </span><span class="k">in</span><span class="w"> </span>a<span class="w"> </span>single<span class="w"> </span>NPU.<span class="w"> </span>Default<span class="w"> </span>value:<span class="w"> </span>-1.
+--max-prefill-batch-size:<span class="w"> </span>Maximum<span class="w"> </span>prefill<span class="w"> </span>batch<span class="w"> </span>size.<span class="w"> </span>Default<span class="w"> </span>value:<span class="w"> </span><span class="m">50</span>.
+--ip:<span class="w"> </span>IP<span class="w"> </span>address<span class="w"> </span>bound<span class="w"> </span>to<span class="w"> </span>the<span class="w"> </span>business<span class="w"> </span>RESTful<span class="w"> </span>interface<span class="w"> </span>provided<span class="w"> </span>by<span class="w"> </span>EndPoint.<span class="w"> </span>Default<span class="w"> </span>value:<span class="w"> </span><span class="s2">&quot;127.0.0.1&quot;</span>.
+--port:<span class="w"> </span>Port<span class="w"> </span>number<span class="w"> </span>bound<span class="w"> </span>to<span class="w"> </span>the<span class="w"> </span>business<span class="w"> </span>RESTful<span class="w"> </span>interface<span class="w"> </span>provided<span class="w"> </span>by<span class="w"> </span>EndPoint.<span class="w"> </span>Default<span class="w"> </span>value:<span class="w"> </span><span class="m">1025</span>.
+--management-ip:<span class="w"> </span>IP<span class="w"> </span>address<span class="w"> </span>bound<span class="w"> </span>to<span class="w"> </span>the<span class="w"> </span>management<span class="w"> </span>RESTful<span class="w"> </span>interface<span class="w"> </span>provided<span class="w"> </span>by<span class="w"> </span>EndPoint.<span class="w"> </span>Default<span class="w"> </span>value:<span class="w"> </span><span class="s2">&quot;127.0.0.2&quot;</span>.
+--management-port:<span class="w"> </span>Port<span class="w"> </span>number<span class="w"> </span>bound<span class="w"> </span>to<span class="w"> </span>the<span class="w"> </span>management<span class="w"> </span>interface<span class="w"> </span><span class="o">(</span>see<span class="w"> </span>Table<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="k">for</span><span class="w"> </span>management<span class="w"> </span>interface<span class="o">)</span><span class="w"> </span>provided<span class="w"> </span>by<span class="w"> </span>EndPoint.<span class="w"> </span>Default<span class="w"> </span>value:<span class="w"> </span><span class="m">1026</span>.
+--metrics-port:<span class="w"> </span>Port<span class="w"> </span>number<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>service<span class="w"> </span>management<span class="w"> </span>metrics<span class="w"> </span>interface<span class="w"> </span><span class="o">(</span>Prometheus<span class="w"> </span>format<span class="o">)</span>.<span class="w"> </span>Default<span class="w"> </span>value:<span class="w"> </span><span class="m">1027</span>.
+--ms-sched-host:<span class="w"> </span>Scheduler<span class="w"> </span>node<span class="w"> </span>IP<span class="w"> </span>address.<span class="w"> </span>Default<span class="w"> </span>value:<span class="w"> </span><span class="m">127</span>.0.0.1.
+--ms-sched-port:<span class="w"> </span>Scheduler<span class="w"> </span>node<span class="w"> </span>service<span class="w"> </span>port.<span class="w"> </span>Default<span class="w"> </span>value:<span class="w"> </span><span class="m">8090</span>.
+</pre></div>
+</div>
+<p>View logs:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tail<span class="w"> </span>-f<span class="w"> </span>output.log
+</pre></div>
+</div>
+<p>When <code class="docutils literal notranslate"><span class="pre">Daemon</span> <span class="pre">start</span> <span class="pre">success!</span></code> appears in the log, it means the service started successfully.</p>
+<p><strong>Script Parameters</strong></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Parameters</p></th>
+<th class="head text-left"><p>Parameter Description</p></th>
+<th class="head"><p>Value Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--model-name</span></code></p></td>
+<td class="text-left"><p>Given a model name to identify MindIE Service.</p></td>
+<td><p>str, required</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--model-path</span></code></p></td>
+<td class="text-left"><p>Given a model path which contain necessary files such as yaml/conf.json/tokenizer/vocab etc.</p></td>
+<td><p>str, required</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--ip</span></code></p></td>
+<td class="text-left"><p>The IP address bound to the MindIE Server business plane RESTful interface.</p></td>
+<td><p>str, optional. Default value: “127.0.0.1”</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--port</span></code></p></td>
+<td class="text-left"><p>The port bound to the MindIE Server business plane RESTful interface.</p></td>
+<td><p>int, optional. Default value: 1025</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--management-ip</span></code></p></td>
+<td class="text-left"><p>The IP address bound to the MindIE Server management plane RESTful interface.</p></td>
+<td><p>str, optional. Default value: “127.0.0.2”</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--management-port</span></code></p></td>
+<td class="text-left"><p>The port bound to the MindIE Server management plane RESTful interface.</p></td>
+<td><p>int, optional. Default value: 1026</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--metrics-port</span></code></p></td>
+<td class="text-left"><p>The port bound to the performance indicator monitoring interface.</p></td>
+<td><p>int, optional. Default value: 1027</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--max-seq-len</span></code></p></td>
+<td class="text-left"><p>Maximum sequence length.</p></td>
+<td><p>int, optional. Default value: 2560</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--max-iter-times</span></code></p></td>
+<td class="text-left"><p>The global maximum output length of the model.</p></td>
+<td><p>int, optional. Default value: 512</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--max-input-token-len</span></code></p></td>
+<td class="text-left"><p>The maximum length of the token id.</p></td>
+<td><p>int, optional. Default value: 2048</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--max-prefill-tokens</span></code></p></td>
+<td class="text-left"><p>Each time prefill occurs, the total number of input tokens in the current batch.</p></td>
+<td><p>int, optional. Default value: 8192</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--truncation</span></code></p></td>
+<td class="text-left"><p>Whether to perform parameter rationalization check interception.</p></td>
+<td><p>bool, optional. Default value: false</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--template-type</span></code></p></td>
+<td class="text-left"><p>Reasoning type.<br />Standard：In the scenario where PDs are deployed together, prefill requests and decode requests are batched separately.<br />Mix：Parameters related to the SplitFuse feature. Prefill and Decode requests can be batched together.</p></td>
+<td><p>str, optional. Default value: “Standard”.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--max-preempt-count</span></code></p></td>
+<td class="text-left"><p>The upper limit of the maximum number of preemptible requests in each batch.</p></td>
+<td><p>int, optional. Default value: 0</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--support-select-batch</span></code></p></td>
+<td class="text-left"><p>Batch selection strategy.<br />false：Indicates that requests in the Prefill phase are preferentially scheduled and executed in each round of scheduling.<br />true：In each round of scheduling, the sequence of scheduling and executing requests in the Prefill and Decode phases is adaptively adjusted based on the number of requests in the Prefill and Decode phases.</p></td>
+<td><p>bool, optional. Default value: false</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--npu-mem-size</span></code></p></td>
+<td class="text-left"><p>This can be used to apply for the upper limit of the KV Cache size in the NPU.</p></td>
+<td><p>int, optional. Default value: 50</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--max-prefill-batch-size</span></code></p></td>
+<td class="text-left"><p>The maximum prefill batch size.</p></td>
+<td><p>int, optional. Default value: 50</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--world-size</span></code></p></td>
+<td class="text-left"><p>Enable several cards for inference. By default, this parameter is not set. The value of parallel_config in the YAML file prevails. After the parameter is set, the model_parallel parameter in the parallel configuration in the YAML file is overwritten.</p></td>
+<td><p>str, optional.</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--ms-sched-host</span></code></p></td>
+<td class="text-left"><p>MindSpore scheduler IP address.</p></td>
+<td><p>str, optional. Default value: “127.0.0.1”</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--ms-sched-port</span></code></p></td>
+<td class="text-left"><p>MindSpore scheduler port.</p></td>
+<td><p>int, optional. Default value: 8119</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">--help</span></code></p></td>
+<td class="text-left"><p>Show parameter description messages.</p></td>
+<td><p>str, optional.</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>2. Customized Startup</strong></p>
+<p>The MindIE installation paths are all the default paths <code class="docutils literal notranslate"><span class="pre">/usr/local/Ascend/.</span></code> If you customize the installation path, synchronize the path in the following example.</p>
+<p>Open config.json in the mindie-service directory and modify the server-related configuration.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>vim<span class="w"> </span>/usr/local/Ascend/mindie/latest/mindie-service/conf/config.json
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">modelWeightPath</span></code> and <code class="docutils literal notranslate"><span class="pre">backendType</span></code> must be modified to configure:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;modelWeightPath&quot;</span>:<span class="w"> </span><span class="s2">&quot;/path/to/mf_model/qwen1_5_72b&quot;</span>
+<span class="s2">&quot;backendType&quot;</span>:<span class="w"> </span><span class="s2">&quot;ms&quot;</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">modelWeightPath</span></code> is the model folder created in the previous step, where model and tokenizer and other related files are placed; <code class="docutils literal notranslate"><span class="pre">backendType</span></code> backend startup method is <code class="docutils literal notranslate"><span class="pre">ms</span></code>.</p>
+<p>Other relevant parameters are as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Optional Configurations</p></th>
+<th class="head"><p>Value Type</p></th>
+<th class="head"><p>Range of Values</p></th>
+<th class="head"><p>Configuration Descriptions</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>httpsEnabled</p></td>
+<td><p>Bool</p></td>
+<td><p>True/False</p></td>
+<td><p>Whether to enable HTTPS communication security authentication, the default is True. Easy to start, it is recommended to set to False.</p></td>
+</tr>
+<tr class="row-odd"><td><p>maxSeqLen</p></td>
+<td><p>int32</p></td>
+<td><p>Customized by user requirements, &gt;0</p></td>
+<td><p>MaxSeqLen. Length of input + length of output &lt;= maxSeqLen, user selects maxSeqLen according to inference scenario</p></td>
+</tr>
+<tr class="row-even"><td><p>npuDeviceIds</p></td>
+<td><p>list</p></td>
+<td><p>Customization by model requirements</p></td>
+<td><p>This configuration item is temporarily disabled. The actual running card is controlled by the visible card environment variable and the worldSize configuration. Resource reference needs to be adjusted by visible card according to <a class="reference external" href="https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/80RC3alpha003/apiref/envref/envref_07_0029.html">CANN Environment Variables</a>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>worldSize</p></td>
+<td><p>int32</p></td>
+<td><p>Customization by model requirements</p></td>
+<td><p>The number of cards used for the visible card. Example: ASCEND_RT_VISIBLE_DEVICES=4,0,1,2 and worldSize=2, then take the 4th, 0th card to run.</p></td>
+</tr>
+<tr class="row-even"><td><p>npuMemSize</p></td>
+<td><p>int32</p></td>
+<td><p>Customization by Video Memory</p></td>
+<td><p>The upper limit of the size (GB) that can be used to request KVCache in the NPU can be calculated according to the actual size of the deployment model: npuMemSize=(total free - weight/mp number)*factor, where the factor is taken as 0.8. Recommended value: 8.</p></td>
+</tr>
+<tr class="row-odd"><td><p>cpuMemSize</p></td>
+<td><p>int32</p></td>
+<td><p>Customization by Memory</p></td>
+<td><p>The upper limit of the size (GB) that can be used to request KVCache in CPU is related to the swap function, and the Cache will be released for recalculation when cpuMemSize is insufficient. Recommended value: 5.</p></td>
+</tr>
+<tr class="row-even"><td><p>maxPrefillBatchSize</p></td>
+<td><p>int32</p></td>
+<td><p>[1, maxBatchSize]</p></td>
+<td><p>Maximum prefill batch size. maxPrefillBatchSize and maxPrefillTokens will complete the batch if they reach their respective values first. This parameter is mainly used in scenarios where there is a clear need to limit the batch size of the prefill phase, otherwise it can be set to 0 (at this point, the engine will take the maxBatchSize value by default) or the same as maxBatchSize. Required, default value: 50.</p></td>
+</tr>
+<tr class="row-odd"><td><p>maxPrefillTokens</p></td>
+<td><p>int32</p></td>
+<td><p>[5120, 409600]</p></td>
+<td><p>At each prefill, the total number of all input tokens in the current batch must not exceed maxPrefillTokens. maxPrefillTokens and maxPrefillBatchSize will complete the current group batch if they reach their respective values first. Required, default value: 8192.</p></td>
+</tr>
+<tr class="row-even"><td><p>maxBatchSize</p></td>
+<td><p>int32</p></td>
+<td><p>[1, 5000]</p></td>
+<td><p>Maximum decode batch size, estimated based on model size and NPU graphics memory.</p></td>
+</tr>
+<tr class="row-odd"><td><p>maxIterTimes</p></td>
+<td><p>int32</p></td>
+<td><p>[1, maxSeqLen-1]</p></td>
+<td><p>The number of decodes that can be performed, i.e. the maximum length of a sentence that can be generated. There is a max_output_length parameter inside the request level, maxIterTimes is a global setting, and max_output_length is taken as the maximum length of the final output.</p></td>
+</tr>
+</tbody>
+</table>
+<p>The full set of configuration parameters is available in <a class="reference external" href="https://www.hiascend.com/document/detail/zh/mindie/10RC3/mindieservice/servicedev/mindie_service0285.html">MindIE Service Developer’s Guide - Quick Start - Configuration Parameter Descriptions</a>.</p>
+<p>Run the startup script:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/path/to/mindie/latest/mindie-service
+nohup<span class="w"> </span>./bin/mindieservice_daemon<span class="w"> </span>&gt;<span class="w"> </span>output.log<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">&amp;</span>
+tail<span class="w"> </span>-f<span class="w"> </span>output.log
+</pre></div>
+</div>
+<p>When <code class="docutils literal notranslate"><span class="pre">Daemon</span> <span class="pre">start</span> <span class="pre">success!</span></code> appears in the log, it means the service started successfully.</p>
+<p>The related logs of Python:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">MINDIE_LLM_PYTHON_LOG_TO_FILE</span><span class="o">=</span><span class="m">1</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MINDIE_LLM_PYTHON_LOG_PATH</span><span class="o">=</span>/usr/local/Ascend/mindie/latest/mindie-service/logs/pythonlog.log
+tail<span class="w"> </span>-f<span class="w"> </span>/usr/local/Ascend/mindie/latest/mindie-service/logs/pythonlog.log
+</pre></div>
+</div>
+</section>
+</section>
+<section id="mindie-service-deployment-and-inference-example">
+<h3>MindIE Service Deployment and Inference Example<a class="headerlink" href="#mindie-service-deployment-and-inference-example" title="Link to this heading"></a></h3>
+<p>The following example installs each component to the default path <code class="docutils literal notranslate"><span class="pre">/usr/local/Ascend/.</span></code> and the model uses <code class="docutils literal notranslate"><span class="pre">Qwen1.5-72B</span></code>.</p>
+<section id="id2">
+<h4>Preparing Model Files<a class="headerlink" href="#id2" title="Link to this heading"></a></h4>
+<p>Take Qwen1.5-72B as an example to prepare the model file directory. For details of the directory structure and configuration, refer to <a class="reference internal" href="#preparing-model-files">Preparing Model Files</a>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>-p<span class="w"> </span>mf_model/qwen1_5_72b
+</pre></div>
+</div>
+</section>
+<section id="id3">
+<h4>Starting MindIE<a class="headerlink" href="#id3" title="Link to this heading"></a></h4>
+<p><strong>1. One-click Start (Recommended)</strong></p>
+<p>Go to the <code class="docutils literal notranslate"><span class="pre">scripts</span></code> directory and execute the mindie startup script:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>./scripts
+bash<span class="w"> </span>run_mindie.sh<span class="w"> </span>--model-name<span class="w"> </span>qwen1_5_72b<span class="w"> </span>--model-path<span class="w"> </span>/path/to/mf_model/qwen1_5_72b
+</pre></div>
+</div>
+<p>View log:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tail<span class="w"> </span>-f<span class="w"> </span>output.log
+</pre></div>
+</div>
+<p>When <code class="docutils literal notranslate"><span class="pre">Daemon</span> <span class="pre">start</span> <span class="pre">success!</span></code> appears in the log, it means the service started successfully.</p>
+<p><strong>2. Customized Startup</strong></p>
+<p>Open config.json in the mindie-service directory and modify the server-related configuration.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>vim<span class="w"> </span>/usr/local/Ascend/mindie/latest/mindie-service/conf/config.json
+</pre></div>
+</div>
+<p>The final modified config.json is as follows:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;Version&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1.0.0&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;LogConfig&quot;</span><span class="w"> </span><span class="p">:</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;logLevel&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Info&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;logFileSize&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;logFileNum&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;logPath&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;logs/mindservice.log&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+
+<span class="w">    </span><span class="nt">&quot;ServerConfig&quot;</span><span class="w"> </span><span class="p">:</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;ipAddress&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;managementIpAddress&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;127.0.0.2&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;port&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1025</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;managementPort&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1026</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;metricsPort&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1027</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;allowAllZeroIpListening&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;maxLinkNum&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;httpsEnabled&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;fullTextEnabled&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;tlsCaPath&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;security/ca/&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;tlsCaFile&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;ca.pem&quot;</span><span class="p">],</span>
+<span class="w">        </span><span class="nt">&quot;tlsCert&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;security/certs/server.pem&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;tlsPk&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;security/keys/server.key.pem&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;tlsPkPwd&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;security/pass/key_pwd.txt&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;tlsCrl&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;security/certs/server_crl.pem&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;managementTlsCaFile&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;management_ca.pem&quot;</span><span class="p">],</span>
+<span class="w">        </span><span class="nt">&quot;managementTlsCert&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;security/certs/management/server.pem&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;managementTlsPk&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;security/keys/management/server.key.pem&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;managementTlsPkPwd&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;security/pass/management/key_pwd.txt&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;managementTlsCrl&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;security/certs/management/server_crl.pem&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;kmcKsfMaster&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tools/pmt/master/ksfa&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;kmcKsfStandby&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tools/pmt/standby/ksfb&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;inferMode&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;standard&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;interCommTLSEnabled&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;interCommPort&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1121</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;interCommTlsCaFile&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;security/grpc/ca/ca.pem&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;interCommTlsCert&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;security/grpc/certs/server.pem&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;interCommPk&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;security/grpc/keys/server.key.pem&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;interCommPkPwd&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;security/grpc/pass/key_pwd.txt&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;interCommTlsCrl&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;security/certs/server_crl.pem&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;openAiSupport&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;vllm&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+
+<span class="w">    </span><span class="nt">&quot;BackendConfig&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;backendName&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;mindieservice_llm_engine&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;modelInstanceNumber&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;npuDeviceIds&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]],</span>
+<span class="w">        </span><span class="nt">&quot;tokenizerProcessNumber&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;multiNodesInferEnabled&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;multiNodesInferPort&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1120</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;interNodeTLSEnabled&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;interNodeTlsCaFile&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;security/grpc/ca/ca.pem&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;interNodeTlsCert&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;security/grpc/certs/server.pem&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;interNodeTlsPk&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;security/grpc/keys/server.key.pem&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;interNodeTlsPkPwd&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;security/grpc/pass/mindie_server_key_pwd.txt&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;interNodeTlsCrl&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;security/grpc/certs/server_crl.pem&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;interNodeKmcKsfMaster&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tools/pmt/master/ksfa&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;interNodeKmcKsfStandby&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tools/pmt/standby/ksfb&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;ModelDeployConfig&quot;</span><span class="w"> </span><span class="p">:</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;maxSeqLen&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">8192</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;maxInputTokenLen&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">8192</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;truncation&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;ModelConfig&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="nt">&quot;modelInstanceType&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Standard&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;modelName&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Qwen1.5-72B-Chat&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;modelWeightPath&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/mf_model/qwen1_5_72b&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;worldSize&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;cpuMemSize&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;npuMemSize&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;backendType&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ms&quot;</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">]</span>
+<span class="w">        </span><span class="p">},</span>
+
+<span class="w">        </span><span class="nt">&quot;ScheduleConfig&quot;</span><span class="w"> </span><span class="p">:</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;templateType&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Standard&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;templateName&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Standard_LLM&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;cacheBlockSize&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span>
+
+<span class="w">            </span><span class="nt">&quot;maxPrefillBatchSize&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">50</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;maxPrefillTokens&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">8192</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;prefillTimeMsPerReq&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">150</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;prefillPolicyType&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+
+<span class="w">            </span><span class="nt">&quot;decodeTimeMsPerReq&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">50</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;decodePolicyType&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+
+<span class="w">            </span><span class="nt">&quot;maxBatchSize&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;maxIterTimes&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">4096</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;maxPreemptCount&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;supportSelectBatch&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;maxQueueDelayMicroseconds&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">5000</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>For testing purposes, the <code class="docutils literal notranslate"><span class="pre">httpsEnabled</span></code> parameter is set to <code class="docutils literal notranslate"><span class="pre">false</span></code>, ignoring subsequent https communication related parameters.</p>
+</div></blockquote>
+<p>Go to the mindie-service directory to start the service:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/usr/local/Ascend/mindie/1.0.RC3/mindie-service
+nohup<span class="w"> </span>./bin/mindieservice_daemon<span class="w"> </span>&gt;<span class="w"> </span>output.log<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">&amp;</span>
+tail<span class="w"> </span>-f<span class="w"> </span>output.log
+</pre></div>
+</div>
+<p>The following message is printed, indicating that the startup was successful.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Daemon<span class="w"> </span>start<span class="w"> </span>success!
+</pre></div>
+</div>
+</section>
+<section id="request-test">
+<h4>Request Test<a class="headerlink" href="#request-test" title="Link to this heading"></a></h4>
+<p>After the service has started successfully, you can use the curl command to send a request for verification, as shown in the following example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-w<span class="w"> </span><span class="s2">&quot;\ntime_total=%{time_total}\n&quot;</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Accept: application/json&quot;</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Content-type: application/json&quot;</span><span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;inputs&quot;: &quot;I love Beijing, because&quot;,&quot;stream&quot;: false}&#39;</span><span class="w"> </span>http://127.0.0.1:1025/generate
+</pre></div>
+</div>
+<p>The validation is successful with the following returned inference result:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;generated_text&quot;</span><span class="p">:</span><span class="s2">&quot; it is a city with a long history and rich culture.....&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="model-list">
+<h3>Model List<a class="headerlink" href="#model-list" title="Link to this heading"></a></h3>
+<p>Examples of MindIE inference for other models can be found in the introduction documentation for each model in <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/introduction/models.html">Model Library</a>.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="inference.html" class="btn btn-neutral float-left" title="Inference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="evaluation.html" class="btn btn-neutral float-right" title="Evaluation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

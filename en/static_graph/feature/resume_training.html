@@ -1,0 +1,381 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resumable Training After Breakpoint &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Checkpoint Saving and Loading" href="checkpoint_saving_and_loading.html" />
+    <link rel="prev" title="Training Metrics Monitoring" href="monitor.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">Models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contribution Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">Modelers Contribution Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">Model-Related FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">Feature-Related FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Static Graph Implementation (Deprecated)</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Full-process Guide to Large Models</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Features</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">Features Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="start_tasks.html">Start Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ckpt.html">Ckpt Weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="safetensors.html">Safetensors Weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">Configuration File Descriptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="load_huggingface_config.html">Loading Hugging Face Model Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html">Logs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tokenizer.html">Using Tokenizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset.html">Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training_hyperparameters.html">Training Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monitor.html">Training Metrics Monitoring</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Resumable Training After Breakpoint</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#important-note">Important Note</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#introduction-to-weight-and-strategy-files">Introduction to Weight and Strategy Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#yaml-parameter-configuration-description">YAML Parameter Configuration Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#introduction-to-resume-training-scenarios">Introduction to Resume Training Scenarios</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#interrupted-training-resumption">Interrupted Training Resumption</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#strategy-conversion-resumption">Strategy Conversion Resumption</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#incremental-training-resumption">Incremental Training Resumption</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#automatic-recovery-resumption">Automatic Recovery Resumption</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#notes-and-recommendations">Notes and Recommendations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoint_saving_and_loading.html">Checkpoint Saving and Loading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training2.0.html">Resume Training2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel_training.html">Distributed Parallelism Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="high_availability.html">Training High Availability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory_optimization.html">Memory Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skip_data_and_ckpt_health_monitor.html">Data Skip And Checkpoint Health Monitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pma_fused_checkpoint.html">Pre-trained Model Average Weight Consolidation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="other_training_features.html">Other Training Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantization.html">Quantization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_development/index.html">Advanced Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">Excellent Practice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">Environment Variable Descriptions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Features</a></li>
+      <li class="breadcrumb-item active">Resumable Training After Breakpoint</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/feature/resume_training.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">Deprecated</p>
+<p>This page belongs to the <strong>Static Graph (GRAPH_MODE) Implementation</strong> section and has been marked as deprecated. New features are primarily being developed in the “r2.0.0 Dynamic Graph Implementation” section. Please refer to the dynamic graph documentation first.</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="resumable-training-after-breakpoint">
+<h1>Resumable Training After Breakpoint<a class="headerlink" href="#resumable-training-after-breakpoint" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_en/static_graph/feature/resume_training.md"><img alt="View Source on AtomGit" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source_en.svg" /></a></p>
+<p>This document is the user guide for the checkpoint resume training feature of <strong>Checkpoint 1.0</strong> under the MindSpore Transformers framework.</p>
+<section id="important-note">
+<h2>Important Note<a class="headerlink" href="#important-note" title="Link to this heading"></a></h2>
+<p>Currently, MindSpore Transformers has officially launched <strong><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/checkpoint_saving_and_loading.html">Checkpoint 2.0</a></strong>, along with the official documentation for checkpoint <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/resume_training2.0.html">resume training adapted to the new version</a>. To ensure compatibility and advancement in feature usage, this document related to Checkpoint 1.0 will be gradually discontinued (sunset) in the future. Users are advised to refer to the new version of the documentation first for development and usage.</p>
+</section>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>MindSpore Transformers supports <strong>step-level resume training</strong> functionality, enabling the loading of saved checkpoints to resume previous training states. This feature is particularly important for handling large-scale training tasks, as it effectively reduces time and resource waste caused by unexpected interruptions.</p>
+<p>MindSpore Transformers supports saving and loading weights in both <strong>ckpt</strong> and <strong>safetensors</strong> formats. It supports various resume training scenarios such as <strong>interrupted training resumption</strong>, <strong>strategy conversion resumption</strong>, <strong>incremental training resumption</strong>, and <strong>automatic recovery resumption</strong>. It also supports different weight loading methods including <strong>loading the last fully saved weights</strong>, <strong>loading weights from a specified step</strong>, and <strong>loading MindSpore merged weights</strong> for resumption.</p>
+<p>In a distributed environment, resume training requires that weights from all nodes be stored in the <strong>same shared directory</strong>. Users can set the shared path via the environment variable <code class="docutils literal notranslate"><span class="pre">SHARED_PATHS</span></code>.</p>
+</section>
+<section id="introduction-to-weight-and-strategy-files">
+<h2>Introduction to Weight and Strategy Files<a class="headerlink" href="#introduction-to-weight-and-strategy-files" title="Link to this heading"></a></h2>
+<p>MindSpore Transformers saves weight and strategy files, which are by default stored in the <code class="docutils literal notranslate"><span class="pre">output/checkpoint</span></code> and <code class="docutils literal notranslate"><span class="pre">output/strategy</span></code> folders. Users can modify the <code class="docutils literal notranslate"><span class="pre">output_dir</span></code> parameter in the YAML configuration to change the path of the <code class="docutils literal notranslate"><span class="pre">output</span></code> folder.</p>
+<p>Weight files mainly store <strong>network parameters</strong>, <strong>optimizer parameters</strong>, and <strong>resume training information</strong>. Weight files are saved separately in rank-specific folders, and each rank folder maintains a <code class="docutils literal notranslate"><span class="pre">meta.json</span></code> file to record the last fully saved weight information for that rank. Taking a single-machine 8-card setup as an example, the weight saving format is as follows:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>output/checkpoint
+    ├── rank_0
+      ├── meta.json
+      └── {prefix}-{epoch}_{step}.safetensors
+    ├── rank_1
+      ├── meta.json
+      └── {prefix}-{epoch}_{step}.safetensors
+    ...
+    ├── rank_7
+      ├── meta.json
+      └── {prefix}-{epoch}_{step}.safetensors
+</pre></div>
+</div>
+<blockquote>
+<div><p>The prefix of the weight name contains rank_id information, e.g., <code class="docutils literal notranslate"><span class="pre">qwen3_8b_rank_0</span></code>. If a weight with the same prefix already exists when saving, an incremental suffix will be automatically added to the prefix to prevent overwriting old weights. For example, if “qwen3_8b_rank_0” already exists, the prefix will be updated to “qwen3_8b_rank_0_1”, and if “qwen3_8b_rank_0_1” also exists, it will be updated to “qwen3_8b_rank_0_2”.</p>
+</div></blockquote>
+<p>Strategy files are only saved in distributed training tasks and are used for <strong>weight strategy conversion</strong>. Strategy files are saved in ckpt format with the rank_id as the suffix, mainly recording the network and optimizer sharding information for the current rank. Taking a single-machine 8-card setup as an example, the strategy file saving format is as follows:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>output/strategy
+    ├── ckpt_strategy_rank_0.ckpt
+    ├── ckpt_strategy_rank_1.ckpt
+    ...
+    └── ckpt_strategy_rank_7.ckpt
+</pre></div>
+</div>
+<blockquote>
+<div><p>Strategy files will overwrite old files when saved. To prevent overwriting or mixing strategy files from different tasks, please promptly save strategy files to a custom folder.</p>
+</div></blockquote>
+<p>For more information about weights, refer to <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/ckpt.html">Ckpt Weights</a> and <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/safetensors.html">Safetensors Weights</a>.</p>
+</section>
+<section id="yaml-parameter-configuration-description">
+<h2>YAML Parameter Configuration Description<a class="headerlink" href="#yaml-parameter-configuration-description" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>load_checkpoint</p></td>
+<td><p>Path to the weight file or folder, <strong>required for resuming training</strong>, default is an empty string.<br />If the configured path is an empty directory, it will fall back to using randomly initialized weights for pre-training.<br />For single-card weights, configure the path to the weight file, ensuring the parent directory does not start with “rank_”.</p></td>
+</tr>
+<tr class="row-odd"><td><p>src_strategy_path_or_dir</p></td>
+<td><p>Path to the strategy file or folder, required when <strong><code class="docutils literal notranslate"><span class="pre">auto_trans_ckpt=True</span></code> and load_checkpoint is a distributed weight</strong>, default is an empty string.<br />If the weights configured in load_checkpoint do not have pipeline parallel sharding, configure any strategy file path; otherwise, configure the strategy folder path.</p></td>
+</tr>
+<tr class="row-even"><td><p>auto_trans_ckpt</p></td>
+<td><p>Switch for automatic weight conversion, needs to be enabled when the <strong>weights configured in load_checkpoint do not match the distributed strategy of the current task</strong>, default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>transform_process_num</p></td>
+<td><p>Number of processes used for automatic weight conversion, <strong>only applicable to automatic conversion of ckpt format weights</strong>, which can accelerate weight conversion. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code> (disabled).<br />The set value must be divisible by the total number of cluster cards. A larger value increases host memory usage; reduce the number of processes if host memory is insufficient.</p></td>
+</tr>
+<tr class="row-even"><td><p>resume_training</p></td>
+<td><p>Switch for resuming training, can be set to <code class="docutils literal notranslate"><span class="pre">True</span></code> or the weight file name in any rank sub-folder. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.<br />When set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, it <strong>loads the last fully saved weights</strong> for resumption.<br />When set to a weight file name, it <strong>loads the weights from the specified step</strong> for resumption.</p></td>
+</tr>
+<tr class="row-odd"><td><p>load_ckpt_format</p></td>
+<td><p>Format of the weights configured in load_checkpoint, can be set to <code class="docutils literal notranslate"><span class="pre">safetensors</span></code> or <code class="docutils literal notranslate"><span class="pre">ckpt</span></code>, default is <code class="docutils literal notranslate"><span class="pre">ckpt</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>remove_redundancy</p></td>
+<td><p>Switch for loading without redundancy, needs to be enabled when the weights configured in load_checkpoint are <strong>safetensors format weights saved without redundancy</strong>, default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>load_ckpt_async</p></td>
+<td><p>Whether to execute weight loading in parallel with model compilation. This configuration <strong>only applies to asynchronous loading scenarios with ckpt format weights and unchanged distributed strategy</strong>. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="introduction-to-resume-training-scenarios">
+<h2>Introduction to Resume Training Scenarios<a class="headerlink" href="#introduction-to-resume-training-scenarios" title="Link to this heading"></a></h2>
+<section id="interrupted-training-resumption">
+<h3>Interrupted Training Resumption<a class="headerlink" href="#interrupted-training-resumption" title="Link to this heading"></a></h3>
+<p><strong>Overview</strong>: Resume training based on saved weights after an unexpected interruption of a normal training task, without changing the distributed strategy.</p>
+<ul>
+<li><p>Resume training from the last fully saved weights</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/checkpoint</span>
+<span class="nt">resume_training</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+</div>
+<p>The system will automatically search for and load the last fully saved weights based on the weight records in each rank’s <code class="docutils literal notranslate"><span class="pre">meta.json</span></code> for resumption.</p>
+<blockquote>
+<div><p>If there is no meta.json in all rank sub-folders of the weight folder, it will fall back to resuming from the weights with the latest timestamp for each rank.</p>
+</div></blockquote>
+</li>
+<li><p>Resume training from weights of a specified step</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/checkpoint</span>
+<span class="c1"># For ckpt weights, fill in {prefix}-{epoch}_{step}.ckpt</span>
+<span class="nt">resume_training</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nv">prefix</span><span class="p p-Indicator">}</span><span class="l l-Scalar l-Scalar-Plain">-{epoch}_{step}.safetensors</span>
+</pre></div>
+</div>
+<p>Users must ensure the integrity of the specified weights. Each rank will automatically replace the rank information in the “prefix” to update the weight name to be loaded. For example, if the specified weight name is <code class="docutils literal notranslate"><span class="pre">qwen3_8b_rank_0-200_1.safetensors</span></code>, when loading rank_1, the weight name will be replaced with <code class="docutils literal notranslate"><span class="pre">qwen3_8b_rank_1-200_1.safetensors</span></code>. An error will occur if the weight is missing for a certain rank.</p>
+</li>
+</ul>
+</section>
+<section id="strategy-conversion-resumption">
+<h3>Strategy Conversion Resumption<a class="headerlink" href="#strategy-conversion-resumption" title="Link to this heading"></a></h3>
+<p><strong>Overview</strong>: Continue training after modifying the <strong>distributed strategy</strong> or <strong>expanding/shrinking the cluster scale</strong>, requiring <strong>enabling automatic weight conversion</strong>.</p>
+<section id="safetensors-weights">
+<h4>Safetensors Weights<a class="headerlink" href="#safetensors-weights" title="Link to this heading"></a></h4>
+<p>Enabling automatic weight conversion will automatically merge safetensors weights into <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/safetensors.html#complete-weights">complete weights</a> for distributed loading. The merged safetensors weights will be saved to the <code class="docutils literal notranslate"><span class="pre">output/unified_checkpoint</span></code> folder. If the weights have been offline merged into <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/safetensors.html#complete-weights">complete weights</a>, they will be directly loaded in a distributed manner. For offline merging steps, refer to the <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/safetensors.html">Safetensors Weights - Weight Slicing and Merging</a> section.</p>
+<ul>
+<li><p>Resume training from the last fully saved weights</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/checkpoint</span>
+<span class="nt">src_strategy_path_or_dir</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/strategy</span>
+<span class="nt">resume_training</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="nt">auto_trans_ckpt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+</div>
+</li>
+<li><p>Resume training from weights of a specified step</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/checkpoint</span>
+<span class="nt">src_strategy_path_or_dir</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/strategy</span>
+<span class="nt">resume_training</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nv">prefix</span><span class="p p-Indicator">}</span><span class="l l-Scalar l-Scalar-Plain">-{epoch}_{step}.safetensors</span>
+<span class="nt">auto_trans_ckpt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+</div>
+</li>
+<li><p>Resume training from merged weights</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/unified_checkpoint</span>
+<span class="nt">resume_training</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="nt">auto_trans_ckpt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="ckpt-weights">
+<h4>Ckpt Weights<a class="headerlink" href="#ckpt-weights" title="Link to this heading"></a></h4>
+<p>Enabling automatic weight conversion will automatically convert weights to the distributed strategy of the current task before loading. The converted ckpt weights will be saved to the <code class="docutils literal notranslate"><span class="pre">output/transformed_checkpoint</span></code> folder, which can be directly loaded for subsequent use without enabling weight automatic conversion.</p>
+<p>If there are multiple step weight files in the rank sub-folder of the weights, it is necessary to offline filter the weights to ensure that <strong>each rank sub-folder contains only a single ckpt file to be loaded</strong>.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/checkpoint</span>
+<span class="nt">src_strategy_path_or_dir</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/strategy</span>
+<span class="nt">resume_training</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="nt">auto_trans_ckpt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="nt">transform_process_num</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="incremental-training-resumption">
+<h3>Incremental Training Resumption<a class="headerlink" href="#incremental-training-resumption" title="Link to this heading"></a></h3>
+<p><strong>Overview</strong>: The training dataset needs to be <strong>produced and trained incrementally</strong>. After training on the current dataset, new produced datasets are added for continued training until all datasets are processed. This scenario requires users to preset the total steps of the learning rate curve in advance based on the total amount of training data.</p>
+<p>Assume a total of 10T tokens of data will be trained, with each produced dataset containing 1T tokens. The entire training process is completed in 10 epochs, requiring a total of 100,000 steps.</p>
+<ul>
+<li><p>Step 1: Preset the total training steps to fix the learning rate curve for the entire training process</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">lr_schedule</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">total_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100000</span>
+</pre></div>
+</div>
+</li>
+<li><p>Step 2: Set a sufficiently large epoch value to ensure all datasets can be trained</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">runner_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">epochs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">15</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>The learning rate curve for the entire training process is fixed, and the epoch value setting will not affect the learning rate. You can set a larger value to ensure that all 10 datasets are fully trained.</p>
+</div></blockquote>
+</li>
+<li><p>Step 3: After training 1 epoch of the dataset, replace the dataset and resume training. The following example resumes from the last fully saved weights; for other resumption methods, refer to <a class="reference internal" href="#interrupted-training-resumption">Interrupted Training Resumption</a> or <a class="reference internal" href="#strategy-conversion-resumption">Strategy Conversion Resumption</a>.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/checkpoint</span>
+<span class="nt">resume_training</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>Due to inconsistent sample counts across datasets, the displayed epoch and step may change when resuming with a new dataset. However, the total number of training steps remains unchanged, which is a normal phenomenon.</p>
+</div></blockquote>
+</li>
+</ul>
+</section>
+<section id="automatic-recovery-resumption">
+<h3>Automatic Recovery Resumption<a class="headerlink" href="#automatic-recovery-resumption" title="Link to this heading"></a></h3>
+<p><strong>Overview</strong>: To facilitate automatic resumption of training by the platform without manual intervention, configure load_checkpoint to the save path of weight checkpoints. During the first training run, this directory is empty, and training will start normally with randomly initialized weights. For resumption, training will resume from the last fully saved weights in this directory.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/output/checkpoint</span>
+<span class="nt">resume_training</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="notes-and-recommendations">
+<h2>Notes and Recommendations<a class="headerlink" href="#notes-and-recommendations" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Distributed resume training must enable <strong>data sinking mode</strong> by configuring <code class="docutils literal notranslate"><span class="pre">sink_mode=True</span></code>.</p></li>
+<li><p>It is recommended to set the <code class="docutils literal notranslate"><span class="pre">SHARED_PATHS</span></code> environment variable to the path of the top-level shared directory. For example, if <code class="docutils literal notranslate"><span class="pre">/data01</span></code> is the shared directory and the project directory is under it, configure <code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">SHARED_PATHS=/data01</span></code>.</p></li>
+<li><p>It is recommended to save weights and strategy files of training tasks with different distributed strategies in separate folders.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="monitor.html" class="btn btn-neutral float-left" title="Training Metrics Monitoring" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="checkpoint_saving_and_loading.html" class="btn btn-neutral float-right" title="Checkpoint Saving and Loading" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

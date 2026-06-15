@@ -1,0 +1,245 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Logs &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Using Tokenizer" href="tokenizer.html" />
+    <link rel="prev" title="Loading Hugging Face Model Configuration" href="load_huggingface_config.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">Models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contribution Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">Modelers Contribution Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">Model-Related FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">Feature-Related FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Static Graph Implementation (Deprecated)</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Full-process Guide to Large Models</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Features</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">Features Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="start_tasks.html">Start Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ckpt.html">Ckpt Weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="safetensors.html">Safetensors Weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">Configuration File Descriptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="load_huggingface_config.html">Loading Hugging Face Model Configuration</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Logs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#logs-saving">Logs Saving</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#training-log-directory-structure">Training Log Directory Structure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#configuration-and-usage">Configuration and Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tokenizer.html">Using Tokenizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset.html">Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training_hyperparameters.html">Training Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monitor.html">Training Metrics Monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training.html">Resumable Training After Breakpoint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoint_saving_and_loading.html">Checkpoint Saving and Loading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training2.0.html">Resume Training2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel_training.html">Distributed Parallelism Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="high_availability.html">Training High Availability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory_optimization.html">Memory Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skip_data_and_ckpt_health_monitor.html">Data Skip And Checkpoint Health Monitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pma_fused_checkpoint.html">Pre-trained Model Average Weight Consolidation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="other_training_features.html">Other Training Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantization.html">Quantization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_development/index.html">Advanced Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">Excellent Practice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">Environment Variable Descriptions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Features</a></li>
+      <li class="breadcrumb-item active">Logs</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/feature/logging.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">Deprecated</p>
+<p>This page belongs to the <strong>Static Graph (GRAPH_MODE) Implementation</strong> section and has been marked as deprecated. New features are primarily being developed in the “r2.0.0 Dynamic Graph Implementation” section. Please refer to the dynamic graph documentation first.</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="logs">
+<h1>Logs<a class="headerlink" href="#logs" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_en/static_graph/feature/logging.md"><img alt="View Source on AtomGit" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source_en.svg" /></a></p>
+<section id="logs-saving">
+<h2>Logs Saving<a class="headerlink" href="#logs-saving" title="Link to this heading"></a></h2>
+<section id="overview">
+<h3>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h3>
+<p>MindSpore Transformers will write the model’s training configuration, training steps, loss, throughput and other information into the log. Developers can specify the path for log storage.</p>
+</section>
+<section id="training-log-directory-structure">
+<h3>Training Log Directory Structure<a class="headerlink" href="#training-log-directory-structure" title="Link to this heading"></a></h3>
+<p>During the training process, MindSpore Transformers will generate a training log directory in the output directory (default is <code class="docutils literal notranslate"><span class="pre">./output</span></code>) by default: <code class="docutils literal notranslate"><span class="pre">./log</span></code>.</p>
+<p>When the training task is started using the <code class="docutils literal notranslate"><span class="pre">msrun</span></code> method, an additional log directory will be generated in the output directory by default: <code class="docutils literal notranslate"><span class="pre">./msrun_log</span></code>.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Folder</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>log</p></td>
+<td><p>The log information of each card is divided into <code class="docutils literal notranslate"><span class="pre">rank_{i}</span></code> folders. (<code class="docutils literal notranslate"><span class="pre">i</span></code> corresponds to the NPU card number used for training tasks)<br>Each <code class="docutils literal notranslate"><span class="pre">rank_{i}</span></code> folder will include <code class="docutils literal notranslate"><span class="pre">info.log</span></code> and <code class="docutils literal notranslate"><span class="pre">error.log</span></code> to record the INFO level and ERROR level information output during training respectively. The default maximum size for a single log file is 50 MB, with a maximum of 5 backup logs.</p></td>
+</tr>
+<tr class="row-odd"><td><p>msrun_log</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">worker_{i}.log</span></code> is used to record the training log of each card (including error information), and <code class="docutils literal notranslate"><span class="pre">scheduler.log</span></code> records the startup information of msrun. <br>Training log information is usually viewed through this folder.</p></td>
+</tr>
+</tbody>
+</table>
+<p>Take an 8-rank task started by <code class="docutils literal notranslate"><span class="pre">msrun</span></code> as an example. The specific log structure is as follows:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>output
+    ├── log
+        ├── rank_0
+            ├── info.log    # Record the training information of NPU rank 0
+            └── error.log   # Record the error information of NPU rank 0
+        ├── ...
+        └── rank_7
+            ├── info.log    # Record the training information of NPU rank 7
+            └── error.log   # Record the error information of NPU rank 7
+    └── msrun_log
+        ├── scheduler.log   # Record the communication information between each NPU rank
+        ├── worker_0.log    # Record the training and error information of NPU rank 0
+        ├── ...
+        └── worker_7.log    # Record the training and error information of NPU rank 7
+</pre></div>
+</div>
+</section>
+<section id="configuration-and-usage">
+<h3>Configuration and Usage<a class="headerlink" href="#configuration-and-usage" title="Link to this heading"></a></h3>
+<p>By default, MindSpore Transformers specifies the file output path as <code class="docutils literal notranslate"><span class="pre">./output</span></code> in the training yaml file. If you start the training task under the <code class="docutils literal notranslate"><span class="pre">mindformers</span></code> path, the log output generated by the training will be saved under <code class="docutils literal notranslate"><span class="pre">mindformers/output</span></code> by default.</p>
+<section id="yaml-parameter-configuration">
+<h4>YAML Parameter Configuration<a class="headerlink" href="#yaml-parameter-configuration" title="Link to this heading"></a></h4>
+<p>If you need to re-specify the output log folder, you can modify the configuration in yaml.</p>
+<p>Taking <a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/example/deepseek3/pretrain_deepseek3_671b.yaml"><code class="docutils literal notranslate"><span class="pre">DeepSeek-V3</span></code> pre-training yaml</a> as an example, the following configuration can be made:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">output_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;./output&#39;</span><span class="w"> </span><span class="c1"># path to save logs/checkpoint/strategy</span>
+</pre></div>
+</div>
+</section>
+<section id="specifying-output-directory-for-single-card-tasks">
+<h4>Specifying Output Directory for Single-Card Tasks<a class="headerlink" href="#specifying-output-directory-for-single-card-tasks" title="Link to this heading"></a></h4>
+<p>In addition to specifying the yaml file configuration, MindSpore Transformers also supports <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/start_tasks.html#run-mindformer-one-click-start-script">run_mindformer in the one-click start script</a>,
+use the <code class="docutils literal notranslate"><span class="pre">--output_dir</span></code> start command to specify the log output path.</p>
+<blockquote>
+<div><p>If the output path is configured here, it will overwrite the configuration in the yaml file!</p>
+</div></blockquote>
+</section>
+<section id="distributed-task-specifies-the-output-directory">
+<h4>Distributed Task Specifies the Output Directory<a class="headerlink" href="#distributed-task-specifies-the-output-directory" title="Link to this heading"></a></h4>
+<p>If the model training requires multiple servers, use the <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/start_tasks.html#distributed-task-pull-up-script">distributed task launch script</a> to start the distributed training task.</p>
+<p>If shared storage is set, you can also specify the input parameter <code class="docutils literal notranslate"><span class="pre">LOG_DIR</span></code> in the startup script to specify the log output path of the Worker and Scheduler, and output the logs of all machine nodes to one path for unified observation.</p>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="load_huggingface_config.html" class="btn btn-neutral float-left" title="Loading Hugging Face Model Configuration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tokenizer.html" class="btn btn-neutral float-right" title="Using Tokenizer" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

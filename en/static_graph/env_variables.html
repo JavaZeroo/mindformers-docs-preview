@@ -1,0 +1,477 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Environment Variable Descriptions &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Practice Case: Using GLM4-9B for Multi-Device Model Fine-Tuning" href="example/finetune_with_glm4/finetune_with_glm4.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/models.html">Models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contribution Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contribution/mindformers_contribution.html">MindSpore Transformers Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution/modelers_contribution.html">Modelers Contribution Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../faq/model_related.html">Model-Related FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/feature_related.html">Feature-Related FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Static Graph Implementation (Deprecated)</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guide/index.html">Full-process Guide to Large Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="feature/index.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_development/index.html">Advanced Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example/index.html">Excellent Practice</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Environment Variable Descriptions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#debugging-variables">Debugging Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#other-variables">Other Variables</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Environment Variable Descriptions</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/static_graph/env_variables.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">Deprecated</p>
+<p>This page belongs to the <strong>Static Graph (GRAPH_MODE) Implementation</strong> section and has been marked as deprecated. New features are primarily being developed in the “r2.0.0 Dynamic Graph Implementation” section. Please refer to the dynamic graph documentation first.</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="environment-variable-descriptions">
+<h1>Environment Variable Descriptions<a class="headerlink" href="#environment-variable-descriptions" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_en/static_graph/env_variables.md"><img alt="View Source on AtomGit" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source_en.svg" /></a></p>
+<p>The following environment variables are supported by MindSpore Transformers.</p>
+<section id="debugging-variables">
+<h2>Debugging Variables<a class="headerlink" href="#debugging-variables" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variables Names</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Interpretations</p></th>
+<th class="head"><p>Descriptions</p></th>
+<th class="head"><p>Application Scenarios</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>HCCL_DETERMINISTIC</strong></p></td>
+<td><p>false</p></td>
+<td><p>Whether to enable deterministic computation of reductive communication operators, where reductive communication operators include AllReduce, ReduceScatter, Reduce.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code>: turns on the HCCL deterministic switch;<br> <code class="docutils literal notranslate"><span class="pre">false</span></code>: turns off the HCCL deterministic switch.</p></td>
+<td><p>Turning on deterministic computation eliminates the randomness introduced by inconsistent ordering of multi-card computations, but it results in a performance degradation compared to the disabled state. It is recommended to turn it on in scenarios where consistency is required.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>LCCL_DETERMINISTIC</strong></p></td>
+<td><p>0</p></td>
+<td><p>whether to turn the LCCL deterministic operator AllReduce (order-preserving addition) on.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code>: turns on the LCCL deterministic switch;<br><code class="docutils literal notranslate"><span class="pre">0</span></code>: turns off the LCCL deterministic switch.</p></td>
+<td><p>Turning on deterministic computation eliminates the randomness introduced by inconsistent ordering of multi-card computations, but it results in a performance degradation compared to the disabled state. It is recommended to turn it on in scenarios where consistency is required. <br>Takes effect when rankSize&lt;=8.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>CUSTOM_MATMUL_SHUFFLE</strong></p></td>
+<td><p>on</p></td>
+<td><p>Whether to enable shuffle operations for custom matrix multiplication.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">on</span></code>: turns on matrix shuffle;<br><code class="docutils literal notranslate"><span class="pre">off</span></code>: turns off matrix shuffle.</p></td>
+<td><p>The shuffle operation is optimized for specific matrix sizes and memory access patterns. If the matrix size does not match the shuffle-optimized size, turning off shuffling may result in better performance. Please set it according to the actual usage.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>ASCEND_LAUNCH_BLOCKING</strong></p></td>
+<td><p>0</p></td>
+<td><p>training or online inference scenarios, this environment variable can be used to control whether synchronization mode is activated during operator execution.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code>: synchronized mode is mandatory;<br><code class="docutils literal notranslate"><span class="pre">0</span></code>: synchronized mode is optional.</p></td>
+<td><p>Since the default operator executes asynchronously during NPU model training, when an error is reported during operator execution, the error stack information printed is not the actual call stack information. When set to <code class="docutils literal notranslate"><span class="pre">1</span></code>, synchronized mode is mandatory, which prints the correct call stack information and makes it easier to debug and locate problems in the code. Setting it to <code class="docutils literal notranslate"><span class="pre">0</span></code> provides more efficient arithmetic.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>TE_PARALLEL_COMPILER</strong></p></td>
+<td><p>8</p></td>
+<td><p>The number of threads on which the operator is compiled in parallel. Enables parallel compilation when greater than 1.</p></td>
+<td><p>Takes a positive integer;Maximum number of cpu cores*80%/number of Ascend AI processors, value range 1~32, default value is 8.</p></td>
+<td><p>When the network model is large, parallel compilation of the operator can be turned on by configuring this environment variable;<br>setting it to <code class="docutils literal notranslate"><span class="pre">1</span></code> for single-threaded compilation simplifies the difficulty when debugging.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>CPU_AFFINITY</strong></p></td>
+<td><p>0</p></td>
+<td><p>Turn on the CPU affinity switch, thus ensuring that each process or thread is bound to a single CPU core to improve performance.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code>: turn on the CPU affinity switch;<br><code class="docutils literal notranslate"><span class="pre">0</span></code>: turn off the CPU affinity switch.</p></td>
+<td><p>CPU affinity is turned off by default for <strong>optimized resource utilization</strong> and <strong>energy saving</strong>.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>MS_MEMORY_STATISTIC</strong></p></td>
+<td><p>0</p></td>
+<td><p>Memory Statistics.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code>: turn on memory statistics;<br><code class="docutils literal notranslate"><span class="pre">0</span></code>: turn off memory statistics.</p></td>
+<td><p>During memory analysis, basic memory usage can be counted. You can refer to <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/advanced_development/performance_optimization.html">Optimization Guide</a> for details.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>MINDSPORE_DUMP_CONFIG</strong></p></td>
+<td><p>NA</p></td>
+<td><p>Specify the path to the configuration file that the <a class="reference external" href="https://www.mindspore.cn/tutorials/en/r2.7.0rc1/debug/dump.html">cloud-side Dump function</a> or <a class="reference external" href="https://www.mindspore.cn/lite/docs/en/r2.7.0rc1/tools/benchmark_tool.html#dump">end-side Dump function</a> depends on.</p></td>
+<td><p>File path, support relative path and absolute path.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>GLOG_v</strong></p></td>
+<td><p>3</p></td>
+<td><p>Controls the level of MindSpore logs.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code>: DEBUG <br><code class="docutils literal notranslate"><span class="pre">1</span></code>: INFO <br><code class="docutils literal notranslate"><span class="pre">2</span></code>: WARNING <br><code class="docutils literal notranslate"><span class="pre">3</span></code>: ERROR: indicates that an error has been reported in the execution of the program, an error log is output, and the program may not be terminated;<br><code class="docutils literal notranslate"><span class="pre">4</span></code>: CRITICAL, indicates that an exception has occurred in the execution of the program, and the execution of the program will be terminated.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>ASCEND_GLOBAL_LOG_LEVEL</strong></p></td>
+<td><p>3</p></td>
+<td><p>Controls the logging level of CANN.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code>: DEBUG <br><code class="docutils literal notranslate"><span class="pre">1</span></code>: INFO <br><code class="docutils literal notranslate"><span class="pre">2</span></code>: WARNING <br><code class="docutils literal notranslate"><span class="pre">3</span></code>: ERROR <br><code class="docutils literal notranslate"><span class="pre">4</span></code>: NULL, no log is output.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>ASCEND_SLOG_PRINT_TO_STDOUT</strong></p></td>
+<td><p>0</p></td>
+<td><p>Whether to display on the screen. When turned on, the logs will not be saved in the log file, but the generated logs will be displayed directly on the screen.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code>: Display on the screen <br><code class="docutils literal notranslate"><span class="pre">0</span></code>: Do not display on the screen</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>ASCEND_GLOBAL_EVENT_ENABLE</strong></p></td>
+<td><p>0</p></td>
+<td><p>Whether to enable event logging.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code>: turn on Event logging;<br><code class="docutils literal notranslate"><span class="pre">0</span></code>: turn off Event logging.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>HCCL_EXEC_TIMEOUT</strong></p></td>
+<td><p>1836</p></td>
+<td><p>This environment variable allows you to control the amount of time to wait for synchronization when executing between devices, where each device process waits for the other device to perform communication synchronization for the configured amount of time.</p></td>
+<td><p>The range is: (0, 17340], and the default value is 1836 in s.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>HCCL_CONNECT_TIMEOUT</strong></p></td>
+<td><p>120</p></td>
+<td><p>Used in distributed training or inference scenarios to limit the timeout wait time of the socket building process between different devices.</p></td>
+<td><p>The environment variable needs to be configured as an integer in the range [120,7200], with default value 120s.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>MS_NODE_ID</strong></p></td>
+<td><p>NA</p></td>
+<td><p>Specifies process rank id in dynamic cluster scenarios.</p></td>
+<td><p>The rank_id of the process, unique within the cluster.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>MS_ALLOC_CONF</strong></p></td>
+<td><p>NA</p></td>
+<td><p>Sets memory allocation policies.</p></td>
+<td><p>Configuration items, formatted as key:value, with multiple items separated by commas. For example: export MS_ALLOC_CONF=enable_vmm:true,memory_tracker:true. <br>enable_vmm: Whether to enable virtual memory; default value is true.<br>vmm_align_size: Sets virtual memory alignment size in MB; default value is 2.<br>memory_tracker: Whether to enable memory tracker; default value is false. <br>memory_tracker_path: Enables memory tracker and saves to specified path. Default is disabled with empty save path.<br>simple_tracker: Whether to enable simplified tracker mode, omitting tracker_graph.ir and retaining only the last user task. Takes effect when memory_tracker is enabled. Default is false. <br>acl_allocator: Whether to use the ACL memory allocator. Default value is true.<br>somas_whole_block: Whether to use SOMAS whole-block memory allocation. Default value is false.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>MS_INTERNAL_DISABLE_CUSTOM_KERNEL_LIST</strong></p></td>
+<td><p>PagedAttention</p></td>
+<td><p>Enables a list of custom operators. An experimental configuration item, generally not required. Will be removed in future.</p></td>
+<td><p>Configured as a string, with operator names separated by commas.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>TRANSFORMERS_OFFLINE</strong></p></td>
+<td><p>0</p></td>
+<td><p>Forces the Auto interface to read only offline local files.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">ON</span></code>, <code class="docutils literal notranslate"><span class="pre">TRUE</span></code>, <code class="docutils literal notranslate"><span class="pre">YES</span></code>: Forces reading only offline local files; <br>Other values: Allows downloading files from the network.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>MDS_ENDPOINT</strong></p></td>
+<td><p>https://modelers.cn</p></td>
+<td><p>Sets the endpoint for openMind Hub.</p></td>
+<td><p>Configured as a URL address in string format.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>OM_MODULES_CACHE</strong></p></td>
+<td><p>~/.cache/openmind/modules</p></td>
+<td><p>Cache path for openMind modules.</p></td>
+<td><p>Configured as a directory path in string format.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>OPENMIND_CACHE</strong></p></td>
+<td><p>~/.cache/openmind/hub</p></td>
+<td><p>Cache path for openMind Hub.</p></td>
+<td><p>Configured as a directory path in string format.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>openmind_IS_CI</strong></p></td>
+<td><p></p></td>
+<td><p>Indicates whether openMind is operating within a CI access control environment.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">ON</span></code>, <code class="docutils literal notranslate"><span class="pre">TRUE</span></code>, <code class="docutils literal notranslate"><span class="pre">YES</span></code>: Within CI environment; <br>All other values: Not within CI environment.</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="other-variables">
+<h2>Other Variables<a class="headerlink" href="#other-variables" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variables Names</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Interpretations</p></th>
+<th class="head"><p>Descriptions</p></th>
+<th class="head"><p>Application Scenarios</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>RUN_MODE</strong></p></td>
+<td><p>predict</p></td>
+<td><p>Set the running mode.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">predict</span></code>: inference <br><code class="docutils literal notranslate"><span class="pre">finetune</span></code>: Fine-tuning <br><code class="docutils literal notranslate"><span class="pre">train</span></code>: Training <br><code class="docutils literal notranslate"><span class="pre">eval</span></code>: Evaluation</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>USE_ROPE_SELF_DEFINE</strong></p></td>
+<td><p>true</p></td>
+<td><p>Whether to enable ROPE fusion operator.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code>: enable ROPE fusion operator;<br><code class="docutils literal notranslate"><span class="pre">false</span></code>: disable ROPE fusion operator.</p></td>
+<td><p>Enabling the ROPE fusion operator by default can improve the computation efficiency. Except for debugging scenarios, turn it off as needed, and generally do not make special settings.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>MS_ENABLE_INTERNAL_BOOST</strong></p></td>
+<td><p>on</p></td>
+<td><p>Whether to turn on the internal acceleration of the MindSpore framework.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">on</span></code>: turn on MindSpore internal acceleration;<br> <code class="docutils literal notranslate"><span class="pre">off</span></code>: turn off MindSpore internal acceleration.</p></td>
+<td><p>In order to achieve high-performance inference, this parameter is turned on by default. In cases where debugging or comparing different acceleration strategies is performed, this parameter needs to be turned off to observe the impact on performance.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>MF_LOG_SUFFIX</strong></p></td>
+<td><p>NA</p></td>
+<td><p>Set custom suffixes for all log log folders.</p></td>
+<td><p>Suffix for the log folder. Default: no suffix</p></td>
+<td><p>Adding a consistent suffix isolates logs across tasks from being overwritten.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>PLOG_REDIRECT_TO_OUTPUT</strong></p></td>
+<td><p>False</p></td>
+<td><p>Controls whether plog logs change storage paths.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code>: store the logs in the ./output directory; <br><code class="docutils literal notranslate"><span class="pre">False</span></code>: Store to the default storage location.</p></td>
+<td><p>This setting makes it easier to query the plog log.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>MS_ENABLE_FA_FLATTEN</strong></p></td>
+<td><p>on</p></td>
+<td><p>Controls whether support FlashAttention flatten optimization.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">on</span></code>: Enable FlashAttention flatten optimization; <br><code class="docutils literal notranslate"><span class="pre">off</span></code>: Disable FlashAttention flatten optimization.</p></td>
+<td><p>Provide a fallback mechanism for models that have not yet been adapted to FlashAttention flatten optimization.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>EXPERIMENTAL_KERNEL_LAUNCH_GROUP</strong></p></td>
+<td><p>NA</p></td>
+<td><p>Control whether to support the batch parallel submission of operators. If supported, enable the parallel submission and configure the number of parallel submissions.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">thread_num</span></code>: The number of concurrent threads is not recommended to be increased. The default value is 2; <br> <code class="docutils literal notranslate"><span class="pre">kernel_group_num</span></code>: Total number of operator groups, <code class="docutils literal notranslate"><span class="pre">kernel_group_num/thread_num</span></code> groups per thread, default is <code class="docutils literal notranslate"><span class="pre">8</span></code>.</p></td>
+<td><p>This feature will continue to evolve in the future, and the subsequent behavior may change. Currently, only the <code class="docutils literal notranslate"><span class="pre">deepseek</span></code> reasoning scenario is supported, with certain performance optimization, but other models using this feature may deteriorate, and users need to use it with caution, as follows:<code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">EXPERIMENTAL_KERNEL_LAUNCH_GROUP=&quot;thread_num:2,kernel_group_num:8&quot;</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>ENFORCE_EAGER</strong></p></td>
+<td><p>False</p></td>
+<td><p>Control whether to disable jit mode.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">False</span></code>: Enable jit mode; <br><code class="docutils literal notranslate"><span class="pre">True</span></code>: Do not enable jit mode.</p></td>
+<td><p>Jit compiles functions into a callable MindSpore graph, sets ENFORCE_EAGER to False to enable jit mode, which can generate performance benefits. Currently, only inference mode is supported.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>MS_ENABLE_TFT</strong></p></td>
+<td><p>NA</p></td>
+<td><p>Enable the Training Fault Tolerance (TFT) feature, which most functionalities rely on MindIO TFT.</p></td>
+<td><p>The value of the environment variable can be:”{TTP:1,UCE:1,HCCE:1,ARF:1,TRE:1,TSP:1}”, when using a certain feature, the corresponding field can be configured as “1”.</p></td>
+<td><p>Usage can refer to <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/high_availability.html">High Availability</a>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>MS_WORKER_NUM</strong></p></td>
+<td><p>NA</p></td>
+<td><p>Number of processes assigned the role MS_WORKER.</p></td>
+<td><p>Integer greater than 0.</p></td>
+<td><p>Distributed scenarios.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>RANK_ID</strong></p></td>
+<td><p>NA</p></td>
+<td><p>Specifies the logical ID for invoking the NPU.</p></td>
+<td><p>0–7. When multiple machines are parallelised, DEVICE_ID may duplicate across different servers. Using RANK_ID avoids this issue (in multi-machine parallelisation, RANK_ID = SERVER_ID * DEVICE_NUM + DEVICE_ID, where DEVICE_ID denotes the Ascend AI processor number on the current machine).</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>RANK_SIZE</strong></p></td>
+<td><p>NA</p></td>
+<td><p>Specifies the number of NPU units to invoke.</p></td>
+<td><p>An integer greater than 1.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>LD_PRELOAD</strong></p></td>
+<td><p>NA</p></td>
+<td><p>Specifies the shared library to preload.</p></td>
+<td><p>Specifies the path to the shared library.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>DEVICE_ID</strong></p></td>
+<td><p>0</p></td>
+<td><p>Specifies the device ID for invoking the NPU.</p></td>
+<td><p>0 to the number of NPUs on the server.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>MS_SCHED_PORT</strong></p></td>
+<td><p>NA</p></td>
+<td><p>Specifies the port number for Scheduler binding.</p></td>
+<td><p>Port number within the range 1024–65535.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>NPU_ASD_ENABLE</strong></p></td>
+<td><p>0</p></td>
+<td><p>Whether to enable feature value detection.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code>: Disable feature value detection<br/><code class="docutils literal notranslate"><span class="pre">1</span></code>: Logs detected anomalies without throwing exceptions<br/><code class="docutils literal notranslate"><span class="pre">2</span></code>: Logs anomalies and throws exceptions<br/><code class="docutils literal notranslate"><span class="pre">3</span></code>: Logs in both normal and anomalous scenarios (Note: Logging occurs only when CANN is set to INFO or DEBUG levels in normal scenarios). When anomalies are detected, the detection operator throws an exception.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>MS_SDC_DETECT_ENABLE</strong></p></td>
+<td><p>0</p></td>
+<td><p>Enable/disable CheckSum detection for silent failures.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code>: Disable CheckSum detection for silent failures.<br/><code class="docutils literal notranslate"><span class="pre">1</span></code>: Enable CheckSum detection for silent failures.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>ASCEND_HOME_PATH</strong></p></td>
+<td><p>NA</p></td>
+<td><p>Installation path for the Ascend software package.</p></td>
+<td><p>Set to the specified path.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>ENABLE_LAZY_INLINE</strong></p></td>
+<td><p>1</p></td>
+<td><p>Whether to enable Lazy Inline mode. This environment variable will be deprecated and removed in the next version.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code>: Disable Lazy Inline. <br/><code class="docutils literal notranslate"><span class="pre">1</span></code>: Enable Lazy Inline.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>LOCAL_DEFAULT_PATH</strong></p></td>
+<td><p>./output</p></td>
+<td><p>Sets the default path for logs.</p></td>
+<td><p>Set to the specified path.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>STDOUT_DEVICES</strong></p></td>
+<td><p>NA</p></td>
+<td><p>Sets the list of device IDs for standard output.</p></td>
+<td><p>Set as a numeric list, with multiple IDs separated by commas.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>REGISTER_PATH</strong></p></td>
+<td><p></p></td>
+<td><p>Directory path containing the plug-in code to be registered.</p></td>
+<td><p>Set to the specified path.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>LOG_MF_PATH</strong></p></td>
+<td><p>./output/log</p></td>
+<td><p>Log path for MindSpore Transformers.</p></td>
+<td><p>Set to the specified path.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>DEVICE_NUM_PER_NODE</strong></p></td>
+<td><p>8</p></td>
+<td><p>Number of NPUs on the server.</p></td>
+<td><p>An integer greater than 0.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>SHARED_PATHS</strong></p></td>
+<td><p></p></td>
+<td><p>Paths for shared storage.</p></td>
+<td><p>Set to the specified path.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>ASCEND_PROCESS_LOG_PATH</strong></p></td>
+<td><p>NA</p></td>
+<td><p>Log path for the Ascend process.</p></td>
+<td><p>Set to the specified path.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>ENABLE_LAZY_INLINE_NO_PIPELINE</strong></p></td>
+<td><p>0</p></td>
+<td><p>Whether to enable Lazy Inline mode during non-pipelined parallelism. This environment variable will be deprecated and removed in the next version.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code>: Lazy Inline disabled. <br/><code class="docutils literal notranslate"><span class="pre">1</span></code>: Lazy Inline enabled.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>REMOTE_SAVE_URL</strong></p></td>
+<td><p>None</p></td>
+<td><p>URL used when saving training results on ModelArts. Currently deprecated and will be removed in future.</p></td>
+<td><p>Enter the URL for saving results.</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="example/finetune_with_glm4/finetune_with_glm4.html" class="btn btn-neutral float-left" title="Practice Case: Using GLM4-9B for Multi-Device Model Fine-Tuning" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,394 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>训练超参数 &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="训练指标监控" href="monitor.html" />
+    <link rel="prev" title="数据集" href="dataset.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">介绍</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/quick_start.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">模型支持库</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">安装</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">安装指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">功能特性</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/overview.html">功能特性概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/start_task.html">启动任务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/configuration.html">配置文件说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/logging.html">日志</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/dataset.html">数据集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/training_hyperparameters.html">训练超参数与优化器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/save_and_load_checkpoint.html">权重保存与加载</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/resume_training.html">断点续训</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/monitor.html">训练指标监控与 Profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/static_graph_features.html">静态图实现特性</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">环境变量</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../env_variables.html">环境变量说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">贡献指南</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers贡献指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">魔乐社区贡献指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">模型相关 FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">功能相关 FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">静态图实现（Deprecated）</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">大模型全流程指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">功能特性</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">功能特性概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="start_tasks.html">启动任务</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ckpt.html">Ckpt权重</a></li>
+<li class="toctree-l2"><a class="reference internal" href="safetensors.html">Safetensors权重</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">配置文件说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="load_huggingface_config.html">加载 Hugging Face 模型配置</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html">日志</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tokenizer.html">使用Tokenizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset.html">数据集</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">训练超参数</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">学习率</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id3">动态学习率</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">分组学习率</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">优化器</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id6">概述</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#adamw">AdamW 优化器</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#muon">Muon 优化器</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="monitor.html">训练指标监控</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training.html">断点续训</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoint_saving_and_loading.html">checkpoint保存和加载</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training2.0.html">断点续训2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l2"><a class="reference internal" href="high_availability.html">训练高可用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skip_data_and_ckpt_health_monitor.html">数据跳过和健康监测</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pma_fused_checkpoint.html">Pre-trained Model Average 权重合并</a></li>
+<li class="toctree-l2"><a class="reference internal" href="other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantization.html">量化</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_development/index.html">高阶开发</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">优秀实践</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">环境变量说明</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">功能特性</a></li>
+      <li class="breadcrumb-item active">训练超参数</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/feature/training_hyperparameters.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">已废弃（Deprecated）</p>
+<p>本页属于 <strong>静态图（GRAPH_MODE）实现</strong> 章节，已标记为废弃。新特性优先在「r2.0.0 动态图实现」章节演进，请优先查阅动态图相关文档。</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>训练超参数<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/static_graph/feature/training_hyperparameters.md"><img alt="查看源文件" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source.svg" /></a></p>
+<p>超参数对模型的性能有着重要影响，不同的超参数设置可能导致模型表现的巨大差异。参数的选择会影响到模型的训练速度、收敛性、容量和泛化能力等方面。且它们并非通过训练数据直接学习得到的，而是由开发者根据经验、实验或调优过程来确定的。</p>
+<p>MindSpore Transformers 提供了如下几类超参数的配置方式。</p>
+<section id="id2">
+<h2>学习率<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<section id="id3">
+<h3>动态学习率<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p>学习率控制着模型权重更新的步长大小，决定了参数更新的速度。</p>
+<p>学习率是影响模型训练速度和稳定性的关键参数。在每次迭代过程中，通过计算损失函数相对于权重的梯度，并根据学习率调整这些权重。学习率设置得过大可能会导致模型无法收敛，而设置得过小则会使训练过程过于缓慢。</p>
+<p><strong>YAML 参数配置</strong></p>
+<p>用户可通过在模型训练的 yaml 配置文件中新增 <code class="docutils literal notranslate"><span class="pre">lr_schedule</span></code> 模块来使用学习率。
+以 <a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/example/deepseek3/pretrain_deepseek3_671b.yaml"><code class="docutils literal notranslate"><span class="pre">DeepSeek-V3</span></code> 预训练 yaml</a> 为例，可做如下配置：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># lr schedule</span>
+<span class="nt">lr_schedule</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConstantWarmUpLR</span>
+<span class="w">  </span><span class="nt">learning_rate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.2e-4</span>
+<span class="w">  </span><span class="nt">warmup_ratio</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.02</span>
+<span class="w">  </span><span class="nt">total_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-1</span><span class="w"> </span><span class="c1"># -1 means it will load the total steps of the dataset</span>
+</pre></div>
+</div>
+<p><strong>主要配置参数介绍</strong></p>
+<p>各学习率需配置的参数不同，MindSpore Transformers 目前支持了以下学习率：</p>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/core/mindformers.core.ConstantWarmUpLR.html">恒定预热学习率</a></p></li>
+<li><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/core/mindformers.core.LinearWithWarmUpLR.html">线性预热学习率</a></p></li>
+<li><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/core/mindformers.core.CosineWithWarmUpLR.html">余弦预热学习率</a></p></li>
+<li><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/core/mindformers.core.CosineWithRestartsAndWarmUpLR.html">余弦重启与预热学习率</a></p></li>
+<li><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/core/mindformers.core.PolynomialWithWarmUpLR.html">带有预热阶段的多项式衰减学习率</a></p></li>
+<li><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/core/mindformers.core.CosineAnnealingLR.html">SGDR 的余弦退火部分</a></p></li>
+<li><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/core/mindformers.core.CosineAnnealingWarmRestarts.html">使用余弦退火调度设置每个参数组的学习率</a></p></li>
+<li><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/core/mindformers.core.LearningRateWiseLayer.html">学习率分层模块</a></p></li>
+</ol>
+<p>以余弦预热学习率（CosineWithWarmUpLR）为例，需要关注的主要参数如下表所列：</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>参数</p></th>
+<th class="head"><p>描述</p></th>
+<th class="head"><p>取值说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>type</p></td>
+<td><p>使用学习率的类型。</p></td>
+<td><p>(str, 必选) - 如 <code class="docutils literal notranslate"><span class="pre">ConstantWarmUpLR</span></code> 、 <code class="docutils literal notranslate"><span class="pre">CosineWithWarmUpLR</span></code> 等。</p></td>
+</tr>
+<tr class="row-odd"><td><p>learning_rate</p></td>
+<td><p>学习率的初始值。</p></td>
+<td><p>(float, 必选) - 默认值： <code class="docutils literal notranslate"><span class="pre">None</span></code> 。</p></td>
+</tr>
+<tr class="row-even"><td><p>warmup_steps</p></td>
+<td><p>预热阶段的步数。</p></td>
+<td><p>(int, 可选) - 默认值： <code class="docutils literal notranslate"><span class="pre">None</span></code> 。</p></td>
+</tr>
+<tr class="row-odd"><td><p>warmup_lr_init</p></td>
+<td><p>预热阶段的初始学习率。</p></td>
+<td><p>(float, 可选) - 默认值： <code class="docutils literal notranslate"><span class="pre">0.0</span></code> 。</p></td>
+</tr>
+<tr class="row-even"><td><p>warmup_ratio</p></td>
+<td><p>预热阶段占总训练步数的比例。</p></td>
+<td><p>(float, 可选) - 默认值： <code class="docutils literal notranslate"><span class="pre">None</span></code> 。</p></td>
+</tr>
+<tr class="row-odd"><td><p>total_steps</p></td>
+<td><p>总的预热步数。</p></td>
+<td><p>(int, 可选) - 默认值： <code class="docutils literal notranslate"><span class="pre">None</span></code> 。</p></td>
+</tr>
+<tr class="row-even"><td><p>lr_end</p></td>
+<td><p>学习率的最终值。</p></td>
+<td><p>(float, 可选) - 默认值： <code class="docutils literal notranslate"><span class="pre">0.0</span></code> 。</p></td>
+</tr>
+</tbody>
+</table>
+<p>在 yaml 中，可做如下配置，表示使用初始值为 1e-5 的余弦预热学习率，总预热 20 步，预热阶段占总训练步数的 1%：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># lr schedule</span>
+<span class="nt">lr_schedule</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CosineWithWarmUpLR</span>
+<span class="w">  </span><span class="nt">learning_rate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1e-5</span>
+<span class="w">  </span><span class="nt">warmup_lr_init</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0</span>
+<span class="w">  </span><span class="nt">warmup_ratio</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.01</span>
+<span class="w">  </span><span class="nt">warmup_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">  </span><span class="nt">total_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span><span class="w"> </span><span class="c1"># -1 means it will load the total steps of the dataset</span>
+</pre></div>
+</div>
+<p>更多关于学习率 API 的介绍（如 <code class="docutils literal notranslate"><span class="pre">type</span></code> 的配置名称、学习率算法的介绍），可参见 <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/mindformers.core.html#%E5%AD%A6%E4%B9%A0%E7%8E%87">MindSpore Transformers API 文档：学习率部分</a> 的相关链接。</p>
+</section>
+<section id="id4">
+<h3>分组学习率<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p>由于模型中不同层或参数对学习率的敏感度不同，在训练过程中针对不同的参数设置不同的学习率策略能够提高训练效率和性能，避免网络中部分参数过拟合训练或训练不充分的情况发生。</p>
+<p>在配置文件中配置<code class="docutils literal notranslate"><span class="pre">grouped_lr_schedule</span></code>字段即可开启分组学习率功能，该配置下包含<code class="docutils literal notranslate"><span class="pre">default</span></code>和<code class="docutils literal notranslate"><span class="pre">grouped</span></code>两个可配置项：</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>参数名</p></th>
+<th class="head"><p>说明</p></th>
+<th class="head"><p>类型</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>default</p></td>
+<td><p>不需要分组的参数对应的学习率策略配置，可配置内容与<a class="reference internal" href="#id3">动态学习率</a>中<code class="docutils literal notranslate"><span class="pre">lr_schedule</span></code>相同。</p></td>
+<td><p>dict</p></td>
+</tr>
+<tr class="row-odd"><td><p>grouped</p></td>
+<td><p>各参数组及其对应的学习率策略配置，每个参数组中可配置内容与<a class="reference internal" href="#id3">动态学习率</a>中<code class="docutils literal notranslate"><span class="pre">lr_schedule</span></code>相比需要额外配置<code class="docutils literal notranslate"><span class="pre">params</span></code>参数； <br/> <code class="docutils literal notranslate"><span class="pre">params</span></code>是一个字符串列表，表示需要匹配的参数名，配置后会通过正则匹配模型中的参数名并配置对应的学习率策略。</p></td>
+<td><p>list</p></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<div><p>当同时配置lr_schedule和grouped_lr_schedule时，lr_schedule不生效。</p>
+</div></blockquote>
+<p>以下是分组学习率配置示例：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">grouped_lr_schedule</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">default</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LinearWithWarmUpLR</span>
+<span class="w">    </span><span class="nt">learning_rate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.e-5</span>
+<span class="w">    </span><span class="nt">warmup_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">    </span><span class="nt">total_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-1</span><span class="w"> </span><span class="c1"># -1 means it will load the total steps of the dataset</span>
+<span class="w">  </span><span class="nt">grouped</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LinearWithWarmUpLR</span>
+<span class="w">      </span><span class="nt">params</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;embedding.*&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;output_layer.weight&#39;</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">learning_rate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.5e-5</span>
+<span class="w">      </span><span class="nt">warmup_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">      </span><span class="nt">total_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-1</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConstantWarmUpLR</span>
+<span class="w">      </span><span class="nt">params</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;q_layernorm&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;kv_layernorm&#39;</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">learning_rate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.e-6</span>
+<span class="w">      </span><span class="nt">warmup_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">      </span><span class="nt">total_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-1</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id5">
+<h2>优化器<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
+<section id="id6">
+<h3>概述<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<p>优化器是用于优化神经网络权重的算法选择，其在训练过程中更新模型权重以最小化损失函数。</p>
+<p>选择合适的优化器对模型的收敛速度和最终性能有着至关重要的影响。不同的优化器通过不同的方法调整学习率和其他超参数，来加速训练过程、改善收敛性并避免局部最优解。</p>
+<p>MindSpore Transformers 当前支持以下两类优化器：</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/mindformers.core.html#%E4%BC%98%E5%8C%96%E5%99%A8"><strong>AdamW 优化器</strong></a></p></li>
+<li><p><strong>Muon 优化器</strong></p></li>
+</ul>
+<p>不同优化器通过不同的数学策略（如自适应学习率、动量估计、方向归一化等）影响训练稳定性、收敛速度和最终性能。</p>
+<p>用户可通过在模型训练的 yaml 配置文件中新增 <code class="docutils literal notranslate"><span class="pre">optimizer</span></code> 模块来选择并配置优化器。</p>
+<p>以下示例基于 <a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/example/deepseek3/pretrain_deepseek3_671b.yaml">DeepSeek-V3 预训练 yaml</a>。</p>
+</section>
+<section id="adamw">
+<h3>AdamW 优化器<a class="headerlink" href="#adamw" title="Link to this heading"></a></h3>
+<p>AdamW 是一种基于自适应矩估计（Adaptive Moment Estimation）的优化器，并改进了传统 Adam 的权重衰减方式，采用了 decoupled weight decay。它通过分别维护梯度的一阶、二阶动量来实现自适应学习率，使模型在训练过程中能够稳定地进行参数更新。</p>
+<p>由于其良好的收敛特性和训练稳定性，AdamW 广泛应用于大规模 Transformer 模型、LLM 预训练、MoE 结构等场景，是当前深度学习中最常用的优化器之一。</p>
+<section id="yaml">
+<h4>YAML 示例<a class="headerlink" href="#yaml" title="Link to this heading"></a></h4>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">optimizer</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AdamW</span>
+<span class="w">  </span><span class="nt">betas</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.9</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.95</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">eps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.e-8</span>
+<span class="w">  </span><span class="nt">weight_decay</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.01</span>
+</pre></div>
+</div>
+</section>
+<section id="id7">
+<h4>主要配置参数介绍<a class="headerlink" href="#id7" title="Link to this heading"></a></h4>
+<p>有关 AdamW 优化器配置的主要参数，可参见 <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/core/mindformers.core.AdamW.html#mindformers.core.AdamW">MindSpore Transformers API 文档：AdamW优化器部分</a> 的相关链接。</p>
+</section>
+</section>
+<section id="muon">
+<h3>Muon 优化器<a class="headerlink" href="#muon" title="Link to this heading"></a></h3>
+<p>Muon（Momentum Orthogonalized by Newton-Schulz）是一种具备矩阵结构感知（matrix-structured）和几何特性（geometry-aware）的优化器，专为大规模深度学习特别是 LLM 训练设计。Muon 通过将 SGD 动量产生的更新，然后对每个更新进行牛顿-舒尔茨迭代，作为后处理步骤，再应用到参数上，从而优化二维神经网络参数。详情可参考<a class="reference external" href="https://kellerjordan.github.io/posts/muon/">Muon 优化器</a>。</p>
+<section id="id8">
+<h4>YAML 示例<a class="headerlink" href="#id8" title="Link to this heading"></a></h4>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">optimizer</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Muon</span>
+<span class="w">  </span><span class="nt">adamw_betas</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.9</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.95</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">adamw_eps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.e-8</span>
+<span class="w">  </span><span class="nt">weight_decay</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.01</span>
+<span class="w">  </span><span class="nt">matched_adamw_rms</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.2</span>
+<span class="w">  </span><span class="nt">qk_clip_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
+</pre></div>
+</div>
+</section>
+<section id="id9">
+<h4>主要配置参数介绍<a class="headerlink" href="#id9" title="Link to this heading"></a></h4>
+<p>Muon 优化器支持以下配置参数：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">adamw_betas</span></code> (list[float] 或 tuple[float], 可选)：一阶和二阶矩的指数衰减率，用于匹配 AdamW 的动量统计。每个值范围在 (0.0, 1.0)。默认值：(0.95, 0.95)。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">adamw_eps</span></code> (float, 可选)：加在分母中以提高数值稳定性。必须大于 0。默认值：1e-8。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">weight_decay</span></code> (float, 可选)：权重衰减系数，用于在参数更新中施加 L2 正则化。默认值：0.1。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">matched_adamw_rms</span></code> (float, 可选)：用于对齐 AdamW 的 RMS（均方根幅度）统计，避免更新过大导致的不稳定，也防止过小更新带来的收敛变慢。默认值：0.2。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">qk_clip_threshold</span></code> (float, 可选)：用于 限制 Q/K 点积注意力的数值范围，防止 softmax 输入过大导致梯度爆炸或数值不稳定。默认值：100。</p></li>
+</ul>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="dataset.html" class="btn btn-neutral float-left" title="数据集" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="monitor.html" class="btn btn-neutral float-right" title="训练指标监控" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

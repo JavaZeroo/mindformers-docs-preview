@@ -1,0 +1,336 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>使用Tokenizer &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="数据集" href="dataset.html" />
+    <link rel="prev" title="日志" href="logging.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">介绍</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/quick_start.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">模型支持库</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">安装</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">安装指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">功能特性</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/overview.html">功能特性概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/start_task.html">启动任务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/configuration.html">配置文件说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/logging.html">日志</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/dataset.html">数据集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/training_hyperparameters.html">训练超参数与优化器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/save_and_load_checkpoint.html">权重保存与加载</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/resume_training.html">断点续训</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/monitor.html">训练指标监控与 Profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/static_graph_features.html">静态图实现特性</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">环境变量</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../env_variables.html">环境变量说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">贡献指南</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers贡献指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">魔乐社区贡献指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">模型相关 FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">功能相关 FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">静态图实现（Deprecated）</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">大模型全流程指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">功能特性</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">功能特性概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="start_tasks.html">启动任务</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ckpt.html">Ckpt权重</a></li>
+<li class="toctree-l2"><a class="reference internal" href="safetensors.html">Safetensors权重</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">配置文件说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="load_huggingface_config.html">加载 Hugging Face 模型配置</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html">日志</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">使用Tokenizer</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">基本流程</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id3">1. 根据模型选择下载Tokenizer文件</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">2. 修改配置文件</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id5">3. 执行任务</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">推理流程示例</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#run-mindformer-py">使用run_mindformer.py脚本启动</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id7">自定义脚本</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">训练流程示例</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id9">在线数据集加载</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id10">离线数据集预处理</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dataset.html">数据集</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training_hyperparameters.html">训练超参数</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monitor.html">训练指标监控</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training.html">断点续训</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoint_saving_and_loading.html">checkpoint保存和加载</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training2.0.html">断点续训2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l2"><a class="reference internal" href="high_availability.html">训练高可用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skip_data_and_ckpt_health_monitor.html">数据跳过和健康监测</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pma_fused_checkpoint.html">Pre-trained Model Average 权重合并</a></li>
+<li class="toctree-l2"><a class="reference internal" href="other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantization.html">量化</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_development/index.html">高阶开发</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">优秀实践</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">环境变量说明</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">功能特性</a></li>
+      <li class="breadcrumb-item active">使用Tokenizer</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/feature/tokenizer.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">已废弃（Deprecated）</p>
+<p>本页属于 <strong>静态图（GRAPH_MODE）实现</strong> 章节，已标记为废弃。新特性优先在「r2.0.0 动态图实现」章节演进，请优先查阅动态图相关文档。</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="tokenizer">
+<h1>使用Tokenizer<a class="headerlink" href="#tokenizer" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/static_graph/feature/tokenizer.md"><img alt="查看源文件" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source.svg" /></a></p>
+<section id="id1">
+<h2>概述<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<p>Hugging Face Tokenizer 是由 Hugging Face 开发的一款高效、灵活的文本分词工具。它旨在为自然语言处理（NLP）任务提供强大的支持，通过将文本转换为模型能够理解的形式——即分词（tokens）。Tokenizer 不仅负责将文本分割成词汇单元，还管理着这些词汇单元与它们对应的索引之间的映射关系，这在机器学习模型中用于输入表示至关重要。</p>
+<p>MindSpore Transformers中涉及使用Tokenizer的流程有：推理、微调、在线数据集加载及离线数据集预处理等。当前已支持直接使用基于Hugging Face transformers的Tokenizer。</p>
+<p>MindSpore Transformers原有的Tokenizer组件与Hugging Face Tokenizer的功能相同，直接使用无需额外开发成本，对于迁移Hugging Face上的模型时比较友好。本文档主要以推理流程为例，介绍如何复用Hugging Face Tokenizer。目前仅支持新架构的Qwen3系列模型，后续将持续优化泛化性。</p>
+</section>
+<section id="id2">
+<h2>基本流程<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p>使用流程可以分解成以下几个步骤：</p>
+<section id="id3">
+<h3>1. 根据模型选择下载Tokenizer文件<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p>根据模型下载对应的Tokenizer相关文件到指定文件夹，文件包括词表文件等。此外，Hugging Face的Tokenizer具体可以分为两大类：</p>
+<ol class="arabic simple">
+<li><p>transformers的内置Tokenizer。如Qwen2Tokenizer；</p></li>
+<li><p>继承transformers的Tokenizer的基类实现的自定义Tokenizer，并没有合入transformers。只是在Hugging Face的仓库上或者本地存在Tokenizer的Python文件，需要支持远程加载和将Tokenizer的Python文件存到对应文件夹。如ChatGLM4Tokenizer。</p></li>
+</ol>
+</section>
+<section id="id4">
+<h3>2. 修改配置文件<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p>根据任务参考后面的<a class="reference internal" href="#id6">推理流程示例</a>和<a class="reference internal" href="#id8">训练流程示例</a>修改配置文件。</p>
+</section>
+<section id="id5">
+<h3>3. 执行任务<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<p>参考样例拉起任务。</p>
+</section>
+</section>
+<section id="id6">
+<h2>推理流程示例<a class="headerlink" href="#id6" title="Link to this heading"></a></h2>
+<p>推理流程以Qwen3模型为例。</p>
+<section id="run-mindformer-py">
+<h3>使用run_mindformer.py脚本启动<a class="headerlink" href="#run-mindformer-py" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p>修改yaml配置</p>
+<p>Qwen3模型的配置文件<a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/configs/qwen3/predict_qwen3.yaml">predict_qwen3.yaml</a>需要修改的地方如下：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">use_legacy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+
+<span class="nt">pretrained_model_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;path/to/qwen3_dir&quot;</span>
+</pre></div>
+</div>
+<p>参数说明：</p>
+<ul class="simple">
+<li><p>use_legacy：决定是否使用老架构，默认值：<code class="docutils literal notranslate"><span class="pre">True</span></code>；</p></li>
+<li><p>pretrained_model_dir：放置Tokenizer相关文件的文件夹路径。</p></li>
+</ul>
+</li>
+<li><p>拉起任务</p>
+<p>以<code class="docutils literal notranslate"><span class="pre">Qwen3-8b</span></code>的单卡推理为例，启动命令如下：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>run_mindformer.py<span class="w"> </span><span class="se">\</span>
+--config<span class="w"> </span>configs/qwen3/predict_qwen3.yaml<span class="w"> </span><span class="se">\</span>
+--load_checkpoint<span class="w"> </span>/path/to/model_dir<span class="w"> </span><span class="se">\</span>
+--run_mode<span class="w"> </span>predict<span class="w"> </span><span class="se">\</span>
+--trust_remote_code<span class="w"> </span>False<span class="w"> </span><span class="se">\</span>
+--predict_data<span class="w"> </span><span class="s1">&#39;帮助我制定一份去上海的旅游攻略&#39;</span>
+</pre></div>
+</div>
+<p>参数说明：</p>
+<ul class="simple">
+<li><p>config：yaml配置文件的路径；</p></li>
+<li><p>load_checkpoint：放置权重的文件夹路径；</p></li>
+<li><p>run_mode：运行模式，推理任务配置为<code class="docutils literal notranslate"><span class="pre">predict</span></code>；</p></li>
+<li><p>trust_remote_code：是否信任从远程下载的代码，默认值：<code class="docutils literal notranslate"><span class="pre">False</span></code>；</p></li>
+<li><p>predict_data：推理的输入。</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="id7">
+<h3>自定义脚本<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<p>推理的自定义脚本实现过程涉及Tokenizer的实例化，其实现代码参考如下：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoTokenizer</span>
+
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">pretrained_model_name_or_path</span><span class="o">=</span><span class="s2">&quot;path/to/pretrained_model_dir&quot;</span><span class="p">,</span>
+                                          <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>参数说明：</p>
+<ul class="simple">
+<li><p>pretrained_model_name_or_path：Hugging Face下载的Tokenizer相关的文件存储的文件夹路径。</p></li>
+<li><p>trust_remote_code：是否信任从远程下载的代码，默认值：<code class="docutils literal notranslate"><span class="pre">False</span></code>。</p></li>
+</ul>
+</section>
+</section>
+<section id="id8">
+<h2>训练流程示例<a class="headerlink" href="#id8" title="Link to this heading"></a></h2>
+<section id="id9">
+<h3>在线数据集加载<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
+<p>修改yaml配置中train_dataset部分中和Tokenizer相关的部分。</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">use_legacy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+
+<span class="nt">pretrained_model_dir</span><span class="p">:</span><span class="w"> </span><span class="nl">&amp;pretrained_model_dir</span><span class="w"> </span><span class="s">&quot;path/to/qwen3_dir&quot;</span>
+
+<span class="nt">train_dataset</span><span class="p">:</span><span class="w"> </span><span class="nl">&amp;train_dataset</span>
+<span class="w">    </span><span class="nt">data_loader</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CommonDataLoader</span>
+<span class="w">        </span><span class="nt">handler</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AlpacaInstructDataHandler</span>
+<span class="w">            </span><span class="nt">pretrained_model_dir</span><span class="p">:</span><span class="w"> </span><span class="nv">*pretrained_model_dir</span>
+<span class="w">            </span><span class="nt">trust_remote_code</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">            </span><span class="nt">tokenizer</span><span class="p">:</span>
+<span class="w">                </span><span class="nt">padding_side</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;right&quot;</span>
+</pre></div>
+</div>
+<p>参数说明：</p>
+<ul class="simple">
+<li><p>use_legacy：决定是否使用老架构，默认值：<code class="docutils literal notranslate"><span class="pre">True</span></code>。</p></li>
+<li><p>pretrained_model_dir：HuggingFace下载的Tokenizer相关的文件存储的文件夹路径。</p></li>
+<li><p>padding_side: 指定Tokenizer的padding的位置，训练时需要设置：<code class="docutils literal notranslate"><span class="pre">&quot;right&quot;</span></code>。</p></li>
+<li><p>trust_remote_code：是否信任从远程下载的代码，默认值：<code class="docutils literal notranslate"><span class="pre">False</span></code>。</p></li>
+</ul>
+</section>
+<section id="id10">
+<h3>离线数据集预处理<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
+<p>将离线数据集预处理的脚本中Tokenizer实例化的代码替换成以下代码即可：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoTokenizer</span>
+
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">pretrained_model_name_or_path</span><span class="o">=</span><span class="s2">&quot;path/to/pretrained_model_dir&quot;</span><span class="p">,</span>
+                                          <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">tokenizer</span><span class="o">.</span><span class="n">padding_side</span> <span class="o">=</span> <span class="s2">&quot;right&quot;</span>
+</pre></div>
+</div>
+<p>参数说明：</p>
+<ul class="simple">
+<li><p>pretrained_model_name_or_path：HuggingFace下载的Tokenizer相关的文件存储的文件夹路径。</p></li>
+<li><p>trust_remote_code：是否信任从远程下载的代码，默认值：<code class="docutils literal notranslate"><span class="pre">False</span></code>。</p></li>
+</ul>
+<p>关于Tokenizer的支持的更多功能参考Tokenizer的<a class="reference external" href="https://hf-mirror.com/docs/transformers/main_classes/tokenizer">API接口文档</a>，使用方法可以参考其<a class="reference external" href="https://hf-mirror.com/docs/transformers/main/en/fast_tokenizers">使用文档</a>。</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="logging.html" class="btn btn-neutral float-left" title="日志" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="dataset.html" class="btn btn-neutral float-right" title="数据集" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

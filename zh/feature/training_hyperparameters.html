@@ -1,0 +1,782 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>训练超参数与优化器 &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="分布式并行训练" href="parallel_training.html" />
+    <link rel="prev" title="数据集" href="dataset.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">介绍</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/quick_start.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/models.html">模型支持库</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">安装</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">安装指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">功能特性</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">功能特性概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="start_task.html">启动任务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">配置文件说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logging.html">日志</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dataset.html">数据集</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">训练超参数与优化器</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">选型速查</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#optimizer">一、优化器（optimizer）</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#adamw">1.1 AdamW</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#muon">1.2 Muon</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ns-coefficients">ns_coefficients 的两种写法</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#comm-strategy">comm_strategy 的取舍</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#lr-scheduler">二、学习率策略（lr_scheduler）</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#constantwarmuplr">2.1 ConstantWarmUpLR — 升温后保持常数</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#linearwithwarmuplr">2.2 LinearWithWarmUpLR — 升温后线性衰减</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cosinewithwarmuplr">2.3 CosineWithWarmUpLR — 升温后余弦衰减（预训练最常用）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cosinewithrestartsandwarmuplr">2.4 CosineWithRestartsAndWarmUpLR — 带重启的余弦</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#polynomialwithwarmuplr">2.5 PolynomialWithWarmUpLR — 升温后多项式衰减</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#warmupstabledecaylr-wsd">2.6 WarmUpStableDecayLR — 升温/恒定/衰减三段式（WSD）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cosineannealinglr-warm-up">2.7 CosineAnnealingLR — 余弦退火（无 warm-up）</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#training">三、训练基础参数（training）</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">3.1 批大小与梯度累积步数</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#max-norm">3.2 梯度裁剪 max_norm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#seed-deterministic">3.3 可复现性 seed 与 deterministic</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#yaml">四、组合示例（完整 YAML）</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id4">4.1 AdamW 通用预训练</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#muon-deepseek-v3-mla">4.2 Muon + DeepSeek-V3（MLA）</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">五、相关文档</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l1"><a class="reference internal" href="memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="save_and_load_checkpoint.html">权重保存与加载</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resume_training.html">断点续训</a></li>
+<li class="toctree-l1"><a class="reference internal" href="monitor.html">训练指标监控与 Profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="static_graph_features.html">静态图实现特性</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">环境变量</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">环境变量说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">贡献指南</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contribution/mindformers_contribution.html">MindSpore Transformers贡献指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution/modelers_contribution.html">魔乐社区贡献指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../faq/model_related.html">模型相关 FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/feature_related.html">功能相关 FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">静态图实现（Deprecated）</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/guide/index.html">大模型全流程指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/feature/index.html">功能特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/advanced_development/index.html">高阶开发</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/example/index.html">优秀实践</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/env_variables.html">环境变量说明</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">训练超参数与优化器</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/feature/training_hyperparameters.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>训练超参数与优化器<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<p>动态图（PyNative）训练的超参数集中在配置文件的三个<strong>顶层并列段</strong>中：<code class="docutils literal notranslate"><span class="pre">optimizer</span></code>（优化器）、<code class="docutils literal notranslate"><span class="pre">lr_scheduler</span></code>（学习率策略）与 <code class="docutils literal notranslate"><span class="pre">training</span></code>（训练基础参数）。三者分别由 <code class="docutils literal notranslate"><span class="pre">OptimizerConfig</span></code>、<code class="docutils literal notranslate"><span class="pre">LrSchedulerConfig</span></code>、<code class="docutils literal notranslate"><span class="pre">TrainingConfig</span></code> 解析（见 <a class="reference internal" href="configuration.html"><span class="std std-doc">配置文件说明</span></a>）。</p>
+<p>本页详细介绍了优化器，学习率策略，训练基础参数的配置和示例，并给出可直接套用的配套组合。整体训练流程可先参考 <a class="reference internal" href="../introduction/overview.html"><span class="std std-doc">概述</span></a> 与 <a class="reference internal" href="../quick_start/quick_start.html"><span class="std std-doc">快速开始</span></a>。</p>
+<p>启动训练时，配置文件作为 <code class="docutils literal notranslate"><span class="pre">--config</span></code> 传入，动态图须显式指定 <code class="docutils literal notranslate"><span class="pre">--mode</span> <span class="pre">1</span></code>：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>bash<span class="w"> </span>scripts/msrun_launcher.sh<span class="w"> </span><span class="s2">&quot;python run_mindformer.py --config xxx.yaml --mode 1&quot;</span><span class="w"> </span>...
+</pre></div>
+</div>
+<hr class="docutils" />
+<section id="id2">
+<h2>选型速查<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p><strong>优化器选型</strong>：动态图当前支持 <code class="docutils literal notranslate"><span class="pre">AdamW</span></code> 与 <code class="docutils literal notranslate"><span class="pre">Muon</span></code> 两种。</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>维度</p></th>
+<th class="head"><p>AdamW</p></th>
+<th class="head"><p>Muon</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>适用模型</p></td>
+<td><p>通用，无限制</p></td>
+<td><p><strong>仅</strong> 启用 Multi-Latent Attention 的模型（如 DeepSeek-V3）</p></td>
+</tr>
+<tr class="row-odd"><td><p>是否支持 SWAP</p></td>
+<td><p>支持</p></td>
+<td><p><strong>不支持</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>多卡通信</p></td>
+<td><p>无需额外通信策略</p></td>
+<td><p>二维分片权重需 all-gather / P2P 聚合（<code class="docutils literal notranslate"><span class="pre">comm_strategy</span></code>）</p></td>
+</tr>
+<tr class="row-odd"><td><p>默认 <code class="docutils literal notranslate"><span class="pre">learning_rate</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1e-5</span></code>（由 <code class="docutils literal notranslate"><span class="pre">lr_scheduler</span></code> 提供）</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1e-5</span></code>（由 <code class="docutils literal notranslate"><span class="pre">lr_scheduler</span></code> 提供）</p></td>
+</tr>
+<tr class="row-even"><td><p>典型场景</p></td>
+<td><p>默认首选；预训练、微调通用</p></td>
+<td><p>DeepSeek-V3 类 MLA 大模型预训练，追求收敛质量</p></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<div><p>AdamW 是通用默认优化器，适配所有模型与并行策略。Muon 仅适用于 MLA 模型（如 DeepSeek-V3），且不能与 SWAP 同时开启，否则会在优化器构造阶段直接报错。</p>
+</div></blockquote>
+<p><strong>学习率调度器选型</strong>：所有带 warm-up 的调度器都先线性升温到基础学习率，warm-up 之后的行为各不相同。</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>调度器 <code class="docutils literal notranslate"><span class="pre">type</span></code></p></th>
+<th class="head"><p>warm-up 后行为</p></th>
+<th class="head"><p>典型用途</p></th>
+<th class="head"><p>关键扩展字段</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ConstantWarmUpLR</span></code></p></td>
+<td><p>保持常数</p></td>
+<td><p>调试、续训对齐、短任务</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">LinearWithWarmUpLR</span></code></p></td>
+<td><p>线性衰减到 0</p></td>
+<td><p>简单微调</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CosineWithWarmUpLR</span></code></p></td>
+<td><p>余弦衰减</p></td>
+<td><p><strong>预训练最常用</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">num_cycles</span></code>、<code class="docutils literal notranslate"><span class="pre">lr_end</span></code>、<code class="docutils literal notranslate"><span class="pre">decay_steps</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CosineWithRestartsAndWarmUpLR</span></code></p></td>
+<td><p>带重启的余弦</p></td>
+<td><p>长训练周期性重启</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">num_cycles</span></code>（重启次数）、<code class="docutils literal notranslate"><span class="pre">decay_steps</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PolynomialWithWarmUpLR</span></code></p></td>
+<td><p>多项式衰减</p></td>
+<td><p>需自定义衰减曲线</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">power</span></code>、<code class="docutils literal notranslate"><span class="pre">lr_end</span></code>、<code class="docutils literal notranslate"><span class="pre">decay_steps</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">WarmUpStableDecayLR</span></code></p></td>
+<td><p>升温→恒定→衰减三段（WSD）</p></td>
+<td><p>大规模预训练，便于中途扩 token</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">lr_end</span></code>、<code class="docutils literal notranslate"><span class="pre">decay_start_steps</span></code>/<code class="docutils literal notranslate"><span class="pre">decay_start_ratio</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CosineAnnealingLR</span></code></p></td>
+<td><p>余弦退火（无 warm-up）</p></td>
+<td><p>简单周期退火</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">t_max</span></code>、<code class="docutils literal notranslate"><span class="pre">eta_min</span></code>（注意基础学习率字段名为 <code class="docutils literal notranslate"><span class="pre">base_lr</span></code>）</p></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<div><p>学习率调度器复用 <code class="docutils literal notranslate"><span class="pre">mindformers/core/lr</span></code> 的 LR 注册表，上表之外还注册了 <code class="docutils literal notranslate"><span class="pre">ConstantWithCoolDownLR</span></code>、<code class="docutils literal notranslate"><span class="pre">CosineAnnealingWarmRestarts</span></code>、<code class="docutils literal notranslate"><span class="pre">LearningRateWiseLayer</span></code> 等变体，按需启用（注册名以 <code class="docutils literal notranslate"><span class="pre">mindformers/core/lr/lr_schedule.py</span></code> 的 <code class="docutils literal notranslate"><span class="pre">__all__</span></code> 为准）。</p>
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="optimizer">
+<h2>一、优化器（optimizer）<a class="headerlink" href="#optimizer" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">AdamW</span></code> 与 <code class="docutils literal notranslate"><span class="pre">Muon</span></code> 两种优化器都<strong>始终为 bf16/fp16 参数创建 fp32 主权重副本</strong>（<code class="docutils literal notranslate"><span class="pre">_init_main_params</span></code>）：优化器的动量/方差状态与参数更新均在 fp32 精度上完成，再写回低精度模型参数，与 Megatron 的混合精度优化器设计对齐。</p>
+<p><code class="docutils literal notranslate"><span class="pre">optimizer</span></code> 段标注 <code class="docutils literal notranslate"><span class="pre">allow_extra</span> <span class="pre">=</span> <span class="pre">True</span></code>，允许传入字段表以外的额外参数（如 <code class="docutils literal notranslate"><span class="pre">use_fused</span></code>）。</p>
+<section id="adamw">
+<h3>1.1 AdamW<a class="headerlink" href="#adamw" title="Link to this heading"></a></h3>
+<p><strong>适用场景</strong>：通用默认优化器，对所有模型、所有并行策略均适用。预训练、微调若无特殊诉求，优先使用 <code class="docutils literal notranslate"><span class="pre">AdamW</span></code>。</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">optimizer</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AdamW</span>
+<span class="w">  </span><span class="nt">betas</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.9</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.95</span>
+<span class="w">  </span><span class="nt">eps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.e-8</span>
+<span class="w">  </span><span class="nt">weight_decay</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.01</span>
+<span class="w">  </span><span class="nt">accumulate_allreduce_grads_in_fp32</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+</div>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>字段</p></th>
+<th class="head"><p>类型</p></th>
+<th class="head"><p>默认值</p></th>
+<th class="head"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">type</span></code></p></td>
+<td><p>str</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">AdamW</span></code></p></td>
+<td><p>优化器类型。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">betas</span></code></p></td>
+<td><p>list[float]</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">[0.9,</span> <span class="pre">0.95]</span></code></p></td>
+<td><p>一阶/二阶矩的指数衰减率，长度须为 2，每项取值 <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1)</span></code>。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">eps</span></code></p></td>
+<td><p>float</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1.0e-8</span></code></p></td>
+<td><p>分母数值稳定项，须 <code class="docutils literal notranslate"><span class="pre">&gt;</span> <span class="pre">0</span></code>。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">weight_decay</span></code></p></td>
+<td><p>float</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0.01</span></code></p></td>
+<td><p>解耦的权重衰减（AdamW 风格 L2 正则），须 <code class="docutils literal notranslate"><span class="pre">&gt;=</span> <span class="pre">0</span></code>。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">weight_decay_include</span></code></p></td>
+<td><p>list[str]</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>强制施加权重衰减的参数名匹配规则。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">weight_decay_exclude</span></code></p></td>
+<td><p>list[str]</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>强制不施加权重衰减的参数名匹配规则。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">accumulate_allreduce_grads_in_fp32</span></code></p></td>
+<td><p>bool</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p>「梯度累积 + 优化器更新」整条链路是否都在 fp32 上进行。</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>关键字段怎么调</strong>：</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">betas</span></code>：第一项控制一阶动量平滑、第二项控制二阶矩平滑。预训练大模型常用 <code class="docutils literal notranslate"><span class="pre">[0.9,</span> <span class="pre">0.95]</span></code>；小数据微调可设置为 <code class="docutils literal notranslate"><span class="pre">[0.9,</span> <span class="pre">0.999]</span></code>。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">eps</span></code>：仅作数值兜底，一般无需改动；bf16 训练若出现除零类异常可适当增大（如 <code class="docutils literal notranslate"><span class="pre">1e-6</span></code>）。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">weight_decay</span></code>：典型预训练取 <code class="docutils literal notranslate"><span class="pre">0.01~0.1</span></code>。配合下面的 <code class="docutils literal notranslate"><span class="pre">weight_decay_include</span></code> / <code class="docutils literal notranslate"><span class="pre">weight_decay_exclude</span></code> 控制作用范围。</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">weight_decay_include</span></code> / <code class="docutils literal notranslate"><span class="pre">weight_decay_exclude</span></code></strong>：两者都是参数名匹配规则列表，用于<strong>覆盖</strong>默认的衰减归属——<code class="docutils literal notranslate"><span class="pre">include</span></code> 命中的参数被强制施加权重衰减，<code class="docutils literal notranslate"><span class="pre">exclude</span></code> 命中的参数被强制排除。常见做法是把 LayerNorm、bias、embedding 等放入 <code class="docutils literal notranslate"><span class="pre">exclude</span></code>，仅对线性层权重做衰减：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">optimizer</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AdamW</span>
+<span class="w">  </span><span class="nt">weight_decay</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.1</span>
+<span class="w">  </span><span class="nt">weight_decay_exclude</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;*norm*&quot;</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;*bias*&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>accumulate_allreduce_grads_in_fp32</strong>：默认 <code class="docutils literal notranslate"><span class="pre">True</span></code>。开启后，框架为 bf16/fp16 参数注册反向 hook，把回传梯度<strong>先转成 fp32 再累积</strong>，于是「梯度累积 + 优化器更新」整条链路都在 fp32 上进行，与始终存在的 fp32 主权重副本配套，能显著减少低精度下的累积误差。除非显存极度紧张，建议保持开启。</p></li>
+</ul>
+</section>
+<section id="muon">
+<h3>1.2 Muon<a class="headerlink" href="#muon" title="Link to this heading"></a></h3>
+<p>Muon 对二维/三维权重做 Newton-Schulz 迭代正交化，对 word embedding、输出层等其余权重回退到内置 AdamW。它在 MLA 大模型上往往带来更好的收敛质量，但<strong>有严格的使用前提</strong>。</p>
+<p>Muon 在 <code class="docutils literal notranslate"><span class="pre">__init__</span></code> 中会调用 <code class="docutils literal notranslate"><span class="pre">_verify_model</span></code> 并检查 SWAP 配置，以下任一条件不满足都会在<strong>优化器构造阶段</strong>抛出 <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>，训练无法启动：</p>
+<ol class="arabic simple">
+<li><p><strong>必须传入 <code class="docutils literal notranslate"><span class="pre">model</span></code></strong>：否则报 <code class="docutils literal notranslate"><span class="pre">Model</span> <span class="pre">must</span> <span class="pre">be</span> <span class="pre">provided</span> <span class="pre">for</span> <span class="pre">Muon</span> <span class="pre">optimizer.</span></code>（由框架在构建优化器时自动注入，用户无需在 YAML 手写）。</p></li>
+<li><p><strong>不支持 Legacy Model</strong>：模型为 Legacy 实现时报 <code class="docutils literal notranslate"><span class="pre">Muon</span> <span class="pre">does</span> <span class="pre">not</span> <span class="pre">support</span> <span class="pre">Legacy</span> <span class="pre">Model.</span></code>。</p></li>
+<li><p><strong>必须启用 Multi-Latent Attention</strong>：模型配置 <code class="docutils literal notranslate"><span class="pre">multi_latent_attention</span></code> 必须为 <code class="docutils literal notranslate"><span class="pre">True</span></code>，否则报 <code class="docutils literal notranslate"><span class="pre">...</span> <span class="pre">only</span> <span class="pre">supports</span> <span class="pre">models</span> <span class="pre">with</span> <span class="pre">Multi-Latent</span> <span class="pre">Attention</span> <span class="pre">enabled.</span></code>。</p></li>
+<li><p><strong>不支持 SWAP</strong>：传入 <code class="docutils literal notranslate"><span class="pre">swap=True</span></code> 时报 <code class="docutils literal notranslate"><span class="pre">Muon</span> <span class="pre">does</span> <span class="pre">not</span> <span class="pre">support</span> <span class="pre">swap.</span></code>。</p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">optimizer</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Muon</span>
+<span class="w">  </span><span class="nt">weight_decay</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.1</span>
+<span class="w">  </span><span class="nt">momentum</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.95</span>
+<span class="w">  </span><span class="nt">matched_adamw_rms</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.2</span>
+<span class="w">  </span><span class="nt">nesterov</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">eps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.e-7</span>
+<span class="w">  </span><span class="nt">ns_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+<span class="w">  </span><span class="nt">ns_coefficients</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">3.4445</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">-4.7750</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">2.0315</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">adamw_betas</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.95</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.95</span>
+<span class="w">  </span><span class="nt">adamw_eps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.e-8</span>
+<span class="w">  </span><span class="nt">qk_clip_enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">qk_clip_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
+<span class="w">  </span><span class="nt">comm_strategy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">allgather</span>
+</pre></div>
+</div>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>字段</p></th>
+<th class="head"><p>类型</p></th>
+<th class="head"><p>默认值</p></th>
+<th class="head"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">weight_decay</span></code></p></td>
+<td><p>float</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0.1</span></code></p></td>
+<td><p>权重衰减。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">momentum</span></code></p></td>
+<td><p>float</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0.95</span></code></p></td>
+<td><p>Muon 动量系数。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">matched_adamw_rms</span></code></p></td>
+<td><p>float</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0.2</span></code></p></td>
+<td><p>与 AdamW 更新幅度对齐的 RMS 缩放系数。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">nesterov</span></code></p></td>
+<td><p>bool</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p>是否使用 Nesterov 动量。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">eps</span></code></p></td>
+<td><p>float</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1.0e-7</span></code></p></td>
+<td><p>Newton-Schulz 归一化的数值稳定项。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ns_steps</span></code></p></td>
+<td><p>int</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">5</span></code></p></td>
+<td><p>Newton-Schulz 迭代步数（仅扁平 <code class="docutils literal notranslate"><span class="pre">ns_coefficients</span></code> 形式生效）。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ns_coefficients</span></code></p></td>
+<td><p>tuple/list</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">(3.4445,</span> <span class="pre">-4.7750,</span> <span class="pre">2.0315)</span></code></p></td>
+<td><p>Newton-Schulz 系数，支持扁平三元组或分段调度。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">adamw_betas</span></code></p></td>
+<td><p>tuple</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">(0.95,</span> <span class="pre">0.95)</span></code></p></td>
+<td><p>回退到 AdamW 的权重所用 betas。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">adamw_eps</span></code></p></td>
+<td><p>float</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1.0e-8</span></code></p></td>
+<td><p>回退 AdamW 的 eps。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">qk_clip_enabled</span></code></p></td>
+<td><p>bool</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p>是否对注意力 logit 施加 QK-Clip 缩放。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">qk_clip_threshold</span></code></p></td>
+<td><p>float</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">100</span></code></p></td>
+<td><p>QK-Clip 阈值，须 <code class="docutils literal notranslate"><span class="pre">&gt;</span> <span class="pre">0</span></code>（<code class="docutils literal notranslate"><span class="pre">qk_clip_enabled=True</span></code> 时校验）。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">comm_strategy</span></code></p></td>
+<td><p>str</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">allgather</span></code></p></td>
+<td><p>多卡通信策略，详细描述可见<a class="reference internal" href="#comm-strategy">comm_strategy 的取舍</a>章节。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">use_fused_adamw</span></code></p></td>
+<td><p>bool</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+<td><p>非 Muon 权重是否使用融合 AdamW 算子。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">adamw_include</span></code></p></td>
+<td><p>list[str]</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>指定哪些参数使用 AdamW 而非 Muon；默认 <code class="docutils literal notranslate"><span class="pre">[&quot;*word_embeddings*&quot;,</span> <span class="pre">&quot;*output_layer*&quot;]</span></code>（2D/3D 权重使用 Muon，embedding/输出层使用 AdamW）。</p></td>
+</tr>
+</tbody>
+</table>
+<section id="ns-coefficients">
+<h4>ns_coefficients 的两种写法<a class="headerlink" href="#ns-coefficients" title="Link to this heading"></a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">ns_coefficients</span></code> 经 <code class="docutils literal notranslate"><span class="pre">_normalize_ns_schedule</span></code> 归一化为「每步一个三元组」的调度，支持两种 YAML 写法：</p>
+<ul class="simple">
+<li><p><strong>扁平三元组</strong> <code class="docutils literal notranslate"><span class="pre">[a,</span> <span class="pre">b,</span> <span class="pre">c]</span></code>（默认）：同一组系数应用于全部 <code class="docutils literal notranslate"><span class="pre">ns_steps</span></code> 次迭代。</p></li>
+<li><p><strong>分段调度</strong> <code class="docutils literal notranslate"><span class="pre">[[[a,</span> <span class="pre">b,</span> <span class="pre">c],</span> <span class="pre">count],</span> <span class="pre">...]</span></code>：每段把自身三元组重复 <code class="docutils literal notranslate"><span class="pre">count</span></code> 次，<strong>总迭代步数为各段 <code class="docutils literal notranslate"><span class="pre">count</span></code> 之和，此时 <code class="docutils literal notranslate"><span class="pre">ns_steps</span></code> 被忽略</strong>。适合让前几步与后几步用不同系数（如 DeepSeek V4 的前 8 步 / 后 2 步方案）。</p></li>
+</ul>
+<p>分段调度示例：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">optimizer</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Muon</span>
+<span class="w">  </span><span class="nt">ns_coefficients</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">[[</span><span class="nv">3.4445</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">-4.7750</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">2.0315</span><span class="p p-Indicator">],</span><span class="w"> </span><span class="nv">8</span><span class="p p-Indicator">]</span><span class="w">   </span><span class="c1"># 前 8 步用这组系数</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">[[</span><span class="nv">2.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">-1.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">],</span><span class="w"> </span><span class="nv">2</span><span class="p p-Indicator">]</span><span class="w">            </span><span class="c1"># 后 2 步切换系数；总步数 = 8 + 2 = 10</span>
+<span class="w">  </span><span class="c1"># 注意：使用分段调度时，ns_steps 字段不再生效</span>
+</pre></div>
+</div>
+</section>
+<section id="comm-strategy">
+<h4>comm_strategy 的取舍<a class="headerlink" href="#comm-strategy" title="Link to this heading"></a></h4>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>取值</p></th>
+<th class="head"><p>行为</p></th>
+<th class="head"><p>适用场景与代价</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">allgather</span></code>（默认）</p></td>
+<td><p>每张卡都 all-gather 全量权重并各自独立运行 Newton-Schulz</p></td>
+<td><p>实现简单；多卡时存在<strong>冗余的 NS 计算</strong>（每卡重复算同一份）</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">allgather_deredundency</span></code></p></td>
+<td><p>二维分片权重 P2P 聚合到指定 rank，NS 仅在该 rank 上计算后再分发</p></td>
+<td><p><strong>多卡训练</strong>且 Muon 二维权重较多时开启，去除冗余 NS 计算、降低 HCCS 流量；代价是引入 P2P 聚合/分发通信与 rank 间负载分配逻辑</p></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<div><p>单卡训练无通信，保持默认 <code class="docutils literal notranslate"><span class="pre">allgather</span></code> 即可；大规模多卡（尤其专家/张量并行下二维权重多）时再评估 <code class="docutils literal notranslate"><span class="pre">allgather_deredundency</span></code>。</p>
+</div></blockquote>
+</section>
+</section>
+</section>
+<hr class="docutils" />
+<section id="lr-scheduler">
+<h2>二、学习率策略（lr_scheduler）<a class="headerlink" href="#lr-scheduler" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">lr_scheduler</span></code> 段用 <code class="docutils literal notranslate"><span class="pre">type</span></code> 选择调度器，<code class="docutils literal notranslate"><span class="pre">learning_rate</span></code> 为 <strong>warm-up 之后的基础学习率</strong>，其余字段随调度器类型扩展（该段 <code class="docutils literal notranslate"><span class="pre">allow_extra</span> <span class="pre">=</span> <span class="pre">True</span></code>）。</p>
+<blockquote>
+<div><p>调度器的总步数 <code class="docutils literal notranslate"><span class="pre">total_steps</span></code> 由框架在 <code class="docutils literal notranslate"><span class="pre">_build_lr_scheduler</span></code> 中用 <code class="docutils literal notranslate"><span class="pre">training.steps</span></code> 自动填入。用户<strong>不要</strong>在 <code class="docutils literal notranslate"><span class="pre">lr_scheduler</span></code> 段手填 <code class="docutils literal notranslate"><span class="pre">total_steps</span></code>，否则可能与实际训练步数不一致。</p>
+<p><code class="docutils literal notranslate"><span class="pre">warmup_ratio</span></code> 与 <code class="docutils literal notranslate"><span class="pre">warmup_steps</span></code> 用于确定 warm-up 步数。<code class="docutils literal notranslate"><span class="pre">warmup_steps</span></code> 为绝对步数；<code class="docutils literal notranslate"><span class="pre">warmup_ratio</span></code> 为占总步数的比例。框架按 <code class="docutils literal notranslate"><span class="pre">_get_lr_steps</span></code> 处理——<strong>只设其中一个</strong>：填了 <code class="docutils literal notranslate"><span class="pre">warmup_ratio</span></code> 则用 <code class="docutils literal notranslate"><span class="pre">ratio</span> <span class="pre">×</span> <span class="pre">total_steps</span></code> 计算，否则使用 <code class="docutils literal notranslate"><span class="pre">warmup_steps</span></code>。同时填写会以 <code class="docutils literal notranslate"><span class="pre">warmup_ratio</span></code> 优先并忽略 <code class="docutils literal notranslate"><span class="pre">warmup_steps</span></code>。</p>
+</div></blockquote>
+<p>下面给出每种调度器的最小可用片段（字段名以 <code class="docutils literal notranslate"><span class="pre">mindformers/core/lr/lr_schedule.py</span></code> 各 <code class="docutils literal notranslate"><span class="pre">__init__</span></code> 签名为准）。</p>
+<section id="constantwarmuplr">
+<h3>2.1 ConstantWarmUpLR — 升温后保持常数<a class="headerlink" href="#constantwarmuplr" title="Link to this heading"></a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">lr_scheduler</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConstantWarmUpLR</span>
+<span class="w">  </span><span class="nt">learning_rate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.e-5</span>
+<span class="w">  </span><span class="nt">warmup_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span><span class="w">        </span><span class="c1"># 或用 warmup_ratio</span>
+<span class="w">  </span><span class="nt">warmup_lr_init</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0</span>
+</pre></div>
+</div>
+<p>特有字段：仅 warm-up 相关（<code class="docutils literal notranslate"><span class="pre">warmup_steps</span></code> / <code class="docutils literal notranslate"><span class="pre">warmup_ratio</span></code> / <code class="docutils literal notranslate"><span class="pre">warmup_lr_init</span></code>），warm-up 后恒定。</p>
+</section>
+<section id="linearwithwarmuplr">
+<h3>2.2 LinearWithWarmUpLR — 升温后线性衰减<a class="headerlink" href="#linearwithwarmuplr" title="Link to this heading"></a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">lr_scheduler</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LinearWithWarmUpLR</span>
+<span class="w">  </span><span class="nt">learning_rate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.e-5</span>
+<span class="w">  </span><span class="nt">warmup_ratio</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.01</span>
+<span class="w">  </span><span class="nt">warmup_lr_init</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0</span>
+</pre></div>
+</div>
+<p>线性衰减到 0；总步数取自框架注入的 <code class="docutils literal notranslate"><span class="pre">total_steps</span></code>，无额外曲线字段。</p>
+</section>
+<section id="cosinewithwarmuplr">
+<h3>2.3 CosineWithWarmUpLR — 升温后余弦衰减（预训练最常用）<a class="headerlink" href="#cosinewithwarmuplr" title="Link to this heading"></a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">lr_scheduler</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CosineWithWarmUpLR</span>
+<span class="w">  </span><span class="nt">learning_rate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.e-5</span>
+<span class="w">  </span><span class="nt">warmup_ratio</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.01</span>
+<span class="w">  </span><span class="nt">warmup_lr_init</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0</span>
+<span class="w">  </span><span class="nt">lr_end</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0</span><span class="w">              </span><span class="c1"># 余弦衰减终点</span>
+<span class="w">  </span><span class="nt">num_cycles</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.5</span><span class="w">         </span><span class="c1"># 半周期，从峰值衰减到 lr_end</span>
+<span class="w">  </span><span class="c1"># decay_steps: 9000     # 可选：自定义衰减步数，不填则用 total_steps</span>
+</pre></div>
+</div>
+<p>特有扩展字段：<code class="docutils literal notranslate"><span class="pre">num_cycles</span></code>（默认 <code class="docutils literal notranslate"><span class="pre">0.5</span></code>）、<code class="docutils literal notranslate"><span class="pre">lr_end</span></code>（默认 <code class="docutils literal notranslate"><span class="pre">0.0</span></code>）、<code class="docutils literal notranslate"><span class="pre">decay_steps</span></code>/<code class="docutils literal notranslate"><span class="pre">decay_ratio</span></code>。</p>
+</section>
+<section id="cosinewithrestartsandwarmuplr">
+<h3>2.4 CosineWithRestartsAndWarmUpLR — 带重启的余弦<a class="headerlink" href="#cosinewithrestartsandwarmuplr" title="Link to this heading"></a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">lr_scheduler</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CosineWithRestartsAndWarmUpLR</span>
+<span class="w">  </span><span class="nt">learning_rate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.e-5</span>
+<span class="w">  </span><span class="nt">warmup_ratio</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.01</span>
+<span class="w">  </span><span class="nt">lr_end</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0</span>
+<span class="w">  </span><span class="nt">num_cycles</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0</span><span class="w">         </span><span class="c1"># 重启次数（&gt;=1）</span>
+</pre></div>
+</div>
+<p>特有扩展字段：<code class="docutils literal notranslate"><span class="pre">num_cycles</span></code>（默认 <code class="docutils literal notranslate"><span class="pre">1.0</span></code>，表示重启周期数）、<code class="docutils literal notranslate"><span class="pre">lr_end</span></code>、<code class="docutils literal notranslate"><span class="pre">decay_steps</span></code>。</p>
+</section>
+<section id="polynomialwithwarmuplr">
+<h3>2.5 PolynomialWithWarmUpLR — 升温后多项式衰减<a class="headerlink" href="#polynomialwithwarmuplr" title="Link to this heading"></a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">lr_scheduler</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PolynomialWithWarmUpLR</span>
+<span class="w">  </span><span class="nt">learning_rate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.e-5</span>
+<span class="w">  </span><span class="nt">warmup_ratio</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.01</span>
+<span class="w">  </span><span class="nt">lr_end</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.e-7</span><span class="w">           </span><span class="c1"># 衰减终点</span>
+<span class="w">  </span><span class="nt">power</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0</span><span class="w">              </span><span class="c1"># 多项式幂次；1.0 即线性，&gt;1 衰减更快</span>
+</pre></div>
+</div>
+<p>特有扩展字段：<code class="docutils literal notranslate"><span class="pre">power</span></code>（默认 <code class="docutils literal notranslate"><span class="pre">1.0</span></code>）、<code class="docutils literal notranslate"><span class="pre">lr_end</span></code>（默认 <code class="docutils literal notranslate"><span class="pre">1e-7</span></code>）、<code class="docutils literal notranslate"><span class="pre">decay_steps</span></code>。</p>
+</section>
+<section id="warmupstabledecaylr-wsd">
+<h3>2.6 WarmUpStableDecayLR — 升温/恒定/衰减三段式（WSD）<a class="headerlink" href="#warmupstabledecaylr-wsd" title="Link to this heading"></a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">lr_scheduler</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">WarmUpStableDecayLR</span>
+<span class="w">  </span><span class="nt">learning_rate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.e-5</span>
+<span class="w">  </span><span class="nt">warmup_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
+<span class="w">  </span><span class="nt">warmup_lr_init</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0</span>
+<span class="w">  </span><span class="nt">lr_end</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.e-7</span>
+<span class="w">  </span><span class="nt">decay_start_ratio</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.8</span><span class="w">  </span><span class="c1"># 在总步数 80% 处开始衰减；或用 decay_start_steps 指定绝对步</span>
+</pre></div>
+</div>
+<p>特有扩展字段：<code class="docutils literal notranslate"><span class="pre">lr_end</span></code>（默认 <code class="docutils literal notranslate"><span class="pre">1e-7</span></code>）、<code class="docutils literal notranslate"><span class="pre">decay_start_steps</span></code>（绝对起始步）或 <code class="docutils literal notranslate"><span class="pre">decay_start_ratio</span></code>（占总步数比例，二选一）。WSD 的优势是「恒定段」可随时延长，方便在不改曲线形状的前提下追加训练 token。</p>
+</section>
+<section id="cosineannealinglr-warm-up">
+<h3>2.7 CosineAnnealingLR — 余弦退火（无 warm-up）<a class="headerlink" href="#cosineannealinglr-warm-up" title="Link to this heading"></a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">lr_scheduler</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CosineAnnealingLR</span>
+<span class="w">  </span><span class="nt">base_lr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.e-5</span><span class="w">          </span><span class="c1"># 注意：本调度器用 base_lr，而非 learning_rate</span>
+<span class="w">  </span><span class="nt">t_max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span><span class="w">             </span><span class="c1"># 半个余弦周期的步数</span>
+<span class="w">  </span><span class="nt">eta_min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0</span><span class="w">            </span><span class="c1"># 退火下限</span>
+</pre></div>
+</div>
+<p>特有扩展字段：<code class="docutils literal notranslate"><span class="pre">t_max</span></code>（半周期步数，必填正整数）、<code class="docutils literal notranslate"><span class="pre">eta_min</span></code>（最小学习率，默认 <code class="docutils literal notranslate"><span class="pre">0.0</span></code>）。</p>
+<blockquote>
+<div><p>该调度器的基础学习率参数名是 <code class="docutils literal notranslate"><span class="pre">base_lr</span></code>（而非其它调度器的 <code class="docutils literal notranslate"><span class="pre">learning_rate</span></code>），且不含 warm-up 阶段。迁移配置时注意这一差异。</p>
+</div></blockquote>
+</section>
+</section>
+<hr class="docutils" />
+<section id="training">
+<h2>三、训练基础参数（training）<a class="headerlink" href="#training" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">training</span></code> 段控制训练步数、批大小、梯度裁剪与可复现性等全局行为。</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">training</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span><span class="w">           </span><span class="c1"># 总训练步数（同时作为 LR 调度器的 total_steps）</span>
+<span class="w">  </span><span class="nt">local_batch_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w">   </span><span class="c1"># 单卡（per-rank）batch size</span>
+<span class="w">  </span><span class="nt">global_batch_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span><span class="w">  </span><span class="c1"># 每步全局处理的样本总数</span>
+<span class="w">  </span><span class="nt">max_norm</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0</span><span class="w">         </span><span class="c1"># 梯度裁剪阈值，&gt; 0 时启用</span>
+<span class="w">  </span><span class="nt">seed</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">42</span><span class="w">              </span><span class="c1"># 随机种子</span>
+<span class="w">  </span><span class="nt">deterministic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span><span class="w">  </span><span class="c1"># 确定性计算开关</span>
+</pre></div>
+</div>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>字段</p></th>
+<th class="head"><p>类型</p></th>
+<th class="head"><p>默认值</p></th>
+<th class="head"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">steps</span></code></p></td>
+<td><p>int</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1000</span></code></p></td>
+<td><p>总训练步数；同时作为学习率调度器的总步数。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">local_batch_size</span></code></p></td>
+<td><p>int</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p>单卡 batch size，必须为正。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">global_batch_size</span></code></p></td>
+<td><p>int</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p>每步全局处理的样本总数，必须为正。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">max_norm</span></code></p></td>
+<td><p>float</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1.0</span></code></p></td>
+<td><p>全局梯度裁剪阈值，须为正数（典型取 <code class="docutils literal notranslate"><span class="pre">1.0</span></code>）。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">seed</span></code></p></td>
+<td><p>int</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">42</span></code></p></td>
+<td><p>随机种子。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">deterministic</span></code></p></td>
+<td><p>bool</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+<td><p>是否启用确定性训练。</p></td>
+</tr>
+</tbody>
+</table>
+<section id="id3">
+<h3>3.1 批大小与梯度累积步数<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">global_batch_size</span></code>, <code class="docutils literal notranslate"><span class="pre">local_batch_size</span></code> 与 <code class="docutils literal notranslate"><span class="pre">data_parallel_shard</span></code> 三者共同决定<strong>每步是否需要梯度累积</strong>：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>梯度累积步数 = global_batch_size // (local_batch_size × data_parallel_shard)
+</pre></div>
+</div>
+<p>即每张数据并行卡每步处理 <code class="docutils literal notranslate"><span class="pre">local_batch_size</span></code> 个样本，全局一次累积满 <code class="docutils literal notranslate"><span class="pre">global_batch_size</span></code> 个样本才做一次优化器更新。框架按 <code class="docutils literal notranslate"><span class="pre">local_batch_size</span> <span class="pre">×</span> <span class="pre">data_parallel_shard</span></code> 对 <code class="docutils literal notranslate"><span class="pre">global_batch_size</span></code> 做整数除法推导累积步数（非整除不会报错，而是向下取整，有效全局批相应变小）。这里的 <code class="docutils literal notranslate"><span class="pre">data_parallel_shard</span></code> 是 FSDP 切分数：纯 FSDP（默认 <code class="docutils literal notranslate"><span class="pre">data_parallel_shard:</span> <span class="pre">-1</span></code>）时等于数据并行度，开 HSDP时小于数据并行度。其推导含义与设置见 <a class="reference internal" href="parallel_training.html"><span class="std std-doc">分布式并行训练</span></a>。</p>
+</section>
+<section id="max-norm">
+<h3>3.2 梯度裁剪 max_norm<a class="headerlink" href="#max-norm" title="Link to this heading"></a></h3>
+<p>每次优化器更新前都会计算所有参数梯度的全局 L2 范数（<code class="docutils literal notranslate"><span class="pre">_calculate_global_grad_norm</span></code>）：当全局范数超过 <code class="docutils literal notranslate"><span class="pre">max_norm</span></code> 时，按 <code class="docutils literal notranslate"><span class="pre">max_norm</span> <span class="pre">/</span> <span class="pre">全局范数</span></code> 的比例就地缩放全部梯度，从而把范数压回阈值，抑制梯度尖峰、稳定训练。大模型预训练常取 <code class="docutils literal notranslate"><span class="pre">1.0</span></code>。</p>
+<blockquote>
+<div><p>max_norm 应保持正数，不要用 0 或负值关闭裁剪。动态图路径没有「关闭裁剪」的开关：裁剪逻辑在 <code class="docutils literal notranslate"><span class="pre">clip_coef</span> <span class="pre">=</span> <span class="pre">max_norm</span> <span class="pre">/</span> <span class="pre">(全局范数</span> <span class="pre">+</span> <span class="pre">eps)</span> <span class="pre">&lt;</span> <span class="pre">1</span></code> 时触发。若把 <code class="docutils literal notranslate"><span class="pre">max_norm</span></code> 设为 <code class="docutils literal notranslate"><span class="pre">0</span></code>，<code class="docutils literal notranslate"><span class="pre">clip_coef</span></code> 恒小于 1，会把梯度整体缩放到 0，相当于不再更新；设为负值则会让梯度反号。需要更弱的裁剪请调大 <code class="docutils literal notranslate"><span class="pre">max_norm</span></code>，而不是设为 0 或负数。</p>
+</div></blockquote>
+</section>
+<section id="seed-deterministic">
+<h3>3.3 可复现性 seed 与 deterministic<a class="headerlink" href="#seed-deterministic" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">seed</span></code>：统一初始化与数据打乱等随机源，保证同配置可复现。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">deterministic</span></code>：开启后强制使用确定性算子，使多次运行结果逐位一致，便于调试与精度对齐。</p></li>
+</ul>
+<blockquote>
+<div><p>deterministic 会降低性能。确定性计算会牺牲部分算子的并行优化，<strong>显著降低训练吞吐</strong>。仅在排查精度问题、做逐位复现实验时开启；常规训练保持 <code class="docutils literal notranslate"><span class="pre">deterministic:</span> <span class="pre">False</span></code>。</p>
+</div></blockquote>
+</section>
+</section>
+<hr class="docutils" />
+<section id="yaml">
+<h2>四、组合示例（完整 YAML）<a class="headerlink" href="#yaml" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">optimizer</span></code>、<code class="docutils literal notranslate"><span class="pre">lr_scheduler</span></code>、<code class="docutils literal notranslate"><span class="pre">training</span></code> 是 YAML 的顶层并列键，与 <code class="docutils literal notranslate"><span class="pre">parallelism</span></code>、<code class="docutils literal notranslate"><span class="pre">train_dataset</span></code>、<code class="docutils literal notranslate"><span class="pre">model</span></code> 等同级。以下给出两套可直接套用的成段配置（已省略数据集/模型等无关段，实际使用请补全）。</p>
+<section id="id4">
+<h3>4.1 AdamW 通用预训练<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p>适用于绝大多数模型。</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">training</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span>
+<span class="w">  </span><span class="nt">local_batch_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">global_batch_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">  </span><span class="nt">max_norm</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0</span>
+<span class="w">  </span><span class="nt">seed</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">42</span>
+<span class="w">  </span><span class="nt">deterministic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+
+<span class="nt">optimizer</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AdamW</span>
+<span class="w">  </span><span class="nt">betas</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.9</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.95</span>
+<span class="w">  </span><span class="nt">eps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.e-8</span>
+<span class="w">  </span><span class="nt">weight_decay</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.01</span>
+<span class="w">  </span><span class="nt">accumulate_allreduce_grads_in_fp32</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">weight_decay_exclude</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;*norm*&quot;</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;*bias*&quot;</span>
+
+<span class="nt">lr_scheduler</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CosineWithWarmUpLR</span>
+<span class="w">  </span><span class="nt">learning_rate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.e-5</span>
+<span class="w">  </span><span class="nt">warmup_ratio</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.01</span>
+<span class="w">  </span><span class="nt">warmup_lr_init</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0</span>
+<span class="w">  </span><span class="nt">lr_end</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0</span>
+</pre></div>
+</div>
+</section>
+<section id="muon-deepseek-v3-mla">
+<h3>4.2 Muon + DeepSeek-V3（MLA）<a class="headerlink" href="#muon-deepseek-v3-mla" title="Link to this heading"></a></h3>
+<p>Muon 仅适用于启用 MLA 的模型，下例配套 DeepSeek-V3。注意 <code class="docutils literal notranslate"><span class="pre">model.multi_latent_attention:</span> <span class="pre">True</span></code> 是 Muon 能构造的前提：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">training</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span>
+<span class="w">  </span><span class="nt">local_batch_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">global_batch_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">max_norm</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0</span>
+<span class="w">  </span><span class="nt">seed</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">42</span>
+<span class="w">  </span><span class="nt">deterministic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+
+<span class="nt">optimizer</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Muon</span>
+<span class="w">  </span><span class="nt">weight_decay</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.1</span>
+<span class="w">  </span><span class="nt">momentum</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.95</span>
+<span class="w">  </span><span class="nt">matched_adamw_rms</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.2</span>
+<span class="w">  </span><span class="nt">nesterov</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">eps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.e-7</span>
+<span class="w">  </span><span class="nt">ns_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+<span class="w">  </span><span class="nt">ns_coefficients</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">3.4445</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">-4.7750</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">2.0315</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">adamw_betas</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.95</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.95</span>
+<span class="w">  </span><span class="nt">adamw_eps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.e-8</span>
+<span class="w">  </span><span class="nt">qk_clip_enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">qk_clip_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
+<span class="w">  </span><span class="nt">comm_strategy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">allgather</span><span class="w">          </span><span class="c1"># 多卡可改用 allgather_deredundency 去冗余</span>
+
+<span class="nt">lr_scheduler</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConstantWarmUpLR</span>
+<span class="w">  </span><span class="nt">learning_rate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.e-2</span>
+<span class="w">  </span><span class="nt">warmup_ratio</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id5">
+<h2>五、相关文档<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="configuration.html"><span class="std std-doc">配置文件说明</span></a>：各配置段的总览与解析规则。</p></li>
+<li><p><a class="reference internal" href="parallel_training.html"><span class="std std-doc">分布式并行训练</span></a>：数据并行度、<code class="docutils literal notranslate"><span class="pre">global_batch_size</span></code> 与梯度累积步数的推导。</p></li>
+<li><p><a class="reference internal" href="other_training_features.html"><span class="std std-doc">其它训练特性</span></a>：梯度累积、检查点等训练特性。</p></li>
+<li><p><a class="reference internal" href="#../guide/training.md"><span class="xref myst">训练启动指南</span></a>：如何用 <code class="docutils literal notranslate"><span class="pre">run_mindformer.py</span></code> 启动训练。</p></li>
+<li><p><a class="reference internal" href="../introduction/overview.html"><span class="std std-doc">概述</span></a>：MindSpore Transformers 动态图整体介绍。</p></li>
+<li><p><a class="reference internal" href="../quick_start/quick_start.html"><span class="std std-doc">快速开始</span></a>：端到端跑通一次训练。</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="dataset.html" class="btn btn-neutral float-left" title="数据集" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="parallel_training.html" class="btn btn-neutral float-right" title="分布式并行训练" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

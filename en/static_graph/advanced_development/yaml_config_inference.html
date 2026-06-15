@@ -1,0 +1,260 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guide to Using the Inference Configuration Template &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Comparison of Reasoning Precision" href="inference_precision_comparison.html" />
+    <link rel="prev" title="Development Migration" href="dev_migration.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">Models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contribution Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">Modelers Contribution Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">Model-Related FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">Feature-Related FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Static Graph Implementation (Deprecated)</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Full-process Guide to Large Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/index.html">Features</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Advanced Development</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">Advanced Development Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="precision_optimization.html">Large Model Precision Optimization Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance_optimization.html">Large Model Performance Optimization Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev_migration.html">Development Migration</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Guide to Using the Inference Configuration Template</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#usage-method">Usage Method</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#configurations-that-must-be-modified-required">Configurations that Must be Modified (Required)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#optional-scenario-based-configuration-optional">Optional Scenario-Based Configuration (Optional)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#usage-example">Usage Example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="inference_precision_comparison.html">Comparison of Reasoning Precision</a></li>
+<li class="toctree-l2"><a class="reference internal" href="accuracy_comparison.html">Comparing the Model Precision with that of Megatron-LM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training_template_instruction.html">Training Configuration Template Instruction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="weight_transfer.html">Weight Conversion Development Adaptation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html">API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">Excellent Practice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">Environment Variable Descriptions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Advanced Development</a></li>
+      <li class="breadcrumb-item active">Guide to Using the Inference Configuration Template</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/advanced_development/yaml_config_inference.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">Deprecated</p>
+<p>This page belongs to the <strong>Static Graph (GRAPH_MODE) Implementation</strong> section and has been marked as deprecated. New features are primarily being developed in the “r2.0.0 Dynamic Graph Implementation” section. Please refer to the dynamic graph documentation first.</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="guide-to-using-the-inference-configuration-template">
+<h1>Guide to Using the Inference Configuration Template<a class="headerlink" href="#guide-to-using-the-inference-configuration-template" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_en/static_graph/advanced_development/yaml_config_inference.md"><img alt="View Source on AtomGit" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source_en.svg" /></a></p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>Currently, the Mcore architecture model supports reading the Hugging Face model directory for model instantiation during inference. Therefore, MindSpore Transformers has streamlined the model’s YAML configuration files. Instead of having a separate YAML file for each model and each specification, they have been unified into a single YAML configuration template. For online inference of models with different specifications, you only need to apply the configuration template, set up the model directory downloaded from Hugging Face or ModelScope, and modify a few necessary configurations to perform inference.</p>
+</section>
+<section id="usage-method">
+<h2>Usage Method<a class="headerlink" href="#usage-method" title="Link to this heading"></a></h2>
+<p>When using the inference configuration template for inference, some configurations in it need to be modified according to the actual situation.</p>
+<section id="configurations-that-must-be-modified-required">
+<h3>Configurations that Must be Modified (Required)<a class="headerlink" href="#configurations-that-must-be-modified-required" title="Link to this heading"></a></h3>
+<p>The configuration template does not contain model configurations; it relies on reading model configurations from Hugging Face or ModelScope to instantiate the model. Therefore, the following configurations must be modified:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Configuration Item</p></th>
+<th class="head"><p>Configuration Description</p></th>
+<th class="head"><p>Modification Method</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>pretrained_model_dir</p></td>
+<td><p>Path to the model directory</p></td>
+<td><p>Change it to the folder path of the model file downloaded from Hugging Face or ModelScope.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="optional-scenario-based-configuration-optional">
+<h3>Optional Scenario-Based Configuration (Optional)<a class="headerlink" href="#optional-scenario-based-configuration-optional" title="Link to this heading"></a></h3>
+<p>The following different usage scenarios require modifications to some configurations:</p>
+<section id="default-scenario-single-card-64gb-video-memory">
+<h4>Default Scenario (single card, 64GB video memory)<a class="headerlink" href="#default-scenario-single-card-64gb-video-memory" title="Link to this heading"></a></h4>
+<p>The inference configuration template is by default set for scenarios with a single card and 64GB of video memory, and no additional configuration modifications are needed in this case. It should be noted that if the model scale is too large and the single-card memory cannot support it, multi-card inference is required.</p>
+</section>
+<section id="distributed-scenario">
+<h4>Distributed Scenario<a class="headerlink" href="#distributed-scenario" title="Link to this heading"></a></h4>
+<p>In distributed multi-card inference scenarios, it is necessary to enable parallel configurations in the settings and adjust the model parallel strategy. The configurations that need to be modified are as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Configuration Item</p></th>
+<th class="head"><p>Configuration Description</p></th>
+<th class="head"><p>Modification Method</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>use_parallel</p></td>
+<td><p>Parallel switch</p></td>
+<td><p>Needs to be set to True during distributed inference</p></td>
+</tr>
+<tr class="row-odd"><td><p>parallel_config</p></td>
+<td><p>Parallel strategy</p></td>
+<td><p>Currently, online inference only supports model parallelism. Set model_parallel to the number of cards used</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="scenarios-with-other-video-memory-specifications">
+<h4>Scenarios with Other Video Memory Specifications<a class="headerlink" href="#scenarios-with-other-video-memory-specifications" title="Link to this heading"></a></h4>
+<p>On devices without 64GB of video memory (on-chip memory), it is necessary to adjust the maximum video memory size occupied by MindSpore. The configurations that need to be modified are as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Configuration Item</p></th>
+<th class="head"><p>Configuration Description</p></th>
+<th class="head"><p>Modification Method</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>max_device_memory</p></td>
+<td><p>The maximum video memory that MindSpore can occupy</p></td>
+<td><p>It is necessary to reserve part of the video memory for communication. Generally, devices with 64GB video memory are configured to be less than 60GB, and devices with 32GB video memory are configured to be less than 30GB. When the number of cards is relatively large, it may need to be reduced according to the actual situation.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+<section id="usage-example">
+<h2>Usage Example<a class="headerlink" href="#usage-example" title="Link to this heading"></a></h2>
+<p>Mindspore Transformers provides YAML configuration file templates for the Qwen3 series models <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/configs/qwen3/predict_qwen3.yaml">predict_qwen3.yaml</a>, Qwen3 models of different specifications can perform inference tasks using this template by modifying relevant configurations.</p>
+<p>Taking Qwen3-32B as an example, the configuration that needs to be modified for reasoning YAML is as follows:</p>
+<ol class="arabic">
+<li><p>Modify pretrained_model_dir to the folder path of the model file of Qwen3-32B</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">pretrained_model_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;path/to/Qwen3-32B&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p>The Qwen3-32B requires at least 4 cards and the parallel configuration needs to be modified</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">use_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="nt">parallel_config</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">model_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p>Subsequent operations regarding the execution of reasoning tasks, please refer to <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/configs/qwen3/README.md#%E6%8E%A8%E7%90%86%E6%A0%B7%E4%BE%8B">Qwen3’s README</a>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="dev_migration.html" class="btn btn-neutral float-left" title="Development Migration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="inference_precision_comparison.html" class="btn btn-neutral float-right" title="Comparison of Reasoning Precision" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

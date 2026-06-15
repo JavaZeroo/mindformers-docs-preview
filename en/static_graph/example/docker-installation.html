@@ -1,0 +1,368 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Practical Case: Creating a Docker Image for MindSpore Transformers &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Practice Case of Using DeepSeek-R1 for Model Distillation" href="distilled/distilled.html" />
+    <link rel="prev" title="Excellent Practice" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">Models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contribution Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">Modelers Contribution Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">Model-Related FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">Feature-Related FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Static Graph Implementation (Deprecated)</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Full-process Guide to Large Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/index.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_development/index.html">Advanced Development</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Excellent Practice</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Practical Case: Creating a Docker Image for MindSpore Transformers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#environment-preparations">Environment Preparations</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#system-requirements">System Requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#tool-installation">Tool Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#base-image-selection">Base Image Selection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#image-build">Image Build</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#verification-of-the-build">Verification of the Build</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#examples">Examples</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#starting-a-development-container">Starting a Development Container</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#security-risks">Security Risks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="distilled/distilled.html">Practice Case of Using DeepSeek-R1 for Model Distillation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="convert_ckpt_to_megatron/convert_ckpt_to_megatron.html">Practical Case: Converting Model Weights to Megatron Model Weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_test/model_test.html">Practice Case: Interconnecting MindSpore Transformers with General Evaluation Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="finetune_with_glm4/finetune_with_glm4.html">Practice Case: Using GLM4-9B for Multi-Device Model Fine-Tuning</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">Environment Variable Descriptions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Excellent Practice</a></li>
+      <li class="breadcrumb-item active">Practical Case: Creating a Docker Image for MindSpore Transformers</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/example/docker-installation.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">Deprecated</p>
+<p>This page belongs to the <strong>Static Graph (GRAPH_MODE) Implementation</strong> section and has been marked as deprecated. New features are primarily being developed in the “r2.0.0 Dynamic Graph Implementation” section. Please refer to the dynamic graph documentation first.</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="practical-case-creating-a-docker-image-for-mindspore-transformers">
+<h1>Practical Case: Creating a Docker Image for MindSpore Transformers<a class="headerlink" href="#practical-case-creating-a-docker-image-for-mindspore-transformers" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_en/static_graph/example/docker-installation.md"><img alt="View Source on AtomGit" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source_en.svg" /></a></p>
+<p>This case shares the practice of creating a Docker image for <strong>MindSpore Transformers</strong>. Developers can create their own images by referring to this case.</p>
+<blockquote>
+<div><p>The solution and software packages provided in this case come from the open-source community and are for reference only. To use the image created by this case for commercial purposes, such as deployment, in a production environment, you need to ensure the reliability and security of the image. MindSpore Transformers is not responsible for network security. Use the image in a trusted environment.</p>
+</div></blockquote>
+<section id="environment-preparations">
+<h2>Environment Preparations<a class="headerlink" href="#environment-preparations" title="Link to this heading"></a></h2>
+<p>Before building an image, you need to prepare the host environment, including the hardware, software, and network. This step ensures that the build process goes smoothly.</p>
+<section id="system-requirements">
+<h3>System Requirements<a class="headerlink" href="#system-requirements" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Hardware requirements</strong>: The NPU driver and firmware must be installed on the host. For details, see <a class="reference external" href="https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/82RC1/softwareinst/instg/instg_0005.html?Mode=DockerIns&amp;InstallType=local&amp;OS=Debian&amp;Software=cannToolKit">Ascend Community &gt; Installing the NPU Driver and Firmware</a></p></li>
+<li><p><strong>Software requirements</strong>: Docker <code class="docutils literal notranslate"><span class="pre">26.1.4</span></code> or later</p></li>
+<li><p><strong>Network requirements</strong>: Stable Internet connection; Access to Huawei Cloud (for downloading CANN, MindSpore, and more); Prolonged build time when the network is slow.</p></li>
+</ul>
+<blockquote>
+<div><p>Ensure that the host time and time zone are correct to avoid download problems.</p>
+</div></blockquote>
+</section>
+</section>
+<section id="tool-installation">
+<h2>Tool Installation<a class="headerlink" href="#tool-installation" title="Link to this heading"></a></h2>
+<p>Verify the installation of the tool.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>--version
+</pre></div>
+</div>
+<p>If no version information is displayed, install the tool according to the official guide.</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://docs.docker.com/engine/install/">Install Docker Engine</a></p></li>
+</ul>
+</section>
+<section id="base-image-selection">
+<h2>Base Image Selection<a class="headerlink" href="#base-image-selection" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>In this case, Dockerfiles use <code class="docutils literal notranslate"><span class="pre">ubuntu:24.04</span></code> as the base image.</p></li>
+<li><p><strong>Multiphase building</strong> is used.</p>
+<ol class="arabic simple">
+<li><p>Phase 1: Install Python.</p></li>
+<li><p>Phase 2: Install CANN.</p></li>
+<li><p>Final phase: Install MindSpore and MindSpore Transformers and integrate the results.</p></li>
+</ol>
+</li>
+</ul>
+<p>This multiphase approach helps reduce the final image size and improve the build efficiency.</p>
+<p>For details about the Dockerfile content, see <a class="reference external" href="https://atomgit.com/mindspore/mindformers/issues/2231">Community Issues</a>.</p>
+<p>Save Dockerfiles to the local PC.</p>
+</section>
+<section id="image-build">
+<h2>Image Build<a class="headerlink" href="#image-build" title="Link to this heading"></a></h2>
+<p>Build the <strong>MindSpore Transformers</strong> image as follows:</p>
+<ul>
+<li><p>Create a folder.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a directory for storing Dockerfiles and enter the directory.</span>
+mkdir<span class="w"> </span>-p<span class="w"> </span>mindformers-Dockerfiles
+<span class="nb">cd</span><span class="w"> </span>mindformers-Dockerfiles
+</pre></div>
+</div>
+</li>
+<li><p>Save Dockerfiles to the following directory:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>mindformers-Dockerfiles/
+└── Dockerfile
+</pre></div>
+</div>
+</li>
+<li><p>Run the Docker build command.</p>
+<p>The general commands are as follows:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Build an image.</span>
+docker<span class="w"> </span>build<span class="w"> </span>-f<span class="w"> </span>Dockerfile<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--build-arg<span class="w"> </span><span class="nv">PYTHON_VERSION</span><span class="o">=</span><span class="s2">&quot;Python version&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--build-arg<span class="w"> </span><span class="nv">CANN_TOOLKIT_URL</span><span class="o">=</span><span class="s2">&quot;CANN toolkit download link&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--build-arg<span class="w"> </span><span class="nv">CANN_KERNELS_URL</span><span class="o">=</span><span class="s2">&quot;CANN kernels download link&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--build-arg<span class="w"> </span><span class="nv">MS_WHL_URL</span><span class="o">=</span><span class="s2">&quot;MindSpore wheel package download link&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--build-arg<span class="w"> </span><span class="nv">MINDFORMERS_GIT_REF</span><span class="o">=</span><span class="s2">&quot;MindSpore Transformers code repository branch name&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-t<span class="w"> </span><span class="s2">&quot;Image name:Tag&quot;</span><span class="w"> </span>.
+</pre></div>
+</div>
+<p>The following is an example for MindSpore Transformers 1.6.0:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Build the image. The tag naming mode is for reference only. The version information is included for easy management.</span>
+docker<span class="w"> </span>build<span class="w"> </span>-f<span class="w"> </span>Dockerfile<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--build-arg<span class="w"> </span><span class="nv">PYTHON_VERSION</span><span class="o">=</span><span class="s2">&quot;3.11.4&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--build-arg<span class="w"> </span><span class="nv">CANN_TOOLKIT_URL</span><span class="o">=</span><span class="s2">&quot;https://ascend-repo.obs.cn-east-2.myhuaweicloud.com/CANN/CANN%208.2.RC1/Ascend-cann-toolkit_8.2.RC1_linux-aarch64.run&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--build-arg<span class="w"> </span><span class="nv">CANN_KERNELS_URL</span><span class="o">=</span><span class="s2">&quot;https://ascend-repo.obs.cn-east-2.myhuaweicloud.com/CANN/CANN%208.2.RC1/Ascend-cann-kernels-910b_8.2.RC1_linux-aarch64.run&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--build-arg<span class="w"> </span><span class="nv">MS_WHL_URL</span><span class="o">=</span><span class="s2">&quot;https://ms-release.obs.cn-north-4.myhuaweicloud.com/2.7.0/MindSpore/unified/aarch64/mindspore-2.7.0-cp311-cp311-linux_aarch64.whl&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--build-arg<span class="w"> </span><span class="nv">MINDFORMERS_GIT_REF</span><span class="o">=</span><span class="s2">&quot;r1.6.0&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-t<span class="w"> </span><span class="s2">&quot;mindformers:r1.6.0_ms2.7.0_cann8.2.RC1_py3.11&quot;</span><span class="w"> </span>.
+</pre></div>
+</div>
+</li>
+</ul>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>URL</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PYTHON_VERSION</span></code></p></td>
+<td><p>Python version.</p></td>
+<td><p><a class="reference external" href="https://www.python.org/downloads/">Python website</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CANN_TOOLKIT_URL</span></code></p></td>
+<td><p>URL for downloading the CANN Toolkit package.</p></td>
+<td><p><a class="reference external" href="https://www.hiascend.com/developer/download/community/result?module=cann">Ascend community download page</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CANN_KERNELS_URL</span></code></p></td>
+<td><p>URL for downloading the CANN kernels package.</p></td>
+<td><p><a class="reference external" href="https://www.hiascend.com/developer/download/community/result?module=cann">Ascend community download page</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">MS_WHL_URL</span></code></p></td>
+<td><p>URL for downloading the MindSpore wheel package.</p></td>
+<td><p><a class="reference external" href="https://repo.mindspore.cn/pypi/simple/mindspore/">MindSpore PyPI</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MINDFORMERS_GIT_REF</span></code></p></td>
+<td><p>MindFormers branch name. The corresponding branch is automatically checked out.</p></td>
+<td><p><a class="reference external" href="https://atomgit.com/mindspore/mindformers">MindFormers repository</a></p></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<div><p>The build process may take about 30 minutes, depending on the network speed and hardware performance.</p>
+</div></blockquote>
+</section>
+</section>
+<section id="verification-of-the-build">
+<h2>Verification of the Build<a class="headerlink" href="#verification-of-the-build" title="Link to this heading"></a></h2>
+<p>Check whether the image is built successfully.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Search for a specific image.</span>
+docker<span class="w"> </span>images<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>mindformers
+</pre></div>
+</div>
+<p>Example:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>REPOSITORY    TAG                                IMAGE ID       CREATED        SIZE
+mindformers   r1.6.0_ms2.7.0_cann8.2.RC1_py3.11  67fa2e821694   19 hours ago   14GB
+</pre></div>
+</div>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
+<section id="starting-a-development-container">
+<h3>Starting a Development Container<a class="headerlink" href="#starting-a-development-container" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>-itd<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--hostname<span class="w"> </span><span class="k">$(</span>hostname<span class="w"> </span>-I<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $1}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tr<span class="w"> </span><span class="s1">&#39;.&#39;</span><span class="w"> </span><span class="s1">&#39;-&#39;</span><span class="k">)</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--ipc<span class="o">=</span>host<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--network<span class="o">=</span>host<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--device<span class="o">=</span>/dev/davinci0:rwm<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--device<span class="o">=</span>/dev/davinci1:rwm<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--device<span class="o">=</span>/dev/davinci2:rwm<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--device<span class="o">=</span>/dev/davinci3:rwm<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--device<span class="o">=</span>/dev/davinci4:rwm<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--device<span class="o">=</span>/dev/davinci5:rwm<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--device<span class="o">=</span>/dev/davinci6:rwm<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--device<span class="o">=</span>/dev/davinci7:rwm<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--device<span class="o">=</span>/dev/davinci_manager:rwm<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--device<span class="o">=</span>/dev/devmm_svm:rwm<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--device<span class="o">=</span>/dev/hisi_hdc:rwm<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-v<span class="w"> </span>/usr/local/dcmi:/usr/local/dcmi<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-v<span class="w"> </span>/var/log/npu/:/usr/slog<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-v<span class="w"> </span>/usr/local/bin/npu-smi:/usr/local/bin/npu-smi<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-v<span class="w"> </span>/usr/bin/hccn_tool:/usr/bin/hccn_tool<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-v<span class="w"> </span>/usr/local/Ascend/driver/lib64/common:/usr/local/Ascend/driver/lib64/common<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-v<span class="w"> </span>/usr/local/Ascend/driver/lib64/driver:/usr/local/Ascend/driver/lib64/driver<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-v<span class="w"> </span>/usr/local/Ascend/driver/version.info:/usr/local/Ascend/driver/version.info<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-v<span class="w"> </span>/etc/ascend_install.info:/etc/ascend_install.info<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-v<span class="w"> </span>/etc/hccn.conf:/etc/hccn.conf<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-v<span class="w"> </span>/etc/localtime:/etc/localtime<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--name<span class="w"> </span>Container<span class="w"> </span>name.<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>Image<span class="w"> </span>name.<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>/bin/bash
+</pre></div>
+</div>
+</section>
+</section>
+<section id="security-risks">
+<h2>Security Risks<a class="headerlink" href="#security-risks" title="Link to this heading"></a></h2>
+<p>When using Docker containers to run MindSpore Transformers, be aware of the following security risks:</p>
+<ul class="simple">
+<li><p><strong>Running as the root user</strong>: Containers run as the <strong>root</strong> user by default, which may bring security risks. You are advised to create non-privileged users in the production environment to run applications.</p></li>
+<li><p><strong>Lack of CPU and memory resource limits</strong>: If resource limits are not set, containers may consume excessive system resources, affecting the host performance. You are advised to use the <code class="docutils literal notranslate"><span class="pre">--cpus</span></code> and <code class="docutils literal notranslate"><span class="pre">--memory</span></code> parameters to limit resource usage.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">rwm</span></code> permissions for devices</strong>: Read, write, and mknod permissions are allocated to NPU devices. Although the permissions are required for functions to run, the permission scope should be carefully evaluated in security-sensitive environments.</p></li>
+</ul>
+<blockquote>
+<div><p>In the production environment, adjust the container configurations based on the actual security requirements to ensure system security.</p>
+</div></blockquote>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.mindspore.cn/en">MindSpore website</a></p></li>
+<li><p><a class="reference external" href="https://atomgit.com/mindspore/mindformers">MindSpore Transformers repository</a></p></li>
+<li><p><a class="reference external" href="https://docs.docker.com">Docker documentation</a></p></li>
+<li><p><a class="reference external" href="https://www.hiascend.com/developer">Ascend community</a></p></li>
+<li><p><a class="reference external" href="https://atomgit.com/mindspore/community">MindSpore community</a></p></li>
+<li><p><a class="reference external" href="https://gitee.com/mindspore/mindformers/issues/ICQ9JF">Related issues</a></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Excellent Practice" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="distilled/distilled.html" class="btn btn-neutral float-right" title="Practice Case of Using DeepSeek-R1 for Model Distillation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

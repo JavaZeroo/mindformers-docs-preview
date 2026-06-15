@@ -1,0 +1,831 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>分布式并行训练 &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="训练内存优化" href="memory_optimization.html" />
+    <link rel="prev" title="训练超参数与优化器" href="training_hyperparameters.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">介绍</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/quick_start.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/models.html">模型支持库</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">安装</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">安装指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">功能特性</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">功能特性概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="start_task.html">启动任务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">配置文件说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logging.html">日志</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dataset.html">数据集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="training_hyperparameters.html">训练超参数与优化器</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">分布式并行训练</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">选型速查</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">全局配置示例与字段汇总</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fsdp-hsdp">一、数据并行与 FSDP / HSDP</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id4">1.1 是什么</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">1.2 何时用 / 怎么选组规模</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">1.3 字段表</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">1.4 场景化配置</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#a-8-fsdp">场景 A：单机 8 卡纯 FSDP（推荐基线）</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#b-16-hsdp">场景 B：双机 16 卡 HSDP（节点内分片 + 跨节点复制）</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#tp">二、张量并行（TP）</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id8">2.1 是什么</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id9">2.2 何时用 / 怎么选</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id10">2.3 字段表</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dp-tp">2.4 场景化配置：单机 8 卡 DP + TP 微调</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#cp">三、上下文并行（CP）</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id11">3.1 是什么</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id12">3.2 何时用 / 怎么选</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id13">3.3 字段表</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id14">3.4 场景化配置</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#a-8-colossal-cp">场景 A：单机 8 卡 colossal CP（长序列）</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#b-ulysses-cp-head">场景 B：ulysses CP（head 维切分）</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#c-hybrid-cp-head">场景 C：hybrid CP（序列分块 × head 切分）</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pp">四、流水线并行（PP）</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id15">4.1 是什么</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id16">4.2 何时用 / 怎么选</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id17">4.3 字段表</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id18">4.4 场景化配置</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#auto">场景一：层数可均匀放置 → 配置 <code class="docutils literal notranslate"><span class="pre">auto</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#stage">场景二：层数不能均分 → 显式指定各 stage 的层区间</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ep">五、专家并行（EP）</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id19">5.1 是什么</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id20">5.2 何时用 / 怎么选</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id21">5.3 字段表</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id22">5.4 场景化配置</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#a-8-moe-ep-tp-tp">场景 A：单机 8 卡 MoE，EP ≤ TP（专家随 TP 切分）</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#b-16-moe-ep-tp">场景 B：多机 16 卡 MoE，EP &gt; TP + 去冗余分发</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#sp">六、序列并行（SP）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id23">组合约束</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id24">启动</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id25">相关文档</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="save_and_load_checkpoint.html">权重保存与加载</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resume_training.html">断点续训</a></li>
+<li class="toctree-l1"><a class="reference internal" href="monitor.html">训练指标监控与 Profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="static_graph_features.html">静态图实现特性</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">环境变量</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">环境变量说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">贡献指南</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contribution/mindformers_contribution.html">MindSpore Transformers贡献指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution/modelers_contribution.html">魔乐社区贡献指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../faq/model_related.html">模型相关 FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/feature_related.html">功能相关 FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">静态图实现（Deprecated）</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/guide/index.html">大模型全流程指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/feature/index.html">功能特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/advanced_development/index.html">高阶开发</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/example/index.html">优秀实践</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/env_variables.html">环境变量说明</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">分布式并行训练</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/feature/parallel_training.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>分布式并行训练<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<p>动态图（PyNative）训练采用 <strong>多维混合并行</strong> 来训练大规模模型。所有并行维度统一写在配置文件的 <code class="docutils literal notranslate"><span class="pre">parallelism</span></code> 段中，加载时映射到 <code class="docutils literal notranslate"><span class="pre">ParallelismConfig</span></code>（见 <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/mindformers/pynative/config/config.py"><code class="docutils literal notranslate"><span class="pre">mindformers/pynative/config/config.py</span></code></a>）；<a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/mindformers/pynative/trainer/trainer.py"><code class="docutils literal notranslate"><span class="pre">mindformers/pynative/trainer/trainer.py</span></code></a> 据此推导出数据并行规模，再由 <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/mindformers/pynative/distributed/parallel_dims.py"><code class="docutils literal notranslate"><span class="pre">mindformers/pynative/distributed/parallel_dims.py</span></code></a> 的 <code class="docutils literal notranslate"><span class="pre">ParallelDims</span></code> 构建出一张多维设备网格（DeviceMesh）。各并行能力（FSDP/HSDP、TP、CP、PP、EP、SP）随后由 <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/mindformers/pynative/base_models/gpt/parallelize.py"><code class="docutils literal notranslate"><span class="pre">parallelize.py</span></code></a>、<a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/mindformers/pynative/distributed/tensor_parallel.py"><code class="docutils literal notranslate"><span class="pre">tensor_parallel.py</span></code></a>、<a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/mindformers/pynative/distributed/context_parallel.py"><code class="docutils literal notranslate"><span class="pre">context_parallel.py</span></code></a>、<a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/mindformers/pynative/distributed/pipeline_parallel.py"><code class="docutils literal notranslate"><span class="pre">pipeline_parallel.py</span></code></a>、<a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/mindformers/pynative/distributed/expert_parallel.py"><code class="docutils literal notranslate"><span class="pre">expert_parallel.py</span></code></a> 等模块逐一施加到模型上。</p>
+<p>动态图的设备网格（<code class="docutils literal notranslate"><span class="pre">DeviceMesh</span></code>）、FSDP/HSDP、TP/CP/EP、PP 调度等并行能力均由 <a class="reference external" href="https://atomgit.com/mindspore/hyper-parallel/">HyperParallel</a> 提供，是动态图训练的必需依赖（要求 MindSpore &gt;= 2.8）。安装方式见 <a class="reference internal" href="../installation.html#hyperparallel"><span class="std std-ref">安装指南 · 安装 HyperParallel</span></a>。</p>
+<p>本页先给出 <strong>选型速查</strong> 与 <strong>可配项 vs 派生量</strong> 的全局约定，再按每个并行维度展开「① 是什么 ② 何时用 ③ 字段表 ④ 场景化完整 YAML」，最后给出组合约束与启动方式。</p>
+<section id="id2">
+<h2>选型速查<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>维度</p></th>
+<th class="head"><p>配置字段</p></th>
+<th class="head"><p>切什么</p></th>
+<th class="head"><p>典型场景</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>数据并行 / FSDP</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">data_parallel_shard</span></code></p></td>
+<td><p>样本维 + 参数/梯度/优化器状态分片</p></td>
+<td><p><strong>几乎所有训练的基础</strong>；显存吃紧时把分片度调大</p></td>
+</tr>
+<tr class="row-odd"><td><p>HSDP（副本+分片）</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">data_parallel_shard</span></code>（小于 DP 总度）</p></td>
+<td><p>节点内分片、跨节点复制</p></td>
+<td><p>多节点训练，想用节点内带宽做分片、节点间做复制</p></td>
+</tr>
+<tr class="row-even"><td><p>张量并行 TP</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tensor_parallel</span></code></p></td>
+<td><p>算子内权重（注意力/FFN 线性层）</p></td>
+<td><p>单层权重在一张卡放不下的大模型</p></td>
+</tr>
+<tr class="row-odd"><td><p>上下文并行 CP</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">context_parallel</span></code></p></td>
+<td><p>序列维（含注意力计算）</p></td>
+<td><p><strong>长序列</strong>（长上下文/长文档），激活显存爆炸时</p></td>
+</tr>
+<tr class="row-even"><td><p>流水线并行 PP</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">pipeline_parallel</span></code></p></td>
+<td><p>模型按层切到多个 stage</p></td>
+<td><p>层数很多、单卡放不下整模型；常与 TP/DP 组合</p></td>
+</tr>
+<tr class="row-odd"><td><p>专家并行 EP</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">expert_parallel</span></code> / <code class="docutils literal notranslate"><span class="pre">expert_tensor_parallel</span></code></p></td>
+<td><p>MoE 专家分布到不同卡</p></td>
+<td><p>MoE 模型（DeepSeek-V3 等）</p></td>
+</tr>
+<tr class="row-even"><td><p>序列并行 SP</p></td>
+<td><p>（随 TP 自动开启）</p></td>
+<td><p>TP 未切分部分（LayerNorm/Dropout/残差）的序列维</p></td>
+<td><p>开启 TP 即自动生效，无需也无法单独配置</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>可配项与派生量</strong>：用户在 <code class="docutils literal notranslate"><span class="pre">parallelism</span></code> 中 <strong>真正需要配置</strong> 的并行度只有：<code class="docutils literal notranslate"><span class="pre">data_parallel_shard</span></code>、<code class="docutils literal notranslate"><span class="pre">tensor_parallel</span></code>、<code class="docutils literal notranslate"><span class="pre">context_parallel</span></code>、<code class="docutils literal notranslate"><span class="pre">pipeline_parallel</span></code>、<code class="docutils literal notranslate"><span class="pre">expert_parallel</span></code>、<code class="docutils literal notranslate"><span class="pre">expert_tensor_parallel</span></code>。</p>
+<p>以下两个量 <strong>不是用户字段</strong>，由框架在 <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/mindformers/pynative/trainer/trainer.py"><code class="docutils literal notranslate"><span class="pre">trainer.py</span></code></a> 运行时推导，写在 YAML 里也会被覆盖：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">data_parallel</span></code>（数据并行总度）：由 <code class="docutils literal notranslate"><span class="pre">world_size</span> <span class="pre">//</span> <span class="pre">(tensor_parallel</span> <span class="pre">*</span> <span class="pre">pipeline_parallel</span> <span class="pre">*</span> <span class="pre">context_parallel)</span></code> 推导。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data_parallel_replicate</span></code>（即 <code class="docutils literal notranslate"><span class="pre">dp_replicate</span></code>，HSDP 副本度）：当 <code class="docutils literal notranslate"><span class="pre">data_parallel_shard</span> <span class="pre">&lt;</span> <span class="pre">0</span></code> 时取 <code class="docutils literal notranslate"><span class="pre">1</span></code>；否则取 <code class="docutils literal notranslate"><span class="pre">max(data_parallel</span> <span class="pre">//</span> <span class="pre">data_parallel_shard,</span> <span class="pre">1)</span></code>。随后 <code class="docutils literal notranslate"><span class="pre">dp_shard</span></code> 被回写为 <code class="docutils literal notranslate"><span class="pre">data_parallel</span> <span class="pre">//</span> <span class="pre">dp_replicate</span></code>。</p></li>
+</ul>
+<p>因此你只需指定「分片度」<code class="docutils literal notranslate"><span class="pre">data_parallel_shard</span></code>，框架会自动算出副本度并组成 HSDP 拓扑；<code class="docutils literal notranslate"><span class="pre">data_parallel_shard:</span> <span class="pre">-1</span></code> 表示「用剩余卡数全部做分片」（副本度为 1，即纯 FSDP）。</p>
+</section>
+<section id="id3">
+<h2>全局配置示例与字段汇总<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<p>下面是一份覆盖主要 <code class="docutils literal notranslate"><span class="pre">parallelism</span></code> 字段的“总览型”配置，便于对照字段含义；实际使用时按后续各维度的场景示例裁剪即可。</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">parallelism</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># —— 数据并行 / FSDP / HSDP ——</span>
+<span class="w">  </span><span class="nt">data_parallel_shard</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-1</span><span class="w">                 </span><span class="c1"># 用户唯一需要配的 DP 字段；-1=剩余卡全部做分片(纯 FSDP)</span>
+<span class="w">  </span><span class="nt">reshard_after_forward_policy</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;default&quot;</span><span class="w"> </span><span class="c1"># 前向后是否重新分片参数：always / never / default</span>
+<span class="w">  </span><span class="nt">cpu_offload</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span><span class="w">                      </span><span class="c1"># 将分片后的参数/梯度卸载到 CPU</span>
+<span class="w">  </span><span class="nt">disable_gradient_division</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w">         </span><span class="c1"># 关闭 FSDP 自动梯度均分(按 sum 聚合)</span>
+
+<span class="w">  </span><span class="c1"># —— 张量并行 TP ——</span>
+<span class="w">  </span><span class="nt">tensor_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+
+<span class="w">  </span><span class="c1"># —— 上下文并行 CP ——</span>
+<span class="w">  </span><span class="nt">context_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">context_parallel_method</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;colossal&quot;</span><span class="w">     </span><span class="c1"># colossal / ulysses / hybrid</span>
+<span class="w">  </span><span class="nt">context_parallel_async</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">ulysses_degree_in_cp</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span><span class="w">              </span><span class="c1"># ulysses/hybrid 时按规则取值</span>
+<span class="w">  </span><span class="nt">context_parallel_mask_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;causal&quot;</span>
+
+<span class="w">  </span><span class="c1"># —— 流水线并行 PP ——</span>
+<span class="w">  </span><span class="nt">pipeline_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">pipeline_parallel_interleave_num</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w">     </span><span class="c1"># 每个 stage 的交织模型块数</span>
+<span class="w">  </span><span class="nt">pipeline_parallel_layers_per_stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span><span class="w">   </span><span class="c1"># pp&gt;1 时必填：auto（均分）或各 stage 层区间列表，见 4.4</span>
+<span class="w">  </span><span class="nt">pipeline_parallel_overlap_p2p</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">pipeline_parallel_overlap_b_f</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+
+<span class="w">  </span><span class="c1"># —— 专家并行 EP（MoE）——</span>
+<span class="w">  </span><span class="nt">expert_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">expert_tensor_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w">               </span><span class="c1"># ep&gt;1 时只能取 tensor_parallel 或 1</span>
+<span class="w">  </span><span class="nt">moe_token_dispatcher_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;alltoall&quot;</span><span class="w">   </span><span class="c1"># alltoall / alltoall_deredundancy</span>
+<span class="w">  </span><span class="nt">npu_nums_per_device</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+
+<span class="w">  </span><span class="c1"># —— 序列并行 SP ——</span>
+<span class="w">  </span><span class="c1"># SP 随 TP 自动开启，当前不支持单独关闭，无需在此配置（见第六节）</span>
+</pre></div>
+</div>
+<p><strong>关于 <code class="docutils literal notranslate"><span class="pre">data_parallel_shard_strategy</span></code></strong>：<code class="docutils literal notranslate"><span class="pre">ParallelismConfig</span></code> 中存在 <code class="docutils literal notranslate"><span class="pre">data_parallel_shard_strategy</span></code>（默认 <code class="docutils literal notranslate"><span class="pre">&quot;optim_grads_params&quot;</span></code>）字段，但在动态图代码中 <strong>没有任何消费点</strong>：FSDP 统一通过 <code class="docutils literal notranslate"><span class="pre">fully_shard</span></code> 一次性分片参数、梯度与优化器状态，分片粒度不可调。该字段当前为预留/占位项，改动它不会改变行为，新配置无需填写。</p>
+</section>
+<hr class="docutils" />
+<section id="fsdp-hsdp">
+<h2>一、数据并行与 FSDP / HSDP<a class="headerlink" href="#fsdp-hsdp" title="Link to this heading"></a></h2>
+<section id="id4">
+<h3>1.1 是什么<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p>动态图默认采用 <strong>FSDP（全分片数据并行）</strong> 风格：在分片组内对参数、梯度、优化器状态做切分，前向/反向时按需 all-gather 权重、reduce-scatter 梯度。<code class="docutils literal notranslate"><span class="pre">ParallelDims</span></code> 把数据并行进一步拆成两层：</p>
+<ul class="simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">dp_shard</span></code>（分片度）</strong>：组内对参数/梯度/优化器状态做切分——省显存，组内有 all-gather/reduce-scatter 通信。</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">dp_replicate</span></code>（副本度）</strong>：组间整份复制权重、只在反向同步梯度——经典数据并行，通信少但不省显存。</p></li>
+</ul>
+<p>两者都大于 1 时即 <strong>HSDP（混合分片数据并行）</strong>：节点内分片、跨节点复制，兼顾省显存与降低跨节点通信。FSDP 是否启用由 <code class="docutils literal notranslate"><span class="pre">dp_shard</span> <span class="pre">&gt;</span> <span class="pre">1</span> <span class="pre">或</span> <span class="pre">cp</span> <span class="pre">&gt;</span> <span class="pre">1</span></code> 决定（见 <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/mindformers/pynative/distributed/parallel_dims.py"><code class="docutils literal notranslate"><span class="pre">parallel_dims.py</span></code></a> 的 <code class="docutils literal notranslate"><span class="pre">fsdp_enabled</span></code>）。</p>
+</section>
+<section id="id5">
+<h3>1.2 何时用 / 怎么选组规模<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>基线</strong>：单机多卡训练直接用纯 FSDP（<code class="docutils literal notranslate"><span class="pre">data_parallel_shard:</span> <span class="pre">-1</span></code>，副本度为 1），把全部数据并行卡用于分片，显存利用率最高。</p></li>
+<li><p><strong>显存不够</strong>：优先增大分片度（即让更多卡进同一个分片组）。极限情况叠加 <code class="docutils literal notranslate"><span class="pre">cpu_offload</span></code>、<code class="docutils literal notranslate"><span class="pre">reshard_after_forward_policy:</span> <span class="pre">always</span></code>。</p></li>
+<li><p><strong>多节点想降低跨节点通信</strong>：用 HSDP——把分片度设为「节点内卡数」，让框架推导出「副本度 = 节点数」，分片通信走节点内高带宽，副本只做梯度 all-reduce。配置上只需把 <code class="docutils literal notranslate"><span class="pre">data_parallel_shard</span></code> 设成一个小于 DP 总度的正数。</p></li>
+</ul>
+</section>
+<section id="id6">
+<h3>1.3 字段表<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>字段</p></th>
+<th class="head"><p>类型</p></th>
+<th class="head"><p>默认值</p></th>
+<th class="head"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">data_parallel_shard</span></code></p></td>
+<td><p>int</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-1</span></code></p></td>
+<td><p>分片度（dp_shard）。<code class="docutils literal notranslate"><span class="pre">-1</span></code> 表示用剩余卡数全部做分片（纯 FSDP，副本度为 1）；填正整数则框架据此推导副本度，可形成 HSDP。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">reshard_after_forward_policy</span></code></p></td>
+<td><p>str</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;default&quot;</span></code></p></td>
+<td><p>前向后是否重新分片参数：<code class="docutils literal notranslate"><span class="pre">always</span></code> / <code class="docutils literal notranslate"><span class="pre">never</span></code> / <code class="docutils literal notranslate"><span class="pre">default</span></code>。<code class="docutils literal notranslate"><span class="pre">never</span></code> 用显存换通信（前向后保留聚合权重，反向少一次 all-gather）；<code class="docutils literal notranslate"><span class="pre">always</span></code> 反之。<code class="docutils literal notranslate"><span class="pre">default</span></code> 等价于「非 PP 时 <code class="docutils literal notranslate"><span class="pre">always</span></code>、PP 时 <code class="docutils literal notranslate"><span class="pre">never</span></code>」。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">cpu_offload</span></code></p></td>
+<td><p>bool</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+<td><p>将分片后的参数/梯度卸载到 CPU 内存，进一步省显存，代价是 H2D/D2H 拷贝。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">disable_gradient_division</span></code></p></td>
+<td><p>bool</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p>关闭 FSDP 自动梯度均分：以 <strong>sum</strong> 而非 mean 聚合梯度（对所有 HSDP 子模块设 reduce op = “sum”）。</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>易错点</strong>：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">disable_gradient_division=True</span></code> 是默认值，意味着 FSDP 梯度按 <strong>sum</strong> 聚合而非取平均。量纲修正由框架在反向的 loss sense（<code class="docutils literal notranslate"><span class="pre">1/(world_size//pp)</span></code>）与 grad-norm 缩放里完成，无需用户手动设置任何缩放因子；不要误以为存在某个需要你配置的「梯度除数」开关。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">reshard_after_forward_policy:</span> <span class="pre">default</span></code> 在 <strong>PP 下解析为 <code class="docutils literal notranslate"><span class="pre">never</span></code></strong>：因为 PP 每个 microbatch 都会重复前向，若每次都 reshard 会带来反复 all-gather，故默认保留聚合权重。</p></li>
+</ul>
+</section>
+<section id="id7">
+<h3>1.4 场景化配置<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<section id="a-8-fsdp">
+<h4>场景 A：单机 8 卡纯 FSDP（推荐基线）<a class="headerlink" href="#a-8-fsdp" title="Link to this heading"></a></h4>
+<p>8 卡全部做分片，副本度为 1。满足 <code class="docutils literal notranslate"><span class="pre">dp_replicate(1)</span> <span class="pre">*</span> <span class="pre">dp_shard(8)</span> <span class="pre">*</span> <span class="pre">cp(1)</span> <span class="pre">*</span> <span class="pre">tp(1)</span> <span class="pre">*</span> <span class="pre">pp(1)</span> <span class="pre">==</span> <span class="pre">8</span></code>。</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">parallelism</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">data_parallel_shard</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-1</span><span class="w">          </span><span class="c1"># = 8（剩余卡全部分片）</span>
+<span class="w">  </span><span class="nt">reshard_after_forward_policy</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;default&quot;</span>
+<span class="w">  </span><span class="nt">cpu_offload</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">disable_gradient_division</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">tensor_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">context_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">pipeline_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">expert_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+</section>
+<section id="b-16-hsdp">
+<h4>场景 B：双机 16 卡 HSDP（节点内分片 + 跨节点复制）<a class="headerlink" href="#b-16-hsdp" title="Link to this heading"></a></h4>
+<p>每节点 8 卡，希望节点内分片、节点间复制。把分片度设为 8，框架推导出 <code class="docutils literal notranslate"><span class="pre">data_parallel</span> <span class="pre">=</span> <span class="pre">16</span></code>、<code class="docutils literal notranslate"><span class="pre">dp_replicate</span> <span class="pre">=</span> <span class="pre">16</span> <span class="pre">//</span> <span class="pre">8</span> <span class="pre">=</span> <span class="pre">2</span></code>、<code class="docutils literal notranslate"><span class="pre">dp_shard</span> <span class="pre">=</span> <span class="pre">8</span></code>。满足 <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">*</span> <span class="pre">8</span> <span class="pre">*</span> <span class="pre">1</span> <span class="pre">*</span> <span class="pre">1</span> <span class="pre">*</span> <span class="pre">1</span> <span class="pre">==</span> <span class="pre">16</span></code>。</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">parallelism</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">data_parallel_shard</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span><span class="w">           </span><span class="c1"># 节点内 8 卡分片；副本度 2 由框架推导</span>
+<span class="w">  </span><span class="nt">reshard_after_forward_policy</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;default&quot;</span>
+<span class="w">  </span><span class="nt">cpu_offload</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">disable_gradient_division</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">tensor_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">context_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">pipeline_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<hr class="docutils" />
+<section id="tp">
+<h2>二、张量并行（TP）<a class="headerlink" href="#tp" title="Link to this heading"></a></h2>
+<section id="id8">
+<h3>2.1 是什么<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">tensor_parallel</span></code> 指定 TP 规模，对注意力与 FFN 中的线性层权重在 <strong>算子内</strong> 做列/行切分（<code class="docutils literal notranslate"><span class="pre">apply_non_moe_tp</span></code> 用 <code class="docutils literal notranslate"><span class="pre">ColwiseParallel</span></code> / <code class="docutils literal notranslate"><span class="pre">RowwiseParallel</span></code>），组内通过 all-gather / all-reduce 同步激活。</p>
+</section>
+<section id="id9">
+<h3>2.2 何时用 / 怎么选<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>单层权重在一张卡放不下、或单卡注意力/FFN 激活过大时启用。</p></li>
+<li><p>TP 通信发生在 <strong>每一层的前反向</strong>，对带宽极敏感，<strong>通常只在单节点内</strong> 开（TP 组规模一般 ≤ 节点内卡数，如 2/4/8）。</p></li>
+<li><p>与 FSDP 正交：<code class="docutils literal notranslate"><span class="pre">world_size</span> <span class="pre">=</span> <span class="pre">dp_total</span> <span class="pre">*</span> <span class="pre">tp</span> <span class="pre">*</span> <span class="pre">pp</span> <span class="pre">*</span> <span class="pre">cp</span></code>，开了 TP 后剩余卡数自动用于数据并行。</p></li>
+</ul>
+</section>
+<section id="id10">
+<h3>2.3 字段表<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>字段</p></th>
+<th class="head"><p>类型</p></th>
+<th class="head"><p>默认值</p></th>
+<th class="head"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">tensor_parallel</span></code></p></td>
+<td><p>int</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p>张量并行规模，<code class="docutils literal notranslate"><span class="pre">1</span></code> 表示关闭。</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="dp-tp">
+<h3>2.4 场景化配置：单机 8 卡 DP + TP 微调<a class="headerlink" href="#dp-tp" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">tp=2</span></code>，剩余 <code class="docutils literal notranslate"><span class="pre">data_parallel</span> <span class="pre">=</span> <span class="pre">8</span> <span class="pre">//</span> <span class="pre">2</span> <span class="pre">=</span> <span class="pre">4</span></code> 全部用于分片（<code class="docutils literal notranslate"><span class="pre">data_parallel_shard:</span> <span class="pre">-1</span></code> → <code class="docutils literal notranslate"><span class="pre">dp_shard</span> <span class="pre">=</span> <span class="pre">4</span></code>）。满足 <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">*</span> <span class="pre">4</span> <span class="pre">*</span> <span class="pre">1</span> <span class="pre">*</span> <span class="pre">2</span> <span class="pre">*</span> <span class="pre">1</span> <span class="pre">==</span> <span class="pre">8</span></code>。</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">parallelism</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">data_parallel_shard</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-1</span><span class="w">          </span><span class="c1"># = 4</span>
+<span class="w">  </span><span class="nt">tensor_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">context_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">pipeline_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">expert_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">reshard_after_forward_policy</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;default&quot;</span>
+<span class="w">  </span><span class="nt">disable_gradient_division</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="cp">
+<h2>三、上下文并行（CP）<a class="headerlink" href="#cp" title="Link to this heading"></a></h2>
+<section id="id11">
+<h3>3.1 是什么<a class="headerlink" href="#id11" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">context_parallel</span></code> 在 <strong>序列维</strong> 对输入进行切分，使每张卡只处理一段序列，显著降低长序列下的激活显存与注意力计算量；FlashAttention 在 CP 组内交换 KV 完成全序列注意力（见 <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/mindformers/pynative/distributed/context_parallel.py"><code class="docutils literal notranslate"><span class="pre">context_parallel.py</span></code></a>）。动态图支持三种实现方法 <code class="docutils literal notranslate"><span class="pre">context_parallel_method</span></code>：</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>方法</p></th>
+<th class="head"><p>原理</p></th>
+<th class="head"><p>约束（<code class="docutils literal notranslate"><span class="pre">_validate_cp_method</span></code>）</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">colossal</span></code></p></td>
+<td><p>默认；按序列分块、组内交换 KV</p></td>
+<td><p>无额外约束；<code class="docutils literal notranslate"><span class="pre">ulysses_degree_in_cp</span></code> 内部按 1 处理</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ulysses</span></code></p></td>
+<td><p>在注意力 head 维做 all-to-all 切分</p></td>
+<td><p>要求 <code class="docutils literal notranslate"><span class="pre">ulysses_degree_in_cp</span> <span class="pre">==</span> <span class="pre">context_parallel</span></code>（不设则默认取 <code class="docutils literal notranslate"><span class="pre">context_parallel</span></code>）；<code class="docutils literal notranslate"><span class="pre">context_parallel_async=True</span></code> 时还要求 <code class="docutils literal notranslate"><span class="pre">num_attention_heads</span> <span class="pre">%</span> <span class="pre">ulysses_degree</span> <span class="pre">==</span> <span class="pre">0</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">hybrid</span></code></p></td>
+<td><p>colossal + ulysses 混合</p></td>
+<td><p>必须设 <code class="docutils literal notranslate"><span class="pre">ulysses_degree_in_cp</span></code>，且满足 <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">&lt;</span> <span class="pre">ulysses_degree_in_cp</span> <span class="pre">&lt;</span> <span class="pre">context_parallel</span></code> 且 <code class="docutils literal notranslate"><span class="pre">context_parallel</span> <span class="pre">%</span> <span class="pre">ulysses_degree_in_cp</span> <span class="pre">==</span> <span class="pre">0</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id12">
+<h3>3.2 何时用 / 怎么选<a class="headerlink" href="#id12" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>主要用于 <strong>长序列/长上下文</strong>（<code class="docutils literal notranslate"><span class="pre">seq_length</span></code> 很大导致激活显存爆炸）。CP 组规模越大，单卡序列越短、激活越省，但组内 KV 交换通信也越多。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">colossal</span></code>：通用首选，序列切分直接，无 head 整除限制。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ulysses</span></code>：在 head 维切分，更适合 head 数较多的模型；启用 async 时要保证 head 数能被 ulysses 度整除。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">hybrid</span></code>：把 CP 拆成「序列分块 × head 切分」两层，适合既想切长序列又想用 head 维并行的超长序列场景。</p></li>
+</ul>
+<p><strong>CP 与 FSDP 的耦合</strong>：启用 CP 时，<strong>FSDP 也会作用于 CP 组</strong>：分片网格名为 <code class="docutils literal notranslate"><span class="pre">fsdp</span></code>，规模为 <code class="docutils literal notranslate"><span class="pre">dp_shard</span> <span class="pre">*</span> <span class="pre">cp</span></code>，即便 <code class="docutils literal notranslate"><span class="pre">dp_shard</span> <span class="pre">==</span> <span class="pre">1</span></code>（见 <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/mindformers/pynative/distributed/parallel_dims.py"><code class="docutils literal notranslate"><span class="pre">parallel_dims.py</span></code></a> 的 <code class="docutils literal notranslate"><span class="pre">fsdp_enabled</span></code> / <code class="docutils literal notranslate"><span class="pre">fsdp</span></code> 属性）。也就是说开 CP 会自动让参数在 CP 组内分片，无需单独配置。此外 CP 输入准备<strong>仅接受</strong> <code class="docutils literal notranslate"><span class="pre">context_parallel_mask_type:</span> <span class="pre">causal</span></code>，传入其它值会直接抛 <code class="docutils literal notranslate"><span class="pre">NotImplementedError</span></code>，且不接受自定义 <code class="docutils literal notranslate"><span class="pre">attention_mask</span></code>。</p>
+</section>
+<section id="id13">
+<h3>3.3 字段表<a class="headerlink" href="#id13" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>字段</p></th>
+<th class="head"><p>类型</p></th>
+<th class="head"><p>默认值</p></th>
+<th class="head"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">context_parallel</span></code></p></td>
+<td><p>int</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p>上下文并行规模。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">context_parallel_method</span></code></p></td>
+<td><p>str</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;colossal&quot;</span></code></p></td>
+<td><p>CP 实现方法：<code class="docutils literal notranslate"><span class="pre">colossal</span></code> / <code class="docutils literal notranslate"><span class="pre">ulysses</span></code> / <code class="docutils literal notranslate"><span class="pre">hybrid</span></code>。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">context_parallel_async</span></code></p></td>
+<td><p>bool</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+<td><p>启用异步 CP 通信钩子（Hyper-Parallel）；与 <code class="docutils literal notranslate"><span class="pre">ulysses</span></code> 同用时要求 head 数可被 ulysses 度整除。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ulysses_degree_in_cp</span></code></p></td>
+<td><p>int</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>Ulysses 维度。<code class="docutils literal notranslate"><span class="pre">ulysses</span></code> 时须等于 <code class="docutils literal notranslate"><span class="pre">context_parallel</span></code>；<code class="docutils literal notranslate"><span class="pre">hybrid</span></code> 时须 <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">&lt;</span> <span class="pre">值</span> <span class="pre">&lt;</span> <span class="pre">context_parallel</span></code> 且整除 <code class="docutils literal notranslate"><span class="pre">context_parallel</span></code>。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">context_parallel_mask_type</span></code></p></td>
+<td><p>str</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;causal&quot;</span></code></p></td>
+<td><p>CP 输入准备的掩码类型，<strong>仅接受 <code class="docutils literal notranslate"><span class="pre">causal</span></code></strong>，其它值直接抛 <code class="docutils literal notranslate"><span class="pre">NotImplementedError</span></code>。</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id14">
+<h3>3.4 场景化配置<a class="headerlink" href="#id14" title="Link to this heading"></a></h3>
+<section id="a-8-colossal-cp">
+<h4>场景 A：单机 8 卡 colossal CP（长序列）<a class="headerlink" href="#a-8-colossal-cp" title="Link to this heading"></a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">cp=2</span></code>，剩余 <code class="docutils literal notranslate"><span class="pre">data_parallel</span> <span class="pre">=</span> <span class="pre">8</span> <span class="pre">//</span> <span class="pre">2</span> <span class="pre">=</span> <span class="pre">4</span></code> 做分片。FSDP 分片组规模 = <code class="docutils literal notranslate"><span class="pre">dp_shard(4)</span> <span class="pre">*</span> <span class="pre">cp(2)</span> <span class="pre">=</span> <span class="pre">8</span></code>。满足 <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">*</span> <span class="pre">4</span> <span class="pre">*</span> <span class="pre">2</span> <span class="pre">*</span> <span class="pre">1</span> <span class="pre">*</span> <span class="pre">1</span> <span class="pre">==</span> <span class="pre">8</span></code>。</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">parallelism</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">data_parallel_shard</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-1</span><span class="w">          </span><span class="c1"># = 4</span>
+<span class="w">  </span><span class="nt">tensor_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">context_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">context_parallel_method</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;colossal&quot;</span>
+<span class="w">  </span><span class="nt">context_parallel_mask_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;causal&quot;</span>
+<span class="w">  </span><span class="nt">pipeline_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+</section>
+<section id="b-ulysses-cp-head">
+<h4>场景 B：ulysses CP（head 维切分）<a class="headerlink" href="#b-ulysses-cp-head" title="Link to this heading"></a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">cp=4</span></code>，<code class="docutils literal notranslate"><span class="pre">ulysses</span></code> 要求 <code class="docutils literal notranslate"><span class="pre">ulysses_degree_in_cp</span> <span class="pre">==</span> <span class="pre">context_parallel</span></code>。满足 <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">*</span> <span class="pre">2</span> <span class="pre">*</span> <span class="pre">4</span> <span class="pre">*</span> <span class="pre">1</span> <span class="pre">*</span> <span class="pre">1</span> <span class="pre">==</span> <span class="pre">8</span></code>（<code class="docutils literal notranslate"><span class="pre">data_parallel</span> <span class="pre">=</span> <span class="pre">8//4</span> <span class="pre">=</span> <span class="pre">2</span></code>）。</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">parallelism</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">data_parallel_shard</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-1</span><span class="w">          </span><span class="c1"># = 2</span>
+<span class="w">  </span><span class="nt">context_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">  </span><span class="nt">context_parallel_method</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ulysses&quot;</span>
+<span class="w">  </span><span class="nt">ulysses_degree_in_cp</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span><span class="w">          </span><span class="c1"># 必须等于 context_parallel</span>
+<span class="w">  </span><span class="nt">context_parallel_async</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span><span class="w">    </span><span class="c1"># 若设 True，需保证 num_attention_heads % 4 == 0</span>
+<span class="w">  </span><span class="nt">tensor_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">pipeline_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+</section>
+<section id="c-hybrid-cp-head">
+<h4>场景 C：hybrid CP（序列分块 × head 切分）<a class="headerlink" href="#c-hybrid-cp-head" title="Link to this heading"></a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">cp=4</span></code>，hybrid 要求 <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">&lt;</span> <span class="pre">ulysses_degree_in_cp</span> <span class="pre">&lt;</span> <span class="pre">cp</span></code> 且整除 <code class="docutils literal notranslate"><span class="pre">cp</span></code>，故取 2。满足 <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">*</span> <span class="pre">2</span> <span class="pre">*</span> <span class="pre">4</span> <span class="pre">*</span> <span class="pre">1</span> <span class="pre">*</span> <span class="pre">1</span> <span class="pre">==</span> <span class="pre">8</span></code>。</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">parallelism</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">data_parallel_shard</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-1</span><span class="w">          </span><span class="c1"># = 2</span>
+<span class="w">  </span><span class="nt">context_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">  </span><span class="nt">context_parallel_method</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;hybrid&quot;</span>
+<span class="w">  </span><span class="nt">ulysses_degree_in_cp</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w">          </span><span class="c1"># 1 &lt; 2 &lt; 4 且 4 % 2 == 0</span>
+<span class="w">  </span><span class="nt">context_parallel_mask_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;causal&quot;</span>
+<span class="w">  </span><span class="nt">tensor_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">pipeline_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<hr class="docutils" />
+<section id="pp">
+<h2>四、流水线并行（PP）<a class="headerlink" href="#pp" title="Link to this heading"></a></h2>
+<section id="id15">
+<h3>4.1 是什么<a class="headerlink" href="#id15" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">pipeline_parallel</span></code> 把模型 <strong>按层切分到多个 stage</strong>，配合 microbatch 流水执行。动态图固定采用交织式 1F1B 调度 <code class="docutils literal notranslate"><span class="pre">ScheduleInterleaved1F1B</span></code>（见 <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/mindformers/pynative/base_models/gpt/parallelize.py"><code class="docutils literal notranslate"><span class="pre">base_models/gpt/parallelize.py</span></code></a>），通过 interleave 把每个 stage 切成多个虚拟模型块以减小流水线气泡。</p>
+</section>
+<section id="id16">
+<h3>4.2 何时用 / 怎么选<a class="headerlink" href="#id16" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>模型层数很多、单卡放不下整模型时启用；常与 TP（节点内）、DP（节点间）组合成 3D 并行。</p></li>
+<li><p>增大 <code class="docutils literal notranslate"><span class="pre">pipeline_parallel_interleave_num</span></code> 可进一步减小气泡，但会增加 stage 间 P2P 通信次数；可叠加 <code class="docutils literal notranslate"><span class="pre">pipeline_parallel_overlap_p2p</span></code> 把通信与计算重叠。</p></li>
+</ul>
+<p><strong>微批数与调度策略（派生 / 预留）</strong>：</p>
+<ul class="simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">pipeline_parallel_microbatch_size</span></code> 是派生量，不是用户可配项</strong>。<a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/mindformers/pynative/trainer/trainer.py"><code class="docutils literal notranslate"><span class="pre">trainer.py</span></code></a> 会用梯度累积步数覆盖它：<code class="docutils literal notranslate"><span class="pre">num_accumulation_steps</span> <span class="pre">=</span> <span class="pre">global_batch_size</span> <span class="pre">//</span> <span class="pre">(data_parallel</span> <span class="pre">*</span> <span class="pre">local_batch_size)</span></code>（其中 <code class="docutils literal notranslate"><span class="pre">data_parallel</span> <span class="pre">=</span> <span class="pre">dp_replicate</span> <span class="pre">*</span> <span class="pre">dp_shard</span></code> 为数据并行总度），随后 <code class="docutils literal notranslate"><span class="pre">pipeline_parallel_microbatch_size</span> <span class="pre">=</span> <span class="pre">num_accumulation_steps</span></code>。所以请通过 <code class="docutils literal notranslate"><span class="pre">global_batch_size</span></code> / <code class="docutils literal notranslate"><span class="pre">local_batch_size</span></code> 间接控制微批数（见 <a class="reference internal" href="configuration.html"><span class="std std-doc">配置文件说明</span></a>），手填该字段无效。</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">pipeline_parallel_schedule</span></code>（<code class="docutils literal notranslate"><span class="pre">ParallelismConfig</span></code> 中默认 <code class="docutils literal notranslate"><span class="pre">&quot;1f1b&quot;</span></code>）当前未参与分支</strong>：动态图固定走 <code class="docutils literal notranslate"><span class="pre">ScheduleInterleaved1F1B</span></code>，该字符串不被读取，属预留项。真正影响流水行为的是 <code class="docutils literal notranslate"><span class="pre">pipeline_parallel_interleave_num</span></code> 与 <code class="docutils literal notranslate"><span class="pre">pipeline_parallel_overlap_p2p</span></code> / <code class="docutils literal notranslate"><span class="pre">pipeline_parallel_overlap_b_f</span></code>。</p></li>
+</ul>
+</section>
+<section id="id17">
+<h3>4.3 字段表<a class="headerlink" href="#id17" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>字段</p></th>
+<th class="head"><p>类型</p></th>
+<th class="head"><p>默认值</p></th>
+<th class="head"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pipeline_parallel</span></code></p></td>
+<td><p>int</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p>流水线 stage 数。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pipeline_parallel_interleave_num</span></code></p></td>
+<td><p>int</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p>每个 stage 的交织模型块数（虚拟 stage 数 = <code class="docutils literal notranslate"><span class="pre">pp</span> <span class="pre">*</span> <span class="pre">interleave_num</span></code>），增大可减小气泡。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pipeline_parallel_layers_per_stage</span></code></p></td>
+<td><p>list/str</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>各 stage 的层分配。<code class="docutils literal notranslate"><span class="pre">pp</span> <span class="pre">&gt;</span> <span class="pre">1</span></code> 时<strong>必填</strong>：层数可被 <code class="docutils literal notranslate"><span class="pre">pp</span> <span class="pre">*</span> <span class="pre">interleave_num</span></code> 整除时配 <code class="docutils literal notranslate"><span class="pre">auto</span></code>（均匀放置）；否则配列表显式指定各 stage 的层区间（见 4.4）。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pipeline_parallel_overlap_p2p</span></code></p></td>
+<td><p>bool</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+<td><p>启用 stage 间 P2P 通信与计算重叠。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pipeline_parallel_overlap_b_f</span></code></p></td>
+<td><p>bool</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+<td><p>启用反向(b)与前向(f)计算重叠。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pipeline_parallel_microbatch_size</span></code></p></td>
+<td><p>int</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code>（<strong>派生</strong>）</p></td>
+<td><p>派生量，运行时被 <code class="docutils literal notranslate"><span class="pre">num_accumulation_steps</span></code> 覆盖，无需手填（见上方提示）。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pipeline_parallel_schedule</span></code></p></td>
+<td><p>str</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;1f1b&quot;</span></code>（<strong>预留</strong>）</p></td>
+<td><p>预留项，动态图固定用交织 1F1B，当前不参与分支。</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id18">
+<h3>4.4 场景化配置<a class="headerlink" href="#id18" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">pp</span> <span class="pre">&gt;</span> <span class="pre">1</span></code> 时必须通过 <code class="docutils literal notranslate"><span class="pre">pipeline_parallel_layers_per_stage</span></code> 指定各 stage 的层放置，按层数能否均分选择以下两种方式之一。</p>
+<section id="auto">
+<h4>场景一：层数可均匀放置 → 配置 <code class="docutils literal notranslate"><span class="pre">auto</span></code><a class="headerlink" href="#auto" title="Link to this heading"></a></h4>
+<p>当 <code class="docutils literal notranslate"><span class="pre">num_hidden_layers</span></code> 能被虚拟 stage 总数（<code class="docutils literal notranslate"><span class="pre">pp</span> <span class="pre">*</span> <span class="pre">interleave_num</span></code>）整除时，配置 <code class="docutils literal notranslate"><span class="pre">auto</span></code> 即可，框架按虚拟 stage 顺序把层连续均分（每个虚拟 stage 分得 <code class="docutils literal notranslate"><span class="pre">num_hidden_layers</span> <span class="pre">/</span> <span class="pre">(pp</span> <span class="pre">*</span> <span class="pre">interleave_num)</span></code> 层）。例如 8 层模型、<code class="docutils literal notranslate"><span class="pre">pp=2</span></code>、<code class="docutils literal notranslate"><span class="pre">interleave_num=2</span></code>：4 个虚拟 stage 各放 2 层。</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">parallelism</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">data_parallel_shard</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-1</span>
+<span class="w">  </span><span class="nt">tensor_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">  </span><span class="nt">pipeline_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">pipeline_parallel_interleave_num</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w">     </span><span class="c1"># 虚拟 stage 总数 = 2 * 2 = 4</span>
+<span class="w">  </span><span class="nt">pipeline_parallel_layers_per_stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">auto</span>
+<span class="w">  </span><span class="nt">pipeline_parallel_overlap_p2p</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+</div>
+<p>若层数不能整除而仍配置 <code class="docutils literal notranslate"><span class="pre">auto</span></code>，启动时会报错并提示改用显式配置。</p>
+</section>
+<section id="stage">
+<h4>场景二：层数不能均分 → 显式指定各 stage 的层区间<a class="headerlink" href="#stage" title="Link to this heading"></a></h4>
+<p>列表每一项对应一个<strong>物理 stage</strong>（第 <code class="docutils literal notranslate"><span class="pre">i</span></code> 项给 <code class="docutils literal notranslate"><span class="pre">pp_rank</span> <span class="pre">=</span> <span class="pre">i</span></code>）；项内用逗号分隔出 <code class="docutils literal notranslate"><span class="pre">interleave_num</span></code> 段层区间，第 <code class="docutils literal notranslate"><span class="pre">k</span></code> 段是该卡的第 <code class="docutils literal notranslate"><span class="pre">k</span></code> 个交织模型块，对应虚拟 stage 编号 <code class="docutils literal notranslate"><span class="pre">k</span> <span class="pre">*</span> <span class="pre">pp</span> <span class="pre">+</span> <span class="pre">i</span></code>。区间写法为 <code class="docutils literal notranslate"><span class="pre">&quot;start-end&quot;</span></code>（闭区间）或单层 <code class="docutils literal notranslate"><span class="pre">&quot;n&quot;</span></code>，所有区间按虚拟 stage 顺序必须恰好覆盖 <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">~</span> <span class="pre">num_hidden_layers-1</span></code> 且层号递增。</p>
+<p>以 10 层模型（层号 0–9）、<code class="docutils literal notranslate"><span class="pre">pp=2</span></code>、<code class="docutils literal notranslate"><span class="pre">interleave_num=2</span></code> 为例，<code class="docutils literal notranslate"><span class="pre">10</span> <span class="pre">%</span> <span class="pre">4</span> <span class="pre">!=</span> <span class="pre">0</span></code> 无法均分，可显式配置：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">parallelism</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">data_parallel_shard</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-1</span>
+<span class="w">  </span><span class="nt">tensor_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">  </span><span class="nt">pipeline_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">pipeline_parallel_interleave_num</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">pipeline_parallel_layers_per_stage</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;0-1,</span><span class="nv"> </span><span class="s">4-8&quot;</span><span class="w">    </span><span class="c1"># 物理 stage 0：虚拟 stage 0 放层 0-1，虚拟 stage 2 放层 4-8</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;2-3,</span><span class="nv"> </span><span class="s">9&quot;</span><span class="w">      </span><span class="c1"># 物理 stage 1：虚拟 stage 1 放层 2-3，虚拟 stage 3 放层 9</span>
+<span class="w">  </span><span class="nt">pipeline_parallel_overlap_p2p</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+</div>
+<p>层的执行顺序为虚拟 stage 0 → 1 → 2 → 3，即层 0-1 → 2-3 → 4-8 → 9。各 stage 层数可以不等（如本例为 2/2/5/1），可用于平衡首尾 stage 上 embedding / lm_head 的额外显存与计算。</p>
+</section>
+</section>
+</section>
+<hr class="docutils" />
+<section id="ep">
+<h2>五、专家并行（EP）<a class="headerlink" href="#ep" title="Link to this heading"></a></h2>
+<section id="id19">
+<h3>5.1 是什么<a class="headerlink" href="#id19" title="Link to this heading"></a></h3>
+<p>针对 MoE 模型（DeepSeek-V3 等），<code class="docutils literal notranslate"><span class="pre">expert_parallel</span></code> 把专家分布到不同卡，token 经 all-to-all 路由到所在卡的专家计算（<code class="docutils literal notranslate"><span class="pre">apply_moe_ep_tp</span></code>）；<code class="docutils literal notranslate"><span class="pre">expert_tensor_parallel</span></code> 进一步对专家权重做张量切分。EP 不是独立网格——<a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/mindformers/pynative/distributed/parallel_dims.py"><code class="docutils literal notranslate"><span class="pre">parallel_dims.py</span></code></a> 的 <code class="docutils literal notranslate"><span class="pre">build_mesh</span></code> 会按 EP 与 TP/CP 的相对大小，把 EP 通信组 <strong>复用</strong> 在 TP/CP 维上，并据此区分专家的 FSDP 网格 <code class="docutils literal notranslate"><span class="pre">efsdp</span></code> 与非专家的 <code class="docutils literal notranslate"><span class="pre">fsdp</span></code>。</p>
+<p><code class="docutils literal notranslate"><span class="pre">build_mesh</span></code> 分四种情形构造网格：</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>情形</p></th>
+<th class="head"><p>EP 通信组复用关系</p></th>
+<th class="head"><p>专家分片网格</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ep</span> <span class="pre">==</span> <span class="pre">1</span></code>（含 <code class="docutils literal notranslate"><span class="pre">etp</span> <span class="pre">==</span> <span class="pre">1</span></code>）</p></td>
+<td><p>不构造 EP 维，experts 走普通 TP</p></td>
+<td><p>与非专家一致（<code class="docutils literal notranslate"><span class="pre">fsdp</span> <span class="pre">=</span> <span class="pre">dp_shard*cp</span></code>）</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ep</span> <span class="pre">&lt;=</span> <span class="pre">tp</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tp</span></code> 拆成 <code class="docutils literal notranslate"><span class="pre">tp_mod_ep</span> <span class="pre">×</span> <span class="pre">ep</span></code>，EP 复用 TP 组内</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">efsdp</span> <span class="pre">=</span> <span class="pre">dp_shard*cp*tp_mod_ep</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">tp</span> <span class="pre">&lt;</span> <span class="pre">ep</span> <span class="pre">&lt;=</span> <span class="pre">cp*tp</span></code></p></td>
+<td><p>EP 跨 CP 与 TP 组（<code class="docutils literal notranslate"><span class="pre">cp</span></code> 拆为 <code class="docutils literal notranslate"><span class="pre">cp_tp_mod_ep</span> <span class="pre">×</span> <span class="pre">ep_mod_tp</span></code>）</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">efsdp</span> <span class="pre">=</span> <span class="pre">dp_shard*cp_tp_mod_ep</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ep</span> <span class="pre">&gt;</span> <span class="pre">cp*tp</span></code></p></td>
+<td><p>EP 进一步占用 dp_shard 维（<code class="docutils literal notranslate"><span class="pre">efsdp</span></code> 由 <code class="docutils literal notranslate"><span class="pre">dp_shard*cp*tp/ep</span></code> 得到）</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">efsdp</span></code> 维度更小</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id20">
+<h3>5.2 何时用 / 怎么选<a class="headerlink" href="#id20" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>仅 MoE 模型需要</strong>。专家数较多、单卡装不下所有专家时启用 EP；<code class="docutils literal notranslate"><span class="pre">expert_parallel</span></code> 越大，单卡专家越少、显存越省，all-to-all 通信越多。</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">expert_tensor_parallel</span></code> 的语义</strong>：当 <code class="docutils literal notranslate"><span class="pre">expert_parallel</span> <span class="pre">&gt;</span> <span class="pre">1</span></code> 时它只能取 <code class="docutils literal notranslate"><span class="pre">tensor_parallel</span></code> 或 <code class="docutils literal notranslate"><span class="pre">1</span></code>。取 <code class="docutils literal notranslate"><span class="pre">tensor_parallel</span></code> 表示专家权重同样按 TP 切分（与非专家共用 TP 切分语义）；取 <code class="docutils literal notranslate"><span class="pre">1</span></code> 表示专家不做张量切分、只做 EP（<code class="docutils literal notranslate"><span class="pre">etp</span></code> 不启用，experts 仅按 EP 分布）。</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">alltoall</span></code> vs <code class="docutils literal notranslate"><span class="pre">alltoall_deredundancy</span></code></strong>：<code class="docutils literal notranslate"><span class="pre">alltoall</span></code> 是默认全连接 all-to-all 分发；<code class="docutils literal notranslate"><span class="pre">alltoall_deredundancy</span></code>（<code class="docutils literal notranslate"><span class="pre">DeredundancyExpertParallel</span></code>）用「节点间外层 all-gather/reduce-scatter + 节点内 all-to-all」的去冗余方案降低跨节点通信，<strong>仅在多机大 EP 时收益明显</strong>，并要求 <code class="docutils literal notranslate"><span class="pre">expert_parallel</span> <span class="pre">&gt;=</span> <span class="pre">npu_nums_per_device</span></code>（否则 <code class="docutils literal notranslate"><span class="pre">ParallelismConfig.__post_init__</span></code> 直接报错）。</p></li>
+</ul>
+</section>
+<section id="id21">
+<h3>5.3 字段表<a class="headerlink" href="#id21" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>字段</p></th>
+<th class="head"><p>类型</p></th>
+<th class="head"><p>默认值</p></th>
+<th class="head"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">expert_parallel</span></code></p></td>
+<td><p>int</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p>专家并行规模。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">expert_tensor_parallel</span></code></p></td>
+<td><p>int</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p>专家张量并行规模；当 <code class="docutils literal notranslate"><span class="pre">expert_parallel</span> <span class="pre">&gt;</span> <span class="pre">1</span></code> 时只能取 <code class="docutils literal notranslate"><span class="pre">tensor_parallel</span></code> 或 <code class="docutils literal notranslate"><span class="pre">1</span></code>。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">moe_token_dispatcher_type</span></code></p></td>
+<td><p>str</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;alltoall&quot;</span></code></p></td>
+<td><p>token 分发方式：<code class="docutils literal notranslate"><span class="pre">alltoall</span></code> / <code class="docutils literal notranslate"><span class="pre">alltoall_deredundancy</span></code>。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">npu_nums_per_device</span></code></p></td>
+<td><p>int</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">8</span></code></p></td>
+<td><p>每节点 NPU 数，<code class="docutils literal notranslate"><span class="pre">alltoall_deredundancy</span></code> 约束所用。</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id22">
+<h3>5.4 场景化配置<a class="headerlink" href="#id22" title="Link to this heading"></a></h3>
+<section id="a-8-moe-ep-tp-tp">
+<h4>场景 A：单机 8 卡 MoE，EP ≤ TP（专家随 TP 切分）<a class="headerlink" href="#a-8-moe-ep-tp-tp" title="Link to this heading"></a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">tp=4</span></code>、<code class="docutils literal notranslate"><span class="pre">ep=2</span></code>（<code class="docutils literal notranslate"><span class="pre">ep</span> <span class="pre">&lt;=</span> <span class="pre">tp</span></code>），专家张量并行取 <code class="docutils literal notranslate"><span class="pre">tensor_parallel</span></code>。剩余 <code class="docutils literal notranslate"><span class="pre">data_parallel</span> <span class="pre">=</span> <span class="pre">8//(4*1*1)</span> <span class="pre">=</span> <span class="pre">2</span></code>。满足 <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">*</span> <span class="pre">2</span> <span class="pre">*</span> <span class="pre">1</span> <span class="pre">*</span> <span class="pre">4</span> <span class="pre">*</span> <span class="pre">1</span> <span class="pre">==</span> <span class="pre">8</span></code>。</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">parallelism</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">data_parallel_shard</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-1</span><span class="w">          </span><span class="c1"># = 2</span>
+<span class="w">  </span><span class="nt">tensor_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">  </span><span class="nt">expert_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w">               </span><span class="c1"># ep &lt;= tp</span>
+<span class="w">  </span><span class="nt">expert_tensor_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span><span class="w">        </span><span class="c1"># = tensor_parallel</span>
+<span class="w">  </span><span class="nt">moe_token_dispatcher_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;alltoall&quot;</span>
+<span class="w">  </span><span class="nt">context_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">pipeline_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+</section>
+<section id="b-16-moe-ep-tp">
+<h4>场景 B：多机 16 卡 MoE，EP &gt; TP + 去冗余分发<a class="headerlink" href="#b-16-moe-ep-tp" title="Link to this heading"></a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">tp=2</span></code>、<code class="docutils literal notranslate"><span class="pre">ep=8</span></code>（<code class="docutils literal notranslate"><span class="pre">ep</span> <span class="pre">&gt;</span> <span class="pre">tp</span></code>），专家不再做张量切分故 <code class="docutils literal notranslate"><span class="pre">expert_tensor_parallel:</span> <span class="pre">1</span></code>；用去冗余分发，要求 <code class="docutils literal notranslate"><span class="pre">ep(8)</span> <span class="pre">&gt;=</span> <span class="pre">npu_nums_per_device(8)</span></code>。剩余 <code class="docutils literal notranslate"><span class="pre">data_parallel</span> <span class="pre">=</span> <span class="pre">16//(2*1*1)</span> <span class="pre">=</span> <span class="pre">8</span></code>。满足 <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">*</span> <span class="pre">8</span> <span class="pre">*</span> <span class="pre">1</span> <span class="pre">*</span> <span class="pre">2</span> <span class="pre">*</span> <span class="pre">1</span> <span class="pre">==</span> <span class="pre">16</span></code>。</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">parallelism</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">data_parallel_shard</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-1</span><span class="w">          </span><span class="c1"># = 8</span>
+<span class="w">  </span><span class="nt">tensor_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">expert_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span><span class="w">               </span><span class="c1"># ep &gt; tp</span>
+<span class="w">  </span><span class="nt">expert_tensor_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w">        </span><span class="c1"># 专家只做 EP，不做 TP 切分</span>
+<span class="w">  </span><span class="nt">moe_token_dispatcher_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;alltoall_deredundancy&quot;</span>
+<span class="w">  </span><span class="nt">npu_nums_per_device</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span><span class="w">           </span><span class="c1"># 要求 expert_parallel &gt;= 此值</span>
+<span class="w">  </span><span class="nt">context_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">pipeline_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<hr class="docutils" />
+<section id="sp">
+<h2>六、序列并行（SP）<a class="headerlink" href="#sp" title="Link to this heading"></a></h2>
+<p>序列并行（SP）在 TP 的基础上，对 TP 未切分的部分（LayerNorm、Dropout、残差）按 <strong>序列维</strong> 进一步切分，降低这些算子的激活显存。</p>
+<p><strong>SP 随 TP 自动开启，当前不支持单独关闭</strong>：动态图 SPMD 路径中，<strong>只要开启 TP（<code class="docutils literal notranslate"><span class="pre">tensor_parallel</span> <span class="pre">&gt;</span> <span class="pre">1</span></code>）就会自动施加 SP</strong>：源码 <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/mindformers/pynative/base_models/gpt/parallelize.py"><code class="docutils literal notranslate"><span class="pre">base_models/gpt/parallelize.py</span></code></a> 调用 <code class="docutils literal notranslate"><span class="pre">apply_non_moe_tp</span></code> 时形参 <code class="docutils literal notranslate"><span class="pre">enable_sp</span></code> 恒为 <code class="docutils literal notranslate"><span class="pre">True</span></code>。SP 没有独立的配置开关——<code class="docutils literal notranslate"><span class="pre">parallelism</span></code> 段下即便写了 <code class="docutils literal notranslate"><span class="pre">sequence_parallel</span></code>，当前也不会被该路径读取，因此既无需手动开启、也暂不支持关闭。</p>
+<p>因此<strong>无需为 SP 单独配置</strong>：按本页第二节配好 TP（<code class="docutils literal notranslate"><span class="pre">tensor_parallel</span> <span class="pre">&gt;</span> <span class="pre">1</span></code>），SP 即自动生效。</p>
+</section>
+<hr class="docutils" />
+<section id="id23">
+<h2>组合约束<a class="headerlink" href="#id23" title="Link to this heading"></a></h2>
+<p>设备网格的总规模必须满足以下整除关系，否则 <code class="docutils literal notranslate"><span class="pre">ParallelDims._validate</span></code> / <code class="docutils literal notranslate"><span class="pre">_validate_meshes</span></code> 报错：</p>
+<ul class="simple">
+<li><p><strong>总规模</strong>：<code class="docutils literal notranslate"><span class="pre">dp_replicate</span> <span class="pre">*</span> <span class="pre">dp_shard</span> <span class="pre">*</span> <span class="pre">cp</span> <span class="pre">*</span> <span class="pre">tp</span> <span class="pre">*</span> <span class="pre">pp</span> <span class="pre">==</span> <span class="pre">world_size</span></code>（<code class="docutils literal notranslate"><span class="pre">world_size</span></code> 即 <code class="docutils literal notranslate"><span class="pre">msrun</span></code> 的总卡数）。其中 <code class="docutils literal notranslate"><span class="pre">dp_replicate</span></code> 与 <code class="docutils literal notranslate"><span class="pre">dp_shard</span></code> 由框架按上文「可配项 vs 派生量」推导，用户只配 <code class="docutils literal notranslate"><span class="pre">data_parallel_shard</span></code>。</p></li>
+<li><p><strong>数据并行总度</strong>：<code class="docutils literal notranslate"><span class="pre">data_parallel</span> <span class="pre">=</span> <span class="pre">world_size</span> <span class="pre">//</span> <span class="pre">(tp</span> <span class="pre">*</span> <span class="pre">pp</span> <span class="pre">*</span> <span class="pre">cp)</span></code>，必须 ≥ 1，且能被推导出的 <code class="docutils literal notranslate"><span class="pre">dp_shard</span></code> 整除。</p></li>
+<li><p><strong>TP / SP</strong>：<code class="docutils literal notranslate"><span class="pre">tensor_parallel</span> <span class="pre">&gt;</span> <span class="pre">1</span></code> 才有意义；SP 随 TP 自动开启（无独立开关，当前不支持关闭，见第六节）。</p></li>
+<li><p><strong>CP 方法</strong>：<code class="docutils literal notranslate"><span class="pre">ulysses</span></code> 要求 <code class="docutils literal notranslate"><span class="pre">ulysses_degree_in_cp</span> <span class="pre">==</span> <span class="pre">context_parallel</span></code>；<code class="docutils literal notranslate"><span class="pre">hybrid</span></code> 要求 <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">&lt;</span> <span class="pre">ulysses_degree_in_cp</span> <span class="pre">&lt;</span> <span class="pre">context_parallel</span></code> 且整除；<code class="docutils literal notranslate"><span class="pre">ulysses</span> <span class="pre">+</span> <span class="pre">async</span></code> 还要求 <code class="docutils literal notranslate"><span class="pre">num_attention_heads</span> <span class="pre">%</span> <span class="pre">ulysses_degree</span> <span class="pre">==</span> <span class="pre">0</span></code>；CP 启用时 FSDP 分片组规模为 <code class="docutils literal notranslate"><span class="pre">dp_shard</span> <span class="pre">*</span> <span class="pre">cp</span></code>。</p></li>
+<li><p><strong>EP</strong>：<code class="docutils literal notranslate"><span class="pre">expert_parallel</span> <span class="pre">&gt;</span> <span class="pre">1</span></code> 时 <code class="docutils literal notranslate"><span class="pre">expert_tensor_parallel</span></code> 只能取 <code class="docutils literal notranslate"><span class="pre">tensor_parallel</span></code> 或 <code class="docutils literal notranslate"><span class="pre">1</span></code>；<code class="docutils literal notranslate"><span class="pre">moe_token_dispatcher_type</span> <span class="pre">=</span> <span class="pre">alltoall_deredundancy</span></code> 时要求 <code class="docutils literal notranslate"><span class="pre">expert_parallel</span> <span class="pre">&gt;=</span> <span class="pre">npu_nums_per_device</span></code>。</p></li>
+</ul>
+</section>
+<section id="id24">
+<h2>启动<a class="headerlink" href="#id24" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>msrun<span class="w"> </span>--worker_num<span class="o">=</span><span class="m">8</span><span class="w"> </span>--local_worker_num<span class="o">=</span><span class="m">8</span><span class="w"> </span>--master_port<span class="o">=</span><span class="m">8118</span><span class="w"> </span>--join<span class="o">=</span>True<span class="w"> </span><span class="se">\</span>
+<span class="w">      </span>run_mindformer.py<span class="w"> </span>--config<span class="w"> </span>your_config.yaml<span class="w"> </span>--mode<span class="w"> </span><span class="m">1</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">--mode</span> <span class="pre">1</span></code> 表示 PYNATIVE（动态图）。<code class="docutils literal notranslate"><span class="pre">--worker_num</span></code> 即 <code class="docutils literal notranslate"><span class="pre">world_size</span></code>，须与上文整除关系一致。</p>
+</section>
+<section id="id25">
+<h2>相关文档<a class="headerlink" href="#id25" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>配置文件总览、<code class="docutils literal notranslate"><span class="pre">global_batch_size</span></code> / <code class="docutils literal notranslate"><span class="pre">local_batch_size</span></code> 与梯度累积：<a class="reference internal" href="configuration.html"><span class="std std-doc">配置文件说明</span></a></p></li>
+<li><p>数据按并行维度自动分片、每卡批大小推导：<a class="reference internal" href="dataset.html"><span class="std std-doc">数据集</span></a></p></li>
+<li><p>显存相关的并行/重计算/offload 优化：<a class="reference internal" href="memory_optimization.html"><span class="std std-doc">训练内存优化</span></a></p></li>
+<li><p>预训练中的并行场景实践：<a class="reference internal" href="#../guide/training.md"><span class="xref myst">训练指南</span></a></p></li>
+<li><p>端到端上手：<a class="reference internal" href="../quick_start/quick_start.html"><span class="std std-doc">快速开始</span></a></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="training_hyperparameters.html" class="btn btn-neutral float-left" title="训练超参数与优化器" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="memory_optimization.html" class="btn btn-neutral float-right" title="训练内存优化" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

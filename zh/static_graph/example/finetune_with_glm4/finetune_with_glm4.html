@@ -1,0 +1,423 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>使用GLM4-9B进行多卡模型微调的实践案例 &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="环境变量说明" href="../../env_variables.html" />
+    <link rel="prev" title="MindSpore Transformers对接通用评测工具的实践案例" href="../model_test/model_test.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">介绍</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quick_start/quick_start.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction/models.html">模型支持库</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">安装</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">安装指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">功能特性</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../feature/overview.html">功能特性概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feature/start_task.html">启动任务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feature/configuration.html">配置文件说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feature/logging.html">日志</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feature/dataset.html">数据集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feature/training_hyperparameters.html">训练超参数与优化器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feature/parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feature/memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feature/save_and_load_checkpoint.html">权重保存与加载</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feature/resume_training.html">断点续训</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feature/monitor.html">训练指标监控与 Profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feature/other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feature/static_graph_features.html">静态图实现特性</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">环境变量</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../env_variables.html">环境变量说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">贡献指南</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution/mindformers_contribution.html">MindSpore Transformers贡献指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution/modelers_contribution.html">魔乐社区贡献指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../faq/model_related.html">模型相关 FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../faq/feature_related.html">功能相关 FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">静态图实现（Deprecated）</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guide/index.html">大模型全流程指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/index.html">功能特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced_development/index.html">高阶开发</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">优秀实践</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../docker-installation.html">制作 MindSpore Transformers 的 Docker 镜像的实践案例</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../distilled/distilled.html">使用DeepSeek-R1进行模型蒸馏的实践案例</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../convert_ckpt_to_megatron/convert_ckpt_to_megatron.html">转换模型权重为Megatron模型权重的实践案例</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model_test/model_test.html">MindSpore Transformers对接通用评测工具的实践案例</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">使用GLM4-9B进行多卡模型微调的实践案例</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">1. 环境搭建</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">2. 数据集准备</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">3. 多卡训练</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id4">3.1 权重转换</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id5">3.2 并行策略配置与训练启动</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id6">3.3 权重合并</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id7">3.4 权重反向转换</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">推理测试</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../env_variables.html">环境变量说明</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">优秀实践</a></li>
+      <li class="breadcrumb-item active">使用GLM4-9B进行多卡模型微调的实践案例</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/static_graph/example/finetune_with_glm4/finetune_with_glm4.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">已废弃（Deprecated）</p>
+<p>本页属于 <strong>静态图（GRAPH_MODE）实现</strong> 章节，已标记为废弃。新特性优先在「r2.0.0 动态图实现」章节演进，请优先查阅动态图相关文档。</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="glm4-9b">
+<h1>使用GLM4-9B进行多卡模型微调的实践案例<a class="headerlink" href="#glm4-9b" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/static_graph/example/finetune_with_glm4/finetune_with_glm4.md"><img alt="查看源文件" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source.svg" /></a></p>
+<p>本文由Killjoy, chen-xialei, fuyao-15989607593, laozhuang, oacjiewen贡献。</p>
+<p>本案例基于MindSpore框架和MindSpore Transformers大模型套件，指导用户对GLM4-9B模型进行微调，以提升其在自定义任务上的性能。涵盖了从环境配置、数据准备、权重转换、模型训练、权重合并、反转和推理测试的完整流程。通过以下步骤，您可以了解如何利用MindSpore Transformers对模型进行训练。</p>
+<section id="id1">
+<h2>1. 环境搭建<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<p>参考<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/installation.html">MindSpore Transformers 环境安装</a>搭建环境。</p>
+</section>
+<section id="id2">
+<h2>2. 数据集准备<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p>MindSpore Transformers接收输入的数据集格式之一为<code class="docutils literal notranslate"><span class="pre">MindRecord</span></code>格式，下面演示如何将原始数据集进行格式转换。原始数据集的类型不限，可以选择使用可以选择开源数据集（如Alpaca）或自定义数据集。首先将数据集转换为json格式，且数据集里的每一行数据应当处理为对话形式，即用户与模型的一问一答。然后通过MindSpore Transformers提供的脚本将其处理成MindRecord格式。下面以<code class="docutils literal notranslate"><span class="pre">Alpaca</span></code>数据集为例展示处理流程。Alpaca数据集包含52k条指令数据，适合对预训练的大语言模型进行指令微调。</p>
+<ol class="arabic simple">
+<li><p>首先下载<a class="reference external" href="https://www.modelscope.cn/datasets/AI-ModelScope/alpaca-gpt4-data-en/files">Alpaca数据集</a>。</p></li>
+<li><p>打开<code class="docutils literal notranslate"><span class="pre">train.csv</span></code>，可以看到alpaca数据集包含四个属性：<code class="docutils literal notranslate"><span class="pre">instruction</span></code>、<code class="docutils literal notranslate"><span class="pre">input</span></code>、<code class="docutils literal notranslate"><span class="pre">output</span></code>、<code class="docutils literal notranslate"><span class="pre">text</span></code>。<code class="docutils literal notranslate"><span class="pre">text</span></code>是对该条数据集的解释，可以忽略。</p></li>
+<li><p>将该数据集转换为用户与模型的对话格式，方法是：将<code class="docutils literal notranslate"><span class="pre">instruction</span></code>与<code class="docutils literal notranslate"><span class="pre">input</span></code>拼接，作为用户的输入，将<code class="docutils literal notranslate"><span class="pre">output</span></code>作为模型的输出，设置对话格式为<code class="docutils literal notranslate"><span class="pre">chatml</span></code>，设置对话输入方为<code class="docutils literal notranslate"><span class="pre">human</span></code>，输出方为<code class="docutils literal notranslate"><span class="pre">gpt</span></code>。</p></li>
+</ol>
+<p>例如，<code class="docutils literal notranslate"><span class="pre">Alpaca</span></code>数据集的第一条为：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>&quot;instruction&quot;: &quot;Give three tips for staying healthy.&quot;
+&quot;input&quot;: &quot;&quot;
+&quot;output&quot;: &quot;1. Eat a balanced and nutritious diet...&quot;
+&quot;text&quot;: &quot;Below is an instruction that describes a task. Write a response...&quot;
+</pre></div>
+</div>
+<p>则处理后的数据集应为以下格式：</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;chatml&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;conversations&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;from&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;human&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Give three tips for staying healthy.&quot;</span>
+<span class="w">            </span><span class="p">},</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;from&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;gpt&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1. Eat a balanced and nutritious diet...&quot;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">]</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="err">#</span><span class="w">  </span><span class="s2">&quot;第二条数据...&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="err">...</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>在处理完数据集后，使用MindSpore Transformers提供的数据处理脚本，生成MindRecord格式数据集。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>mindformers/tools/dataset_preprocess/glm4/glm4_preprocess.py<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--input_glob<span class="w"> </span>/path/to/dataset<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--vocab_file<span class="w"> </span>/path/tokenizer.model<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--seq_length<span class="w"> </span><span class="m">8192</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--output_file<span class="w"> </span>/path/output_dataset.mindrecord
+</pre></div>
+</div>
+<p>注意<code class="docutils literal notranslate"><span class="pre">--seq_length</span></code>参数应当按照数据集的实际情况进行调整，保证该参数大于数据集中所有对话的长度。</p>
+</section>
+<section id="id3">
+<h2>3. 多卡训练<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<section id="id4">
+<h3>3.1 权重转换<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p>MindSpore Transformers在多卡训练时，需要预先将权重进行转换，转换为MindSpore的权重表示格式。首先下载<a class="reference external" href="https://huggingface.co/zai-org/glm-4-9b-chat-hf">GLM4-9B模型</a>。下载后的文件目录如下所示：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>- config.json
+- configuration.json
+- generation_config.json
+- model-00001-of-00004.safetensors
+- model-00002-of-00004.safetensors
+- model-00003-of-00004.safetensors
+- model-00004-of-00004.safetensors
+- model.safetensors.index.json
+- tokenizer.json
+- tokenizer_config.json
+</pre></div>
+</div>
+<p>权重转换脚本依赖torch，运行前请执行如下指令安装torch：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>torch&gt;<span class="o">=</span><span class="m">2</span>.10.0
+</pre></div>
+</div>
+<p>然后进行权重转换：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>convert_weight.py<span class="w"> </span>--model<span class="w"> </span>glm4<span class="w"> </span>--input_path<span class="w"> </span>HF_CKPT_PATH<span class="w"> </span>--output_path<span class="w"> </span>MS_NOT_CONCAT_CKPT_PATH<span class="w"> </span>--dtype<span class="w"> </span>bf16<span class="w"> </span>--config<span class="w"> </span>YAML_PATH
+</pre></div>
+</div>
+<p>其中<code class="docutils literal notranslate"><span class="pre">convert_weight.py</span></code>文件位于<a class="reference external" href="https://atomgit.com/mindspore/mindformers">MindSpore Transformers仓库</a>根目录下。</p>
+<p>参数含义：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--model</span></code> 要转换的模型名。此处填写<code class="docutils literal notranslate"><span class="pre">glm4</span></code>即可。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--input_path</span></code> 待转换的模型权重路径。此处填写下载的GLM4的Hugging Face权重路径。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--output_path</span></code> 转换后的权重保存路径。此处根据用户需求自行填写。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--dtype</span></code> 权重的数值类型。可查看下载的模型的<code class="docutils literal notranslate"><span class="pre">config</span></code>文件，类型与Hugging Face权重格式一致即可。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--config</span></code> 权重转换的参数配置文件路径。参数配置文件可参考<code class="docutils literal notranslate"><span class="pre">mindformers/configs/glm4/finetune_glm4_9b.yaml</span></code>进行调整，注意其中的<code class="docutils literal notranslate"><span class="pre">seq_length</span></code>属性应当和MindRecord转换时使用的长度相同，然后将此处路径改为调整好的路径即可。</p></li>
+</ul>
+<p>在权重转换之后，输出为整个模型权重的ckpt文件。如果提示<code class="docutils literal notranslate"><span class="pre">trust_remote_code</span></code>相关错误，按照提示设置<code class="docutils literal notranslate"><span class="pre">trust_remote_code=True</span></code>即可。</p>
+</section>
+<section id="id5">
+<h3>3.2 并行策略配置与训练启动<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<p>启动首次微调任务：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bash<span class="w"> </span>scripts/msrun_launcher.sh<span class="w"> </span><span class="s2">&quot;run_mindformer.py \</span>
+<span class="s2"> --config configs/glm4/finetune_glm4_9b.yaml \</span>
+<span class="s2"> --load_checkpoint /path/to/ckpt \</span>
+<span class="s2"> --auto_trans_ckpt True \</span>
+<span class="s2"> --train_dataset /path/to/dataset \</span>
+<span class="s2"> --run_mode finetune&quot;</span><span class="w"> </span><span class="m">8</span>
+</pre></div>
+</div>
+<p>其中参数<code class="docutils literal notranslate"><span class="pre">--auto_trans_ckpt</span></code>配置为True会根据<code class="docutils literal notranslate"><span class="pre">finetune_glm4_9b.yaml</span></code>中的<code class="docutils literal notranslate"><span class="pre">parallel</span> <span class="pre">config</span></code>自动对权重进行切分/合并，并生成权重文件夹<code class="docutils literal notranslate"><span class="pre">transformed_checkpoint</span></code>和分布式策略文件夹<code class="docutils literal notranslate"><span class="pre">strategy</span></code>。最后的<code class="docutils literal notranslate"><span class="pre">8</span></code>代表8卡训练，如果是采用其他卡的数量，需要对应修改。</p>
+<blockquote>
+<div><p>开启了权重自动转换（auto_trans_ckpt=True），会将原有的<code class="docutils literal notranslate"><span class="pre">strategy</span></code>和<code class="docutils literal notranslate"><span class="pre">transformed_checkpoint</span></code>文件夹清空，然后保存最新任务的转换结果。如有需要，请将其保存到自定义文件夹。</p>
+</div></blockquote>
+<p>在使用断点恢复训练时，可在上一条命令的命令中加上/修改以下参数：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>--load_checkpoint /path/to/last_checkpoint \
+--resume_training True \
+--auto_trans_ckpt False
+</pre></div>
+</div>
+<p>当分布式训练开始时，训练的log日志会出现在<code class="docutils literal notranslate"><span class="pre">/mindformers/output/msrun_log/</span></code>文件夹下，打开<code class="docutils literal notranslate"><span class="pre">worker_0.log</span></code>可关注训练过程是否正常进行。</p>
+</section>
+<section id="id6">
+<h3>3.3 权重合并<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<p>由于多卡训练时进行了权重分割，在完成训练后需要如下执行脚本进行权重合并：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>mindformers/tools/transform_ckpt.py<span class="w"> </span>--src_ckpt_strategy<span class="w"> </span>SRC_CKPT_STRATEGY<span class="w"> </span>--dst_ckpt_strategy<span class="w"> </span>None<span class="w"> </span>--src_ckpt_dir<span class="w"> </span>SRC_CKPT_DIR<span class="w"> </span>--dst_ckpt_dir<span class="w"> </span>DST_CKPT_DIR
+</pre></div>
+</div>
+<p>部分重要参数解释：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--src_ckpt_strategy</span></code>：待转换权重的分布式策略文件路径（该文件为训练时生成）。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--src_ckpt_dir</span></code>: 待转换权重路径（该文件为训练时生成）。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--dst_ckpt_strategy</span></code>：目标权重的分布式策略文件路径，此处因为合并后的权重为完整权重，没有分布式策略，所以填<code class="docutils literal notranslate"><span class="pre">None</span></code>。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--dst_ckpt_dir</span></code>：自定义目标权重保存路径。</p></li>
+</ul>
+<p>详细参数解释可见<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/ckpt.html">Ckpt权重 | MindSpore Transformers 文档 | 昇思MindSpore社区</a>。</p>
+</section>
+<section id="id7">
+<h3>3.4 权重反向转换<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<p>由于训练过程中采用的是MindSpore版本的权重格式，如果需要用vLLM等推理框架进行部署的话，需要转换为Hugging Face权重格式。转换权重本质上是要让权重的字典与Hugging Face模型的字典一一对应。因此，我们在官方脚本 <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/mindformers/models/glm2/convert_reversed.py">convert_reversed.py</a> 的基础上进行改写，该脚本已经实现了权重格式的转换以及字典名的对应，仅需要修改的地方为保存的部分。首先分析代码，修改的函数为<code class="docutils literal notranslate"><span class="pre">convert_ms_to_pt</span></code>：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;saving pt ckpt....&#39;</span><span class="p">)</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">pt_param</span><span class="p">,</span> <span class="n">output_path</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Convert finished, the output is saved to </span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>该部分为原文件模型保存的过程，现在将其改写为保存为safetensors格式的功能。</p>
+<p>首先，删除以上三行，并在头文件里引入保存safetensors格式的库：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">safetensors.torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">save_file</span>
+</pre></div>
+</div>
+<p>由于一个safetensors文件不能太大，所以需要事先设定一个值，将模型分为<code class="docutils literal notranslate"><span class="pre">split_num</span></code>份保存，该参数可以通过参数<code class="docutils literal notranslate"><span class="pre">--safetensor_split_num</span></code>传入。脚本里面存全部权重的变量为字典 <code class="docutils literal notranslate"><span class="pre">pt_param</span></code> ，首先把这个字典分成<code class="docutils literal notranslate"><span class="pre">split_num</span></code>份：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">split_dict</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    将字典d均匀分成n份。</span>
+<span class="sd">    返回一个列表，其中每个元素是一个字典。</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">items</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+    <span class="n">k</span><span class="p">,</span> <span class="n">m</span> <span class="o">=</span> <span class="nb">divmod</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">),</span> <span class="n">n</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="nb">dict</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="n">k</span> <span class="o">+</span> <span class="nb">min</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">m</span><span class="p">):(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">k</span> <span class="o">+</span> <span class="nb">min</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">m</span><span class="p">)])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+
+<span class="n">split_dicts</span> <span class="o">=</span> <span class="n">split_dict</span><span class="p">(</span><span class="n">pt_param</span><span class="p">,</span> <span class="n">split_num</span><span class="p">)</span> <span class="c1"># 将整个模型的权重分割成多个safetensors进行保存</span>
+</pre></div>
+</div>
+<p>转换为safetensors格式时，需要一个 <code class="docutils literal notranslate"><span class="pre">model.safetensors.index.json</span></code> 文件来记录模型的每一层权重保存在了哪里，所以需要在保存权重的时候记录这些信息：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">converted_st_map</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">()</span>
+<span class="n">converted_st_map</span><span class="p">[</span><span class="s2">&quot;weight_map&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">()</span>
+<span class="n">converted_st_map</span><span class="p">[</span><span class="s2">&quot;metadata&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">split_id</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">split_dicts</span><span class="p">)):</span>
+    <span class="n">saving_file_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;model-</span><span class="si">{</span><span class="n">split_id</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">:</span><span class="s2">05d</span><span class="si">}</span><span class="s2">-of-</span><span class="si">{</span><span class="n">split_num</span><span class="si">:</span><span class="s2">05d</span><span class="si">}</span><span class="s2">.safetensors&quot;</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;saving weights in split-</span><span class="si">{</span><span class="n">split_id</span><span class="w">  </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2"> to file </span><span class="si">{</span><span class="n">saving_file_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">split_dicts</span><span class="p">[</span><span class="n">split_id</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">ckpt_dict</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;处理检查点&quot;</span><span class="p">):</span>
+        <span class="n">converted_st_map</span><span class="p">[</span><span class="s2">&quot;weight_map&quot;</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">saving_file_name</span>
+        <span class="n">total_size</span> <span class="o">+=</span> <span class="n">get_torch_storage_size</span><span class="p">(</span><span class="n">split_dicts</span><span class="p">[</span><span class="n">split_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+    <span class="n">save_file</span><span class="p">(</span><span class="n">split_dicts</span><span class="p">[</span><span class="n">split_id</span><span class="p">],</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="n">saving_file_name</span><span class="p">))</span>
+
+<span class="n">converted_st_map</span><span class="p">[</span><span class="s2">&quot;metadata&quot;</span><span class="p">][</span><span class="s2">&quot;total_size&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">total_size</span>
+<span class="n">converted_model_index_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;model.safetensors.index.json&quot;</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">converted_model_index_file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">json_string</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">converted_st_map</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json_string</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>运行反向转换脚本。此时文件目录下已经保存好了转换后的safetensors格式权重文件,和一个 <code class="docutils literal notranslate"><span class="pre">model.safetensors.index.json</span></code> ，文件目录如下（假设权重分为40份存储，即<code class="docutils literal notranslate"><span class="pre">--safetensor_split_num</span></code>传入的值为40）：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>- model-00001-of-00040.safetensors
+- model-00002-of-00040.safetensors
+- model-00003-of-00040.safetensors
+...
+- model-00039-of-00040.safetensors
+- model-00040-of-00040.safetensors
+- model.safetensors.index.json
+</pre></div>
+</div>
+<p>此时，需要找到模型原来的仓库，把tokenizer等剩余文件复制过来，复制好的目录文件为：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>- model-00001-of-00040.safetensors
+- model-00002-of-00040.safetensors
+- model-00003-of-00040.safetensors
+...
+- model-00039-of-00040.safetensors
+- model-00040-of-00040.safetensors
+- model.safetensors.index.json
+- config.json
+- configuration_chatglm.py
+- generation_config.json
+- modeling_chatglm.py
+- tokenization_chatglm.py
+- tokenizer_config.json
+- tokenizer.model
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id8">
+<h2>推理测试<a class="headerlink" href="#id8" title="Link to this heading"></a></h2>
+<p>您可以在NPU或GPU机器上使用PyTorch框架测试反转后的权重。以下给出一个NPU+PyTorch的简单示例程序，参考<a class="reference external" href="https://www.hiascend.com/document/detail/zh/Pytorch/710/index/index.html">文档</a>安装相关依赖后，运行程序测试能否正常加载反转后的模型权重并进行推理。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoModelForCausalLM</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch_npu</span>  <span class="c1"># 导入PyTorch NPU适配库</span>
+
+<span class="c1"># 加载模型和分词器</span>
+<span class="n">model_name</span> <span class="o">=</span> <span class="s2">&quot;/path/to/model&quot;</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;npu:0&quot;</span><span class="p">)</span>
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForCausalLM</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">half</span><span class="p">()</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="c1"># 将模型设置为评估模式</span>
+<span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+<span class="c1"># 输入文本</span>
+<span class="n">input_text</span> <span class="o">=</span> <span class="s2">&quot;人工智能的未来发展&quot;</span>
+<span class="c1"># 编码输入</span>
+<span class="n">input_ids</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">input_text</span><span class="p">,</span> <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span>
+        <span class="n">input_ids</span><span class="p">,</span>
+        <span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>  <span class="c1"># 最大生成长度</span>
+        <span class="n">num_return_sequences</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>  <span class="c1"># 返回的序列数</span>
+        <span class="n">no_repeat_ngram_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>  <span class="c1"># 避免重复的n-gram</span>
+        <span class="c1"># early_stopping=True  # 提前停止</span>
+    <span class="p">)</span>
+
+<span class="c1"># 解码输出</span>
+<span class="n">generated_text</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;生成的文本:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">generated_text</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>运行结果示例：</p>
+<p><img alt="运行结果" src="../../../_images/execution_result.jpg" /></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../model_test/model_test.html" class="btn btn-neutral float-left" title="MindSpore Transformers对接通用评测工具的实践案例" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../env_variables.html" class="btn btn-neutral float-right" title="环境变量说明" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

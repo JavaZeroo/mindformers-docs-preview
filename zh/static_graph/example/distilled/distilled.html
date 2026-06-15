@@ -1,0 +1,501 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>使用DeepSeek-R1进行模型蒸馏的实践案例 &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="转换模型权重为Megatron模型权重的实践案例" href="../convert_ckpt_to_megatron/convert_ckpt_to_megatron.html" />
+    <link rel="prev" title="制作 MindSpore Transformers 的 Docker 镜像的实践案例" href="../docker-installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">介绍</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quick_start/quick_start.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction/models.html">模型支持库</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">安装</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">安装指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">功能特性</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../feature/overview.html">功能特性概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feature/start_task.html">启动任务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feature/configuration.html">配置文件说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feature/logging.html">日志</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feature/dataset.html">数据集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feature/training_hyperparameters.html">训练超参数与优化器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feature/parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feature/memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feature/save_and_load_checkpoint.html">权重保存与加载</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feature/resume_training.html">断点续训</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feature/monitor.html">训练指标监控与 Profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feature/other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feature/static_graph_features.html">静态图实现特性</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">环境变量</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../env_variables.html">环境变量说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">贡献指南</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution/mindformers_contribution.html">MindSpore Transformers贡献指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution/modelers_contribution.html">魔乐社区贡献指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../faq/model_related.html">模型相关 FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../faq/feature_related.html">功能相关 FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">静态图实现（Deprecated）</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guide/index.html">大模型全流程指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/index.html">功能特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced_development/index.html">高阶开发</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">优秀实践</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../docker-installation.html">制作 MindSpore Transformers 的 Docker 镜像的实践案例</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">使用DeepSeek-R1进行模型蒸馏的实践案例</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">1. 前提准备</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id2">1.1 环境</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">1.2 模型</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">1.3 数据集</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#yaml">1.4 YAML配置</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">2. 启动微调</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id9">3. 执行推理</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id10">4. 评估结果</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../convert_ckpt_to_megatron/convert_ckpt_to_megatron.html">转换模型权重为Megatron模型权重的实践案例</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model_test/model_test.html">MindSpore Transformers对接通用评测工具的实践案例</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../finetune_with_glm4/finetune_with_glm4.html">使用GLM4-9B进行多卡模型微调的实践案例</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../env_variables.html">环境变量说明</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">优秀实践</a></li>
+      <li class="breadcrumb-item active">使用DeepSeek-R1进行模型蒸馏的实践案例</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/static_graph/example/distilled/distilled.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">已废弃（Deprecated）</p>
+<p>本页属于 <strong>静态图（GRAPH_MODE）实现</strong> 章节，已标记为废弃。新特性优先在「r2.0.0 动态图实现」章节演进，请优先查阅动态图相关文档。</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="deepseek-r1">
+<h1>使用DeepSeek-R1进行模型蒸馏的实践案例<a class="headerlink" href="#deepseek-r1" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/static_graph/example/distilled/distilled.md"><img alt="查看源文件" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source.svg" /></a></p>
+<p>本案例参考OpenR1-Qwen-7B，旨在指导用户基于MindSpore框架和MindSpore Transformers大模型套件，使用DeepSeek-R1对Qwen2.5-Math-7B模型进行知识蒸馏和微调，以提升其在数学推理任务上的性能。案例涵盖了从环境配置、数据生成、预处理到模型微调和推理测试的完整流程。通过以下步骤，您可以了解如何利用DeepSeek-R1生成推理数据、过滤错误数据、处理数据集，并最终对模型进行微调以解决复杂的数学问题。</p>
+<p>蒸馏流程：</p>
+<p><img alt="蒸馏流程" src="../../../_images/distilled_process.png" /></p>
+<p>更多信息请参考<a class="reference external" href="https://hf-mirror.com/deepseek-ai/DeepSeek-R1-Distill-Qwen-7B">DeepSeek-R1-Distill-Qwen-7B</a>。</p>
+<section id="id1">
+<h2>1. 前提准备<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<section id="id2">
+<h3>1.1 环境<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<p>安装方式请参考<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/installation.html">MindSpore Transformers安装指南</a>。</p>
+<p>并将本案例的<a class="reference external" href="https://atomgit.com/mindspore/docs/tree/master/docs/mindformers/docs/source_zh_cn/example/distilled/distilled">distilled</a>文件夹，复制到MindSpore Transformers源码根目录下。</p>
+<p>最后得到的目录结构如下：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mindformers
+├──<span class="w"> </span>...
+└──<span class="w"> </span>distilled
+<span class="w">    </span>├──<span class="w"> </span>data_process_handling.yaml<span class="w">  </span><span class="c1"># 数据集处理配置文件</span>
+<span class="w">    </span>├──<span class="w"> </span>data_process_packing.yaml<span class="w">   </span><span class="c1"># 数据集packing配置文件</span>
+<span class="w">    </span>├──<span class="w"> </span>finetune_qwen_2_5_7b.yaml<span class="w">   </span><span class="c1"># 微调配置文件</span>
+<span class="w">    </span>├──<span class="w"> </span>generate_reasoning.py<span class="w">       </span><span class="c1"># 生成CoT数据脚本</span>
+<span class="w">    </span>└──<span class="w"> </span>reject_sampling.py<span class="w">          </span><span class="c1"># 拒绝采样脚本</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>本案例的指令均在MindSpore Transformers源码根目录下执行。</p>
+</div></blockquote>
+</section>
+<section id="id3">
+<h3>1.2 模型<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p>本次微调使用的模型为Qwen2.5-Math-7B-Instruct，可以在<a class="reference external" href="https://modelers.cn/models/MindSpore-Lab/Qwen2.5-Math-7B-Instruct">魔乐社区</a>下载。</p>
+</section>
+<section id="id4">
+<h3>1.3 数据集<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p>本案例提供三种数据集的准备方式：</p>
+<ul class="simple">
+<li><p><strong>从零开始生成数据集</strong>：适合希望自定义数据集或深入了解数据生成流程的用户。包括从种子数据集生成CoT数据和拒绝采样。请从<a class="reference internal" href="#id5">1.3.1 从零开始生成数据集</a>开始。</p></li>
+<li><p><strong>使用OpenR1-Math-220K数据集</strong>：</p>
+<ul>
+<li><p><strong>选项1: 使用原始数据离线处理</strong>：适合需要自定义数据处理或学习处理流程的用户。包括预处理和packing。请从<a class="reference internal" href="#id6">选项1: 使用原始数据离线处理</a>开始。</p></li>
+<li><p><strong>选项2: 使用已处理好的数据</strong>：适合希望快速开始训练的用户。案例提供预处理好的OpenR1-Math-220K数据集。请从<a class="reference internal" href="#id7">选项2: 使用已处理好的数据</a>开始。</p></li>
+</ul>
+</li>
+</ul>
+<section id="id5">
+<h4>1.3.1 从零开始生成数据集<a class="headerlink" href="#id5" title="Link to this heading"></a></h4>
+<p><strong>适用场景</strong>：适合希望自定义数据集或学习数据生成流程的用户。</p>
+<blockquote>
+<div><p>生成数据集流程仅作为示例，如需生成高质量数据集，建议参考<a class="reference external" href="https://huggingface.co/datasets/open-r1/OpenR1-Math-220k">OpenR1-Math-220k</a>的数据集生成流程。</p>
+</div></blockquote>
+<ol class="arabic">
+<li><p>安装依赖</p>
+<p>执行以下命令安装所需依赖：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>datasets<span class="w"> </span>tqdm<span class="w"> </span>aiofiles<span class="w"> </span>aiohttp<span class="w"> </span>uvloop<span class="w"> </span>math_verify
+</pre></div>
+</div>
+</li>
+<li><p>本地部署Deepseek-R1</p>
+<p>参考<a class="reference external" href="https://modelers.cn/models/MindSpore-Lab/DeepSeek-R1">MindSpore-Lab/DeepSeek-R1 | 魔乐社区</a>在本地部署DeepSeek-R1推理服务，或是使用公开的API服务。</p>
+</li>
+<li><p>生成数据</p>
+<p><strong>目标</strong>：利用DeepSeek-R1模型为数学问题生成Chain-of-Thought（CoT）推理数据，用于后续的数据蒸馏。</p>
+<p>首先需要在脚本<code class="docutils literal notranslate"><span class="pre">generate_reasoning.py</span></code>中修改API_KEY。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">API_KEY</span> <span class="o">=</span> <span class="s2">&quot;your_api_key_here&quot;</span>
+</pre></div>
+</div>
+<p>执行以下命令调用推理服务的接口，使用种子数据集中的问题，生成CoT数据：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>distilled/generate_reasoning.py<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--model<span class="w"> </span>DeepSeek-R1<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--dataset-name<span class="w"> </span>AI-MO/NuminaMath-1.5<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--output-file<span class="w"> </span>/path/to/numinamath_r1_generations.jsonl<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--prompt-column<span class="w"> </span>problem<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--uuid-column<span class="w"> </span>problem<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--api-addr<span class="w"> </span>api.host.name<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--num-generations<span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--max-tokens<span class="w"> </span><span class="m">16384</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--max-concurrent<span class="w"> </span><span class="m">100</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>作用</strong>：调用DeepSeek-R1推理服务，基于<a class="reference external" href="https://huggingface.co/datasets/AI-MO/NuminaMath-1.5">AI-MO/NuminaMath-1.5</a>数据集中的数学问题（<code class="docutils literal notranslate"><span class="pre">problem</span></code>列）生成推理路径。</p></li>
+<li><p><strong>参数说明</strong>：</p>
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">--model</span></code></strong>: 推理服务的模型名，需要和服务化配置文件 <code class="docutils literal notranslate"><span class="pre">config.json</span></code> 中的 <code class="docutils literal notranslate"><span class="pre">modelName</span></code> 一致。</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">--dataset-name</span></code></strong>：种子数据集名称，配置为HuggingFace Datasets名称或本地的数据集路径。</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">--output-file</span></code></strong>：输出CoT数据文件的文件名。</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">--prompt-column</span></code></strong>：种子数据集中提示词的列名，使用此列的数据进行CoT数据生成。</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">--uuid-column</span></code></strong>：种子数据集中uuid的列名，使用此列计算哈希值去重数据。</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">--api-addr</span></code></strong>：推理服务api的地址，配置为 <code class="docutils literal notranslate"><span class="pre">ip:port</span></code> 。</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">--num-generations</span></code></strong>：对于种子数据集中每个问题生成CoT数据的数量。</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">--max-tokens</span></code></strong>：生成的CoT数据的最大Token数。</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">--max-concurrent</span></code></strong>：请求的最大并发数量。</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>拒绝采样</p>
+<p><strong>目标</strong>：过滤掉推理数据中的错误或不准确的CoT数据，确保数据质量。</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>distilled/reject_sampling.py<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--src<span class="w"> </span>/path/to/numinamath_r1_generations.jsonl<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--dst<span class="w"> </span>/path/to/numinamath_r1_generations_filtered.jsonl
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>作用</strong>：使用<code class="docutils literal notranslate"><span class="pre">math_verify</span></code>库验证<code class="docutils literal notranslate"><span class="pre">numinamath_r1_generations.jsonl</span></code>中的推理路径，剔除错误的CoT数据。</p></li>
+<li><p><strong>参数说明</strong>：</p>
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">--src</span></code></strong>：输入的CoT数据文件路径。</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">--dst</span></code></strong>：输出的过滤后的CoT数据文件路径。</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>数据集预处理</p>
+<p>跳转到<a class="reference internal" href="#id6">选项-1-使用原始数据离线处理</a>的中的<strong>步骤一</strong>，并将生成的CoT数据转换为MindSpore Transformers支持的格式。</p>
+<p><strong>此时的数据集格式为jsonl格式，和原始数据集的parquet格式不一致，并且<code class="docutils literal notranslate"><span class="pre">data_files</span></code>中只包含一个<code class="docutils literal notranslate"><span class="pre">numinamath_r1_generations_filtered.jsonl</span></code>文件。按照以下格式修改配置文件<code class="docutils literal notranslate"><span class="pre">data_process_handling.yaml</span></code></strong>：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">train_dataset</span><span class="p">:</span>
+<span class="nn">...</span>
+<span class="nt">data_loader</span><span class="p">:</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">path</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;json&quot;</span>
+<span class="w">    </span><span class="nt">data_files</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">[</span><span class="s">&quot;/path/to/numinamath_r1_generations_filtered.jsonl&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="openr1-math-220k">
+<h4>1.3.2 使用OpenR1-Math-220K数据集<a class="headerlink" href="#openr1-math-220k" title="Link to this heading"></a></h4>
+<p><strong>适用场景</strong>：适合希望使用高质量预蒸馏数据集进行微调的用户。</p>
+<p>如果使用OpenR1-Math-220K数据集（已经过DeepSeek-R1蒸馏）进行微调，我们提供<a class="reference internal" href="#id6">详细制作流程</a>以及<a class="reference internal" href="#id7">转换后的数据集</a>。</p>
+<section id="id6">
+<h5>选项 1: 使用原始数据离线处理<a class="headerlink" href="#id6" title="Link to this heading"></a></h5>
+<p>首先在HuggingFace上下载<a class="reference external" href="https://huggingface.co/datasets/open-r1/OpenR1-Math-220K">OpenR1-Math-220K</a>原始数据集。</p>
+<p>步骤一、<strong>数据集预处理</strong></p>
+<p><strong>目标</strong>：将原始数据集（例如OpenR1-Math-220K）转换为适合MindSpore Transformers微调的格式。</p>
+<p>首先需要修改数据集处理的配置文件<code class="docutils literal notranslate"><span class="pre">data_process_handling.yaml</span></code>：</p>
+<ol class="arabic">
+<li><p>将MindSpore Transformers源码根目录下的<code class="docutils literal notranslate"><span class="pre">research/qwen2_5/qwen2_5_tokenizer.py</span></code>文件复制到<code class="docutils literal notranslate"><span class="pre">distilled</span></code>目录下。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cp<span class="w"> </span>research/qwen2_5/qwen2_5_tokenizer.py<span class="w"> </span>distilled/
+</pre></div>
+</div>
+</li>
+<li><p>修改数据集文件路径：将<code class="docutils literal notranslate"><span class="pre">data_files</span></code>中的路径替换为原始数据集的路径。每一个parquet文件都需要在这里列出。</p>
+<ul class="simple">
+<li><p>例如：<code class="docutils literal notranslate"><span class="pre">[&quot;/path/to/data1.parquet&quot;,</span> <span class="pre">&quot;/path/to/data2.parquet&quot;,</span> <span class="pre">...]</span></code>。</p></li>
+</ul>
+</li>
+<li><p>修改tokenizer的路径：将<code class="docutils literal notranslate"><span class="pre">vocab_file</span></code>和<code class="docutils literal notranslate"><span class="pre">merges_file</span></code>替换为Qwen2.5-7B-Instruct模型的<strong>词表文件</strong>和<strong>merges文件</strong>的路径。</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">train_dataset</span><span class="p">:</span>
+<span class="nt">input_columns</span><span class="p">:</span><span class="w"> </span><span class="nl">&amp;input_columns</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;input_ids&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;labels&quot;</span><span class="p p-Indicator">]</span>
+<span class="nt">data_loader</span><span class="p">:</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">data_files</span><span class="p p-Indicator">:</span>
+<span class="w">        </span><span class="p p-Indicator">[</span><span class="s">&quot;/path/to/data1.parquet&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;/path/to/data2.parquet&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">...</span><span class="p p-Indicator">]</span><span class="w">   </span><span class="c1"># 数据集文件路径</span>
+<span class="w">    </span><span class="nt">handler</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OpenR1Math220kDataHandler</span>
+<span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">      </span><span class="nt">tokenizer</span><span class="p">:</span>
+<span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">vocab_file</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;/path/to/vocab.json&quot;</span><span class="w">       </span><span class="c1"># 词表文件路径</span>
+<span class="w">        </span><span class="nt">merges_file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/path/to/merges.txt&quot;</span><span class="w">      </span><span class="c1"># merges文件路径</span>
+<span class="w">        </span><span class="nt">chat_template</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+<p>在MindSpore Transformers源码根目录下执行以下数据预处理脚本：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>toolkit/data_preprocess/huggingface/datasets_preprocess.py<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--config<span class="w"> </span>distilled/data_process_handling.yaml<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--save_path<span class="w"> </span>/path/to/handled_data<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--register_path<span class="w"> </span>distilled/
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>作用</strong>：将原始数据集转换为MindSpore Transformers支持的格式。</p></li>
+<li><p><strong>参数说明</strong>：</p>
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">--config</span></code></strong>：数据预处理的配置文件路径。</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">--save_path</span></code></strong>：转换后数据集的保存文件夹路径。</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">--register_path</span></code></strong>：注册路径，为当前目录下的<code class="docutils literal notranslate"><span class="pre">distilled/</span></code>文件夹。</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<p>步骤二、<strong>数据集packing</strong></p>
+<p>MindSpore Transformers已经支持数据集packing机制，减少微调所需要的时间。
+数据集packing的配置文件放在/dataset/packing目录下。其中，需要将<code class="docutils literal notranslate"><span class="pre">path</span></code>修改成<code class="docutils literal notranslate"><span class="pre">handled_data</span></code>的路径，</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># dataset</span>
+<span class="nt">train_dataset</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">data_loader</span><span class="p">:</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">path</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/handled_data</span><span class="w"> </span><span class="c1"># 转换后数据集的保存文件夹</span>
+</pre></div>
+</div>
+<p>并在MindSpore Transformers源码根目录下执行如下脚本：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>toolkit/data_preprocess/huggingface/datasets_preprocess.py<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--config<span class="w"> </span>distilled/data_process_packing.yaml<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--save_path<span class="w"> </span>/path/to/packed_data<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--register_path<span class="w"> </span>distilled
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>作用</strong>：将处理好的数据集进行packing，减少微调时的数据加载时间。</p></li>
+<li><p><strong>参数说明</strong>：</p>
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">--config</span></code></strong>：数据集packing的配置文件路径。</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">--save_path</span></code></strong>：packing后数据集的保存路径</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">--register_path</span></code></strong>：注册数据集的路径。</p></li>
+</ul>
+</li>
+</ul>
+<p>最后在<code class="docutils literal notranslate"><span class="pre">packed_data</span></code>中可以找到处理后的数据集，格式为arrow。</p>
+<p>更多数据集处理的教程请参考<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/dataset.html#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E5%8A%9F%E8%83%BD">MindSpore Transformers官方文档-数据集</a>。</p>
+</section>
+<section id="id7">
+<h5>选项 2: 使用完成转换的数据<a class="headerlink" href="#id7" title="Link to this heading"></a></h5>
+<p>我们在<a class="reference external" href="https://modelers.cn/models/MindSpore-Lab/OpenR1-Qwen-7B/tree/main/dataset/packing">魔乐社区</a>提供packing处理后可以直接用于模型训练的数据，格式为arrow。此时<a class="reference internal" href="#yaml">#1.4 YAML配置</a>中的<code class="docutils literal notranslate"><span class="pre">path</span></code>需要修改为下载后的数据集路径。</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">train_dataset</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">data_loader</span><span class="p p-Indicator">:</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">path</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;/path/to/OpenR1-Qwen-7B/dataset/packing/&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="yaml">
+<h3>1.4 YAML配置<a class="headerlink" href="#yaml" title="Link to this heading"></a></h3>
+<p>微调配置文件<code class="docutils literal notranslate"><span class="pre">finetune_qwen_2_5_7b.yaml</span></code>，需要根据实际情况修改，具体如下：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">seed</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">42</span>
+<span class="nt">output_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;./output&#39;</span>
+<span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/path/to/Qwen2.5-Math-7B-Instruct&quot;</span><span class="w"> </span><span class="c1"># 权重文件夹路径，根据实际情况修改</span>
+<span class="nt">load_ckpt_format</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;safetensors&#39;</span>
+<span class="nt">auto_trans_ckpt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="nt">only_save_strategy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="nt">resume_training</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="nt">run_mode</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;finetune&#39;</span>
+<span class="nn">...</span>
+<span class="nt">train_dataset</span><span class="p">:</span><span class="w"> </span><span class="nl">&amp;train_dataset</span>
+<span class="w">  </span><span class="nt">input_columns</span><span class="p">:</span><span class="w"> </span><span class="nl">&amp;input_columns</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;input_ids&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;labels&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;loss_mask&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;position_ids&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;attention_mask&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">divisor</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">32</span>
+<span class="w">  </span><span class="nt">remainder</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">num_parallel_workers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+<span class="w">  </span><span class="nt">python_multiprocessing</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">drop_remainder</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">batch_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">repeat</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">numa_enable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">prefetch_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">dynamic_batch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">pad_token_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">151643</span>
+<span class="w">  </span><span class="nt">data_loader</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CommonDataLoader</span>
+<span class="w">    </span><span class="nt">shuffle</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">    </span><span class="nt">split</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;train&quot;</span>
+<span class="w">    </span><span class="nt">load_func</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;load_from_disk&quot;</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/path/to/packed_data&quot;</span><span class="w"> </span><span class="c1"># packing处理后的数据集文件夹路径</span>
+<span class="l l-Scalar l-Scalar-Plain">......</span>
+</pre></div>
+</div>
+<p>其余参数配置的解释可以参考<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/guide/supervised_fine_tuning.html">MindSpore Transformers官方文档-SFT微调</a>。</p>
+</section>
+</section>
+<section id="id8">
+<h2>2. 启动微调<a class="headerlink" href="#id8" title="Link to this heading"></a></h2>
+<p>设置如下环境变量防止OOM：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">ACLNN_CACHE_LIMIT</span><span class="o">=</span><span class="m">10</span><span class="w"> </span><span class="c1"># CANN 缓存限制</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MS_DEV_RUNTIME_CONF</span><span class="o">=</span><span class="s2">&quot;aclnn_cache_queue_length:128&quot;</span><span class="w"> </span><span class="c1"># MS缓存队列长度建议设置成128，设置过大内存容易OOM，设置越小性能越差</span>
+</pre></div>
+</div>
+<p>在MindSpore Transformers目录下执行如下命令启动微调：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bash<span class="w"> </span>scripts/msrun_launcher.sh<span class="w"> </span><span class="s2">&quot;run_mindformer.py --config distilled/finetune_qwen_2_5_7b.yaml --run_mode finetune&quot;</span><span class="w"> </span><span class="m">8</span>
+</pre></div>
+</div>
+<p>日志记录在<code class="docutils literal notranslate"><span class="pre">output/msrun_log</span></code>目录下，例如可以通过<code class="docutils literal notranslate"><span class="pre">tail</span> <span class="pre">-f</span> <span class="pre">output/msrun_log/worker_7.log</span></code>指令查看worker 7的日志信息。
+微调完成后，输出的<code class="docutils literal notranslate"><span class="pre">safetensors</span></code>权重文件在<code class="docutils literal notranslate"><span class="pre">output/checkpoint</span></code>目录下。</p>
+<p>更多safetensors权重的内容请参考<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/safetensors.html">MindSpore Transformers官方文档-Safetensors权重</a>。</p>
+</section>
+<section id="id9">
+<h2>3. 执行推理<a class="headerlink" href="#id9" title="Link to this heading"></a></h2>
+<p>若想使用微调后的权重进行推理，可以参考<a class="reference external" href="https://modelers.cn/models/MindSpore-Lab/Qwen2.5-Math-7B-Instruct">Qwen2.5-Math-7B-Instruct</a>中的推理部分，但需要修改<a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/r1.5.0/research/qwen2_5/run_qwen2_5.py">run_qwen2_5.py</a>脚本中的system提示词：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;Please reason step by step, and put your final answer within </span><span class="se">\\</span><span class="s2">boxed</span><span class="si">{}</span><span class="s2">.&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">input_prompt</span><span class="p">}</span>
+    <span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="id10">
+<h2>4. 评估结果<a class="headerlink" href="#id10" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Model</p></th>
+<th class="head text-center"><p>MATH-500</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>DeepSeek-Distill-Qwen-7B</p></td>
+<td class="text-center"><p>91.6</p></td>
+</tr>
+<tr class="row-odd"><td><p>OpenR1-Qwen-7B (HuggingFace)</p></td>
+<td class="text-center"><p>90.6</p></td>
+</tr>
+<tr class="row-even"><td><p>OpenR1-Qwen-7B (MindSpore Transformers)</p></td>
+<td class="text-center"><p>90.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>OpenThinker-7B</p></td>
+<td class="text-center"><p>89.6</p></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<div><p>上表第三行为本案例实验结果，该结果由本地实测得到。</p>
+</div></blockquote>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../docker-installation.html" class="btn btn-neutral float-left" title="制作 MindSpore Transformers 的 Docker 镜像的实践案例" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../convert_ckpt_to_megatron/convert_ckpt_to_megatron.html" class="btn btn-neutral float-right" title="转换模型权重为Megatron模型权重的实践案例" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

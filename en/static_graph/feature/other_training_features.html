@@ -1,0 +1,613 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Other Training Features &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Quantization" href="quantization.html" />
+    <link rel="prev" title="Pre-trained Model Average Weight Consolidation" href="pma_fused_checkpoint.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">Models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contribution Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">Modelers Contribution Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">Model-Related FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">Feature-Related FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Static Graph Implementation (Deprecated)</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Full-process Guide to Large Models</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Features</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">Features Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="start_tasks.html">Start Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ckpt.html">Ckpt Weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="safetensors.html">Safetensors Weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">Configuration File Descriptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="load_huggingface_config.html">Loading Hugging Face Model Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html">Logs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tokenizer.html">Using Tokenizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset.html">Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training_hyperparameters.html">Training Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monitor.html">Training Metrics Monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training.html">Resumable Training After Breakpoint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoint_saving_and_loading.html">Checkpoint Saving and Loading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training2.0.html">Resume Training2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel_training.html">Distributed Parallelism Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="high_availability.html">Training High Availability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory_optimization.html">Memory Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skip_data_and_ckpt_health_monitor.html">Data Skip And Checkpoint Health Monitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pma_fused_checkpoint.html">Pre-trained Model Average Weight Consolidation</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Other Training Features</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#gradient-accumulation">Gradient Accumulation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#configuration-and-usage">Configuration and Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#gradient-clipping">Gradient Clipping</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">Configuration and Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#groupedmatmul">GroupedMatmul</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id5">Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id6">Configuration and Usage</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#faq">FAQ</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#moe-droprate-logging">MoE DropRate Logging</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id8">Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id9">Configuration and Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#rotary-position-embedding-fusion-operator">Rotary Position Embedding Fusion Operator</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id11">Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id12">Configuration and Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#swiglu-fusion-operator">SwiGLU Fusion Operator</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id14">Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id15">Configuration and Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#cpu-affinity-binding-configuration">CPU Affinity Binding Configuration</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id17">Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id18">Configuration and Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#positional-encoding">Positional Encoding</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id21">Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id22">Configuration and Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#slidingwindowattention">SlidingWindowAttention</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id24">Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id25">Configuration and Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="quantization.html">Quantization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_development/index.html">Advanced Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">Excellent Practice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">Environment Variable Descriptions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Features</a></li>
+      <li class="breadcrumb-item active">Other Training Features</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/feature/other_training_features.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">Deprecated</p>
+<p>This page belongs to the <strong>Static Graph (GRAPH_MODE) Implementation</strong> section and has been marked as deprecated. New features are primarily being developed in the “r2.0.0 Dynamic Graph Implementation” section. Please refer to the dynamic graph documentation first.</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="other-training-features">
+<h1>Other Training Features<a class="headerlink" href="#other-training-features" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_en/static_graph/feature/other_training_features.md"><img alt="View Source on AtomGit" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source_en.svg" /></a></p>
+<p>During the large-scale training of deep learning models, challenges such as memory limitations, effective utilization of computational resources, and synchronization issues in distributed training are encountered. To address these challenges, training optimization algorithms are employed to enhance training efficiency, accelerate convergence, and improve the final model performance.</p>
+<p>MindSpore Transformers provides optimization algorithms like Recomputation, Gradient Accumulation, and Gradient Clipping for use during training.</p>
+<section id="gradient-accumulation">
+<h2>Gradient Accumulation<a class="headerlink" href="#gradient-accumulation" title="Link to this heading"></a></h2>
+<section id="overview">
+<h3>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h3>
+<p>MindSpore supported the gradient accumulation implementation interface <code class="docutils literal notranslate"><span class="pre">mindspore.nn.wrap.cell_wrapper.GradAccumulationCell</span></code> in versions after 2.1.1, which provides the gradient accumulation capability by splitting MiniBatch. MindSpore Transformers encapsulates it into a unified training process and enables it through yaml configuration. For the principle of gradient accumulation and the ability of framework measurement, please refer to <a class="reference external" href="https://www.mindspore.cn/tutorials/en/master/parallel/distributed_gradient_accumulation.html">MindSpore Document: Gradient Accumulation</a>.</p>
+</section>
+<section id="configuration-and-usage">
+<h3>Configuration and Usage<a class="headerlink" href="#configuration-and-usage" title="Link to this heading"></a></h3>
+<section id="yaml-parameter-configuration">
+<h4>YAML Parameter Configuration<a class="headerlink" href="#yaml-parameter-configuration" title="Link to this heading"></a></h4>
+<p>To enable gradient accumulation, users only need to configure the <code class="docutils literal notranslate"><span class="pre">gradient_accumulation_steps</span></code> item under the <code class="docutils literal notranslate"><span class="pre">runner_config</span></code> item in the configuration file and set it to the required number of gradient accumulation steps:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># runner config</span>
+<span class="nt">runner_config</span><span class="p">:</span>
+<span class="nn">...</span>
+<span class="nt">gradient_accumulation_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="nn">...</span>
+</pre></div>
+</div>
+</section>
+<section id="key-parameters-introduction">
+<h4>Key Parameters Introduction<a class="headerlink" href="#key-parameters-introduction" title="Link to this heading"></a></h4>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Value Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>gradient_accumulation_steps</p></td>
+<td><p>The number of steps to accumulate gradients before performing backpropagation. Default: <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></td>
+<td><p>(int, required) - Default value: <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="other-ways-to-use-gradient-accumulation">
+<h4>Other Ways to Use Gradient Accumulation<a class="headerlink" href="#other-ways-to-use-gradient-accumulation" title="Link to this heading"></a></h4>
+<p>In addition to the configuration file, when launching the <code class="docutils literal notranslate"><span class="pre">run_mindformer.py</span></code> script, you can specify the <code class="docutils literal notranslate"><span class="pre">--gradient_accumulation_steps</span></code> argument to use the gradient accumulation feature.</p>
+</section>
+<section id="usage-restrictions-of-gradient-accumulation">
+<h4>Usage Restrictions of Gradient Accumulation<a class="headerlink" href="#usage-restrictions-of-gradient-accumulation" title="Link to this heading"></a></h4>
+<blockquote>
+<div><p>Enabling gradient accumulation will increase memory overhead. Please pay attention to memory management to prevent Out Of Memory.</p>
+</div></blockquote>
+<ol class="arabic simple">
+<li><p>Since the implementation of <code class="docutils literal notranslate"><span class="pre">GradAccumulationCell</span></code> relies on parallel features, gradient accumulation is currently only supported in <strong>semi-automatic parallel mode</strong>;</p></li>
+<li><p>In addition, in the pipeline parallel scenario, the meaning of gradient accumulation is the same as micro_batch and will not take effect. Please configure the <code class="docutils literal notranslate"><span class="pre">micro_batch_num</span></code> item to increase the training batch_size.</p></li>
+</ol>
+</section>
+</section>
+</section>
+<section id="gradient-clipping">
+<h2>Gradient Clipping<a class="headerlink" href="#gradient-clipping" title="Link to this heading"></a></h2>
+<section id="id1">
+<h3>Overview<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<p>The gradient clipping algorithm can prevent gradient explosion caused by excessively large negative gradients, thereby helping the model training converge more stably.</p>
+</section>
+<section id="id2">
+<h3>Configuration and Usage<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<section id="id3">
+<h4>YAML Parameter Configuration<a class="headerlink" href="#id3" title="Link to this heading"></a></h4>
+<p>In MindSpore Transformers, the default training process <code class="docutils literal notranslate"><span class="pre">MFTrainOneStepCell</span></code> integrates gradient clipping logic.</p>
+<p>You can use the following example to enable gradient clipping:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># wrapper cell config</span>
+<span class="nt">runner_wrapper</span><span class="p">:</span>
+<span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MFTrainOneStepCell</span>
+<span class="nn">...</span>
+<span class="nt">use_clip_grad</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="nt">max_grad_norm</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0</span>
+<span class="nn">...</span>
+</pre></div>
+</div>
+</section>
+<section id="id4">
+<h4>Key Parameters Introduction<a class="headerlink" href="#id4" title="Link to this heading"></a></h4>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Value Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>use_clip_grad</p></td>
+<td><p>Controls whether gradient clipping is enabled during training, default value:<code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></td>
+<td><p>(bool, optional) - Default:<code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>max_grad_norm</p></td>
+<td><p>Controls the maximum norm value of gradient clipping, default value:<code class="docutils literal notranslate"><span class="pre">1.0</span></code>.</p></td>
+<td><p>(float, optional) - Default:<code class="docutils literal notranslate"><span class="pre">1.0</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+<section id="groupedmatmul">
+<h2>GroupedMatmul<a class="headerlink" href="#groupedmatmul" title="Link to this heading"></a></h2>
+<section id="id5">
+<h3>Overview<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<p>For MoE (Mixture of Experts), there are fragmented expert computation operations and communications. The GroupedMatmul operator merges multi-expert computations to improve the training performance of MoE. By invoking the GroupedMatmul operator, multiple expert computations are fused to achieve acceleration.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">token_dispatcher</span></code> routes different tokens (input subwords or subunits) to different experts, compute units, or branches for independent processing based on the computed routing strategy. It primarily relies on <code class="docutils literal notranslate"><span class="pre">all_to_all</span></code> communication.</p>
+</section>
+<section id="id6">
+<h3>Configuration and Usage<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<section id="id7">
+<h4>YAML Parameter Configuration<a class="headerlink" href="#id7" title="Link to this heading"></a></h4>
+<p>In scenarios where GroupedMatmul needs to be enabled for MoE, users only need to set the <code class="docutils literal notranslate"><span class="pre">use_gmm</span></code> option to <code class="docutils literal notranslate"><span class="pre">True</span></code> under the <code class="docutils literal notranslate"><span class="pre">moe_config</span></code> section in the configuration file. If the fused operator for <code class="docutils literal notranslate"><span class="pre">token_permute</span></code> is required, configure <code class="docutils literal notranslate"><span class="pre">use_fused_ops_permute</span></code> to <code class="docutils literal notranslate"><span class="pre">True</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">moe_config</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">use_gmm</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">use_fused_ops_permute</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="faq">
+<h3>FAQ<a class="headerlink" href="#faq" title="Link to this heading"></a></h3>
+<p>When using the gmm fusion operator, an error may occur if the workload is unbalanced, resulting in no tokens being assigned to an expert on a specific NPU. The error is as follows:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>ValueError: For primitive[Reshape]， the accumulate of x_shape must be equal to out_shape, but got x_shape: [const vector]{}, and output_shape: [const vector]{0, hiddensize}
+</pre></div>
+</div>
+<p>In this case, you can configure <code class="docutils literal notranslate"><span class="pre">enable_gmm_safe_tokens:</span> <span class="pre">True</span></code> to ensure each expert is assigned at least 1 token, avoiding program errors.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">moe_config</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">enable_gmm_safe_tokens</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="moe-droprate-logging">
+<h2>MoE DropRate Logging<a class="headerlink" href="#moe-droprate-logging" title="Link to this heading"></a></h2>
+<section id="id8">
+<h3>Overview<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
+<p>When training models using the MoE (Mixture of Experts) capacity scheme, certain tokens may be dropped to improve efficiency and performance. By enabling the DropRate logging feature, users can monitor the occurrence rate of these drop operations in real-time during training, helping them better understand model behavior and adjust training strategies accordingly. This feature allows users to view the DropRate for each layer during training. DropRate refers to the proportion of tokens dropped in a specific layer. Observing the trend of DropRate changes can help users evaluate whether the current training parameters are reasonable and whether the model is effectively utilizing expert resources.</p>
+</section>
+<section id="id9">
+<h3>Configuration and Usage<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
+<section id="id10">
+<h4>YAML Parameter Configuration<a class="headerlink" href="#id10" title="Link to this heading"></a></h4>
+<p>To enable the DropRate logging feature, users need to configure the <code class="docutils literal notranslate"><span class="pre">callback_moe_droprate</span></code> parameter under the moe_config section in the configuration file and set it to <code class="docutils literal notranslate"><span class="pre">True</span></code>. Add the <code class="docutils literal notranslate"><span class="pre">MoEDropRateCallback</span></code> configuration item in the callback section and set model-related parameters such as <code class="docutils literal notranslate"><span class="pre">expert_num</span></code>, <code class="docutils literal notranslate"><span class="pre">capacity_factor</span></code>, <code class="docutils literal notranslate"><span class="pre">num_layers</span></code>, and <code class="docutils literal notranslate"><span class="pre">mtp_depth</span></code>. For example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">moe_config</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">callback_moe_droprate</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+
+<span class="nt">callback</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">- type</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MoEDropRateCallback</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">expert_num</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">capacity_factor</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.5</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">num_layers</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mtp_depth</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+</section>
+<section id="key-configuration-parameters">
+<h4>Key Configuration Parameters<a class="headerlink" href="#key-configuration-parameters" title="Link to this heading"></a></h4>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Value Specification</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>callback_moe_droprate</p></td>
+<td><p>Whether to print MoE DropRate in callback.</p></td>
+<td><p>(bool, optional) - Default:<code class="docutils literal notranslate"><span class="pre">False</span></code> .</p></td>
+</tr>
+<tr class="row-odd"><td><p>expert_num</p></td>
+<td><p>Number of experts.</p></td>
+<td><p>(int, required) -  Default:<code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>capacity_factor</p></td>
+<td><p>Capacity factor.</p></td>
+<td><p>(float, required) - Default:<code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>num_layers</p></td>
+<td><p>Number of model layers.</p></td>
+<td><p>(int, required) - Default:<code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>mtp_depth</p></td>
+<td><p>Number of MTP layers.</p></td>
+<td><p>(int, required) - Default:<code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+<section id="rotary-position-embedding-fusion-operator">
+<h2>Rotary Position Embedding Fusion Operator<a class="headerlink" href="#rotary-position-embedding-fusion-operator" title="Link to this heading"></a></h2>
+<section id="id11">
+<h3>Overview<a class="headerlink" href="#id11" title="Link to this heading"></a></h3>
+<p>When RoPE (Rotary Position Embedding) is used as the position encoding in the network, this fusion operator can be enabled to improve overall performance. This feature provides a fused implementation of RoPE, enhancing network performance. For the operator interface, refer to:
+<a class="reference external" href="https://www.mindspore.cn/docs/en/master/api_python/ops/mindspore.ops.rotary_position_embedding.html">mindspore.ops.rotary_position_embedding</a></p>
+</section>
+<section id="id12">
+<h3>Configuration and Usage<a class="headerlink" href="#id12" title="Link to this heading"></a></h3>
+<section id="id13">
+<h4>YAML Parameter Configuration<a class="headerlink" href="#id13" title="Link to this heading"></a></h4>
+<p>To use the rotary_position_embedding fusion operator, users need to configure the <code class="docutils literal notranslate"><span class="pre">use_fused_rope</span></code> parameter under the <code class="docutils literal notranslate"><span class="pre">model_config</span></code> section in the configuration file and set it to <code class="docutils literal notranslate"><span class="pre">True</span></code>. Example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">model_config</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">use_fused_rope</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="swiglu-fusion-operator">
+<h2>SwiGLU Fusion Operator<a class="headerlink" href="#swiglu-fusion-operator" title="Link to this heading"></a></h2>
+<section id="id14">
+<h3>Overview<a class="headerlink" href="#id14" title="Link to this heading"></a></h3>
+<p>When SwiGLU is used as the activation function in the network, this fusion operator can be enabled to improve overall performance. This feature provides a fused implementation of SwiGLU, enhancing network performance. For the operator functionality, refer to:
+<a class="reference external" href="https://www.mindspore.cn/docs/en/master/api_python/ops/mindspore.ops.swiglu.html">mindspore.ops.swiglu</a>.</p>
+</section>
+<section id="id15">
+<h3>Configuration and Usage<a class="headerlink" href="#id15" title="Link to this heading"></a></h3>
+<section id="id16">
+<h4>YAML Parameter Configuration<a class="headerlink" href="#id16" title="Link to this heading"></a></h4>
+<p>To use the SwiGLU fusion operator, users need to configure the <code class="docutils literal notranslate"><span class="pre">use_fused_swiglu</span></code> parameter under the <code class="docutils literal notranslate"><span class="pre">model_config</span></code> section in the configuration file and set it to <code class="docutils literal notranslate"><span class="pre">True</span></code>. For example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">model_config</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">use_fused_swiglu</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="cpu-affinity-binding-configuration">
+<h2>CPU Affinity Binding Configuration<a class="headerlink" href="#cpu-affinity-binding-configuration" title="Link to this heading"></a></h2>
+<section id="id17">
+<h3>Overview<a class="headerlink" href="#id17" title="Link to this heading"></a></h3>
+<p>MindSpore provides thread-level CPU core binding to allocate specific CPU cores for key MindSpore modules (main thread, pynative, runtime, and minddata), preventing performance instability caused by CPU core contention among MindSpore threads.</p>
+</section>
+<section id="id18">
+<h3>Configuration and Usage<a class="headerlink" href="#id18" title="Link to this heading"></a></h3>
+<section id="id19">
+<h4>YAML Parameter Configuration<a class="headerlink" href="#id19" title="Link to this heading"></a></h4>
+<p>There are two places to configure CPU affinity under the <code class="docutils literal notranslate"><span class="pre">context</span></code> field: <code class="docutils literal notranslate"><span class="pre">affinity_cpu_list</span></code> and <code class="docutils literal notranslate"><span class="pre">affinity_config</span></code>. <code class="docutils literal notranslate"><span class="pre">affinity_cpu_list</span></code> is merged into <code class="docutils literal notranslate"><span class="pre">affinity_config</span></code>, it will not be elaborated here. When both are configured, <code class="docutils literal notranslate"><span class="pre">affinity_config</span></code> will take effect.</p>
+<p>Configure items in the <code class="docutils literal notranslate"><span class="pre">affinity_config</span></code> field under the <code class="docutils literal notranslate"><span class="pre">context</span></code> field. <code class="docutils literal notranslate"><span class="pre">affinity_config</span></code> and all its sub-fields are optional. A string ending with .json can also be passed to transfer the JSON configuration file to the MindSpore API. For details, please refer to <a class="reference external" href="https://www.mindspore.cn/docs/en/master/api_python/runtime/mindspore.runtime.set_cpu_affinity.html">mindspore.runtime.set_cpu_affinity</a>. The following is a two-device example showing both custom configuration and JSON file methods achieving the same binding effect (device0’s main thread binds to CPU 0 and CPU 1, minddata thread binds to CPU 10 and CPU 11; device1’s main thread binds to CPU 20 and CPU 21, minddata thread binds to CPU 30 and CPU 31):</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">context</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">affinity_config</span><span class="p p-Indicator">:</span>
+<span class="w">    </span><span class="nt">device_0</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">affinity_cpu_list</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;0-3&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;8-11&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">module_to_cpu_dict</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">main</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1</span><span class="p p-Indicator">]</span>
+<span class="w">        </span><span class="nt">minddata</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">6</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">7</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">device_1</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">affinity_cpu_list</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;20-23&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;28-31&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">module_to_cpu_dict</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">main</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1</span><span class="p p-Indicator">]</span>
+<span class="w">        </span><span class="nt">minddata</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">6</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">7</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+
+<span class="c1"># Or pass in a JSON file path</span>
+<span class="nt">context</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">affinity_config</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;path_to_file.json&quot;</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+<p>Here is an example of the JSON configuration file. For detailed configuration, please refer to <a class="reference external" href="https://www.mindspore.cn/tutorials/en/master/parallel/msrun_launcher.html">Using JSON to Unify CPU/NUMA Affinity</a>:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;bind_config&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;bind_cpu_mode&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;cpu&quot;</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">&quot;bind_cpu&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;device0&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;main&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;0-1&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;minddata&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;10-11&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;device1&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;main&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;20-21&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;minddata&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;30-31&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>JSON file configuration uses <strong>absolute CPU IDs</strong>, for example, <code class="docutils literal notranslate"><span class="pre">&quot;main&quot;:</span> <span class="pre">&quot;10-12&quot;</span></code> in JSON directly binds to physical CPU IDs 10, 11, 12; custom configuration (<code class="docutils literal notranslate"><span class="pre">affinity_cpu_list</span></code> + <code class="docutils literal notranslate"><span class="pre">module_to_cpu_dict</span></code>) uses <strong>absolute CPU range + relative indexing mechanism</strong>, where <code class="docutils literal notranslate"><span class="pre">affinity_cpu_list</span></code> defines the available range (absolute IDs) and <code class="docutils literal notranslate"><span class="pre">module_to_cpu_dict</span></code> uses indices within that range. For example, <code class="docutils literal notranslate"><span class="pre">affinity_cpu_list:</span> <span class="pre">[&quot;10-20&quot;]</span></code> and <code class="docutils literal notranslate"><span class="pre">module_to_cpu_dict:</span> <span class="pre">{main:</span> <span class="pre">[0,</span> <span class="pre">1,</span> <span class="pre">2]}</span></code> mean selecting indices 0, 1, 2 from range 10-20, binding to physical CPU IDs 10, 11, 12.</p>
+</div></blockquote>
+</section>
+<section id="id20">
+<h4>Key Configuration Parameters<a class="headerlink" href="#id20" title="Link to this heading"></a></h4>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Value Specification</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>device_id</p></td>
+<td><p>The id of the device to be configured</p></td>
+<td><p>Replace the letter <code class="docutils literal notranslate"><span class="pre">id</span></code> with effective number.</p></td>
+</tr>
+<tr class="row-odd"><td><p>affinity_cpu_list</p></td>
+<td><p>Manually specifies the CPU affinity range for the process. Format: <code class="docutils literal notranslate"><span class="pre">[&quot;cpuidX-cpuidY&quot;]</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">[&quot;0-3&quot;,</span> <span class="pre">&quot;8-11&quot;]</span></code>)</p></td>
+<td><p>(list, optional) - Default: <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>module_to_cpu_dict</p></td>
+<td><p>Customizes core binding for specific modules. Valid keys (module names) are<code class="docutils literal notranslate"><span class="pre">main</span></code>, <code class="docutils literal notranslate"><span class="pre">runtime</span></code>, <code class="docutils literal notranslate"><span class="pre">pynative</span></code>, <code class="docutils literal notranslate"><span class="pre">minddata</span></code>. Valid value is a list of int indices representing CPU cores (e.g. <code class="docutils literal notranslate"><span class="pre">{&quot;main&quot;:</span> <span class="pre">[0,1],</span> <span class="pre">&quot;minddata&quot;:</span> <span class="pre">[6,7]}</span></code>)</p></td>
+<td><p>(dict, optional) - Default: <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+<section id="positional-encoding">
+<h2>Positional Encoding<a class="headerlink" href="#positional-encoding" title="Link to this heading"></a></h2>
+<section id="id21">
+<h3>Overview<a class="headerlink" href="#id21" title="Link to this heading"></a></h3>
+<p>Positional encoding is a key mechanism introduced to incorporate sequence order information into the Transformer architecture. In MindSpore Transformers, positional encoding is configured via the <code class="docutils literal notranslate"><span class="pre">position_embedding_type</span></code> parameter, supporting various mainstream positional encoding schemes to enhance the model’s awareness of token positions. The specific supported encoding types include:</p>
+<ul class="simple">
+<li><p>RoPE (Rotary Position Embedding): Encodes positional information through rotation matrices, offering good extrapolation capabilities.</p></li>
+<li><p>YaRN: An improved variant of RoPE that better handles long sequences.</p></li>
+<li><p>Learned Absolute Positional Encoding: Treats positional information as trainable parameters.</p></li>
+<li><p>No Positional Encoding: Does not use explicit positional encoding.</p></li>
+</ul>
+</section>
+<section id="id22">
+<h3>Configuration and Usage<a class="headerlink" href="#id22" title="Link to this heading"></a></h3>
+<section id="id23">
+<h4>YAML Parameter Configuration<a class="headerlink" href="#id23" title="Link to this heading"></a></h4>
+<p>Users configure the <code class="docutils literal notranslate"><span class="pre">position_embedding_type</span></code> parameter under the <code class="docutils literal notranslate"><span class="pre">model_config</span></code> section in the configuration file to set the positional encoding. The current optional values and meanings for <code class="docutils literal notranslate"><span class="pre">position_embedding_type</span></code> are as follows:</p>
+<ul class="simple">
+<li><p>‘none’: No positional encoding is used in any layer.</p></li>
+<li><p>‘rope’: RoPE positional encoding is used in all layers. To achieve an alternating pattern between RoPE layers and layers without positional encoding, the <code class="docutils literal notranslate"><span class="pre">nope_layer_interval</span></code> parameter can be configured as a positive integer. <code class="docutils literal notranslate"><span class="pre">nope_layer_interval</span></code> represents the number of encoded layers between adjacent layers without positional encoding.</p></li>
+<li><p>‘yarn’: YaRN positional encoding is used in all layers.</p></li>
+<li><p>‘learned_absolute’: Learnable absolute positional encoding is used in all layers.</p></li>
+</ul>
+<p>Examples:</p>
+<ul>
+<li><p>Use YaRN positional encoding in all layers:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">model_config</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">position_embedding_type</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&#39;yarn&#39;</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+</li>
+<li><p>Insert four RoPE positional encoding layers between every two layers without positional encoding:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">model_config</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">position_embedding_type</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&#39;rope&#39;</span>
+<span class="w">  </span><span class="nt">nope_layer_interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+</section>
+</section>
+<section id="slidingwindowattention">
+<h2>SlidingWindowAttention<a class="headerlink" href="#slidingwindowattention" title="Link to this heading"></a></h2>
+<section id="id24">
+<h3>Overview<a class="headerlink" href="#id24" title="Link to this heading"></a></h3>
+<p>SlidingWindowAttention is a sparse attention mechanism that solves the problem of quadratic increase in computational complexity with sequence length in standard Transformer models by restricting each token to only focus on other tokens within a local window. The core idea is to narrow the attention range from global to a fixed window size.</p>
+</section>
+<section id="id25">
+<h3>Configuration and Usage<a class="headerlink" href="#id25" title="Link to this heading"></a></h3>
+<section id="id26">
+<h4>YAML Parameter Configuration<a class="headerlink" href="#id26" title="Link to this heading"></a></h4>
+<p>While use the SlidingWindowAttention module, you need to configure the <code class="docutils literal notranslate"><span class="pre">window_size</span></code> and <code class="docutils literal notranslate"><span class="pre">window_attn_skip_freq</span></code> items under the <code class="docutils literal notranslate"><span class="pre">model_config</span></code> item in the configuration file.</p>
+<p>The type of <code class="docutils literal notranslate"><span class="pre">window_size</span></code> is <code class="docutils literal notranslate"><span class="pre">Tuple[int,</span> <span class="pre">int]</span></code>, where <code class="docutils literal notranslate"><span class="pre">window_size[0]</span></code> represents <code class="docutils literal notranslate"><span class="pre">pre_tokens</span></code>, and <code class="docutils literal notranslate"><span class="pre">window_size[1]</span></code> represents <code class="docutils literal notranslate"><span class="pre">next_tokens</span></code>. Both are integers not less than -1, where -1 is a special value representing “infinite window size”. The default starting point is the bottom right corner, as shown in the following figure:</p>
+<p><img alt="/expert_load" src="../../_images/sliding_window.png" /></p>
+<p>The type of <code class="docutils literal notranslate"><span class="pre">window_attn_skip_freq</span></code> is <code class="docutils literal notranslate"><span class="pre">Union[int,</span> <span class="pre">List[int]]</span></code>, which represents the range of the number of neighboring tokens that a token can ‘focus’ on in each attention operation; <code class="docutils literal notranslate"><span class="pre">window_size[0]</span></code> represents the number of tokens followed forward, while <code class="docutils literal notranslate"><span class="pre">window_size[1]</span></code> represents the number of tokens followed backward. Any token set to <code class="docutils literal notranslate"><span class="pre">-1</span></code> indicates an unlimited number of tokens to ‘follow’ forward or backward:</p>
+<ul class="simple">
+<li><p>Equal Interval Mode: Specify an integer <code class="docutils literal notranslate"><span class="pre">N</span></code> to insert the full attention layer in a ratio of <code class="docutils literal notranslate"><span class="pre">(N-1)</span> <span class="pre">:</span> <span class="pre">1</span></code> . After passing through <code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">−</span> <span class="pre">1</span></code>  sliding window attention layers, a full attention layer is inserted.</p></li>
+<li><p>Custom mode: freely define the alternating order of attention layers through a Boolean value list. For example: <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">1,</span> <span class="pre">1,</span> <span class="pre">1,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">0]</span></code>, where <code class="docutils literal notranslate"><span class="pre">1</span></code> represents the sliding window attention layer and <code class="docutils literal notranslate"><span class="pre">0</span></code> represents the full attention layer. This list determines the type of each layer in the network in order.</p></li>
+</ul>
+<p>Example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">model_config</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">window_size</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">10</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0</span><span class="p p-Indicator">]</span><span class="w">  </span><span class="c1"># Each token focuses on 10 tokens forward and not backward</span>
+<span class="w">  </span><span class="nt">window_attn_skip_freq</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w">  </span><span class="c1"># There is a full attention layer every 2 layers</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pma_fused_checkpoint.html" class="btn btn-neutral float-left" title="Pre-trained Model Average Weight Consolidation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="quantization.html" class="btn btn-neutral float-right" title="Quantization" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

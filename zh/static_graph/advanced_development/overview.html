@@ -1,0 +1,275 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>高阶开发概述 &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="大模型精度调优指南" href="precision_optimization.html" />
+    <link rel="prev" title="高阶开发" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">介绍</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/quick_start.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">模型支持库</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">安装</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">安装指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">功能特性</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/overview.html">功能特性概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/start_task.html">启动任务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/configuration.html">配置文件说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/logging.html">日志</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/dataset.html">数据集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/training_hyperparameters.html">训练超参数与优化器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/save_and_load_checkpoint.html">权重保存与加载</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/resume_training.html">断点续训</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/monitor.html">训练指标监控与 Profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/static_graph_features.html">静态图实现特性</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">环境变量</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../env_variables.html">环境变量说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">贡献指南</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers贡献指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">魔乐社区贡献指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">模型相关 FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">功能相关 FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">静态图实现（Deprecated）</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">大模型全流程指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/index.html">功能特性</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">高阶开发</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">高阶开发概述</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">调试调优</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">模型开发与配置</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">精度对比</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#api">API 参考</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="precision_optimization.html">大模型精度调优指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance_optimization.html">大模型性能调优指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev_migration.html">开发迁移</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yaml_config_inference.html">推理配置模板使用指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inference_precision_comparison.html">推理精度比对</a></li>
+<li class="toctree-l2"><a class="reference internal" href="accuracy_comparison.html">与 Megatron-LM 比对训练精度</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training_template_instruction.html">训练配置模板使用说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="weight_transfer.html">权重转换开发适配</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html">API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">优秀实践</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">环境变量说明</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">高阶开发</a></li>
+      <li class="breadcrumb-item active">高阶开发概述</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/advanced_development/overview.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">已废弃（Deprecated）</p>
+<p>本页属于 <strong>静态图（GRAPH_MODE）实现</strong> 章节，已标记为废弃。新特性优先在「r2.0.0 动态图实现」章节演进，请优先查阅动态图相关文档。</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>高阶开发概述<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/static_graph/advanced_development/overview.md"><img alt="查看源文件" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source.svg" /></a></p>
+<p>MindSpore Transformers 高阶开发面向模型迁移、调优与精度验证等进阶场景，帮助用户在完成基础训练与推理后，进一步做开发迁移、调试调优和精度对比。本章节按 <strong>调试调优</strong>、<strong>模型开发与配置</strong>、<strong>精度对比</strong> 和 <strong>API 参考</strong> 对全部高阶开发文档进行分类汇总，便于快速查找与跳转。</p>
+<section id="id2">
+<h2>调试调优<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p>面向训练与推理过程中的精度与性能问题，提供系统化的排查与优化方法。</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>文档</p></th>
+<th class="head"><p>说明</p></th>
+<th class="head"><p>架构支持</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/advanced_development/precision_optimization.html">精度调优</a></p></td>
+<td><p>大模型训练常见精度问题与通用定位方法，包括 CheckList、参数对齐、随机性固定及长稳排查等。</p></td>
+<td><p>Mcore/Legacy</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/advanced_development/performance_optimization.html">性能调优</a></p></td>
+<td><p>大模型性能调优思路与工具，涵盖数据加载、前向/反向计算、通信与调度等环节的优化及 Profile 使用指导。</p></td>
+<td><p>Mcore/Legacy</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id3">
+<h2>模型开发与配置<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<p>支持从零构建或迁移模型，以及通过配置模板快速拉起训练与推理任务。</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>文档</p></th>
+<th class="head"><p>说明</p></th>
+<th class="head"><p>架构支持</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/advanced_development/dev_migration.html">开发迁移</a></p></td>
+<td><p>基于 MindSpore Transformers 构建大模型的完整流程，包括配置、模型、分词器与 YAML 配置的编写与适配。</p></td>
+<td><p>Legacy</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/advanced_development/yaml_config_inference.html">推理配置模板使用指南</a></p></td>
+<td><p>推理场景下 YAML 配置模板的使用方法，支持按 Hugging Face/ModelScope 模型目录快速配置并启动推理。</p></td>
+<td><p>Mcore</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/advanced_development/training_template_instruction.html">训练配置模板使用说明</a></p></td>
+<td><p>预训练与微调的通用配置模板说明，支持稠密/MoE 等场景，便于未支持规格或自定义模型的训练任务快速启动。</p></td>
+<td><p>Mcore</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/advanced_development/weight_transfer.html">权重转换开发适配</a></p></td>
+<td><p>将新模型适配 MindSpore Transformers 权重转换功能，实现 Hugging Face 权重到 MindSpore 权重的统一转换与加载。</p></td>
+<td><p>Mcore</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id4">
+<h2>精度对比<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<p>用于验证与标杆实现或 GPU 环境在训练与推理层面的一致性。</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>文档</p></th>
+<th class="head"><p>说明</p></th>
+<th class="head"><p>架构支持</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/advanced_development/accuracy_comparison.html">与 Megatron-LM 比对训练精度</a></p></td>
+<td><p>与 Megatron-LM 在模型层面的训练精度对齐方法，包括等价结构构建、前向/损失/梯度等关键指标对比。</p></td>
+<td><p>Mcore</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/advanced_development/inference_precision_comparison.html">推理精度比对</a></p></td>
+<td><p>推理精度验收流程与定位思路，涵盖在线推理验证、数据集评测及常见问题的排查与解决。</p></td>
+<td><p>Mcore</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="api">
+<h2>API 参考<a class="headerlink" href="#api" title="Link to this heading"></a></h2>
+<p>MindSpore Transformers 各模块的 API 文档入口。</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>文档</p></th>
+<th class="head"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/api.html">API</a></p></td>
+<td><p>mindformers 及各子模块的 API 索引与详细接口说明。</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="高阶开发" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="precision_optimization.html" class="btn btn-neutral float-right" title="大模型精度调优指南" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

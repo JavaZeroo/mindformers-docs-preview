@@ -1,0 +1,402 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>断点续训 &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="checkpoint保存和加载" href="checkpoint_saving_and_loading.html" />
+    <link rel="prev" title="训练指标监控" href="monitor.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">介绍</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/quick_start.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">模型支持库</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">安装</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">安装指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">功能特性</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/overview.html">功能特性概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/start_task.html">启动任务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/configuration.html">配置文件说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/logging.html">日志</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/dataset.html">数据集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/training_hyperparameters.html">训练超参数与优化器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/save_and_load_checkpoint.html">权重保存与加载</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/resume_training.html">断点续训</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/monitor.html">训练指标监控与 Profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/static_graph_features.html">静态图实现特性</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">环境变量</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../env_variables.html">环境变量说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">贡献指南</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers贡献指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">魔乐社区贡献指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">模型相关 FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">功能相关 FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">静态图实现（Deprecated）</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">大模型全流程指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">功能特性</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">功能特性概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="start_tasks.html">启动任务</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ckpt.html">Ckpt权重</a></li>
+<li class="toctree-l2"><a class="reference internal" href="safetensors.html">Safetensors权重</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">配置文件说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="load_huggingface_config.html">加载 Hugging Face 模型配置</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html">日志</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tokenizer.html">使用Tokenizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset.html">数据集</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training_hyperparameters.html">训练超参数</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monitor.html">训练指标监控</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">断点续训</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">重要说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">权重和策略文件介绍</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#yaml">YAML参数配置说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">断点续训使用场景介绍</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id6">中断续训</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id7">策略转换续训</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id8">增量续训</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id9">自动恢复续训</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id10">注意事项和建议</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoint_saving_and_loading.html">checkpoint保存和加载</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training2.0.html">断点续训2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l2"><a class="reference internal" href="high_availability.html">训练高可用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skip_data_and_ckpt_health_monitor.html">数据跳过和健康监测</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pma_fused_checkpoint.html">Pre-trained Model Average 权重合并</a></li>
+<li class="toctree-l2"><a class="reference internal" href="other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantization.html">量化</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_development/index.html">高阶开发</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">优秀实践</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">环境变量说明</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">功能特性</a></li>
+      <li class="breadcrumb-item active">断点续训</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/feature/resume_training.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">已废弃（Deprecated）</p>
+<p>本页属于 <strong>静态图（GRAPH_MODE）实现</strong> 章节，已标记为废弃。新特性优先在「r2.0.0 动态图实现」章节演进，请优先查阅动态图相关文档。</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>断点续训<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/static_graph/feature/resume_training.md"><img alt="查看源文件" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source.svg" /></a></p>
+<p>本文档为 <strong>MindSpore Transformers</strong> 框架下 Checkpoint 1.0 版本的断点续训功能使用介绍。</p>
+<section id="id2">
+<h2>重要说明<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p>目前 MindSpore Transformers 已正式推出 <strong><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/checkpoint_saving_and_loading.html">Checkpoint 2.0 版本</a></strong>，并同步发布了适配新版本的<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/resume_training2.0.html">断点续训</a>官方文档。为保证功能使用的兼容性与先进性，本 Checkpoint 1.0 版本相关文档后续将逐步停止维护（日落），建议用户优先参考新版本文档进行开发与使用。</p>
+</section>
+<section id="id3">
+<h2>概述<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<p>MindSpore Transformers支持<strong>step级断点续训</strong>功能，支持加载已保存的checkpoint来恢复之前的状态继续训练。这一特性在处理大规模训练任务时尤为重要，能够有效减少因意外中断导致的时间和资源浪费。</p>
+<p>MindSpore Transformers支持保存和加载<strong>ckpt</strong>、<strong>safetensors</strong>两种格式权重，支持<strong>中断续训</strong>、<strong>策略转换续训</strong>、<strong>增量续训</strong>、<strong>自动恢复续训</strong>等多种续训场景，以及支持<strong>加载最后保存完整的权重</strong>、<strong>加载指定step权重</strong>、<strong>加载MindSpore合并的权重</strong>续训等不同的权重加载方式。</p>
+<p>分布式环境中，断点续训要求所有节点的权重在<strong>同一共享目录</strong>下。用户可通过环境变量<code class="docutils literal notranslate"><span class="pre">SHARED_PATHS</span></code>来设置共享路径。</p>
+</section>
+<section id="id4">
+<h2>权重和策略文件介绍<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<p>MindSpore Transformers保存权重和策略文件，默认保存在<code class="docutils literal notranslate"><span class="pre">output/checkpoint</span></code>和<code class="docutils literal notranslate"><span class="pre">output/strategy</span></code>两个文件夹下，用户可以修改yaml配置的<code class="docutils literal notranslate"><span class="pre">output_dir</span></code>参数修改<code class="docutils literal notranslate"><span class="pre">output</span></code>文件夹路径。</p>
+<p>权重文件主要保存了<strong>网络参数</strong>、<strong>优化器参数</strong>和<strong>续训信息</strong>，权重文件根据rank文件夹分开保存，每个rank文件夹下单独维护一个<code class="docutils literal notranslate"><span class="pre">meta.json</span></code>文件用以记录当前rank最后保存完整的权重信息。以单机8卡为例，权重保存格式如下：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>output/checkpoint
+    ├── rank_0
+      ├── meta.json
+      └── {prefix}-{epoch}_{step}.safetensors
+    ├── rank_1
+      ├── meta.json
+      └── {prefix}-{epoch}_{step}.safetensors
+    ...
+    ├── rank_7
+      ├── meta.json
+      └── {prefix}-{epoch}_{step}.safetensors
+</pre></div>
+</div>
+<blockquote>
+<div><p>权重名的prefix中携带rank_id信息，如：qwen3_8b_rank_0；若保存权重时已存在相同prefix的权重，prefix会自动添加自增后缀以防止旧权重被覆盖。如”qwen3_8b_rank_0”已存在时，prefix会更新为”qwen3_8b_rank_0_1”，若”qwen3_8b_rank_0_1”也已存在，prefix会更新为”qwen3_8b_rank_0_2”。</p>
+</div></blockquote>
+<p>策略文件仅在分布式训练任务中保存，用于<strong>权重策略转换</strong>。策略文件以rank_id作为后缀，固定保存为ckpt格式的文件，主要记录了当前rank的网络和优化器切分信息。以单机8卡为例，策略文件保存格式如下：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>output/strategy
+    ├── ckpt_strategy_rank_0.ckpt
+    ├── ckpt_strategy_rank_1.ckpt
+    ...
+    └── ckpt_strategy_rank_7.ckpt
+</pre></div>
+</div>
+<blockquote>
+<div><p>注：策略文件保存时会覆盖旧文件，为防止覆盖或混杂不同任务的策略文件，请及时将策略文件保存到自定义文件夹。</p>
+</div></blockquote>
+<p>可参考<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/ckpt.html">Ckpt权重</a>和<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/safetensors.html">Safetensors权重</a>，获取更多权重相关信息。</p>
+</section>
+<section id="yaml">
+<h2>YAML参数配置说明<a class="headerlink" href="#yaml" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>参数</p></th>
+<th class="head"><p>描述</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>load_checkpoint</p></td>
+<td><p>权重文件或文件夹路径，<strong>断点续训时必填</strong>，默认为空字符串。<br />当配置的路径为空目录时，会退化为使用随机初始化权重进行预训练。<br />若为单卡权重，可配置为权重文件路径，需要确保文件父目录不以”rank_”开头。</p></td>
+</tr>
+<tr class="row-odd"><td><p>src_strategy_path_or_dir</p></td>
+<td><p>策略文件或文件夹路径，<strong><code class="docutils literal notranslate"><span class="pre">auto_trans_ckpt=True</span></code>且load_checkpoint为分布式权重</strong>时需要配置，默认为空字符串。<br />若load_checkpoint配置的权重不带流水线并行切分，则可配置为任一策略文件路径，否则配置为策略文件夹路径。</p></td>
+</tr>
+<tr class="row-even"><td><p>auto_trans_ckpt</p></td>
+<td><p>权重自动转换开关，load_checkpoint配置的<strong>权重和当前任务的分布式策略不匹配</strong>时需要开启，默认为<code class="docutils literal notranslate"><span class="pre">False</span></code>。</p></td>
+</tr>
+<tr class="row-odd"><td><p>transform_process_num</p></td>
+<td><p>权重自动转换使用进程数，<strong>仅适用于ckpt格式权重的自动转换</strong>，可加速权重转换。默认为<code class="docutils literal notranslate"><span class="pre">None</span></code>不开启。<br />设置值需要能够整除集群总卡数，设置值越大，host内存占用越高，若host内存不足，需要减少进程数。</p></td>
+</tr>
+<tr class="row-even"><td><p>resume_training</p></td>
+<td><p>断点续训开关，可设置为<code class="docutils literal notranslate"><span class="pre">True</span></code>或任一rank子文件夹下的权重文件名。默认为<code class="docutils literal notranslate"><span class="pre">False</span></code>。<br />为<code class="docutils literal notranslate"><span class="pre">True</span></code>时，<strong>加载最后保存完整的权重</strong>续训。<br />为权重文件名时，<strong>加载指定step的权重</strong>续训。</p></td>
+</tr>
+<tr class="row-odd"><td><p>load_ckpt_format</p></td>
+<td><p>load_checkpoint配置的权重格式，可配置为<code class="docutils literal notranslate"><span class="pre">safetensors</span></code>或<code class="docutils literal notranslate"><span class="pre">ckpt</span></code>，默认为<code class="docutils literal notranslate"><span class="pre">ckpt</span></code>。</p></td>
+</tr>
+<tr class="row-even"><td><p>remove_redundancy</p></td>
+<td><p>去冗余加载开关，load_checkpoint配置的权重为<strong>去冗余保存的safetensors格式权重</strong>时需要开启，默认为<code class="docutils literal notranslate"><span class="pre">False</span></code>。</p></td>
+</tr>
+<tr class="row-odd"><td><p>load_ckpt_async</p></td>
+<td><p>是否将加载权重与模型编译的操作并行执行。该配置<strong>仅适用于ckpt格式权重且分布式策略不变</strong>的异步加载场景。默认为<code class="docutils literal notranslate"><span class="pre">False</span></code>。</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id5">
+<h2>断点续训使用场景介绍<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
+<section id="id6">
+<h3>中断续训<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<p><strong>概述</strong>：正常训练任务异常中断，不改变分布式策略，基于保存的权重重新恢复训练任务。</p>
+<ul>
+<li><p>基于最后保存完整的权重续训</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/checkpoint</span>
+<span class="nt">resume_training</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+</div>
+<p>系统会自动基于各rank的<code class="docutils literal notranslate"><span class="pre">meta.json</span></code>记录的权重，搜索并加载最后保存完整的权重进行续训。</p>
+<blockquote>
+<div><p>若权重文件夹的所有rank子文件夹下均无meta.json，则退化为基于各自rank最后时间戳的权重续训。</p>
+</div></blockquote>
+</li>
+<li><p>基于指定step的权重续训</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/checkpoint</span>
+<span class="c1"># 若为ckpt权重，则填写{prefix}-{epoch}_{step}.ckpt</span>
+<span class="nt">resume_training</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nv">prefix</span><span class="p p-Indicator">}</span><span class="l l-Scalar l-Scalar-Plain">-{epoch}_{step}.safetensors</span>
+</pre></div>
+</div>
+<p>用户需确保指定权重的完整性。各rank会自动替换”prefix”中的rank信息来更新要加载的权重名，比如指定的权重名为<code class="docutils literal notranslate"><span class="pre">qwen3_8b_rank_0-200_1.safetensors</span></code>，rank_1加载时会将权重名替换为<code class="docutils literal notranslate"><span class="pre">qwen3_8b_rank_1-200_1.safetensors</span></code>。若某rank下权重缺失，会报错权重文件找不到。</p>
+</li>
+</ul>
+</section>
+<section id="id7">
+<h3>策略转换续训<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<p><strong>概述</strong>：修改了<strong>分布式策略</strong>或<strong>扩大/缩小集群规模</strong>继续训练任务，需要<strong>开启权重自动转换</strong>。</p>
+<section id="safetensors">
+<h4>safetensors权重<a class="headerlink" href="#safetensors" title="Link to this heading"></a></h4>
+<p>开启权重自动转换，系统会自动合并safetensors权重为<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/safetensors.html#%E5%AE%8C%E6%95%B4%E6%9D%83%E9%87%8D">完整权重</a>后进行分布式加载，合并的safetensors权重会落盘到<code class="docutils literal notranslate"><span class="pre">output/unified_checkpoint</span></code>文件夹下；若已经将权重离线合并为<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/safetensors.html#%E5%AE%8C%E6%95%B4%E6%9D%83%E9%87%8D">完整权重</a>，则会直接进行分布式加载。离线合并步骤请参考<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/safetensors.html">Safetensors权重-权重切分与合并</a>章节。</p>
+<ul>
+<li><p>基于最后保存完整的权重续训</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/checkpoint</span>
+<span class="nt">src_strategy_path_or_dir</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/strategy</span>
+<span class="nt">resume_training</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="nt">auto_trans_ckpt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+</div>
+</li>
+<li><p>基于指定step的权重续训</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/checkpoint</span>
+<span class="nt">src_strategy_path_or_dir</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/strategy</span>
+<span class="nt">resume_training</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nv">prefix</span><span class="p p-Indicator">}</span><span class="l l-Scalar l-Scalar-Plain">-{epoch}_{step}.safetensors</span>
+<span class="nt">auto_trans_ckpt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+</div>
+</li>
+<li><p>基于合并的权重续训</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/unified_checkpoint</span>
+<span class="nt">resume_training</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="nt">auto_trans_ckpt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="ckpt">
+<h4>ckpt权重<a class="headerlink" href="#ckpt" title="Link to this heading"></a></h4>
+<p>开启权重自动转换，系统会自动转换权重到当前任务的分布式策略后进行加载，转换的ckpt权重会落盘到<code class="docutils literal notranslate"><span class="pre">output/transformed_checkpoint</span></code>文件夹下，可用于后续直接加载使用且无需开启权重自动转换。</p>
+<p>若权重的rank子文件夹下存在多个step的权重文件，需要离线对权重进行筛选，确保<strong>每个rank子文件夹下只有需要加载的单个ckpt文件</strong>。</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/checkpoint</span>
+<span class="nt">src_strategy_path_or_dir</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/strategy</span>
+<span class="nt">resume_training</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="nt">auto_trans_ckpt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="nt">transform_process_num</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id8">
+<h3>增量续训<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
+<p><strong>概述</strong>：训练数据集需要<strong>边生产边训练</strong>，当前数据集训练结束后，加入新生产的数据集继续训练，直到所有数据集训练完毕。该场景需要用户基于训练的总数据量，提前预设学习率曲线的总步数。</p>
+<p>假设一共训练10T tokens数据，每次生产的数据集只包含1T tokens数据，整个训练过程分10个epoch训完，一共需要花费100000steps。</p>
+<ul>
+<li><p>步骤1：预设总训练步数，固定整个训练流程的学习率曲线</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">lr_schedule</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">total_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100000</span>
+</pre></div>
+</div>
+</li>
+<li><p>步骤2：设置足够大的epoch值，确保能够训完所有数据集</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">runner_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">epochs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">15</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>整个训练过程的学习率曲线已固定，epochs值设置不会影响学习率，可以设置较大值，确保能训完10个数据集。</p>
+</div></blockquote>
+</li>
+<li><p>步骤3：数据集训完1个epoch后，可以更换数据集续训，如下为基于最后保存完整的权重续训，其他续训方式请参考<a class="reference internal" href="#id6">中断续训</a>或<a class="reference internal" href="#id7">策略转换续训</a>。</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/checkpoint</span>
+<span class="nt">resume_training</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>由于各个数据集样本数量不一致，更换数据集续训，显示的epoch和step可能发生变化，但是当前训练的总step数不变，为正常现象。</p>
+</div></blockquote>
+</li>
+</ul>
+</section>
+<section id="id9">
+<h3>自动恢复续训<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
+<p><strong>概述</strong>：为方便平台能够自动拉起断点续训，无需人工干预，可以将load_checkpoint配置为权重checkpoint的保存路径，首次开始训练时，该目录为空，会正常随机初始化权重；续训时，会基于该目录下最后保存完整的权重恢复训练。</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/output/checkpoint</span>
+<span class="nt">resume_training</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id10">
+<h2>注意事项和建议<a class="headerlink" href="#id10" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>分布式断点续训必须开启<strong>数据下沉模式</strong>，配置<code class="docutils literal notranslate"><span class="pre">sink_mode=True</span></code>。</p></li>
+<li><p>建议配置<code class="docutils literal notranslate"><span class="pre">SHARED_PATHS</span></code>环境变量为最上层共享目录路径，比如<code class="docutils literal notranslate"><span class="pre">/data01</span></code>是共享目录，工程目录在该目录下，配置<code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">SHARED_PATHS=/data01</span></code>。</p></li>
+<li><p>建议不同分布式策略训练任务的权重和策略文件分开文件夹保存。</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="monitor.html" class="btn btn-neutral float-left" title="训练指标监控" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="checkpoint_saving_and_loading.html" class="btn btn-neutral float-right" title="checkpoint保存和加载" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

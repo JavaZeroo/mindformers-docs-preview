@@ -1,0 +1,250 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Loading Hugging Face Model Configuration &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Logs" href="logging.html" />
+    <link rel="prev" title="Configuration File Descriptions" href="configuration.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">Models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contribution Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">Modelers Contribution Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">Model-Related FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">Feature-Related FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Static Graph Implementation (Deprecated)</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Full-process Guide to Large Models</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Features</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">Features Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="start_tasks.html">Start Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ckpt.html">Ckpt Weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="safetensors.html">Safetensors Weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">Configuration File Descriptions</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Loading Hugging Face Model Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#use-case">Use Case</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#operation-guide">Operation Guide</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#preparing-hugging-face-model-configuration">Preparing Hugging Face Model Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#preparing-yaml-configuration-file">Preparing YAML Configuration File</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#initiating-tasks">Initiating Tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#frequently-asked-questions">Frequently Asked Questions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html">Logs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tokenizer.html">Using Tokenizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset.html">Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training_hyperparameters.html">Training Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monitor.html">Training Metrics Monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training.html">Resumable Training After Breakpoint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoint_saving_and_loading.html">Checkpoint Saving and Loading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training2.0.html">Resume Training2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel_training.html">Distributed Parallelism Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="high_availability.html">Training High Availability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory_optimization.html">Memory Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skip_data_and_ckpt_health_monitor.html">Data Skip And Checkpoint Health Monitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pma_fused_checkpoint.html">Pre-trained Model Average Weight Consolidation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="other_training_features.html">Other Training Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantization.html">Quantization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_development/index.html">Advanced Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">Excellent Practice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">Environment Variable Descriptions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Features</a></li>
+      <li class="breadcrumb-item active">Loading Hugging Face Model Configuration</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/feature/load_huggingface_config.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">Deprecated</p>
+<p>This page belongs to the <strong>Static Graph (GRAPH_MODE) Implementation</strong> section and has been marked as deprecated. New features are primarily being developed in the “r2.0.0 Dynamic Graph Implementation” section. Please refer to the dynamic graph documentation first.</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="loading-hugging-face-model-configuration">
+<h1>Loading Hugging Face Model Configuration<a class="headerlink" href="#loading-hugging-face-model-configuration" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_en/static_graph/feature/load_huggingface_config.md"><img alt="View Source on AtomGit" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source_en.svg" /></a></p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>Currently, MindSpore Transformers supports loading model configurations from Hugging Face, allowing users to directly load the configuration of models on Hugging Face, while only a few of MindSpore Transformers’ own model configurations need to be defined in the YAML file. The benefits of this feature are mainly as follows:</p>
+<ol class="arabic simple">
+<li><p>Reduced cost of migrating models from Hugging Face. Users can directly reuse the configurations of community models without the need to manually rewrite them.</p></li>
+<li><p>Facilitating consistent reproduction. By using plug-and-play configuration files, it ensures that model hyperparameters (such as the number of layers, number of attention heads, hidden layer size, etc.) remain consistent with the original model.</p></li>
+<li><p>Ecological reuse, facilitating the inheritance of upstream and downstream toolchains. Users can download model configurations and Tokenizers from Hugging Face, and perform inference or deployment using MindSpore Transformers. This also makes it easier to seamlessly integrate with tools that support Hugging Face formats in the future.</p></li>
+</ol>
+</section>
+<section id="use-case">
+<h2>Use Case<a class="headerlink" href="#use-case" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Currently supports reusing Hugging Face model configurations for inference directly.</p></li>
+</ul>
+</section>
+<section id="operation-guide">
+<h2>Operation Guide<a class="headerlink" href="#operation-guide" title="Link to this heading"></a></h2>
+<section id="preparing-hugging-face-model-configuration">
+<h3>Preparing Hugging Face Model Configuration<a class="headerlink" href="#preparing-hugging-face-model-configuration" title="Link to this heading"></a></h3>
+<p>Taking Qwen3 as an example, download the model configuration files (including config.json and generation.json) from the Hugging Face official website and store them in the local folder <code class="docutils literal notranslate"><span class="pre">./local/qwen3</span></code>.</p>
+</section>
+<section id="preparing-yaml-configuration-file">
+<h3>Preparing YAML Configuration File<a class="headerlink" href="#preparing-yaml-configuration-file" title="Link to this heading"></a></h3>
+<p>This feature only involves the model and inference configurations, with the relevant parameters as follows:</p>
+<ul class="simple">
+<li><p>pretrained_model_dir: The directory path where the Hugging Face model configuration is located;</p></li>
+<li><p>model_config: Model configuration fields specific to MindSpore Transformers;</p></li>
+<li><p>generation_config: Parameters related to text generation. Optional configuration, increase if customization is needed. For the configuration items, refer to <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/generation/mindformers.generation.GenerationConfig.html">GenerationConfig</a>.</p></li>
+</ul>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">pretrained_model_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;./local/qwen3&quot;</span>
+<span class="nt">model</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">model_config</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">compute_dtype</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;bfloat16&quot;</span>
+<span class="w">    </span><span class="nt">layernorm_compute_dtype</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;float32&quot;</span>
+<span class="w">    </span><span class="nt">rotary_dtype</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;bfloat16&quot;</span>
+<span class="w">    </span><span class="nt">params_dtype</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;bfloat16&quot;</span>
+</pre></div>
+</div>
+<p>If there is no need to reuse Hugging Face model configurations, MindSpore Transformers requires all necessary fields to be configured in model_config and generation, among which model_type and architectures are required fields.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">model</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">model_config</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">model_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">qwen3</span>
+<span class="w">    </span><span class="nt">architectures</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;Qwen3ForCausalLM&#39;</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">    </span><span class="nt">compute_dtype</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;bfloat16&quot;</span>
+<span class="w">    </span><span class="nt">layernorm_compute_dtype</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;float32&quot;</span>
+<span class="w">    </span><span class="nt">rotary_dtype</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;bfloat16&quot;</span>
+<span class="w">    </span><span class="nt">params_dtype</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;bfloat16&quot;</span>
+<span class="nt">generation_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">max_length</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>The configuration fields for the model in the YAML file take precedence over the corresponding model configurations in pretrained_model_dir. Therefore, if there are fields with the same name, the fields in the YAML file will override the original values.</p>
+</div></blockquote>
+</section>
+<section id="initiating-tasks">
+<h3>Initiating Tasks<a class="headerlink" href="#initiating-tasks" title="Link to this heading"></a></h3>
+<p>Refer to <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/guide/inference.html#inference-based-on-the-run-mindformer-script">Using run_mindformer.py to initiate inference tasks</a>.</p>
+</section>
+</section>
+<section id="frequently-asked-questions">
+<h2>Frequently Asked Questions<a class="headerlink" href="#frequently-asked-questions" title="Link to this heading"></a></h2>
+<ul>
+<li><p>If Hugging Face model configuration is not loaded, and model_type and architectures are required configuration fields, how should it be configured?</p>
+<p>Taking Qwen3 as an example:</p>
+<p>If its model configuration class Qwen3Config is registered with non-empty search_names, then model_type only needs to be configured with the value of search_names; If search_names is not provided, then model_type should be configured as Qwen3Config; architectures should be configured as the name of the corresponding model class Qwen3ForCausalLM.</p>
+</li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="configuration.html" class="btn btn-neutral float-left" title="Configuration File Descriptions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="logging.html" class="btn btn-neutral float-right" title="Logs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

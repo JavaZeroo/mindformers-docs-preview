@@ -1,0 +1,615 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>训练高可用 &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="训练内存优化" href="memory_optimization.html" />
+    <link rel="prev" title="分布式并行训练" href="parallel_training.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">介绍</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/quick_start.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">模型支持库</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">安装</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">安装指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">功能特性</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/overview.html">功能特性概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/start_task.html">启动任务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/configuration.html">配置文件说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/logging.html">日志</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/dataset.html">数据集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/training_hyperparameters.html">训练超参数与优化器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/save_and_load_checkpoint.html">权重保存与加载</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/resume_training.html">断点续训</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/monitor.html">训练指标监控与 Profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/static_graph_features.html">静态图实现特性</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">环境变量</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../env_variables.html">环境变量说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">贡献指南</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers贡献指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">魔乐社区贡献指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">模型相关 FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">功能相关 FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">静态图实现（Deprecated）</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">大模型全流程指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">功能特性</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">功能特性概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="start_tasks.html">启动任务</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ckpt.html">Ckpt权重</a></li>
+<li class="toctree-l2"><a class="reference internal" href="safetensors.html">Safetensors权重</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">配置文件说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="load_huggingface_config.html">加载 Hugging Face 模型配置</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html">日志</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tokenizer.html">使用Tokenizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset.html">数据集</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training_hyperparameters.html">训练超参数</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monitor.html">训练指标监控</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training.html">断点续训</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoint_saving_and_loading.html">checkpoint保存和加载</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training2.0.html">断点续训2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">训练高可用</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">使用说明</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id4">环境变量配置</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#yaml">YAML 配置</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">使用示例</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ckpt">临终 CKPT</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id8">故障快速恢复</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skip_data_and_ckpt_health_monitor.html">数据跳过和健康监测</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pma_fused_checkpoint.html">Pre-trained Model Average 权重合并</a></li>
+<li class="toctree-l2"><a class="reference internal" href="other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantization.html">量化</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_development/index.html">高阶开发</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">优秀实践</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">环境变量说明</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">功能特性</a></li>
+      <li class="breadcrumb-item active">训练高可用</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/feature/high_availability.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">已废弃（Deprecated）</p>
+<p>本页属于 <strong>静态图（GRAPH_MODE）实现</strong> 章节，已标记为废弃。新特性优先在「r2.0.0 动态图实现」章节演进，请优先查阅动态图相关文档。</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>训练高可用<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/static_graph/feature/high_availability.md"><img alt="查看源文件" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source.svg" /></a></p>
+<section id="id2">
+<h2>概述<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p>MindSpore Transformers 高可用特性提供了如下几个功能：</p>
+<ul class="simple">
+<li><p><strong>临终 CKPT 功能</strong>：主要针对大模型训练过程中的故障恢复加速。该特性在训练过程中发生故障后，校验中间状态数据的完整性和一致性，生成一次临终 Checkpoint 数据。恢复训练时能够通过该 Checkpoint 数据恢复，减少故障造成的训练迭代损失。</p></li>
+<li><p><strong>UCE 故障容错恢复功能</strong>：主要针对大模型训练过程中片上内存的 UCE 故障检测，并完成在线修复，达到 Step 级重计算。</p></li>
+<li><p><strong>HCCE 故障恢复功能</strong>：主要针对大模型训练过程中HCCL通信算子重计算失败，并完成在线修复，达到 Step 级重计算。</p></li>
+<li><p><strong>TRE 训练结果异常恢复功能</strong>：主要针对大模型训练过程中出现loss或global norm等值异常检测，并完成在线修复，达到 Step 级重计算。</p></li>
+<li><p><strong>ARF 进程级重调度恢复功能</strong>：训练发生异常后，不需要重新拉起整个集群，只需以节点为单位进行重启或替换，完成修复并继续训练。</p></li>
+<li><p><strong>TSP 训练迭代暂停功能</strong>：在每个训练step结束后，进入训练暂停接口，根据上层运维需要进行训练暂停和继续。例如，暂停训练执行通信网络轨道切换，切换成功后继续训练。</p></li>
+<li><p><strong>RSC POD 级重调度功能</strong>：主要作为其他快恢特性执行失败之后的兜底方案，kill故障进程以及其他正常进程（正常进程所在pod不会被kill），将故障pod从当前集群中隔离，同时调度新的pod加入集群，并恢复训练（当前版本必须依赖MindX）。</p></li>
+</ul>
+<p>这几个高可用特性的<strong>约束</strong>和<strong>依赖</strong>如下：</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p></p></th>
+<th class="head"><p>临终 CKPT</p></th>
+<th class="head"><p>UCE</p></th>
+<th class="head"><p>HCCE</p></th>
+<th class="head"><p>ARF</p></th>
+<th class="head"><p>TRE</p></th>
+<th class="head"><p>TSP</p></th>
+<th class="head"><p>RSC</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>依赖MindIO组件</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td><p>卡间存在副本关系</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-even"><td><p>Sink Size 为 1</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+</tr>
+</tbody>
+</table>
+<p>目前这几个高可用特性只支持Ascend后端上图模式的Step级别恢复。</p>
+<p>卡间存在副本关系的目的是当其中一张卡发生故障时，可从另外一张卡恢复。要求权重和优化器状态都会存在至少两份冗余。为保证这种冗余关系，必须开启数据并行，保证有两张卡权重一致。同时，如果开启了优化器并行，也必须确保存在两张卡的优化器状态一致。</p>
+<p>临终 CKPT、UCE 和 ARF 组合开启这三个功能时，依次生效的顺序是：UCE -&gt; ARF -&gt; 临终 CKPT。如果其中一个功能可以恢复，就不会执行下一个功能。临终 CKPT 功能作为最后的保障，完成该功能后整个训练进程会退出。所以在 UCE 或 ARF 功能开启时，会默认开启临终 CKPT。</p>
+<p>故障快速恢复由ARF和TRE两个功能组合，生效顺序为：TRE -&gt; ARF 。TRE负责监测global norm的异常值并抛出异常，ARF负责捕获TRE异常后重新拉起整个集群修复训练，整个过程不中断训练。</p>
+<p>故障快速恢复使用须知：</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>进程级快速恢复功能，能有效减少训练过程中遇到异常 global norm 而导致中断训练直至重新拉起的时间。</p></li>
+<li><p>使用前请先正常训练一段时间，从而确定需要设定的 global norm 的阈值。</p></li>
+<li><p>一旦遇到超过设定阈值的global norm，便会立即抛出异常，进入快速恢复阶段。</p></li>
+<li><p>数据跳过功能不能与故障快速恢复功能同时使用。参考<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/skip_data_and_ckpt_health_monitor.html#%E6%95%B0%E6%8D%AE%E8%B7%B3%E8%BF%87">数据跳过</a>功能。</p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="id3">
+<h2>使用说明<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<p>高可用特性开关由环境变量使能，YAML 配置文件中不单独设置开关。但对于要求卡间存在副本关系的高可用特性，YAML 文件需要能配置出两张卡的权重和优化器状态一致，详见本文档中的<a class="reference internal" href="#id6">副本关系配置</a>章节。</p>
+<p>依赖MindIO组件的高可用特性需用户安装 MindIO TFT SDK 包。</p>
+<section id="id4">
+<h3>环境变量配置<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">MINDIO_FOR_MINDSPORE</span><span class="o">=</span><span class="m">1</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MS_ENABLE_TFT</span><span class="o">=</span><span class="s2">&quot;{TTP:1,UCE:1,HCCE:1,ARF:1,TRE:1,TSP:1}&quot;</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MS_TFT_IP</span><span class="o">=</span><span class="m">127</span>.0.0.1
+<span class="nb">export</span><span class="w"> </span><span class="nv">MS_TFT_PORT</span><span class="o">=</span><span class="m">30051</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">MINDIO_FOR_MINDSPORE</span></code>：使能 MindIO TFT SDK 支持 MindSpore</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MS_ENABLE_TFT</span></code>：表示启用训练故障容错（Training Fault Tolerance）功能。如果只想启用其中的某一个功能，则将对应的值设置为 1 即可。</p>
+<ul>
+<li><p><strong>TTP (Try To Persist)</strong>：临终 CKPT 功能</p></li>
+<li><p><strong>UCE (Uncorrectable Memory Error)</strong>：UCE 故障容错恢复功能</p></li>
+<li><p><strong>HCCE (Huawei Collective Communication Error)</strong>：HCCL 重计算失败恢复功能</p></li>
+<li><p><strong>ARF (Air Refuelling)</strong>：进程级重调度恢复功能</p></li>
+<li><p><strong>TRE (Training Result Error)</strong>：TRE 训练结果异常恢复功能</p></li>
+<li><p><strong>TSP (Training Step Pause)</strong>：TSP 训练迭代暂停功能</p></li>
+<li><p><strong>RSC (Register Stop/Start Controller)</strong>：POD级重调度功能</p></li>
+<li><p>POD级重调度只把训练进程交给第三方组件（如 MindX）管控，仅开启RSC（当前版本必须依赖MindX）时，其他训练故障容错功能不生效</p></li>
+<li><p>开启 UCE 或者 ARF 功能时，默认开启 TTP 功能</p></li>
+<li><p>同时开启 TRE 和异步 CKPT 特性，无法保证续训前后的 loss 完全一致</p></li>
+<li><p>TRE 功能不依赖 MindIO 组件，若只使能TRE特性，无需配置 MindIO 相关的环境变量 MINDIO_FOR_MINDSPORE、MS_TFT_IP 和 MS_TFT_PORT</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MS_TFT_IP</span></code> 和 <code class="docutils literal notranslate"><span class="pre">MS_TFT_PORT</span></code> 分别表示 TFT Controller 的 IP 和端口号，无默认值，需要用户指定。如果由 MindSpore Transformers 启动 Controller，则配置用户集群中 rank0 节点的 IP 和端口号。如果用户自行启动 Controller，则配置 Controller 的 IP 和端口号。</p></li>
+</ul>
+</section>
+<section id="yaml">
+<h3>YAML 配置<a class="headerlink" href="#yaml" title="Link to this heading"></a></h3>
+<p>YAML配置包含两部分：临终 CKPT 的保存及恢复配置和卡间副本关系配置。</p>
+<section id="id5">
+<h4>保存及恢复配置<a class="headerlink" href="#id5" title="Link to this heading"></a></h4>
+<p>临终的 Checkpoint 保存和恢复能力分别用于初始训练和续训，这部分复用现有的 MindSpore Transformers 的配置。以下分别介绍初始训练和续训的配置。</p>
+<ul>
+<li><p><strong>初始训练配置</strong></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">output_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;./output&#39;</span><span class="w"> </span><span class="c1"># 保存 Checkpoint 和 Strategy 的目录</span>
+<span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;&#39;</span><span class="w">    </span><span class="c1"># 初次训练时配置为空</span>
+<span class="nt">src_strategy_path_or_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/output/strategy/&#39;</span>
+<span class="nt">only_save_strategy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="nt">resume_training</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span><span class="w">  </span><span class="c1"># 初次训练时配置为 False</span>
+<span class="nt">run_mode</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;train&#39;</span>
+
+<span class="nt">callbacks</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CheckpointMonitor</span>
+<span class="w">    </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;qwen3_8b&quot;</span>
+<span class="w">    </span><span class="nt">save_checkpoint_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
+<span class="w">    </span><span class="nt">integrated_save</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">    </span><span class="nt">async_save</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>续训配置</strong></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">output_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;./output&#39;</span><span class="w"> </span><span class="c1"># 保存 Checkpoint 和 Strategy 的目录</span>
+<span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;./output/checkpoint/&#39;</span><span class="w">   </span><span class="c1"># 续训时配置 Checkpoint 路径</span>
+<span class="nt">src_strategy_path_or_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/output/strategy/&#39;</span>
+<span class="nt">only_save_strategy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="nt">resume_training</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w">  </span><span class="c1"># 续训时配置为 True</span>
+<span class="nt">run_mode</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;train&#39;</span>
+
+<span class="nt">callbacks</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CheckpointMonitor</span>
+<span class="w">    </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;qwen3_8b&quot;</span>
+<span class="w">    </span><span class="nt">save_checkpoint_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
+<span class="w">    </span><span class="nt">integrated_save</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">    </span><span class="nt">async_save</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="id6">
+<h4>副本关系配置<a class="headerlink" href="#id6" title="Link to this heading"></a></h4>
+<p>高可用的临终 CKPT、UCE 和 ARF 这三个功能的关键是配置出权重和优化器的副本冗余关系。配置的核心是数据并行域的维度大于 2，如果叠加优化器并行，需要同时保证优化器的副本数大于 2。所以配置分两类：开启优化器并行和不开启优化器并行。下面以 8 卡为例，介绍如何配置。</p>
+<ul>
+<li><p><strong>不开启优化器并行</strong></p>
+<p>数据并行度 dp 配置为 2 的倍数即可，这样就会存在两张卡的权重和优化器状态一致。</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">parallel</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enable_parallel_optimizer</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="nt">parallel_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">data_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">model_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">  </span><span class="nt">pipeline_stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>开启优化器并行</strong></p>
+<p>开启优化器并行后必须要保证优化器的状态存在副本，配置的关键是 optimizer_weight_shard_size 为 2。此时优化器状态的副本数为 data_parallel/optimizer_weight_shard_size。因此，如果数据并行度配置为 2 时，是不存在优化器副本的，必须把数据并行度配置为 4。此时的副本数为 data_parallel/optimizer_weight_shard_size = 4/2 = 2。</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">parallel</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enable_parallel_optimizer</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">parallel_optimizer_config</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">optimizer_weight_shard_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="nt">parallel_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">data_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">  </span><span class="nt">model_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">pipeline_stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+</section>
+</section>
+<section id="id7">
+<h2>使用示例<a class="headerlink" href="#id7" title="Link to this heading"></a></h2>
+<section id="ckpt">
+<h3>临终 CKPT<a class="headerlink" href="#ckpt" title="Link to this heading"></a></h3>
+<p>本章节以 Qwen3-8B 训练为例演示临终 CKPT 的使用。</p>
+<ol class="arabic">
+<li><p>先安装 MindSpore 和 MindIO</p></li>
+<li><p>下载 MindSpore Transformers，修改 <a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/example/qwen3/pretrain_qwen3_8b.yaml">pretrain_qwen3_8b.yaml</a> 配置文件，主要配置如下：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># runner config</span>
+<span class="nt">runner_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">epochs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">batch_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">  </span><span class="nt">sink_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">sink_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+
+<span class="c1"># ......</span>
+
+<span class="c1"># parallel context config</span>
+<span class="nt">parallel</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">parallel_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"> </span><span class="c1"># 0-data parallel, 1-semi-auto parallel, 2-auto parallel, 3-hybrid parallel</span>
+<span class="w">  </span><span class="nt">gradients_mean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">enable_alltoall</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">full_batch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">search_mode</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sharding_propagation&quot;</span>
+<span class="w">  </span><span class="nt">enable_parallel_optimizer</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">strategy_ckpt_save_file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;./ckpt_strategy.ckpt&quot;</span>
+<span class="w">  </span><span class="nt">parallel_optimizer_config</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">gradient_accumulation_shard</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">    </span><span class="nt">parallel_optimizer_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">64</span>
+<span class="w">    </span><span class="nt">optimizer_weight_shard_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+
+<span class="c1"># ......</span>
+
+<span class="c1"># default parallel of device num = 16 for Atlas 800T A2</span>
+<span class="nt">parallel_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">data_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+<span class="w">  </span><span class="nt">model_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">pipeline_stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">use_seq_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">micro_batch_num</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">vocab_emb_dp</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">gradient_aggregation_group</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+</pre></div>
+</div>
+<p>需要注意以下关键点：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">sink_size:</span> <span class="pre">1</span></code>：临终 CKPT 和 UCE 故障容错恢复等特性不支持 <code class="docutils literal notranslate"><span class="pre">sink_size</span></code> 大于 1 的场景，因此这里配置为 1。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">enable_parallel_optimizer:</span> <span class="pre">True</span></code>：使能优化器并行。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">optimizer_weight_shard_size:</span> <span class="pre">4</span></code>：优化器并行的切分大小为 4。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data_parallel:</span> <span class="pre">8</span></code>：数据并行配置为 8。</p></li>
+</ul>
+<p>按照前面章节的说明，<code class="docutils literal notranslate"><span class="pre">data_parallel/optimizer_weight_shard_size</span></code> 的值为 <code class="docutils literal notranslate"><span class="pre">8</span> <span class="pre">/</span> <span class="pre">4</span> <span class="pre">=</span> <span class="pre">2</span></code>，大于 1，因此存在副本关系。</p>
+</li>
+<li><p>执行下面命令启动训练</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">MINDIO_FOR_MINDSPORE</span><span class="o">=</span><span class="m">1</span>
+
+<span class="nb">export</span><span class="w"> </span><span class="nv">MS_ENABLE_TFT</span><span class="o">=</span><span class="s2">&quot;{TTP:1,UCE:1,ARF:1,TSP:1}&quot;</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MS_TFT_IP</span><span class="o">=</span><span class="m">127</span>.0.0.1
+<span class="nb">export</span><span class="w"> </span><span class="nv">MS_TFT_PORT</span><span class="o">=</span><span class="m">30051</span>
+
+bash<span class="w"> </span>scripts/msrun_launcher.sh<span class="w"> </span><span class="s2">&quot;run_mindformer.py \</span>
+<span class="s2">  --config path/to/pretrain_qwen3_8b.yaml \</span>
+<span class="s2">  --use_parallel True --run_mode train&quot;</span><span class="w"> </span><span class="m">8</span>
+</pre></div>
+</div>
+</li>
+<li><p>待训练执行若干个 step 之后，终止 worker 进程，触发临终 CKPT 保存</p>
+<p>注意：通过上述启动方式，MindIO Controller 附着在 worker 0 进程上，此种情况下不能终止 worker 0，否则导致 MindIO Controller 退出，无法触发临终 CKPT。但是通过 taskd 方式启动训练时，MindIO Controller 是个单独的进程，可以终止 worker 0 进程。</p>
+</li>
+<li><p>确认临终的 Checkpoint 生成</p>
+<p>在整个训练进程结束后，通过日志确认最终生成的 Checkpoint 文件的合理性，具体操作如下：</p>
+<p>1). 执行命令 <code class="docutils literal notranslate"><span class="pre">find</span> <span class="pre">output/checkpoint/</span> <span class="pre">-name</span> <span class="pre">'*.ckpt'</span></code> 查找生成的 Checkpoint 文件：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>$ find output/checkpoint/ -name &#39;*.ckpt&#39;
+output/checkpoint/rank_2/qwen3_8b_rank_2-5_1.ckpt
+output/checkpoint/rank_3/qwen3_8b_rank_3-5_1.ckpt
+output/checkpoint/rank_0/qwen3_8b_rank_0-5_1.ckpt
+output/checkpoint/rank_5/qwen3_8b_rank_5-5_1.ckpt
+</pre></div>
+</div>
+<p>2). 执行命令 <code class="docutils literal notranslate"><span class="pre">cat</span> <span class="pre">output/msrun_log/worker_0.log</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">'Epoch:'</span></code> 查看已经训练的 step：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>$ cat output/msrun_log/worker_0.log | grep &#39;Epoch:&#39;
+2025-04-07 15:34:27,308 - [mindformers/core/callback/callback.py:529] - INFO - { Epoch:[  1/  2], step:[    1/   19], loss: 10.649, per_step_time: 103328ms, lr: 0.0, overflow cond: False, loss_scale: 1.0, global_norm: [1 31049], train_throughput_per_npu: 2.896T
+2025-04-07 15:34:29,173 - [mindformers/core/callback/callback.py:529] - INFO - { Epoch:[  1/  2], step:[    2/   19], loss: 10.633, per_step_time: 1752ms, lr: 1e-05, overflow cond: False, loss_scale: 1.0, global_norm: [1 508834], train_throughput_per_npu: 170.738T
+2025-04-07 15:34:30,941 - [mindformers/core/callback/callback.py:529] - INFO - { Epoch:[  1/  2], step:[    3/   19], loss: 9.673, per_step_time: 1754ms, lr: 9.981987e-06, overflow cond: False, loss_scale: 1.0, global_norm [10.579812], train_throughput_per_npu: 170.523T
+2025-04-07 15:34:32,704 - [mindformers/core/callback/callback.py:529] - INFO - { Epoch:[  1/  2], step:[    4/   19], loss: 9.287, per_step_time: 1756ms, lr: 9.928079e-06, overflow cond: False, loss_scale: 1.0, global_norm [21.932272], train_throughput_per_npu: 170.319T
+2025-04-07 15:34:34,469 - [mindformers/core/callback/callback.py:529] - INFO - { Epoch:[  1/  2], step:[    5/   19], loss: 8.867, per_step_time: 1758ms, lr: 9.8386645e-06, overflow cond: False, loss_scale: 1.0, global_norm [16.986555], train_throughput_per_npu: 170.173T
+</pre></div>
+</div>
+<p>3). 执行命令 <code class="docutils literal notranslate"><span class="pre">cat</span> <span class="pre">output/msrun_log/worker_0.log</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">'report</span> <span class="pre">group</span> <span class="pre">list:'</span></code> 查看日志中 MindIO 输出的副本关系：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>$ cat output/msrun_log/worker_0.log | grep &#39;report group list:&#39;
+2025-04-07 15:34:27.363613 info 1879138 [TTP controller.cpp:1512] rank:4, report group list: [0, 4]
+2025-04-07 15:34:27.385564 info 1879139 [TTP controller.cpp:1512] rank:7, report group list: [3, 7]
+2025-04-07 15:34:27.393198 info 1879136 [TTP controller.cpp:1512] rank:6, report group list: [2, 6]
+2025-04-07 15:34:27.393515 info 1879142 [TTP controller.cpp:1512] rank:1, report group list: [1, 5]
+</pre></div>
+</div>
+<p>从上面训练的 step 信息可以看出已经训练的 5 个 step，和 Checkpoint 的文件名 <code class="docutils literal notranslate"><span class="pre">qwen3_8b_rank_2-5_1.ckpt</span></code> 中的 5 是一致的。</p>
+<p>从日志中输出的副本关系 <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">4]</span></code>、<code class="docutils literal notranslate"><span class="pre">[3,</span> <span class="pre">7]</span></code>、<code class="docutils literal notranslate"><span class="pre">[2,</span> <span class="pre">6]</span></code> 和 <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">5]</span></code> 得知：</p>
+<ul class="simple">
+<li><p>rank 0 和 rank 4 权重存在副本关系，临终的 Checkpoint 保存在 rank 0</p></li>
+<li><p>rank 3 和 rank 7 权重存在副本关系，临终的 Checkpoint 保存在 rank 3</p></li>
+<li><p>rank 2 和 rank 6 权重存在副本关系，临终的 Checkpoint 保存在 rank 2</p></li>
+<li><p>rank 1 和 rank 5 权重存在副本关系，由于 worker 1 终止，临终的 Checkpoint 保存在 rank 5</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="id8">
+<h3>故障快速恢复<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
+<p>本章节以 Qwen3-8B 训练为例演示故障快速恢复的使用。</p>
+<blockquote>
+<div><p>以下示例所展示的参数数值仅作为实验数据，请以真实训练数据为准。</p>
+</div></blockquote>
+<ol class="arabic">
+<li><p>先安装 <a class="reference external" href="https://www.mindspore.cn/install">MindSpore</a>。</p></li>
+<li><p>下载 MindSpore Transformers，使用的<a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/example/qwen3/pretrain_qwen3_8b.yaml">pretrain_qwen3_8b.yaml</a>按照如下配置添加和修改参数：</p>
+<p>Checkpoint 1.0配置：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">output_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;./output&#39;</span>
+
+<span class="nt">monitor_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">monitor_on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">check_for_global_norm</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">global_norm_spike_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">44.0</span>
+
+<span class="nt">callbacks</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CheckpointMonitor</span>
+<span class="w">    </span><span class="nt">save_checkpoint_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+<p>Checkpoint 2.0配置：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">output_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;./output&#39;</span>
+
+<span class="nt">monitor_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">monitor_on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">health_checkpoint</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">global_norm_spike_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">44.0</span>
+
+<span class="nt">callbacks</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CheckpointMonitor</span>
+<span class="w">    </span><span class="nt">save_checkpoint_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+<p><strong>参数说明：</strong></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>参数名称</p></th>
+<th class="head"><p>描述</p></th>
+<th class="head"><p>类型</p></th>
+<th class="head"><p>是否可选</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>health_checkpoint</p></td>
+<td><p>健康权重相关配置。默认值为<code class="docutils literal notranslate"><span class="pre">None</span></code>。</p></td>
+<td><p>dict</p></td>
+<td><p>可选</p></td>
+</tr>
+<tr class="row-odd"><td><p>output_dir</p></td>
+<td><p>保存权重和切分策略的文件路径。默认值为<code class="docutils literal notranslate"><span class="pre">./output</span></code>。</p></td>
+<td><p>str</p></td>
+<td><p>可选</p></td>
+</tr>
+<tr class="row-even"><td><p>monitor_config</p></td>
+<td><p>训练指标监控配置。默认值为<code class="docutils literal notranslate"><span class="pre">None</span></code>。</p></td>
+<td><p>dict</p></td>
+<td><p>可选</p></td>
+</tr>
+<tr class="row-odd"><td><p>monitor_on</p></td>
+<td><p>是否开启训练指标监控配置。只有开启时才能监测异常的global norm和使能TRE功能。</p></td>
+<td><p>bool</p></td>
+<td><p>必选<code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>check_for_global_norm</p></td>
+<td><p>是否开启进程级故障快速恢复功能，和数据跳过功能互斥。默认值为<code class="docutils literal notranslate"><span class="pre">False</span></code>。</p></td>
+<td><p>bool</p></td>
+<td><p>可选</p></td>
+</tr>
+<tr class="row-odd"><td><p>global_norm_spike_threshold</p></td>
+<td><p>global norm的阈值，当global norm超过时触发数据跳过。Checkpoint 1.0场景下默认值为<code class="docutils literal notranslate"><span class="pre">3.0</span></code>。Checkpoint 1.0场景下和check_for_global_norm搭配使用。Checkpoint 2.0场景下单独使用，赋值则表示启用故障快速恢复功能。</p></td>
+<td><p>float</p></td>
+<td><p>可选</p></td>
+</tr>
+<tr class="row-even"><td><p>callbacks</p></td>
+<td><p>callbacks配置。</p></td>
+<td><p>list</p></td>
+<td><p>必选</p></td>
+</tr>
+<tr class="row-odd"><td><p>save_checkpoint_steps</p></td>
+<td><p>保存权重的步数间隔。</p></td>
+<td><p>int</p></td>
+<td><p>必选</p></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<div><p>Checkpoint 1.0配置在Checkpoint 1.0场景下和Checkpoint 2.0场景下均可生效，同时配置时Checkpoint 2.0的配置优先级高于Checkpoint 1.0的配置。Checkpoint 2.0配置仅在Checkpoint 2.0场景下生效。</p>
+</div></blockquote>
+</li>
+<li><p>配置环境变量：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">MS_ENABLE_TFT</span><span class="o">=</span><span class="s2">&quot;{TRE:1}&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p>运行以下命令，开启训练：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>mindformers
+
+bash<span class="w"> </span>scripts/msrun_launcher.sh<span class="w"> </span><span class="s2">&quot;run_mindformer.py \</span>
+<span class="s2">    --config path/to/pretrain_qwen3_8b.yaml \</span>
+<span class="s2">    --run_mode train \</span>
+<span class="s2">    --use_parallel True&quot;</span><span class="w"> </span><span class="m">8</span>
+</pre></div>
+</div>
+</li>
+<li><p>模型正式开始训练时，遇到global norm大于设定阈值，则会打印如下日志，提示用户当前遇到异常global norm，并记录对应的global step和global norm到abnormal_global_norm.json中，触发报错，进入快速恢复阶段。</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>- INFO - { Epoch:[  1/  2], step:[    2/ 6500], loss: 11.905, per_step_time: 2775ms, lr: 2.5641025e-08, overflow cond: False, loss_scale: 1.0, global_norm: [45.702465], train_throughput_per_npu: 171.176T
+- INFO -    0.0% |                                                  | 0.36029 samples/s/p  10:01:16 }
+- INFO - Current global norm [45.702465] is greater equal than threshold 44.0, stop training...
+</pre></div>
+</div>
+</li>
+<li><p>重新拉起训练后，从之前断点的步数开始续训。如果在训练至相同的global step时，global norm仍然大于设定的阈值，由于此前已经将对应的global step记录到YAML设置的output_dir下的abnormal_global_norm.json中，故此处只会记录相应的global norm，并不会抛出异常。</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>- INFO - { Epoch:[  1/  2], step:[    2/ 6500], loss: 11.905, per_step_time: 3504ms, lr: 2.5641025e-08, overflow cond: False, loss_scale: 1.0, global_norm: [45.706497], train_throughput_per_npu: 135.552T
+- INFO -    0.0% |                                                  | 0.28531 samples/s/p  12:39:17 }
+- INFO - The global norm [45.706497] of step 2 is still greater or equal than threshold 44.0, continue training.
+</pre></div>
+</div>
+<p>abnormal_global_norm.json记录数据如下：</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;2&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mf">45.70246505737305</span><span class="p">,</span><span class="w"> </span><span class="mf">45.70649719238281</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>“2”表示对应训练步数的global step，后面列表记录的则是恢复前后训练的global norm。</p>
+</li>
+</ol>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="parallel_training.html" class="btn btn-neutral float-left" title="分布式并行训练" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="memory_optimization.html" class="btn btn-neutral float-right" title="训练内存优化" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

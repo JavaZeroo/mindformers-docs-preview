@@ -1,0 +1,674 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>训练指标监控与 Profiling &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="其它训练特性" href="other_training_features.html" />
+    <link rel="prev" title="断点续训" href="resume_training.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">介绍</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/quick_start.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/models.html">模型支持库</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">安装</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">安装指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">功能特性</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">功能特性概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="start_task.html">启动任务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">配置文件说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logging.html">日志</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dataset.html">数据集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="training_hyperparameters.html">训练超参数与优化器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l1"><a class="reference internal" href="memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="save_and_load_checkpoint.html">权重保存与加载</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resume_training.html">断点续训</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">训练指标监控与 Profiling</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">一、训练指标监控</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#train-state-norm-loss">1.1 train_state（norm 与 loss 监控）</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id2">输出解读</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">使用场景</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#moe-monitor-moe">1.2 moe_monitor（MoE 专家负载）</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id4">输出格式</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#moe">配置示例：MoE 负载不均诊断</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#tensorboard">1.3 tensorboard（预留，暂不生效）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#health-checkpoint">1.4 health_checkpoint（预留，暂不生效）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#maxlogits-callbacks-maxlogitsmonitor">1.5 MaxLogits 健康监测（callbacks: MaxLogitsMonitor）</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id5">是什么</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id6">何时用</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id7">怎么配</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#muon-qk-clip">场景：配合 Muon + QK clip 自动开启追踪</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id8">二、Profiling（性能数据采集）</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#rank">2.1 多卡下的 rank 选取</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id9">2.2 输出目录与查看方式</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#profiler-level">2.3 场景化配置（按 profiler_level 三档）</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#a-level-0">场景 A：轻量算子级分析（Level 0）</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#b-level-1">场景 B：含通信分析（Level 1）</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#c-level-2">场景 C：含内存与调用栈（Level 2）</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id10">相关文档</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="static_graph_features.html">静态图实现特性</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">环境变量</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">环境变量说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">贡献指南</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contribution/mindformers_contribution.html">MindSpore Transformers贡献指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution/modelers_contribution.html">魔乐社区贡献指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../faq/model_related.html">模型相关 FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/feature_related.html">功能相关 FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">静态图实现（Deprecated）</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/guide/index.html">大模型全流程指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/feature/index.html">功能特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/advanced_development/index.html">高阶开发</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/example/index.html">优秀实践</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/env_variables.html">环境变量说明</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">训练指标监控与 Profiling</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/feature/monitor.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="profiling">
+<h1>训练指标监控与 Profiling<a class="headerlink" href="#profiling" title="Link to this heading"></a></h1>
+<p>MindSpore Transformers 动态图（PyNative）在训练循环中提供两类可观测能力：</p>
+<ul class="simple">
+<li><p><strong>训练指标监控</strong>（<code class="docutils literal notranslate"><span class="pre">monitor</span></code>）：按 micro-step 采集梯度 / 参数范数（norm）、损失（loss）等细粒度指标（另含 MoE 专家负载监控的预留配置）。这些指标<strong>当前仅通过训练日志（<code class="docutils literal notranslate"><span class="pre">logger.info</span></code>）输出</strong>。</p></li>
+<li><p><strong>性能数据采集</strong>（<code class="docutils literal notranslate"><span class="pre">profiler</span></code>）：在指定 step 区间内采集算子、通信、内存、调用栈等性能数据，结果以 MindSpore Profiler 产物落盘，用于性能分析与优化。</p></li>
+</ul>
+<p>两类能力均通过训练 YAML 配置开启，互不依赖，可单独使用。如果尚未一次训练，建议先阅读 <a class="reference internal" href="../quick_start/quick_start.html"><span class="std std-doc">快速开始</span></a>；配置文件整体结构见 <a class="reference internal" href="configuration.html"><span class="std std-doc">配置文件说明</span></a>。</p>
+<blockquote>
+<div><p><strong>输出形式说明</strong></p>
+<p>动态图监控指标（<code class="docutils literal notranslate"><span class="pre">monitor</span></code> 段）目前<strong>只写日志</strong>：每条记录由 <code class="docutils literal notranslate"><span class="pre">Monitor._flush_logger</span></code> 以 <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">key:</span> <span class="pre">value,</span> <span class="pre">...</span> <span class="pre">}</span></code> 形式打印到训练日志。框架内的 <code class="docutils literal notranslate"><span class="pre">_flush_tensorboard</span></code> 为空实现，PyNative 训练侧除 Profiler 的 trace handler 外没有任何 TensorBoard / SummaryWriter 写入逻辑。要把 norm/loss 曲线可视化，需要自行从日志解析。</p>
+</div></blockquote>
+<hr class="docutils" />
+<section id="id1">
+<h2>一、训练指标监控<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">monitor</span></code> 段下有四个子配置：<code class="docutils literal notranslate"><span class="pre">train_state</span></code>、<code class="docutils literal notranslate"><span class="pre">moe_monitor</span></code>、<code class="docutils literal notranslate"><span class="pre">tensorboard</span></code>、<code class="docutils literal notranslate"><span class="pre">health_checkpoint</span></code>。</p>
+<blockquote>
+<div><p><strong>当前生效范围</strong></p>
+<p>只有 <strong><code class="docutils literal notranslate"><span class="pre">train_state</span></code></strong> 和 <strong><code class="docutils literal notranslate"><span class="pre">moe_monitor</span></code></strong> 在动态图中<strong>完整接线并产出日志</strong>。<code class="docutils literal notranslate"><span class="pre">tensorboard</span></code> 与 <code class="docutils literal notranslate"><span class="pre">health_checkpoint</span></code> 是<strong>预留配置（dataclass 定义已存在，但 PyNative 训练侧无任何代码读取）</strong>，填写后不会产生任何效果，详见下文各自小节的提示块。</p>
+</div></blockquote>
+<p>监控由 <code class="docutils literal notranslate"><span class="pre">MonitorGroup</span></code> 在训练初始化时按配置实例化，只有「激活」的子监控才会被创建：<code class="docutils literal notranslate"><span class="pre">train_state</span></code> 在任一 norm/loss 开关打开时激活；<code class="docutils literal notranslate"><span class="pre">moe_monitor</span></code> 在 <code class="docutils literal notranslate"><span class="pre">save_tokens_per_expert_interval</span></code> 为正整数时激活。指标在每个训练 step 结束时由 <code class="docutils literal notranslate"><span class="pre">MonitorCallback</span></code>（<code class="docutils literal notranslate"><span class="pre">on_step_end</span></code>）统一 flush 到日志。</p>
+<section id="train-state-norm-loss">
+<h3>1.1 train_state（norm 与 loss 监控）<a class="headerlink" href="#train-state-norm-loss" title="Link to this heading"></a></h3>
+<p>按 micro-step 采集本地（local）与设备（device）级的梯度范数与损失。四个开关相互独立，可任意组合。</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>参数</p></th>
+<th class="head"><p>类型</p></th>
+<th class="head"><p>默认值</p></th>
+<th class="head"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">local_norm</span></code></p></td>
+<td><p>bool / str / list[str]</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p></td>
+<td><p>监控本地梯度范数。<code class="docutils literal notranslate"><span class="pre">True</span></code> 监控全部可训练参数；字符串或字符串列表按参数名子串过滤（<code class="docutils literal notranslate"><span class="pre">&quot;layers.0&quot;</span></code> 匹配名字含该子串的参数）；<code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>/<code class="docutils literal notranslate"><span class="pre">False</span></code> 关闭。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">local_loss</span></code></p></td>
+<td><p>bool</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+<td><p>监控每个 micro-batch 的本地损失。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">device_norm</span></code></p></td>
+<td><p>bool / str / list[str]</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+<td><p>监控设备级（累积）梯度范数，取值含义同 <code class="docutils literal notranslate"><span class="pre">local_norm</span></code>。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">device_loss</span></code></p></td>
+<td><p>bool</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+<td><p>监控设备级损失（梯度累积/all-reduce 之后的损失）。</p></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<div><p><strong>device_norm 会强制采集 local_norm</strong></p>
+<p>源码中 <code class="docutils literal notranslate"><span class="pre">device_norm</span></code> 的累积范数来自 <code class="docutils literal notranslate"><span class="pre">local_norm</span></code> 采集时缓存的 <code class="docutils literal notranslate"><span class="pre">prev_local_norms</span></code>。因此只要开启 <code class="docutils literal notranslate"><span class="pre">device_norm</span></code>，框架会在 <code class="docutils literal notranslate"><span class="pre">local_norm</span></code> 采集阶段一并计算所需参数的范数，即使 <code class="docutils literal notranslate"><span class="pre">local_norm</span></code> 本身为关闭状态。两者按各自的参数名过滤器独立筛选要打印的参数。</p>
+</div></blockquote>
+<section id="id2">
+<h4>输出解读<a class="headerlink" href="#id2" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">local_norm</span></code> 是「本步增量范数」</strong>。框架内部对每个参数维护累积范数 <code class="docutils literal notranslate"><span class="pre">accumulated</span></code>，按 micro-step 做差分：</p>
+<ul>
+<li><p>第 0 个 micro-step：<code class="docutils literal notranslate"><span class="pre">actual_norm</span> <span class="pre">=</span> <span class="pre">accumulated</span></code>；</p></li>
+<li><p>之后：<code class="docutils literal notranslate"><span class="pre">actual_norm</span> <span class="pre">=</span> <span class="pre">accumulated</span> <span class="pre">-</span> <span class="pre">prev</span></code>（<code class="docutils literal notranslate"><span class="pre">prev</span></code> 为上一 micro-step 的累积值）。
+这样每条记录反映的是<strong>当前 micro-batch 对梯度范数的增量贡献</strong>，而非到当前为止的总范数。</p></li>
+</ul>
+</li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">device_norm</span></code> 是累积值</strong>，直接打印 <code class="docutils literal notranslate"><span class="pre">prev_local_norms</span></code> 中缓存的累积范数。</p></li>
+<li><p>日志逐参数打印，形如 <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;local_norm&quot;:</span> <span class="pre">decoder.layers.0.self_attention.q_layernorm.weight:</span>&#160;&#160; <span class="pre">0.000381</span> <span class="pre">}</span></code>；同一 micro-step 的多条 norm 记录前会先打印一条形如 <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;step&quot;:</span> <span class="pre">4,</span> <span class="pre">&quot;micro_step&quot;:</span> <span class="pre">2</span> <span class="pre">}</span></code> 作为分组标记。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">local_loss</span></code> 记录形如 <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;micro_step&quot;:</span> <span class="pre">2,</span> <span class="pre">&quot;local_loss&quot;:</span> <span class="pre">0.123</span> <span class="pre">}</span></code>；<code class="docutils literal notranslate"><span class="pre">device_loss</span></code> 在优化器更新后记录。</p></li>
+</ul>
+</section>
+<section id="id3">
+<h4>使用场景<a class="headerlink" href="#id3" title="Link to this heading"></a></h4>
+<p><strong>场景 A：只看全局 loss 曲线（最简）</strong></p>
+<p>如果只关心整体收敛、不需要逐参数范数，<strong>不必开启 train_state 的任何 norm</strong>。step 级 loss 由框架的 <code class="docutils literal notranslate"><span class="pre">LossCallback</span></code> 直接打印到日志，监控段可留空或仅开 <code class="docutils literal notranslate"><span class="pre">device_loss</span></code>：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">monitor</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">train_state</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">device_loss</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w">       </span><span class="c1"># 在每个 step 优化器更新后打印归约后的损失</span>
+</pre></div>
+</div>
+<p><strong>场景 B：排查梯度爆炸 / 某层范数异常</strong></p>
+<p>当出现 loss 尖刺、NaN 或怀疑某些层梯度异常时，用 <code class="docutils literal notranslate"><span class="pre">local_norm</span></code> 按参数名过滤定位问题层。增量范数语义（上文「输出解读」）让你能看到<strong>是哪个 micro-batch、哪个参数</strong>贡献了异常增量：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">monitor</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">train_state</span><span class="p">:</span>
+<span class="w">    </span><span class="c1"># 只监控这几类参数的本步增量梯度范数，避免逐参数刷屏</span>
+<span class="w">    </span><span class="nt">local_norm</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;attention&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;layernorm&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">local_loss</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w">        </span><span class="c1"># 同时看每个 micro-batch 的本地损失，定位异常 micro-batch</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>提示：要监控全部参数用 <code class="docutils literal notranslate"><span class="pre">local_norm:</span> <span class="pre">True</span></code>；只看单一参数用字符串，如 <code class="docutils literal notranslate"><span class="pre">local_norm:</span> <span class="pre">&quot;embedding&quot;</span></code>。</p>
+</div></blockquote>
+<p><strong>场景 C：device_norm 与 local_norm 联动观察累积</strong></p>
+<p>需要同时看「每步增量」与「累积总量」时，同时开启两者。注意 <code class="docutils literal notranslate"><span class="pre">device_norm</span></code> 复用 <code class="docutils literal notranslate"><span class="pre">local_norm</span></code> 的采集结果（见上文提示块）：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">monitor</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">train_state</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">local_norm</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w">        </span><span class="c1"># 每个 micro-step 的增量范数</span>
+<span class="w">    </span><span class="nt">device_norm</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w">       </span><span class="c1"># 梯度累积后的累积范数（强制触发 local_norm 采集）</span>
+<span class="w">    </span><span class="nt">device_loss</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="moe-monitor-moe">
+<h3>1.2 moe_monitor（MoE 专家负载）<a class="headerlink" href="#moe-monitor-moe" title="Link to this heading"></a></h3>
+<p>设计用于监控 MoE 解码层各专家分配到的 token 数（tokens-per-expert），用于诊断<strong>专家负载不均</strong>——若少数专家长期吃满、其余专家空转，说明路由失衡，需要调整负载均衡损失或路由策略。</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>参数</p></th>
+<th class="head"><p>类型</p></th>
+<th class="head"><p>默认值</p></th>
+<th class="head"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">save_tokens_per_expert_interval</span></code></p></td>
+<td><p>int / None</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>打印 tokens-per-expert 记录的 micro-step 间隔；<code class="docutils literal notranslate"><span class="pre">None</span></code> 关闭监控，须为正整数（写 bool 会报错）。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">target_layers</span></code></p></td>
+<td><p>int / list[int] / None</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>监控的目标层。<code class="docutils literal notranslate"><span class="pre">int</span></code> 表示前 N 层 <code class="docutils literal notranslate"><span class="pre">range(N)</span></code>，<strong>仅匹配 decoder 层</strong>；<code class="docutils literal notranslate"><span class="pre">list[int]</span></code> 表示指定层 id；<code class="docutils literal notranslate"><span class="pre">None</span></code> 表示自动发现模型中所有含 <code class="docutils literal notranslate"><span class="pre">tokens_per_expert</span></code> 的 MoE 模块。</p></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<div><p><strong>target_layers 的 int 与 list 语义差异</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">int</span></code>（如 <code class="docutils literal notranslate"><span class="pre">3</span></code>）→ 展开为 <code class="docutils literal notranslate"><span class="pre">range(3)</span></code>，即模型第 0/1/2 层。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">list[int]</span></code>（如 <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">2,</span> <span class="pre">4]</span></code>）→ 精确匹配这些层 id。</p></li>
+<li><p>若指定的某层 id 实际不是 MoE 层（没有 <code class="docutils literal notranslate"><span class="pre">tokens_per_expert</span></code>），框架会打印告警 <code class="docutils literal notranslate"><span class="pre">decoder.layers.X</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">a</span> <span class="pre">MoE</span> <span class="pre">layer</span></code>。</p></li>
+</ul>
+</div></blockquote>
+<section id="id4">
+<h4>输出格式<a class="headerlink" href="#id4" title="Link to this heading"></a></h4>
+<p>MoE 监控以 <strong>Megatron 的 tokens-per-expert JSON 格式</strong>打印到日志（每行一条 JSON）。字段含义如下：</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>字段</p></th>
+<th class="head"><p>含义</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">iter</span></code></p></td>
+<td><p>全局 micro-step 计数（<code class="docutils literal notranslate"><span class="pre">global_micro_step</span></code>）</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">step</span></code></p></td>
+<td><p>训练 step id</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">micro_step</span></code></p></td>
+<td><p>step 内的 micro-batch 序号</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">block</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;decoder&quot;</span></code> 或 <code class="docutils literal notranslate"><span class="pre">&quot;mtp&quot;</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">layer</span></code></p></td>
+<td><p>层 id</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">mtp_idx</span></code></p></td>
+<td><p>仅 <code class="docutils literal notranslate"><span class="pre">block</span> <span class="pre">==</span> <span class="pre">&quot;mtp&quot;</span></code> 时出现，标识 MTP 子层</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">tpe</span></code></p></td>
+<td><p>该 micro-batch 内各专家分到的 token 数列表（按专家差分得到的增量）</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="moe">
+<h4>配置示例：MoE 负载不均诊断<a class="headerlink" href="#moe" title="Link to this heading"></a></h4>
+<p>以下为该监控的配置写法：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">monitor</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">moe_monitor</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">save_tokens_per_expert_interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w">   </span><span class="c1"># 每 10 个 micro-step 记录一次（设计语义）</span>
+<span class="w">    </span><span class="nt">target_layers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">10</span><span class="p p-Indicator">]</span><span class="w">             </span><span class="c1"># 抽样靠前/中/后几层，观察是否分层失衡</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>也可用 <code class="docutils literal notranslate"><span class="pre">target_layers:</span> <span class="pre">4</span></code> 监控前 4 层，或省略该字段让框架自动发现全部 MoE 层（数据量会更大）。<code class="docutils literal notranslate"><span class="pre">save_tokens_per_expert_interval</span></code> 须为正整数，写 <code class="docutils literal notranslate"><span class="pre">True</span></code>/<code class="docutils literal notranslate"><span class="pre">False</span></code> 会在配置校验阶段报 <code class="docutils literal notranslate"><span class="pre">TypeError</span></code>。</p>
+</div></blockquote>
+</section>
+</section>
+<hr class="docutils" />
+<section id="tensorboard">
+<h3>1.3 tensorboard（预留，暂不生效）<a class="headerlink" href="#tensorboard" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p><strong>该子配置在动态图中暂未接线</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">tensorboard</span></code> 子配置仅在配置 dataclass 中有定义，PyNative 训练侧<strong>没有任何代码读取它</strong>，填写后不会产生 TensorBoard 事件文件。监控指标当前仅通过日志输出（见本页开头提示块）。下表仅说明字段定义，<strong>不代表当前可用</strong>；如需可视化请自行从日志解析。</p>
+</div></blockquote>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>参数</p></th>
+<th class="head"><p>类型</p></th>
+<th class="head"><p>默认值</p></th>
+<th class="head"><p>说明（仅字段定义）</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">tensorboard_dir</span></code></p></td>
+<td><p>str</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p></td>
+<td><p>TensorBoard 事件文件目录。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tensorboard_log_interval</span></code></p></td>
+<td><p>int</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p>写入间隔。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">tensorboard_queue_size</span></code></p></td>
+<td><p>int</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1000</span></code></p></td>
+<td><p>事件队列最大长度。</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<hr class="docutils" />
+<section id="health-checkpoint">
+<h3>1.4 health_checkpoint（预留，暂不生效）<a class="headerlink" href="#health-checkpoint" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p><strong>当前为预留配置</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">health_checkpoint</span></code> 子配置仅有 dataclass 定义，PyNative 训练侧<strong>尚未实现基于范数阈值的健康检查 / 跳步逻辑</strong>（无任何代码消费 <code class="docutils literal notranslate"><span class="pre">global_norm_skip_threshold</span></code>、<code class="docutils literal notranslate"><span class="pre">embedding_local_norm_threshold</span></code> 等字段）。下表仅列出字段定义，配置后不会触发任何健康检查行为。</p>
+</div></blockquote>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>参数</p></th>
+<th class="head"><p>类型</p></th>
+<th class="head"><p>默认值</p></th>
+<th class="head"><p>说明（仅字段定义）</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">embedding_local_norm_threshold</span></code></p></td>
+<td><p>float</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">100.0</span></code></p></td>
+<td><p>embedding 参数 local norm 阈值。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">global_norm_skip_threshold</span></code></p></td>
+<td><p>float</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">100.0</span></code></p></td>
+<td><p>跳过参数更新的 global norm 阈值。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">global_norm_skip_time</span></code></p></td>
+<td><p>int</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">10</span></code></p></td>
+<td><p>允许连续跳过更新的次数。</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<hr class="docutils" />
+<section id="maxlogits-callbacks-maxlogitsmonitor">
+<h3>1.5 MaxLogits 健康监测（callbacks: MaxLogitsMonitor）<a class="headerlink" href="#maxlogits-callbacks-maxlogitsmonitor" title="Link to this heading"></a></h3>
+<p>大规模长时训练中，注意力 logits 数值溢出、梯度尖刺等会破坏训练稳定性。<code class="docutils literal notranslate"><span class="pre">MaxLogitsMonitor</span></code> 是动态图中<strong>真正被消费的数值健康监测回调</strong>，源码见 <code class="docutils literal notranslate"><span class="pre">mindformers/pynative/callback/max_logits_monitor.py</span></code>。与 <code class="docutils literal notranslate"><span class="pre">monitor</span></code> 段下的子配置不同，它通过 <strong><code class="docutils literal notranslate"><span class="pre">callbacks</span></code> 段</strong>注册。</p>
+<section id="id5">
+<h4>是什么<a class="headerlink" href="#id5" title="Link to this heading"></a></h4>
+<p>在每个训练步收集模型各层的<strong>最大注意力 logit</strong>（max attention logit），分层打印到日志，并汇总输出全部层的均值（mean）与最大值（max），随后在每步结束时重置层内累计值，便于逐步观察注意力数值是否异常增大。</p>
+<p>输出格式（<code class="docutils literal notranslate"><span class="pre">_dump</span></code>，<code class="docutils literal notranslate"><span class="pre">max_logits_monitor.py:88-108</span></code>）：</p>
+<ul class="simple">
+<li><p>逐层一行，日志 tag 为 <code class="docutils literal notranslate"><span class="pre">max_attention_logit/&lt;param_name&gt;</span></code>，值为该层各项的列表（保留 4 位有效数字）；</p></li>
+<li><p>汇总两行：<code class="docutils literal notranslate"><span class="pre">max_attention_logit/mean</span></code>、<code class="docutils literal notranslate"><span class="pre">max_attention_logit/max</span></code>；</p></li>
+<li><p>每行前缀为 <code class="docutils literal notranslate"><span class="pre">step:[当前步/总步数]</span></code>，与 <code class="docutils literal notranslate"><span class="pre">TrainingStateMonitor</span></code> 的打印格式一致。</p></li>
+</ul>
+</section>
+<section id="id6">
+<h4>何时用<a class="headerlink" href="#id6" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>怀疑注意力 logits 溢出 / 数值爆炸导致 loss 抖动或 NaN 时，用它定位是哪一层、在哪一步开始异常增大；</p></li>
+<li><p>使用 Muon 优化器并启用 QK clip 时（此时框架会自动开启追踪，见下文场景），用它验证 clip 是否生效。</p></li>
+</ul>
+</section>
+<section id="id7">
+<h4>怎么配<a class="headerlink" href="#id7" title="Link to this heading"></a></h4>
+<p>通过 <code class="docutils literal notranslate"><span class="pre">callbacks</span></code> 段注册回调即可：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">callbacks</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MaxLogitsMonitor</span>
+<span class="w">    </span><span class="nt">step_interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w">   </span><span class="c1"># 每多少步输出一次，必须为正整数</span>
+</pre></div>
+</div>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>参数</p></th>
+<th class="head"><p>类型</p></th>
+<th class="head"><p>默认值</p></th>
+<th class="head"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">step_interval</span></code></p></td>
+<td><p>int</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p>输出间隔步数；必须为<strong>正整数</strong>，否则在构造时抛 <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>（<code class="docutils literal notranslate"><span class="pre">max_logits_monitor.py:51-54</span></code>）。</p></td>
+</tr>
+</tbody>
+</table>
+<p>行为细节（<code class="docutils literal notranslate"><span class="pre">on_step_end</span></code>，<code class="docutils literal notranslate"><span class="pre">max_logits_monitor.py:58-78</span></code>）：</p>
+<ul class="simple">
+<li><p>当 <code class="docutils literal notranslate"><span class="pre">step_interval</span> <span class="pre">&gt;</span> <span class="pre">1</span></code> 且当前步不是输出步时，<strong>仅重置</strong>累计值、不打印；</p></li>
+<li><p>输出步先采集各层 <code class="docutils literal notranslate"><span class="pre">get_max_attention_logit()</span></code>，无数据则只重置；</p></li>
+<li><p>无论是否打印，每步末都会调用 <code class="docutils literal notranslate"><span class="pre">reset_max_attention_logit()</span></code> 清零，保证下一步从干净状态开始统计。</p></li>
+</ul>
+</section>
+<section id="muon-qk-clip">
+<h4>场景：配合 Muon + QK clip 自动开启追踪<a class="headerlink" href="#muon-qk-clip" title="Link to this heading"></a></h4>
+<p>模型侧是否采集 max attention logit，由 <code class="docutils literal notranslate"><span class="pre">model.track_max_attention_logit</span></code> 开关控制。框架在 <code class="docutils literal notranslate"><span class="pre">configure_max_logits_tracking</span></code>（<code class="docutils literal notranslate"><span class="pre">max_logits_monitor.py:120-132</span></code>）中自动判定是否需要开启：</p>
+<ul class="simple">
+<li><p>优化器为 <strong>Muon</strong> 且 <code class="docutils literal notranslate"><span class="pre">qk_clip_enabled</span></code> 为真；<strong>或</strong></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">callbacks</span></code> 中已配置 <code class="docutils literal notranslate"><span class="pre">MaxLogitsMonitor</span></code>。</p></li>
+</ul>
+<p>满足任一条件时，<code class="docutils literal notranslate"><span class="pre">track_max_attention_logit</span></code> 被置为 <code class="docutils literal notranslate"><span class="pre">True</span></code>。该装配在 Trainer 初始化时触发（<code class="docutils literal notranslate"><span class="pre">pynative/trainer/trainer.py:153</span></code>），并在 <code class="docutils literal notranslate"><span class="pre">ensure_max_logits_reset_callback</span></code> 中确保存在一个 <code class="docutils literal notranslate"><span class="pre">MaxLogitsMonitor</span></code> 负责重置（<code class="docutils literal notranslate"><span class="pre">trainer.py:536-538</span></code>）。</p>
+<p>因此在 <strong>Muon + QK clip</strong> 场景下，即使没有显式写 <code class="docutils literal notranslate"><span class="pre">MaxLogitsMonitor</span></code>，框架也会自动补一个用于重置；若想看到逐层日志，仍建议显式声明并设置 <code class="docutils literal notranslate"><span class="pre">step_interval</span></code>：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># 场景：Muon + QK clip，显式开启逐层 max logit 观测</span>
+<span class="nt">optimizer</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Muon</span>
+<span class="w">  </span><span class="nt">qk_clip_enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w">       </span><span class="c1"># 启用 QK clip，框架据此自动开启 track_max_attention_logit</span>
+
+<span class="nt">callbacks</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MaxLogitsMonitor</span>
+<span class="w">    </span><span class="nt">step_interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">50</span><span class="w">         </span><span class="c1"># 每 50 步打印一次逐层 max logit 与 mean/max</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p><strong>自动开启的是「追踪」，不是「打印」</strong></p>
+<p>Muon + QK clip 仅自动开启<strong>模型侧追踪</strong>并补一个负责重置的回调；要在日志中看到逐层数值，仍需显式配置 <code class="docutils literal notranslate"><span class="pre">MaxLogitsMonitor</span></code>（或接受默认 <code class="docutils literal notranslate"><span class="pre">step_interval=1</span></code> 的逐步输出）。</p>
+</div></blockquote>
+</section>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id8">
+<h2>二、Profiling（性能数据采集）<a class="headerlink" href="#id8" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">profiler</span></code> 段控制性能数据采集。采集仅在 <code class="docutils literal notranslate"><span class="pre">enable_profiling:</span> <span class="pre">True</span></code> <strong>且</strong>当前 rank 命中 <code class="docutils literal notranslate"><span class="pre">profiler_rank</span></code> 时生效，框架用 MindSpore <code class="docutils literal notranslate"><span class="pre">schedule</span></code> 在 <code class="docutils literal notranslate"><span class="pre">[start_step,</span> <span class="pre">end_step]</span></code> 区间内采集（区间外训练正常进行，不采集）。</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>参数</p></th>
+<th class="head"><p>类型</p></th>
+<th class="head"><p>默认值</p></th>
+<th class="head"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">enable_profiling</span></code></p></td>
+<td><p>bool</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+<td><p>是否开启性能数据采集。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">start_step</span></code></p></td>
+<td><p>int</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p>开始采集的 step（对应 <code class="docutils literal notranslate"><span class="pre">schedule</span></code> 的 <code class="docutils literal notranslate"><span class="pre">skip_first</span></code>），须为正整数。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">end_step</span></code></p></td>
+<td><p>int</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p>结束采集的 step，须 ≥ <code class="docutils literal notranslate"><span class="pre">start_step</span></code>（采集 step 数 = <code class="docutils literal notranslate"><span class="pre">end_step</span> <span class="pre">-</span> <span class="pre">start_step</span> <span class="pre">+</span> <span class="pre">1</span></code>）。如果设置了非默认的 <code class="docutils literal notranslate"><span class="pre">start_step</span></code>，务必同时设置 <code class="docutils literal notranslate"><span class="pre">end_step</span></code>，否则默认 <code class="docutils literal notranslate"><span class="pre">1</span></code> 可能导致区间无效。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">output_path</span></code></p></td>
+<td><p>str / None</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>结果保存路径，按 rank 分目录保存为 <code class="docutils literal notranslate"><span class="pre">output_path/rank_x</span></code>；<code class="docutils literal notranslate"><span class="pre">None</span></code> 时回退到 <code class="docutils literal notranslate"><span class="pre">当前工作目录/profile/rank_x</span></code>。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">profiler_rank</span></code></p></td>
+<td><p>list[int] / None</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>指定开启采集的 rank id 列表；<code class="docutils literal notranslate"><span class="pre">None</span></code> 表示所有 rank 均采集。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">profiler_level</span></code></p></td>
+<td><p>int</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p>采集级别 <code class="docutils literal notranslate"><span class="pre">0</span></code> / <code class="docutils literal notranslate"><span class="pre">1</span></code> / <code class="docutils literal notranslate"><span class="pre">2</span></code>，级别越高越详细（映射到 <code class="docutils literal notranslate"><span class="pre">ProfilerLevel.Level0/1/2</span></code>，非法值回退 <code class="docutils literal notranslate"><span class="pre">LevelNone</span></code>）。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">mstx</span></code></p></td>
+<td><p>bool</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+<td><p>是否开启轻量 mstx 打点（透传给 <code class="docutils literal notranslate"><span class="pre">_ExperimentalConfig</span></code>），用于在时间线上插入轻量标记。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">profile_memory</span></code></p></td>
+<td><p>bool</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+<td><p>是否采集 Tensor 内存数据。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">with_stack</span></code></p></td>
+<td><p>bool</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p>是否采集 Python 侧调用栈数据。</p></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<div><p><strong>区间选取要避开首步预热</strong></p>
+<p>第一个 step 通常包含编译/初始化等一次性开销，采集到的数据不代表稳态。建议把 <code class="docutils literal notranslate"><span class="pre">start_step</span></code> 设在若干步之后（如 <code class="docutils literal notranslate"><span class="pre">start_step:</span> <span class="pre">5</span></code>），并只采集少量步（如 2~3 步），既避开预热又控制产物体积与开销。</p>
+<p><strong>开销取舍</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">profile_memory:</span> <span class="pre">True</span></code> 与 <code class="docutils literal notranslate"><span class="pre">with_stack:</span> <span class="pre">True</span></code> 会显著增加采集开销和产物体积，可能拖慢被采集的几个 step。仅在排查内存/调用栈问题时开启；做纯算子耗时分析时建议关闭 <code class="docutils literal notranslate"><span class="pre">profile_memory</span></code>。</p>
+</div></blockquote>
+<section id="rank">
+<h3>2.1 多卡下的 rank 选取<a class="headerlink" href="#rank" title="Link to this heading"></a></h3>
+<p>多卡训练时无需对所有卡采集——数据量大且彼此冗余。用 <code class="docutils literal notranslate"><span class="pre">profiler_rank</span></code> 指定要采集的 rank：</p>
+<ul class="simple">
+<li><p>单机调优一般只采 <code class="docutils literal notranslate"><span class="pre">[0]</span></code>；</p></li>
+<li><p>排查通信不均衡时，可对同一并行组内不同 rank 各采一个对照（如 <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>）。</p></li>
+<li><p>rank 与并行维度（dp/tp/pp/cp）的对应关系见 <a class="reference internal" href="parallel_training.html"><span class="std std-doc">分布式并行训练</span></a>，据此选取代表性的 rank。</p></li>
+</ul>
+</section>
+<section id="id9">
+<h3>2.2 输出目录与查看方式<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>目录结构</strong>：配置了 <code class="docutils literal notranslate"><span class="pre">output_path</span></code> 时为 <code class="docutils literal notranslate"><span class="pre">output_path/rank_x/</span></code>；未配置（<code class="docutils literal notranslate"><span class="pre">None</span></code>）时为 <code class="docutils literal notranslate"><span class="pre">&lt;cwd&gt;/profile/rank_x/</span></code>。</p></li>
+<li><p><strong>查看方式</strong>：框架通过 <code class="docutils literal notranslate"><span class="pre">tensorboard_trace_handler</span></code> 落盘 trace 产物，可用 MindSpore Insight 或 TensorBoard（Trace Viewer）打开，定位算子耗时、通信占比与内存峰值。</p></li>
+</ul>
+<blockquote>
+<div><p><strong>Profiling 仅此处使用 TensorBoard</strong></p>
+<p>本页第一部分强调监控指标不写 TensorBoard；而 Profiler 的 <code class="docutils literal notranslate"><span class="pre">tensorboard_trace_handler</span></code> 是 MindSpore Profiler 自带的产物落盘方式，与监控指标无关，两者不要混淆。</p>
+</div></blockquote>
+</section>
+<section id="profiler-level">
+<h3>2.3 场景化配置（按 profiler_level 三档）<a class="headerlink" href="#profiler-level" title="Link to this heading"></a></h3>
+<section id="a-level-0">
+<h4>场景 A：轻量算子级分析（Level 0）<a class="headerlink" href="#a-level-0" title="Link to this heading"></a></h4>
+<p>只看算子耗时分布、定位热点 kernel，开销最小。关闭内存与调用栈：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">profiler</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enable_profiling</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">start_step</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span><span class="w">            </span><span class="c1"># 跳过前 4 步预热</span>
+<span class="w">  </span><span class="nt">end_step</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">7</span><span class="w">              </span><span class="c1"># 采集 3 步</span>
+<span class="w">  </span><span class="nt">profiler_rank</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">profiler_level</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">  </span><span class="nt">profile_memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">with_stack</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">output_path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;./output/profile&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="b-level-1">
+<h4>场景 B：含通信分析（Level 1）<a class="headerlink" href="#b-level-1" title="Link to this heading"></a></h4>
+<p>需要分析分布式训练中的通信耗时与计算/通信重叠时，提升到 Level 1，并按需对多个 rank 对照采集：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">profiler</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enable_profiling</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">start_step</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+<span class="w">  </span><span class="nt">end_step</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">7</span>
+<span class="w">  </span><span class="nt">profiler_rank</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1</span><span class="p p-Indicator">]</span><span class="w">    </span><span class="c1"># 同组内对照，观察通信不均衡</span>
+<span class="w">  </span><span class="nt">profiler_level</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">mstx</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w">               </span><span class="c1"># 轻量打点，便于在时间线上对齐关键阶段</span>
+<span class="w">  </span><span class="nt">profile_memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">with_stack</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">output_path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;./output/profile&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="c-level-2">
+<h4>场景 C：含内存与调用栈（Level 2）<a class="headerlink" href="#c-level-2" title="Link to this heading"></a></h4>
+<p>排查显存峰值或需要把耗时归因到 Python 调用栈时，开 Level 2 并打开内存与调用栈采集（开销最大，建议只采单卡、少量步）：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">profiler</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enable_profiling</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">start_step</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+<span class="w">  </span><span class="nt">end_step</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">6</span><span class="w">              </span><span class="c1"># 仅采集 2 步，控制产物体积</span>
+<span class="w">  </span><span class="nt">profiler_rank</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">profiler_level</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">profile_memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w">     </span><span class="c1"># 采集 Tensor 内存</span>
+<span class="w">  </span><span class="nt">with_stack</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w">         </span><span class="c1"># 采集 Python 调用栈</span>
+<span class="w">  </span><span class="nt">output_path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;./output/profile&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id10">
+<h2>相关文档<a class="headerlink" href="#id10" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>日志解析与日志结构：<a class="reference internal" href="logging.html"><span class="std std-doc">日志</span></a></p></li>
+<li><p>配置文件总览：<a class="reference internal" href="configuration.html"><span class="std std-doc">配置文件说明</span></a></p></li>
+<li><p>启动训练任务：<a class="reference internal" href="#./start_tasks.md"><span class="xref myst">启动任务</span></a></p></li>
+<li><p>并行维度与 rank 选取（影响 <code class="docutils literal notranslate"><span class="pre">profiler_rank</span></code> 与分布式采集）：<a class="reference internal" href="parallel_training.html"><span class="std std-doc">分布式并行训练</span></a></p></li>
+<li><p>训练全流程（含训练状态监控）：<a class="reference internal" href="#../guide/training.md"><span class="xref myst">训练指南</span></a></p></li>
+<li><p>第一个训练任务：<a class="reference internal" href="../quick_start/quick_start.html"><span class="std std-doc">快速开始</span></a></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="resume_training.html" class="btn btn-neutral float-left" title="断点续训" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="other_training_features.html" class="btn btn-neutral float-right" title="其它训练特性" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

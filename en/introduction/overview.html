@@ -1,0 +1,353 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Overall Structure &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Models" href="models.html" />
+    <link rel="prev" title="MindSpore Transformers Documentation" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Overall Structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#execution-flow">Execution Flow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-layering">Module Layering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#core-modules">Core Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#configuration-module-dataclasses">Configuration Module Dataclasses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#distributed-module-capabilities">Distributed Module Capabilities</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#model-architecture">Model Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#training-capabilities">Training Capabilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#related-documentation">Related Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contribution Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contribution/mindformers_contribution.html">MindSpore Transformers Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution/modelers_contribution.html">Modelers Contribution Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../faq/model_related.html">Model-Related FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/feature_related.html">Feature-Related FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Static Graph Implementation (Deprecated)</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/guide/index.html">Full-process Guide to Large Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/feature/index.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/advanced_development/index.html">Advanced Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/example/index.html">Excellent Practice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/env_variables.html">Environment Variable Descriptions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Overall Structure</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/introduction/overview.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="overall-structure">
+<h1>Overall Structure<a class="headerlink" href="#overall-structure" title="Link to this heading"></a></h1>
+<p>Starting with <strong>r2.0.0</strong>, MindSpore Transformers has adopted a <strong>dynamic graph (PyNative) implementation</strong> as its primary development path. This chapter introduces the overall architecture, core modules, and training capabilities of the dynamic graph training stack, and provides a minimal starting point for implementation.</p>
+<div class="note admonition">
+<p class="admonition-title">The Limits of Dynamic Graph Capabilities</p>
+<ul class="simple">
+<li><p>The source code for the dynamic graph is located in <code class="docutils literal notranslate"><span class="pre">mindformers/pynative/</span></code>.</p></li>
+<li><p>The current dynamic graph focuses on <strong>pre-training and fine-tuning</strong> scenarios; capabilities such as inference, service deployment, and quantization are still provided by the static graph. For more details, see the <a class="reference internal" href="../static_graph/introduction/overview.html"><span class="std std-doc">Static Graph Implementation</span></a> section.</p></li>
+</ul>
+</div>
+<hr class="docutils" />
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_en/introduction/overview.md"><img alt="View Source on AtomGit" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source_en.svg" /></a></p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The dynamic graph implementation adopts a <strong>layered, modular</strong> design:</p>
+<ul class="simple">
+<li><p><strong>Entry Layer</strong>: Unified script <code class="docutils literal notranslate"><span class="pre">run_mindformer.py</span></code>, routes to dynamic graph trainer via <code class="docutils literal notranslate"><span class="pre">--mode</span> <span class="pre">1</span></code> (the <code class="docutils literal notranslate"><span class="pre">config.mode</span> <span class="pre">==</span> <span class="pre">1</span></code> branch in the source code of <code class="docutils literal notranslate"><span class="pre">run_mindformer.py</span></code>).</p></li>
+<li><p><strong>Control Layer</strong>: <code class="docutils literal notranslate"><span class="pre">mindformers.pynative.trainer.Trainer</span></code> is responsible for building the model/dataset/optimizer, and drives the training loop.</p></li>
+<li><p><strong>Configuration Layer</strong>: Centralized management of YAML configurations using dataclasses, with parsing and validation completed during loading.</p></li>
+<li><p><strong>Capability Layer</strong>: Implements multi-dimensional parallelism, fused operators, and memory optimization based on MindSpore’s dynamic graph capabilities.</p></li>
+</ul>
+<p>First, look at the “Execution Flowchart”, then the “Module Layering Diagram”.</p>
+<section id="execution-flow">
+<h3>Execution Flow<a class="headerlink" href="#execution-flow" title="Link to this heading"></a></h3>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>run_mindformer.py --mode 1            # Entry, PYNATIVE_MODE routing
+        │
+        ▼
+mindformers.pynative.trainer.Trainer  # Builds model/dataset/optimizer, drives training loop
+        │
+        ├── config/        YAML → dataclass configuration system
+        ├── base_models/   GPTModel (Unified interface for Dense/MoE)
+        ├── distributed/   Multi-dimensional parallelism and memory optimization
+        ├── optimizer/     AdamW/Muon
+        ├── loss/          Fused cross-entropy
+        ├── callback/      Weight saving, Loss/Metric monitoring
+        └── tools/         Monitoring &amp; Profiling
+</pre></div>
+</div>
+</section>
+<section id="module-layering">
+<h3>Module Layering<a class="headerlink" href="#module-layering" title="Link to this heading"></a></h3>
+<p>The model side is divided into three layers from top to bottom: “Model → Transformer Components → Primitive Layer”, corresponding one-to-one with the core module table below:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>base_models/gpt/  GPTModel (Unified interface for Dense/MoE, assembled via ModuleSpec)
+        │
+        ▼
+transformers/     Attention · MLA · MTP · TransformerLayer/Block · MLP · MoE
+        │                                   (router/experts/shared_experts)
+        ▼
+layers/           Linear · RMSNorm · SwiGlu · FlashAttention · Mask generation
+</pre></div>
+</div>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">base_models/common/embeddings</span></code> provides positional encodings such as RoPE, YaRN, etc., for use by the above layers.</p>
+</div></blockquote>
+</section>
+</section>
+<hr class="docutils" />
+<section id="core-modules">
+<h2>Core Modules<a class="headerlink" href="#core-modules" title="Link to this heading"></a></h2>
+<p>The sub-modules of the dynamic graph implementation and their responsibilities are as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Module</p></th>
+<th class="head"><p>Path</p></th>
+<th class="head"><p>Responsibility</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Trainer</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">pynative/trainer/</span></code></p></td>
+<td><p>Training controller <code class="docutils literal notranslate"><span class="pre">Trainer</span></code>: Builds model/data/optimizer, executes forward/backward, gradient synchronization, saving, and state tracking.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Configuration</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">pynative/config/</span></code></p></td>
+<td><p>Centralized configuration management via dataclasses, supports loading from YAML and validation.</p></td>
+</tr>
+<tr class="row-even"><td><p>Distributed</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">pynative/distributed/</span></code></p></td>
+<td><p>Device mesh construction and sharding for multi-dimensional parallelism, as well as various memory optimizations.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Optimizer</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">pynative/optimizer/</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">AdamW</span></code> and <code class="docutils literal notranslate"><span class="pre">Muon</span></code> optimizer implementations, supporting distributed synchronization and mixed precision.</p></td>
+</tr>
+<tr class="row-even"><td><p>Loss</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">pynative/loss/</span></code></p></td>
+<td><p>Dynamic graph fused cross-entropy <code class="docutils literal notranslate"><span class="pre">CrossEntropyLoss</span></code>, implemented via custom <code class="docutils literal notranslate"><span class="pre">_LogSoftmax</span></code> + <code class="docutils literal notranslate"><span class="pre">_NLLLoss</span></code> (with manual backward).</p></td>
+</tr>
+<tr class="row-odd"><td><p>Base Model</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">pynative/base_models/gpt/</span></code></p></td>
+<td><p>General <code class="docutils literal notranslate"><span class="pre">GPTModel</span></code>, uniformly supports Dense and MoE, uses <code class="docutils literal notranslate"><span class="pre">ModuleSpec</span></code> mechanism to build models according to configuration; <code class="docutils literal notranslate"><span class="pre">common/embeddings</span></code> provides RoPE, YaRN and other positional encodings.</p></td>
+</tr>
+<tr class="row-even"><td><p>Transformer Components</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">pynative/transformers/</span></code></p></td>
+<td><p>Attention, MLA, MTP, TransformerLayer/Block, MLP, and MoE sub-modules.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Primitive Layer</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">pynative/layers/</span></code></p></td>
+<td><p>Fused operators such as Linear, LayerNorm/RMSNorm, SwiGlu, Flash Attention, mask generation, etc.</p></td>
+</tr>
+<tr class="row-even"><td><p>Callback</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">pynative/callback/</span></code></p></td>
+<td><p>Checkpoint saving, Loss monitoring, training metric monitoring, MaxLogits health check.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Tools</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">pynative/tools/</span></code></p></td>
+<td><p>Metric monitoring aggregation (<code class="docutils literal notranslate"><span class="pre">MonitorGroup</span></code>) and Profiling.</p></td>
+</tr>
+</tbody>
+</table>
+<p>The following sections expand on the “Configuration” and “Distributed” modules, which contain more detailed information.</p>
+<section id="configuration-module-dataclasses">
+<h3>Configuration Module Dataclasses<a class="headerlink" href="#configuration-module-dataclasses" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">pynative/config/</span></code> maps each section of YAML into independent dataclasses, facilitating validation and default value management. Commonly used configuration classes:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>dataclass</p></th>
+<th class="head"><p>Corresponding Responsibility</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CheckpointConfig</span></code></p></td>
+<td><p>Weight saving/loading</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TrainingConfig</span></code></p></td>
+<td><p>Training steps, batch size, gradient accumulation, etc.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ParallelismConfig</span></code></p></td>
+<td><p>Multi-dimensional parallelism dimensions</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">OptimizerConfig</span></code></p></td>
+<td><p>Optimizer type and hyperparameters</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">LrSchedulerConfig</span></code></p></td>
+<td><p>Learning rate strategy</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ModelConfig</span></code></p></td>
+<td><p>Model structure parameters</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MonitorConfig</span></code></p></td>
+<td><p>Metric monitoring and visualization</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="distributed-module-capabilities">
+<h3>Distributed Module Capabilities<a class="headerlink" href="#distributed-module-capabilities" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">pynative/distributed/</span></code> undertakes both “parallelism sharding” and “memory optimization” responsibilities:</p>
+<ul class="simple">
+<li><p><strong>Parallelism Dimensions</strong>: DP (including FSDP/HSDP parameter sharding), TP, PP, CP, EP, SP. The device mesh is constructed based on the product of each dimension, satisfying <code class="docutils literal notranslate"><span class="pre">dp_replicate</span> <span class="pre">*</span> <span class="pre">dp_shard</span> <span class="pre">*</span> <span class="pre">cp</span> <span class="pre">*</span> <span class="pre">tp</span> <span class="pre">*</span> <span class="pre">pp</span> <span class="pre">==</span> <span class="pre">world_size</span></code> (<code class="docutils literal notranslate"><span class="pre">parallel_dims.py</span></code>).</p></li>
+<li><p><strong>Memory Optimization</strong>: Activation checkpointing, fine-grained SWAP, CPU offload.</p></li>
+</ul>
+<div class="warning admonition">
+<p class="admonition-title">About pet (LoRA) and models subdirectories</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">pynative/pet/</span></code> and <code class="docutils literal notranslate"><span class="pre">pynative/models/</span></code> directories currently only contain <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> and have no implementation yet. LoRA fine-tuning is <strong>not yet implemented</strong> in the dynamic graph: when triggered, it will raise <code class="docutils literal notranslate"><span class="pre">NotImplementedError(&quot;Lora</span> <span class="pre">model</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">implemented</span> <span class="pre">yet.&quot;)</span></code> in <code class="docutils literal notranslate"><span class="pre">trainer/utils.py</span></code>. For LoRA, please use the static graph implementation.</p>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="model-architecture">
+<h2>Model Architecture<a class="headerlink" href="#model-architecture" title="Link to this heading"></a></h2>
+<p>The dynamic graph adopts a <strong>hierarchical abstraction + modular</strong> design: <code class="docutils literal notranslate"><span class="pre">GPTModel</span></code> (General PreTrained Model) serves as the unified model interface, composing modular interfaces downwards such as <code class="docutils literal notranslate"><span class="pre">TransformerBlock</span></code>, <code class="docutils literal notranslate"><span class="pre">MoELayer</span></code>, <code class="docutils literal notranslate"><span class="pre">Attention</span></code>, <code class="docutils literal notranslate"><span class="pre">Linear</span></code>, <code class="docutils literal notranslate"><span class="pre">Embedding</span></code>, <code class="docutils literal notranslate"><span class="pre">Norm</span></code>, etc., and freely combines them to build models through the <code class="docutils literal notranslate"><span class="pre">ModuleSpec</span></code> mechanism. All modules have undergone parallel and operator fusion optimizations based on MindSpore’s dynamic graph.</p>
+<p>Models currently implemented in the dynamic graph include DeepSeek-V3 (MoE + MLA + MTP) and Qwen3 (Dense).</p>
+</section>
+<hr class="docutils" />
+<section id="training-capabilities">
+<h2>Training Capabilities<a class="headerlink" href="#training-capabilities" title="Link to this heading"></a></h2>
+<p>The dynamic graph training stack provides the following capabilities (configuration instructions for each capability will be supplemented in subsequent documentation):</p>
+<ul class="simple">
+<li><p><strong>Multi-dimensional Hybrid Parallelism</strong>: Flexible combination of data parallelism (including FSDP/HSDP parameter sharding), tensor parallelism (TP), pipeline parallelism (PP, supporting 1F1B and interleave), context parallelism (CP, Colossal method), expert parallelism (EP), and sequence parallelism (SP).</p></li>
+<li><p><strong>Optimizers and Learning Rates</strong>: AdamW, Muon; multiple learning rate strategies with warmup.</p></li>
+<li><p><strong>Dataset</strong>: Megatron blended multi-source dataset (<code class="docutils literal notranslate"><span class="pre">BlendedMegatronDatasetDataLoader</span></code>, preprocessed <code class="docutils literal notranslate"><span class="pre">.bin</span></code>/<code class="docutils literal notranslate"><span class="pre">.idx</span></code> files).</p></li>
+<li><p><strong>Memory Optimization</strong>: Activation checkpointing (full/selective), fine-grained SWAP, CPU offload.</p></li>
+<li><p><strong>Checkpoints</strong>: Sharded saving and loading in Safetensors format, supporting asynchronous saving and redundancy elimination.</p></li>
+<li><p><strong>Stability and Observability</strong>: Resuming training from checkpoints, gradient/parameter norm and Loss monitoring, MaxLogits numerical health checks, and Profiling.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading"></a></h2>
+<p>After reading the architecture, the minimal path to getting started is as follows.</p>
+<p><strong>Single-card</strong> (for debugging/validation):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>run_mindformer.py<span class="w"> </span>--config<span class="w"> </span>&lt;your_config.yaml&gt;<span class="w"> </span>--mode<span class="w"> </span><span class="m">1</span>
+</pre></div>
+</div>
+<p><strong>Multi-card msrun launch</strong> (actual training, taking 8 cards as an example):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bash<span class="w"> </span>scripts/msrun_launcher.sh<span class="w"> </span><span class="s2">&quot;run_mindformer.py --config &lt;your_config.yaml&gt; --mode 1&quot;</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">--mode</span> <span class="pre">1</span></code> routes to the dynamic graph trainer. The complete “prepare configuration → launch → view results” process and end-to-end training configurations will be supplemented in subsequent documentation (Quick Start, Training Guide, feature-specific pages).</p>
+</section>
+<hr class="docutils" />
+<section id="related-documentation">
+<h2>Related Documentation<a class="headerlink" href="#related-documentation" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Capabilities provided by the static graph (inference/quantization, etc.): <a class="reference internal" href="../static_graph/introduction/overview.html"><span class="std std-doc">Static Graph Implementation</span></a></p></li>
+</ul>
+<blockquote>
+<div><p>The Installation Guide, Quick Start, Training Guide, and feature-specific pages are being supplemented and will be available in subsequent submissions.</p>
+</div></blockquote>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="MindSpore Transformers Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="models.html" class="btn btn-neutral float-right" title="Models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

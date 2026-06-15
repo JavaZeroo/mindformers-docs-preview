@@ -1,0 +1,198 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>功能相关 FAQ &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="整体架构" href="../static_graph/introduction/overview.html" />
+    <link rel="prev" title="模型相关 FAQ" href="model_related.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">介绍</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/quick_start.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/models.html">模型支持库</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">安装</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">安装指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">功能特性</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../feature/overview.html">功能特性概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/start_task.html">启动任务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/configuration.html">配置文件说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/logging.html">日志</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/dataset.html">数据集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/training_hyperparameters.html">训练超参数与优化器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/save_and_load_checkpoint.html">权重保存与加载</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/resume_training.html">断点续训</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/monitor.html">训练指标监控与 Profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/static_graph_features.html">静态图实现特性</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">环境变量</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">环境变量说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">贡献指南</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contribution/mindformers_contribution.html">MindSpore Transformers贡献指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution/modelers_contribution.html">魔乐社区贡献指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="model_related.html">模型相关 FAQ</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">功能相关 FAQ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#q-mindspore-transformersmindformers">Q: MindSpore Transformers和MindFormers两个名字的区别？</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#q-mindspore-transformersmindspore-nlp">Q: MindSpore Transformers和MindSpore NLP两个套件的区别？</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#q-wikitext">Q: WikiText数据集下载链接失效</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#q">Q: 如何生成模型切分策略文件？</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#q-ranktablesocket-gaierror-errno-2-name-or-service-not-knownsocket-gaierror-errno-3-temporary-failure-in-name-resolution">Q: 生成<code class="docutils literal notranslate"><span class="pre">ranktable</span></code>文件报错<code class="docutils literal notranslate"><span class="pre">socket.gaierror:</span> <span class="pre">[Errno</span> <span class="pre">-2]</span> <span class="pre">Name</span> <span class="pre">or</span> <span class="pre">service</span> <span class="pre">not</span> <span class="pre">known</span></code>或者<code class="docutils literal notranslate"><span class="pre">socket.gaierror:</span> <span class="pre">[Errno</span> <span class="pre">-3]</span> <span class="pre">Temporary</span> <span class="pre">failure</span> <span class="pre">in</span> <span class="pre">name</span> <span class="pre">resolution</span></code>，怎么解决？</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#q-mindspore-transformers">Q: 通过源码安装MindSpore Transformers时依赖包下载速度慢，怎么解决？</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">静态图实现（Deprecated）</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/guide/index.html">大模型全流程指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/feature/index.html">功能特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/advanced_development/index.html">高阶开发</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/example/index.html">优秀实践</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/env_variables.html">环境变量说明</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">功能相关 FAQ</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/faq/feature_related.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="faq">
+<h1>功能相关 FAQ<a class="headerlink" href="#faq" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/faq/feature_related.md"><img alt="查看源文件" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source.svg" /></a></p>
+<section id="q-mindspore-transformersmindformers">
+<h2>Q: MindSpore Transformers和MindFormers两个名字的区别？<a class="headerlink" href="#q-mindspore-transformersmindformers" title="Link to this heading"></a></h2>
+<p>A: 二者指的是同一个套件。MindSpore Transformers是套件的正式名称；MindFormers是套件的简称，也是仓库名，并在代码中使用。</p>
+<br/>
+</section>
+<section id="q-mindspore-transformersmindspore-nlp">
+<h2>Q: MindSpore Transformers和MindSpore NLP两个套件的区别？<a class="headerlink" href="#q-mindspore-transformersmindspore-nlp" title="Link to this heading"></a></h2>
+<p>A: MindSpore Transformers是MindSpore的大模型套件，主要面向大语言模型（LLM）和多模态模型（MM）在大规模场景下的训练和推理。MindSpore NLP是MindSpore的领域套件，主要面向自然语言处理（NLP）领域的中小模型的训练。二者在定位上有所不同，用户可以根据自身需求选择使用。</p>
+<br/>
+</section>
+<section id="q-wikitext">
+<h2>Q: WikiText数据集下载链接失效<a class="headerlink" href="#q-wikitext" title="Link to this heading"></a></h2>
+<p>A: 官方下载链接失效，请关注社区Issue <a class="reference external" href="https://gitee.com/mindspore/mindformers/issues/IBV35D">#IBV35D</a>。</p>
+<br/>
+</section>
+<section id="q">
+<h2>Q: 如何生成模型切分策略文件？<a class="headerlink" href="#q" title="Link to this heading"></a></h2>
+<p>A: 模型切分策略文件记录了模型权重在分布式场景下的切分策略，一般在离线权重切分时使用。在网络<code class="docutils literal notranslate"><span class="pre">yaml</span></code>文件中配置<code class="docutils literal notranslate"><span class="pre">only_save_strategy:</span> <span class="pre">True</span></code>，然后正常启动分布式任务，便可在<code class="docutils literal notranslate"><span class="pre">output/strategy/</span></code>目录下生成分布式策略文件。详细介绍请参阅<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/feature/ckpt.html">分布式权重切分与合并教程</a>。</p>
+<br/>
+</section>
+<section id="q-ranktablesocket-gaierror-errno-2-name-or-service-not-knownsocket-gaierror-errno-3-temporary-failure-in-name-resolution">
+<h2>Q: 生成<code class="docutils literal notranslate"><span class="pre">ranktable</span></code>文件报错<code class="docutils literal notranslate"><span class="pre">socket.gaierror:</span> <span class="pre">[Errno</span> <span class="pre">-2]</span> <span class="pre">Name</span> <span class="pre">or</span> <span class="pre">service</span> <span class="pre">not</span> <span class="pre">known</span></code>或者<code class="docutils literal notranslate"><span class="pre">socket.gaierror:</span> <span class="pre">[Errno</span> <span class="pre">-3]</span> <span class="pre">Temporary</span> <span class="pre">failure</span> <span class="pre">in</span> <span class="pre">name</span> <span class="pre">resolution</span></code>，怎么解决？<a class="headerlink" href="#q-ranktablesocket-gaierror-errno-2-name-or-service-not-knownsocket-gaierror-errno-3-temporary-failure-in-name-resolution" title="Link to this heading"></a></h2>
+<p>A: 从<code class="docutils literal notranslate"><span class="pre">MindSpore</span> <span class="pre">Transformers</span> <span class="pre">r1.2.0</span></code>版本开始，集群启动统一使用<code class="docutils literal notranslate"><span class="pre">msrun</span></code>方式，<code class="docutils literal notranslate"><span class="pre">ranktable</span></code>启动方式已废弃。</p>
+<br/>
+</section>
+<section id="q-mindspore-transformers">
+<h2>Q: 通过源码安装MindSpore Transformers时依赖包下载速度慢，怎么解决？<a class="headerlink" href="#q-mindspore-transformers" title="Link to this heading"></a></h2>
+<p>A: <code class="docutils literal notranslate"><span class="pre">build.sh</span></code>使用<a class="reference external" href="https://mirrors.tuna.tsinghua.edu.cn/help/pypi/">清华源</a>下载MindSpore Transformers所依赖的Python包。如需修改镜像源，可以修改<code class="docutils literal notranslate"><span class="pre">build.sh</span></code>中下载命令<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">mindformers*whl</span> <span class="pre">-i</span> <span class="pre">https://pypi.tuna.tsinghua.edu.cn/simple</span></code> ，将<code class="docutils literal notranslate"><span class="pre">-i</span></code>后地址替换为目标镜像源地址。</p>
+<br/>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="model_related.html" class="btn btn-neutral float-left" title="模型相关 FAQ" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../static_graph/introduction/overview.html" class="btn btn-neutral float-right" title="整体架构" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

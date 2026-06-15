@@ -1,0 +1,313 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>日志 &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="数据集" href="dataset.html" />
+    <link rel="prev" title="配置文件说明" href="configuration.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">介绍</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/quick_start.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/models.html">模型支持库</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">安装</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">安装指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">功能特性</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">功能特性概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="start_task.html">启动任务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">配置文件说明</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">日志</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">日志总览</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">目录结构示意</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#msrun">msrun 日志</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id4">单机启动</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">多机启动</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id6">日志中的关键字段</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id7">排查建议</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id8">相关文档</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dataset.html">数据集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="training_hyperparameters.html">训练超参数与优化器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l1"><a class="reference internal" href="memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="save_and_load_checkpoint.html">权重保存与加载</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resume_training.html">断点续训</a></li>
+<li class="toctree-l1"><a class="reference internal" href="monitor.html">训练指标监控与 Profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="static_graph_features.html">静态图实现特性</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">环境变量</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">环境变量说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">贡献指南</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contribution/mindformers_contribution.html">MindSpore Transformers贡献指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution/modelers_contribution.html">魔乐社区贡献指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../faq/model_related.html">模型相关 FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/feature_related.html">功能相关 FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">静态图实现（Deprecated）</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/guide/index.html">大模型全流程指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/feature/index.html">功能特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/advanced_development/index.html">高阶开发</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/example/index.html">优秀实践</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/env_variables.html">环境变量说明</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">日志</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/feature/logging.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>日志<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<p>MindSpore Transformers 动态图（PyNative）训练通过 <code class="docutils literal notranslate"><span class="pre">scripts/msrun_launcher.sh</span></code> 拉起，运行时产生的所有日志均通过 <code class="docutils literal notranslate"><span class="pre">msrun</span></code> 的 worker 进程日志统一收集。理解日志的目录结构与关键字段，是定位「训练为什么失败了 / loss 为什么不对 / 哪张卡出了问题」的前提。</p>
+<p>本页介绍日志的用途与目录结构、<code class="docutils literal notranslate"><span class="pre">msrun</span></code> 的可配置项、训练日志中关键字段的含义，以及排查问题时的查看顺序。任务启动方式见 <a class="reference internal" href="#./start_tasks.md"><span class="xref myst">启动任务</span></a>。</p>
+<section id="id2">
+<h2>日志总览<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p>PyNative 训练运行时，所有日志统一由 <code class="docutils literal notranslate"><span class="pre">msrun</span></code> worker 进程日志承载：</p>
+<ul class="simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">msrun</span></code> worker 进程日志</strong>：由启动脚本 <code class="docutils literal notranslate"><span class="pre">scripts/msrun_launcher.sh</span></code> 通过 <code class="docutils literal notranslate"><span class="pre">LOG_DIR</span></code> 参数（默认 <code class="docutils literal notranslate"><span class="pre">output/msrun_log</span></code>）传递给底层 <code class="docutils literal notranslate"><span class="pre">msrun</span></code> 的 <code class="docutils literal notranslate"><span class="pre">--log_dir</span></code>。<code class="docutils literal notranslate"><span class="pre">msrun</span></code> 把每个 worker（设备）进程的<strong>标准输出（stdout）与标准错误（stderr）整体重定向</strong>到一份文件，命名为 <code class="docutils literal notranslate"><span class="pre">worker_{i}.log</span></code>（另有调度进程 <code class="docutils literal notranslate"><span class="pre">scheduler.log</span></code>）。框架 <code class="docutils literal notranslate"><span class="pre">logger</span></code> 的 <code class="docutils literal notranslate"><span class="pre">to_std=True</span></code>（默认开启）会将所有日志镜像到标准输出，因此<strong>逐 step 的训练指标（loss、lr、grad_norm 等）、运行模式 banner、并行切分、数据集/权重加载等框架日志，以及 Python traceback、C++/HCCL 底层报错、segfault 退出信息等，全部落在 <code class="docutils literal notranslate"><span class="pre">worker_{i}.log</span></code> 中</strong>。进程崩溃、组网失败等问题也主要靠它定位。</p></li>
+</ul>
+<blockquote>
+<div><p><strong>排查入口</strong></p>
+<ul class="simple">
+<li><p><strong>进程没起来 / 中途崩溃 / 报底层错</strong>：看对应 rank 的 <code class="docutils literal notranslate"><span class="pre">worker_{i}.log</span></code>（含完整 traceback 与 HCCL/驱动报错）。</p></li>
+<li><p><strong>训练能跑，但要看 loss/lr/收敛/单步耗时</strong>：同样看 <code class="docutils literal notranslate"><span class="pre">worker_{i}.log</span></code>，框架按 step 打印的指标都在里面。</p></li>
+<li><p><strong>怀疑某张卡异常</strong>：对照该 rank 的 <code class="docutils literal notranslate"><span class="pre">worker_{i}.log</span></code> 与 <code class="docutils literal notranslate"><span class="pre">scheduler.log</span></code>。</p></li>
+</ul>
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="id3">
+<h2>目录结构示意<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<p>默认配置下（<code class="docutils literal notranslate"><span class="pre">msrun_launcher.sh</span></code> 的 <code class="docutils literal notranslate"><span class="pre">LOG_DIR</span></code> 默认为 <code class="docutils literal notranslate"><span class="pre">output/msrun_log</span></code>），日志落盘结构如下：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>output/
+└── msrun_log/                  # msrun 的 --log_dir，收集 worker 进程日志
+    ├── scheduler.log           # 调度进程日志（组网、进程拉起/回收）
+    ├── worker_0.log            # rank 0 进程的 stdout/stderr
+    ├── worker_1.log            # rank 1 进程的 stdout/stderr
+    └── ...                     # 每个 worker 一份，worker_{i}.log
+</pre></div>
+</div>
+<blockquote>
+<div><p><strong>文件名与路径来源</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">worker_{i}.log</span></code> / <code class="docutils literal notranslate"><span class="pre">scheduler.log</span></code>：由 <code class="docutils literal notranslate"><span class="pre">msrun</span></code> 在 <code class="docutils literal notranslate"><span class="pre">--log_dir</span></code> 下生成并按 worker/scheduler 命名（属 msrun 行为，非 mindformers 定义；参见 <a class="reference internal" href="#./start_tasks.md"><span class="xref myst">启动任务</span></a>）。</p></li>
+<li><p>日志目录由 <code class="docutils literal notranslate"><span class="pre">msrun_launcher.sh</span></code> 的 <code class="docutils literal notranslate"><span class="pre">LOG_DIR</span></code> 参数控制，默认 <code class="docutils literal notranslate"><span class="pre">output/msrun_log</span></code>。</p></li>
+</ul>
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="msrun">
+<h2>msrun 日志<a class="headerlink" href="#msrun" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">msrun</span></code> 在 <code class="docutils literal notranslate"><span class="pre">--log_dir</span></code> 指定的目录下，为每个 worker 进程生成一份 <code class="docutils literal notranslate"><span class="pre">worker_{i}.log</span></code>，把该进程的标准输出与标准错误整体写入其中；同时生成一份 <code class="docutils literal notranslate"><span class="pre">scheduler.log</span></code> 记录组网与进程管理。推荐通过 <code class="docutils literal notranslate"><span class="pre">scripts/msrun_launcher.sh</span></code> 启动，由 <code class="docutils literal notranslate"><span class="pre">LOG_DIR</span></code> 参数控制日志目录。</p>
+<section id="id4">
+<h3>单机启动<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p>单机 8 卡：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bash<span class="w"> </span>scripts/msrun_launcher.sh<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="s2">&quot;run_mindformer.py --config /path/to/pretrain_xxx.yaml --mode 1&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="m">8</span><span class="w"> </span><span class="m">8</span><span class="w"> </span><span class="m">8118</span><span class="w"> </span>output/msrun_log<span class="w"> </span>False<span class="w"> </span><span class="m">300</span>
+</pre></div>
+</div>
+<p>启动后，<code class="docutils literal notranslate"><span class="pre">output/msrun_log/</span></code> 下会出现 <code class="docutils literal notranslate"><span class="pre">worker_0.log</span></code> ~ <code class="docutils literal notranslate"><span class="pre">worker_7.log</span></code> 与 <code class="docutils literal notranslate"><span class="pre">scheduler.log</span></code>。</p>
+</section>
+<section id="id5">
+<h3>多机启动<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<p>多机场景下，每个节点各自执行 <code class="docutils literal notranslate"><span class="pre">msrun_launcher.sh</span></code>，各节点的 worker 日志落在本节点的 <code class="docutils literal notranslate"><span class="pre">LOG_DIR</span></code> 下（不会自动汇聚到主节点）。以 2 机 16 卡（每机 8 卡，主节点 IP <code class="docutils literal notranslate"><span class="pre">192.168.1.1</span></code>）为例：</p>
+<p>主节点（节点 0）：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bash<span class="w"> </span>scripts/msrun_launcher.sh<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="s2">&quot;run_mindformer.py --config /path/to/pretrain_xxx.yaml --mode 1&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="m">16</span><span class="w"> </span><span class="m">8</span><span class="w"> </span><span class="m">192</span>.168.1.1<span class="w"> </span><span class="m">8118</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>output/msrun_log<span class="w"> </span>False<span class="w"> </span><span class="m">300</span>
+</pre></div>
+</div>
+<p>从节点（节点 1）：仅 <code class="docutils literal notranslate"><span class="pre">NODE_RANK</span></code> 参数不同（<code class="docutils literal notranslate"><span class="pre">0</span></code> → <code class="docutils literal notranslate"><span class="pre">1</span></code>），其余相同；该节点的 <code class="docutils literal notranslate"><span class="pre">worker_{i}.log</span></code> 落在节点 1 自己的 <code class="docutils literal notranslate"><span class="pre">output/msrun_log/</span></code> 下。</p>
+<blockquote>
+<div><p><strong>多机排查提示</strong></p>
+<p>多机问题需要登录到对应节点查看该节点的 <code class="docutils literal notranslate"><span class="pre">LOG_DIR</span></code>。例如怀疑全局 rank 10（节点 1 上的本地 rank 2）异常时，应到节点 1 的 <code class="docutils literal notranslate"><span class="pre">msrun_log</span></code> 目录查看其 <code class="docutils literal notranslate"><span class="pre">worker_2.log</span></code>。</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">msrun_launcher.sh</span></code> 各参数（<code class="docutils literal notranslate"><span class="pre">WORKER_NUM</span></code>、<code class="docutils literal notranslate"><span class="pre">LOCAL_WORKER</span></code>、<code class="docutils literal notranslate"><span class="pre">MASTER_ADDR</span></code>、<code class="docutils literal notranslate"><span class="pre">MASTER_PORT</span></code>、<code class="docutils literal notranslate"><span class="pre">NODE_RANK</span></code>、<code class="docutils literal notranslate"><span class="pre">LOG_DIR</span></code>、<code class="docutils literal notranslate"><span class="pre">JOIN</span></code>、<code class="docutils literal notranslate"><span class="pre">CLUSTER_TIME_OUT</span></code>）的完整说明见 <a class="reference internal" href="#./start_tasks.md"><span class="xref myst">启动任务</span></a>。</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id6">
+<h2>日志中的关键字段<a class="headerlink" href="#id6" title="Link to this heading"></a></h2>
+<p>PyNative 训练循环每隔若干步，由 <code class="docutils literal notranslate"><span class="pre">LossCallback</span></code> 回调（<code class="docutils literal notranslate"><span class="pre">mindformers/pynative/callback/loss_callback.py</span></code> 的 <code class="docutils literal notranslate"><span class="pre">_print_log</span></code>）打印一行训练指标到标准输出，进而被 <code class="docutils literal notranslate"><span class="pre">msrun</span></code> 收集到 <code class="docutils literal notranslate"><span class="pre">worker_{i}.log</span></code> 中。一条典型记录形如：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[INFO] 2026-06-09 10:20:30 [.../loss_callback.py:231] _print_log: { step:[  100/ 1000], loss:   2.345678, per_step_time:    850ms, lr: 1.000000e-04, grad_norm:   1.234000, throughput:  12.34T }
+</pre></div>
+</div>
+<p>逐字段含义如下：</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>字段</p></th>
+<th class="head"><p>示例</p></th>
+<th class="head"><p>含义</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">step:[</span> <span class="pre">100/</span> <span class="pre">1000]</span></code></p></td>
+<td><p>当前 step / 总 step</p></td>
+<td><p>训练所处的步数进度（全局步 / <code class="docutils literal notranslate"><span class="pre">training.steps</span></code>）。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">loss:</span> <span class="pre">2.345678</span></code></p></td>
+<td><p>当前步 loss</p></td>
+<td><p>本步训练 loss（单值），用于判断收敛趋势。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">per_step_time:</span> <span class="pre">850ms</span></code></p></td>
+<td><p>单步耗时</p></td>
+<td><p>本步训练耗时，关注性能与抖动。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">lr:</span> <span class="pre">1.000000e-04</span></code></p></td>
+<td><p>当前学习率</p></td>
+<td><p>反映 warmup 与衰减调度；若学习率调度器不支持实时获取当前学习率，则该字段不打印。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">grad_norm:</span> <span class="pre">1.234000</span></code></p></td>
+<td><p>梯度全局范数</p></td>
+<td><p>全部参数梯度的全局 L2 范数。结合梯度裁剪阈值判断训练稳定性；若该步未取到则打印 <code class="docutils literal notranslate"><span class="pre">grad_norm:</span> <span class="pre">NaN</span></code>。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">throughput:</span> <span class="pre">12.34T</span></code></p></td>
+<td><p>吞吐</p></td>
+<td><p>本步训练吞吐（单位 <code class="docutils literal notranslate"><span class="pre">T</span></code>）。</p></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<div><p><strong>补充说明</strong></p>
+<p>逐 step 行由动态图的 <code class="docutils literal notranslate"><span class="pre">LossCallback._print_log</span></code> 拼接，字段名是 <strong><code class="docutils literal notranslate"><span class="pre">grad_norm</span></code></strong>（不是 <code class="docutils literal notranslate"><span class="pre">global_norm</span></code>），且 <strong>没有</strong> <code class="docutils literal notranslate"><span class="pre">Epoch</span></code>、<code class="docutils literal notranslate"><span class="pre">loss_scale</span></code>、<code class="docutils literal notranslate"><span class="pre">overflow</span> <span class="pre">cond</span></code> 等字段，<code class="docutils literal notranslate"><span class="pre">loss</span></code> 为单值（非「本步/滑动均值」两段式）。MoE / MTP 模型在开启分项 loss 时，行内会额外追加 <code class="docutils literal notranslate"><span class="pre">load_balancing_loss</span></code>、<code class="docutils literal notranslate"><span class="pre">mtp_{i}_loss</span></code>（如 <code class="docutils literal notranslate"><span class="pre">mtp_1_loss</span></code>）等字段。</p>
+<ul class="simple">
+<li><p>需要逐参数 / 逐 micro-step 的 <code class="docutils literal notranslate"><span class="pre">local_norm</span></code>、<code class="docutils literal notranslate"><span class="pre">local_loss</span></code>，或 MoE 的 tokens-per-expert 等更细指标时，通过 <code class="docutils literal notranslate"><span class="pre">monitor</span></code> 配置开启（动态图下这些指标输出到训练日志，暂不写入 TensorBoard）。详见 <a class="reference internal" href="monitor.html"><span class="std std-doc">训练指标监控与 Profiling</span></a>。</p></li>
+<li><p>确认是否运行在动态图：启动阶段会打印 banner <code class="docutils literal notranslate"><span class="pre">Running</span> <span class="pre">MindFormers</span> <span class="pre">in</span> <span class="pre">PYNATIVE_MODE.</span></code>（来源 <code class="docutils literal notranslate"><span class="pre">run_mindformer.py</span></code>，对应 <code class="docutils literal notranslate"><span class="pre">--mode</span> <span class="pre">1</span></code>）以确认进入动态图；未出现该 banner 则说明未以 <code class="docutils literal notranslate"><span class="pre">--mode</span> <span class="pre">1</span></code> 启动。</p></li>
+</ul>
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="id7">
+<h2>排查建议<a class="headerlink" href="#id7" title="Link to this heading"></a></h2>
+<p>按以下顺序定位问题，通常最省时：</p>
+<ul class="simple">
+<li><p><strong>先看 rank 0 的 <code class="docutils literal notranslate"><span class="pre">worker_0.log</span></code></strong>：<code class="docutils literal notranslate"><span class="pre">msrun_log/worker_0.log</span></code> 记录了启动配置、并行切分、数据/权重加载与逐 step 指标，是了解「训练整体在做什么」的入口。</p></li>
+<li><p><strong>进程崩溃 / 底层报错 → 看对应 rank 的 <code class="docutils literal notranslate"><span class="pre">worker_{i}.log</span></code></strong>：含完整 Python traceback、HCCL/驱动等底层报错与退出信息。</p></li>
+<li><p><strong>怀疑单卡异常 → 看对应 rank 的 <code class="docutils literal notranslate"><span class="pre">worker_{i}.log</span></code></strong>：对比该 rank 的日志与其他正常 rank 的日志，定位差异。</p></li>
+<li><p><strong>通信 / 组网问题 → 看 <code class="docutils literal notranslate"><span class="pre">scheduler.log</span></code> 与各 <code class="docutils literal notranslate"><span class="pre">worker_{i}.log</span></code></strong>：组网建立、进程拉起与回收的信息在 <code class="docutils literal notranslate"><span class="pre">scheduler.log</span></code>；HCCL 报错通常分散在各 worker 日志中，需跨 rank 对照。</p></li>
+<li><p><strong>多机问题 → 登录对应节点查看本机 <code class="docutils literal notranslate"><span class="pre">LOG_DIR</span></code></strong>：各节点日志不汇聚，须到出问题的节点上查看其 <code class="docutils literal notranslate"><span class="pre">msrun_log</span></code>。</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="id8">
+<h2>相关文档<a class="headerlink" href="#id8" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>启动任务与 <code class="docutils literal notranslate"><span class="pre">msrun</span></code> 参数：<a class="reference internal" href="#./start_tasks.md"><span class="xref myst">启动任务</span></a></p></li>
+<li><p>更细粒度指标与 Profiling：<a class="reference internal" href="monitor.html"><span class="std std-doc">训练指标监控与 Profiling</span></a></p></li>
+<li><p>配置文件总览：<a class="reference internal" href="configuration.html"><span class="std std-doc">配置文件说明</span></a></p></li>
+<li><p>并行维度与 rank 划分：<a class="reference internal" href="parallel_training.html"><span class="std std-doc">分布式并行训练</span></a></p></li>
+<li><p>端到端训练流程：<a class="reference internal" href="#../guide/training.md"><span class="xref myst">训练</span></a></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="configuration.html" class="btn btn-neutral float-left" title="配置文件说明" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="dataset.html" class="btn btn-neutral float-right" title="数据集" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

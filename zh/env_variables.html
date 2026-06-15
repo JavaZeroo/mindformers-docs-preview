@@ -1,0 +1,453 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>环境变量说明 &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/preview-init.js?v=b2857e68"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="MindSpore Transformers贡献指南" href="contribution/mindformers_contribution.html" />
+    <link rel="prev" title="静态图实现特性" href="feature/static_graph_features.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">介绍</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="quick_start/quick_start.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction/models.html">模型支持库</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">安装</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">安装指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">功能特性</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="feature/overview.html">功能特性概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="feature/start_task.html">启动任务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="feature/configuration.html">配置文件说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="feature/logging.html">日志</a></li>
+<li class="toctree-l1"><a class="reference internal" href="feature/dataset.html">数据集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="feature/training_hyperparameters.html">训练超参数与优化器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="feature/parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l1"><a class="reference internal" href="feature/memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="feature/save_and_load_checkpoint.html">权重保存与加载</a></li>
+<li class="toctree-l1"><a class="reference internal" href="feature/resume_training.html">断点续训</a></li>
+<li class="toctree-l1"><a class="reference internal" href="feature/monitor.html">训练指标监控与 Profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="feature/other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="feature/static_graph_features.html">静态图实现特性</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">环境变量</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">环境变量说明</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">调试变量</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">其他变量</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">贡献指南</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contribution/mindformers_contribution.html">MindSpore Transformers贡献指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contribution/modelers_contribution.html">魔乐社区贡献指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="faq/model_related.html">模型相关 FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq/feature_related.html">功能相关 FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">静态图实现（Deprecated）</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="static_graph/introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="static_graph/guide/index.html">大模型全流程指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="static_graph/feature/index.html">功能特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="static_graph/advanced_development/index.html">高阶开发</a></li>
+<li class="toctree-l1"><a class="reference internal" href="static_graph/example/index.html">优秀实践</a></li>
+<li class="toctree-l1"><a class="reference internal" href="static_graph/env_variables.html">环境变量说明</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">环境变量说明</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/env_variables.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>环境变量说明<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/env_variables.md"><img alt="查看源文件" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source.svg" /></a></p>
+<p>以下是 MindSpore Transformers 支持的环境变量。</p>
+<section id="id2">
+<h2>调试变量<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>变量名称</p></th>
+<th class="head"><p>默认值</p></th>
+<th class="head"><p>解释</p></th>
+<th class="head"><p>说明</p></th>
+<th class="head"><p>应用场景</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>HCCL_DETERMINISTIC</strong></p></td>
+<td><p>false</p></td>
+<td><p>开启或关闭归约类通信算子的确定性计算，其中归约类通信算子包括 AllReduce、ReduceScatter、Reduce。</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code>：打开 HCCL 确定性开关；<br><code class="docutils literal notranslate"><span class="pre">false</span></code>：关闭 HCCL 确定性开关。<br></p></td>
+<td><p>开启确定性计算可消除多卡计算顺序不一致引入的随机性，但也会导致性能相较关闭时下降。推荐在需要保持一致性场景时开启。</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>LCCL_DETERMINISTIC</strong></p></td>
+<td><p>0</p></td>
+<td><p>设置 LCCL 确定性算子 AllReduce(保序加)是否开启。</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code>：打开 LCCL 确定性开关；<br><code class="docutils literal notranslate"><span class="pre">0</span></code>：关闭 LCCL 确定性开关。</p></td>
+<td><p>开启确定性计算可消除多卡计算顺序不一致引入的随机性，但也会导致性能相较关闭时下降。推荐在需要保持一致性场景时开启。<br>在 rankSize&lt;=8 时生效。</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>CUSTOM_MATMUL_SHUFFLE</strong></p></td>
+<td><p>on</p></td>
+<td><p>开启或者关闭自定义矩阵乘法的洗牌操作。</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">on</span></code>：开启矩阵洗牌；<br><code class="docutils literal notranslate"><span class="pre">off</span></code>：关闭矩阵洗牌。</p></td>
+<td><p>洗牌操作对于特定的矩阵尺寸和内存访问模式有优化效果，如果矩阵的大小与洗牌优化的尺寸不匹配，关闭洗牌可能会获得更好的性能。请根据实际使用进行设置。</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>ASCEND_LAUNCH_BLOCKING</strong></p></td>
+<td><p>0</p></td>
+<td><p>训练或在线推理场景，可通过此环境变量控制算子执行时是否启动同步模式。</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code>：强制算子采用同步模式运行；<br><code class="docutils literal notranslate"><span class="pre">0</span></code>：不强制算子采用同步模式运行。</p></td>
+<td><p>由于 NPU 模型训练时默认算子异步执行，导致算子执行过程中出现报错时，打印的报错堆栈信息并不是实际的调用栈信息。当设置为<code class="docutils literal notranslate"><span class="pre">1</span></code>时，强制算子采用同步模式运行，这样能够打印正确的调用栈信息，从而更容易地调试和定位代码中的问题。设置为<code class="docutils literal notranslate"><span class="pre">0</span></code>时有更高的运算效率。</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>TE_PARALLEL_COMPILER</strong></p></td>
+<td><p>8</p></td>
+<td><p>算子最大并行编译进程数，当大于 1 时开启并行编译。</p></td>
+<td><p>取值为正整数；最大不超过 cpu 核数*80%/昇腾 AI 处理器个数，取值范围 1~32，默认值是 8。</p></td>
+<td><p>网络模型较大时，可通过配置此环境变量开启算子的并行编译功能；<br>设置为<code class="docutils literal notranslate"><span class="pre">1</span></code>时为单线程编译，在调试时，可以简化难度。</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>CPU_AFFINITY</strong></p></td>
+<td><p>0</p></td>
+<td><p>启动 CPU 亲和性开关，启动该选项可以确保每个进程或线程绑定到一个 CPU 核心上，以提高性能。</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code>：开启 CPU 亲和性开关；<br><code class="docutils literal notranslate"><span class="pre">0</span></code>：关闭 CPU 亲和性开关。</p></td>
+<td><p>出于<strong>优化资源利用</strong> 以及<strong>节能</strong> 的考虑，CPU 亲和性默认关闭。</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>MS_MEMORY_STATISTIC</strong></p></td>
+<td><p>0</p></td>
+<td><p>内存统计。</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code>：开启内存统计功能；<br><code class="docutils literal notranslate"><span class="pre">0</span></code>：关闭内存统计功能。</p></td>
+<td><p>在内存分析时，可以统计内存的基本使用情况。具体可以参考<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/advanced_development/performance_optimization.html">调优指南</a>。</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>MINDSPORE_DUMP_CONFIG</strong></p></td>
+<td><p></p></td>
+<td><p>指定 <a class="reference external" href="https://www.mindspore.cn/tutorials/zh-CN/master/debug/dump.html">云侧 Dump 功能</a> 或 <a class="reference external" href="https://www.mindspore.cn/lite/docs/zh-CN/master/tools/benchmark_tool.html#dump%E5%8A%9F%E8%83%BD">端侧 Dump 功能</a> 所依赖的配置文件的路径</p></td>
+<td><p>文件路径，支持相对路径与绝对路径。</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>GLOG_v</strong></p></td>
+<td><p>3</p></td>
+<td><p>控制 MindSpore 日志的级别。</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code>：DEBUG；<br><code class="docutils literal notranslate"><span class="pre">1</span></code>：INFO；<br><code class="docutils literal notranslate"><span class="pre">2</span></code>：WARNING；<br><code class="docutils literal notranslate"><span class="pre">3</span></code>：ERROR：表示程序执行出现报错，输出错误日志，程序可能不会终止；<br><code class="docutils literal notranslate"><span class="pre">4</span></code>：CRITICAL，表示程序执行出现异常，将会终止执行程序。</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>ASCEND_GLOBAL_LOG_LEVEL</strong></p></td>
+<td><p>3</p></td>
+<td><p>控制 CANN 的日志级别。</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code>：DEBUG；<br><code class="docutils literal notranslate"><span class="pre">1</span></code>：INFO；<br><code class="docutils literal notranslate"><span class="pre">2</span></code>：WARNING；<br><code class="docutils literal notranslate"><span class="pre">3</span></code>：ERROR；<br><code class="docutils literal notranslate"><span class="pre">4</span></code>：NULL，不输出日志。</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>ASCEND_SLOG_PRINT_TO_STDOUT</strong></p></td>
+<td><p>0</p></td>
+<td><p>是否开启日志打屏。开启后，日志将不会保存在 log 文件中，而是将产生的日志直接打屏显示。</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code>：开启日志打屏；<br><code class="docutils literal notranslate"><span class="pre">0</span></code>：关闭日志打屏。</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>ASCEND_GLOBAL_EVENT_ENABLE</strong></p></td>
+<td><p>0</p></td>
+<td><p>设置应用类日志是否开启 Event 日志。</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code>：开启 Event 日志；<br><code class="docutils literal notranslate"><span class="pre">0</span></code>：关闭 Event 日志。</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>HCCL_EXEC_TIMEOUT</strong></p></td>
+<td><p>1836</p></td>
+<td><p>通过该环境变量可控制设备间执行时同步等待的时间，在该配置时间内各设备进程等待其他设备执行通信同步。</p></td>
+<td><p>取值范围为：(0, 17340]，默认值为 1836，单位为 s。</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>HCCL_CONNECT_TIMEOUT</strong></p></td>
+<td><p>120</p></td>
+<td><p>分布式训练或推理场景下，用于限制不同设备之间 socket 建链过程的超时等待时间。</p></td>
+<td><p>该环境变量需要配置为整数，取值范围[120,7200]，默认值 120s。</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>MS_NODE_ID</strong></p></td>
+<td><p>NA</p></td>
+<td><p>动态组网启动场景下，指定本进程的rank_id。</p></td>
+<td><p>本进程的rank_id，在集群内唯一。</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>MS_ALLOC_CONF</strong></p></td>
+<td><p>NA</p></td>
+<td><p>设置内存策略。</p></td>
+<td><p>配置项，格式为key:value，多个配置项以逗号分隔，例如 export MS_ALLOC_CONF=enable_vmm:true,memory_tracker:true。<br>enable_vmm: 是否使能虚拟内存，默认值为true。<br>vmm_align_size: 设置虚拟内存对齐大小，单位为MB，默认值为2。<br>memory_tracker: 是否开启memory tracker，默认值为false。<br>memory_tracker_path: 开启memory tracker并保存到指定路径，默认值关闭memory tracker且保存路径为空。<br>simple_tracker: 是否开启tracker简化模式，不保存tracker_graph.ir，只保留最后一个user task。开启memory_tracker时生效，默认值为false。<br>acl_allocator: 是否使用ACL内存分配器，默认值为true。<br>somas_whole_block: 是否使用SOMAS整块内存分配，默认值为false。</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>MS_INTERNAL_DISABLE_CUSTOM_KERNEL_LIST</strong></p></td>
+<td><p>PagedAttention</p></td>
+<td><p>使能自定义算子的列表。实验性配置项，一般无需设置。将会在未来删除。</p></td>
+<td><p>配置为字符串，算子名之间用英文逗号隔开。</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>OM_MODULES_CACHE</strong></p></td>
+<td><p>~/.cache/openmind/modules</p></td>
+<td><p>openMind modules的缓存路径。</p></td>
+<td><p>配置为字符串格式的目录路径。</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id3">
+<h2>其他变量<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>变量名称</p></th>
+<th class="head"><p>默认值</p></th>
+<th class="head"><p>解释</p></th>
+<th class="head"><p>说明</p></th>
+<th class="head"><p>应用场景</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>RUN_MODE</strong></p></td>
+<td><p>predict</p></td>
+<td><p>设置运行模式。</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">predict</span></code>：推理； <br><code class="docutils literal notranslate"><span class="pre">finetune</span></code>：微调； <br><code class="docutils literal notranslate"><span class="pre">train</span></code>：训练； <br><code class="docutils literal notranslate"><span class="pre">eval</span></code>：评测。</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>USE_ROPE_SELF_DEFINE</strong></p></td>
+<td><p>true</p></td>
+<td><p>是否使用 ROPE 融合算子。</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code>：使用 ROPE 融合算子；<br><code class="docutils literal notranslate"><span class="pre">false</span></code>：不使用 ROPE 融合算子。</p></td>
+<td><p>默认开启 ROPE 融合算子可以提升计算效率。除调试场景，根据需要进行关闭，一般不作特别设置。</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>MS_ENABLE_INTERNAL_BOOST</strong></p></td>
+<td><p>on</p></td>
+<td><p>是否打开 MindSpore 框架的内部加速功能。</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">on</span></code>：开启 MindSpore 内部加速；<br><code class="docutils literal notranslate"><span class="pre">off</span></code>：关闭 MindSpore 内部加速。</p></td>
+<td><p>为了实现高性能推理，该配置默认开启。在进行调试或对比不同加速策略的情况下，需要关闭此参数以观察对性能的影响。</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>MF_LOG_SUFFIX</strong></p></td>
+<td><p>NA</p></td>
+<td><p>设置所有 log 日志文件夹的自定义后缀。</p></td>
+<td><p>log 文件夹的后缀。默认值：无后缀</p></td>
+<td><p>添加一致的后缀，可以隔离各个任务的日志，不会被覆写。</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>PLOG_REDIRECT_TO_OUTPUT</strong></p></td>
+<td><p>False</p></td>
+<td><p>控制 plog 日志是否改变存储路径。</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code>:存储到./output 目录下; <br><code class="docutils literal notranslate"><span class="pre">False</span></code>: 存储到默认存储位置。</p></td>
+<td><p>设置之后方便用户查询 plog 日志。</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>MS_ENABLE_FA_FLATTEN</strong></p></td>
+<td><p>on</p></td>
+<td><p>控制是否支持 FlashAttention flatten 优化。</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">on</span></code>:启用 FlashAttention flatten 优化; <br><code class="docutils literal notranslate"><span class="pre">off</span></code>: 禁用 FlashAttention flatten 优化。</p></td>
+<td><p>对于还未适配FlashAttention flatten 优化的模型提供回退机制。</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>EXPERIMENTAL_KERNEL_LAUNCH_GROUP</strong></p></td>
+<td><p>NA</p></td>
+<td><p>控制是否支持算子批量并行下发，支持开启并行下发，并配置并行数。</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">thread_num</span></code>: 并发线程数，一般不建议增加，默认值为<code class="docutils literal notranslate"><span class="pre">2</span></code>； <br> <code class="docutils literal notranslate"><span class="pre">kernel_group_num</span></code>: 算子分组总数量，每线程<code class="docutils literal notranslate"><span class="pre">kernel_group_num/thread_num</span></code>个组，默认值为<code class="docutils literal notranslate"><span class="pre">8</span></code>。</p></td>
+<td><p>该特性后续还会继续演进，后续行为可能会有变更，当前仅支持<code class="docutils literal notranslate"><span class="pre">deepseek</span></code>推理场景，有一定的性能优化，但是其他模型使用该特性可能会有劣化，用户需要谨慎使用，使用方法如下：<code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">EXPERIMENTAL_KERNEL_LAUNCH_GROUP=&quot;thread_num:2,kernel_group_num:8&quot;</span></code>。</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>ENFORCE_EAGER</strong></p></td>
+<td><p>False</p></td>
+<td><p>控制是否<strong>不开启</strong>jit模式。</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">False</span></code>: 开启jit模式； <br><code class="docutils literal notranslate"><span class="pre">True</span></code>: 不开启jit模式。</p></td>
+<td><p>Jit将函数编译成一张可调用的MindSpore图，设置ENFORCE_EAGER为False开启jit模式，可以获取性能收益，当前仅支持推理模式。</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>MS_ENABLE_TFT</strong></p></td>
+<td><p>NA</p></td>
+<td><p>使能训练故障容错（Training Fault Tolerance）功能，大多数功能依赖 MindIO TFT。</p></td>
+<td><p>取值为”{TTP:1,UCE:1,HCCE:1,ARF:1,TRE:1,TSP:1,RSC:1}”，使用某一功能时，可将对应字段配置为”1”。</p></td>
+<td><p>使用方式可以参考<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/high_availability.html">高可用特性</a>。</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>MS_WORKER_NUM</strong></p></td>
+<td><p>NA</p></td>
+<td><p>指定角色为MS_WORKER的进程数量。</p></td>
+<td><p>大于0的整数。</p></td>
+<td><p>分布式场景。</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>RANK_ID</strong></p></td>
+<td><p>NA</p></td>
+<td><p>指定调用NPU的逻辑ID。</p></td>
+<td><p>0~7，多机并行时不同server中DEVICE_ID会有重复，使用RANK_ID可以避免这个问题（多机并行时 RANK_ID = SERVER_ID * DEVICE_NUM + DEVICE_ID，DEVICE_ID指当前机器的第几个Ascend AI处理器。）</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>RANK_SIZE</strong></p></td>
+<td><p>NA</p></td>
+<td><p>指定调用NPU的数量。</p></td>
+<td><p>大于1的整数。</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>LD_PRELOAD</strong></p></td>
+<td><p>NA</p></td>
+<td><p>指定预加载的共享库。</p></td>
+<td><p>指定共享库的路径。</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>DEVICE_ID</strong></p></td>
+<td><p>0</p></td>
+<td><p>指定调用NPU的设备ID。</p></td>
+<td><p>0~服务器的NPU数量。</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>MS_SCHED_PORT</strong></p></td>
+<td><p>NA</p></td>
+<td><p>指定Scheduler绑定端口号。</p></td>
+<td><p>1024～65535范围内的端口号。</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>NPU_ASD_ENABLE</strong></p></td>
+<td><p>0</p></td>
+<td><p>是否开启特征值检测功能。</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code>：关闭特征值检测功能<br/><code class="docutils literal notranslate"><span class="pre">1</span></code>：检测到异常，只打印日志，但检测算子不抛异常<br/><code class="docutils literal notranslate"><span class="pre">2</span></code>：检测到异常，打印日志，检测算子抛出异常<br/><code class="docutils literal notranslate"><span class="pre">3</span></code>：特征值正常和异常场景下都会打印（备注：正常场景下只有CANN开启了INFO及DEBUG级别才会打印），检测到异常时检测算子抛出异常。</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>MS_SDC_DETECT_ENABLE</strong></p></td>
+<td><p>0</p></td>
+<td><p>是否使能CheckSum检测静默故障。</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code>：关闭CheckSum检测静默故障。<br/><code class="docutils literal notranslate"><span class="pre">1</span></code>：使能CheckSum检测静默故障。</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>ASCEND_HOME_PATH</strong></p></td>
+<td><p>NA</p></td>
+<td><p>Ascend软件包的安装路径。</p></td>
+<td><p>设置为指定的路径。</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>LOCAL_DEFAULT_PATH</strong></p></td>
+<td><p>./output</p></td>
+<td><p>设置日志的默认路径。</p></td>
+<td><p>设置为指定的路径。</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>STDOUT_DEVICES</strong></p></td>
+<td><p>NA</p></td>
+<td><p>设置标准输出的设备ID列表。</p></td>
+<td><p>设置为数字列表，多个ID之间用英文逗号隔开。</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>REGISTER_PATH</strong></p></td>
+<td><p></p></td>
+<td><p>需要注册的外挂代码所在的目录路径。</p></td>
+<td><p>设置为指定的路径。</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>LOG_MF_PATH</strong></p></td>
+<td><p>./output/log</p></td>
+<td><p>MindSpore Transformers的日志路径。</p></td>
+<td><p>设置为指定的路径。</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>DEVICE_NUM_PER_NODE</strong></p></td>
+<td><p>8</p></td>
+<td><p>服务器上的NPU数量。</p></td>
+<td><p>大于0的整数。</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>SHARED_PATHS</strong></p></td>
+<td><p></p></td>
+<td><p>共享存储的路径。</p></td>
+<td><p>设置为指定的路径。</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>ASCEND_PROCESS_LOG_PATH</strong></p></td>
+<td><p>NA</p></td>
+<td><p>Ascend进程的日志路径。</p></td>
+<td><p>设置为指定的路径。</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="feature/static_graph_features.html" class="btn btn-neutral float-left" title="静态图实现特性" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="contribution/mindformers_contribution.html" class="btn btn-neutral float-right" title="MindSpore Transformers贡献指南" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

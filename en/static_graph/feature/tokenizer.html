@@ -1,0 +1,315 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Using Tokenizer &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Dataset" href="dataset.html" />
+    <link rel="prev" title="Logs" href="logging.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">Models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contribution Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">Modelers Contribution Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">Model-Related FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">Feature-Related FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Static Graph Implementation (Deprecated)</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Full-process Guide to Large Models</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Features</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">Features Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="start_tasks.html">Start Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ckpt.html">Ckpt Weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="safetensors.html">Safetensors Weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">Configuration File Descriptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="load_huggingface_config.html">Loading Hugging Face Model Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html">Logs</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Using Tokenizer</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#basic-process">Basic Process</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#select-and-download-the-tokenizer-file-based-on-the-model">1. Select and Download the Tokenizer File Based on the Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#modify-the-configuration-file">2. Modify the Configuration File</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#carry-out-the-task">3. Carry Out the Task</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#inference-process-example">Inference Process Example</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#start-using-the-run-mindformer-py-script">Start Using the run_mindformer.py Script</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#custom-script">Custom Script</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#training-process-example">Training Process Example</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#online-dataset-loading">Online Dataset Loading</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#preprocessing-of-offline-datasets">Preprocessing of Offline Datasets</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dataset.html">Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training_hyperparameters.html">Training Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monitor.html">Training Metrics Monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training.html">Resumable Training After Breakpoint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoint_saving_and_loading.html">Checkpoint Saving and Loading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training2.0.html">Resume Training2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel_training.html">Distributed Parallelism Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="high_availability.html">Training High Availability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory_optimization.html">Memory Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skip_data_and_ckpt_health_monitor.html">Data Skip And Checkpoint Health Monitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pma_fused_checkpoint.html">Pre-trained Model Average Weight Consolidation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="other_training_features.html">Other Training Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantization.html">Quantization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_development/index.html">Advanced Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">Excellent Practice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">Environment Variable Descriptions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Features</a></li>
+      <li class="breadcrumb-item active">Using Tokenizer</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/feature/tokenizer.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">Deprecated</p>
+<p>This page belongs to the <strong>Static Graph (GRAPH_MODE) Implementation</strong> section and has been marked as deprecated. New features are primarily being developed in the “r2.0.0 Dynamic Graph Implementation” section. Please refer to the dynamic graph documentation first.</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="using-tokenizer">
+<h1>Using Tokenizer<a class="headerlink" href="#using-tokenizer" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_en/static_graph/feature/tokenizer.md"><img alt="View Source on AtomGit" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source_en.svg" /></a></p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>Hugging Face Tokenizer is an efficient and flexible text word segmentation tool developed by Hugging Face. It aims to provide strong support for natural language processing (NLP) tasks by converting text into a form that the model can understand - that is, tokens. Tokenizer is not only responsible for dividing text into lexical units, but also manages the mapping relationship between these lexical units and their corresponding indexes, which is crucial for input representation in machine learning models.</p>
+<p>The processes involving the use of Tokenizer in MindSpore Transformers include: inference, online dataset loading when fine-tuning, and preprocessing of offline datasets. Currently, direct use of Tokenizers based on Hugging Face transformers is supported.</p>
+<p>The original Tokenizer component of MindSpore Transformers has the same function as the Hugging Face Tokenizer. It can be used directly without additional development costs and is relatively friendly when migrating models on Hugging Face. This document mainly introduces how to reuse Hugging Face Tokenizer by taking the reasoning process as an example. Currently, only the Qwen3 series models of the new architecture are supported, and the generalization ability will be continuously optimized in the future.</p>
+</section>
+<section id="basic-process">
+<h2>Basic Process<a class="headerlink" href="#basic-process" title="Link to this heading"></a></h2>
+<p>The usage process can be decomposed into the following steps:</p>
+<section id="select-and-download-the-tokenizer-file-based-on-the-model">
+<h3>1. Select and Download the Tokenizer File Based on the Model<a class="headerlink" href="#select-and-download-the-tokenizer-file-based-on-the-model" title="Link to this heading"></a></h3>
+<p>Download the corresponding Tokenizer-related files to the corresponding folder based on the model. The files include word list files. Furthermore, Hugging Face’s tokenizers can be specifically divided into two major categories:</p>
+<ol class="arabic simple">
+<li><p>The built-in Tokenizer of transformers. For example, Qwen2Tokenizer;</p></li>
+<li><p>A custom Tokenizer implemented by inheriting the base class of the Tokenizer from transformers is not merged into transformers. Only the Python files of the Tokenizer exist on Hugging Face’s repository or locally. It is necessary to support remote loading and saving the Python files of the Tokenizer to the corresponding folders, such as ChatGLM4Tokenizer.</p></li>
+</ol>
+</section>
+<section id="modify-the-configuration-file">
+<h3>2. Modify the Configuration File<a class="headerlink" href="#modify-the-configuration-file" title="Link to this heading"></a></h3>
+<p>Modify the configuration file according to the <a class="reference internal" href="#inference-process-example">Inference Process Example</a> and <a class="reference internal" href="#training-process-example">Training Process Example</a> following the task reference.</p>
+</section>
+<section id="carry-out-the-task">
+<h3>3. Carry Out the Task<a class="headerlink" href="#carry-out-the-task" title="Link to this heading"></a></h3>
+<p>Refer to the sample to start the task.</p>
+</section>
+</section>
+<section id="inference-process-example">
+<h2>Inference Process Example<a class="headerlink" href="#inference-process-example" title="Link to this heading"></a></h2>
+<p>The inference process takes the Qwen3 model as an example.</p>
+<section id="start-using-the-run-mindformer-py-script">
+<h3>Start Using the run_mindformer.py Script<a class="headerlink" href="#start-using-the-run-mindformer-py-script" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p>Modify the yaml configuration</p>
+<p>Qwen3 model configuration file <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/configs/qwen3/predict_qwen3.yaml">predict_qwen3 yaml</a> needs to be modified The places are as follows:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">use_legacy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+
+<span class="nt">pretrained_model_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;path/to/qwen3_dir&quot;</span>
+</pre></div>
+</div>
+<p>Parameter description:</p>
+<ul class="simple">
+<li><p>use_legacy: Decide whether to use the old architecture, default value: <code class="docutils literal notranslate"><span class="pre">True</span></code>;</p></li>
+<li><p>pretrained_model_dir: The folder path where Tokenizer-related files are placed.</p></li>
+</ul>
+</li>
+<li><p>Pull up the task</p>
+<p>Taking the single-card inference of Qwen3-8b as an example, the startup command is as follows:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>run_mindformer.py<span class="w"> </span><span class="se">\</span>
+--config<span class="w"> </span>configs/qwen3/predict_qwen3.yaml<span class="w"> </span><span class="se">\</span>
+--load_checkpoint<span class="w"> </span>/path/to/model_dir<span class="w"> </span><span class="se">\</span>
+--run_mode<span class="w"> </span>predict<span class="w"> </span><span class="se">\</span>
+--trust_remote_code<span class="w"> </span>False<span class="w"> </span><span class="se">\</span>
+--predict_data<span class="w"> </span><span class="s1">&#39;帮助我制定一份去上海的旅游攻略&#39;</span>
+</pre></div>
+</div>
+<p>Parameter description:</p>
+<ul class="simple">
+<li><p>config: The path of the yaml configuration file.</p></li>
+<li><p>load_checkpoint: The folder path where the weights are placed.</p></li>
+<li><p>run_mode: Operation mode, the inference task is configured as <code class="docutils literal notranslate"><span class="pre">predict</span></code>.</p></li>
+<li><p>trust_remote_code: Whether to trust the code downloaded remotely, default value: <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p>predict_data: Input for reasoning.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="custom-script">
+<h3>Custom Script<a class="headerlink" href="#custom-script" title="Link to this heading"></a></h3>
+<p>The custom script implementation process of reasoning involves the instantiation of the Tokenizer, and its implementation code is as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoTokenizer</span>
+
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">pretrained_model_name_or_path</span><span class="o">=</span><span class="s2">&quot;path/to/pretrained_model_dir&quot;</span><span class="p">,</span>
+                                          <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Parameter description:</p>
+<ul class="simple">
+<li><p>pretrained_model_name_or_path: The folder path where the files related to the Tokenizer downloaded by HuggingFace are stored.</p></li>
+<li><p>trust_remote_code: Whether to trust the code downloaded remotely, default value: <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+</ul>
+</section>
+</section>
+<section id="training-process-example">
+<h2>Training Process Example<a class="headerlink" href="#training-process-example" title="Link to this heading"></a></h2>
+<section id="online-dataset-loading">
+<h3>Online Dataset Loading<a class="headerlink" href="#online-dataset-loading" title="Link to this heading"></a></h3>
+<p>Modify the part related to Tokenizer in the train_dataset section of the yaml configuration:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">use_legacy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+
+<span class="nt">pretrained_model_dir</span><span class="p">:</span><span class="w"> </span><span class="nl">&amp;pretrained_model_dir</span><span class="w"> </span><span class="s">&quot;path/to/qwen3_dir&quot;</span>
+
+<span class="nt">train_dataset</span><span class="p">:</span><span class="w"> </span><span class="nl">&amp;train_dataset</span>
+<span class="w">    </span><span class="nt">data_loader</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CommonDataLoader</span>
+<span class="w">        </span><span class="nt">handler</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AlpacaInstructDataHandler</span>
+<span class="w">            </span><span class="nt">pretrained_model_dir</span><span class="p">:</span><span class="w"> </span><span class="nv">*pretrained_model_dir</span>
+<span class="w">            </span><span class="nt">trust_remote_code</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">            </span><span class="nt">tokenizer</span><span class="p">:</span>
+<span class="w">                </span><span class="nt">padding_side</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;right&quot;</span>
+</pre></div>
+</div>
+<p>Parameter description:</p>
+<ul class="simple">
+<li><p>use_legacy: Decide whether to use the old architecture, default value: <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+<li><p>pretrained_model_dir: The folder path where the files related to the Tokenizer downloaded by HuggingFace are stored.</p></li>
+<li><p>padding_side: Specifies the padding position of the Tokenizer. During training, it needs to be set as: <code class="docutils literal notranslate"><span class="pre">&quot;right&quot;</span></code>.</p></li>
+<li><p>trust_remote_code: Whether to trust the code downloaded remotely, default value: <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+</ul>
+</section>
+<section id="preprocessing-of-offline-datasets">
+<h3>Preprocessing of Offline Datasets<a class="headerlink" href="#preprocessing-of-offline-datasets" title="Link to this heading"></a></h3>
+<p>Just replace the code for instantiating the Tokenizer in the script for preprocessing the offline dataset with the following code:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoTokenizer</span>
+
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">pretrained_model_name_or_path</span><span class="o">=</span><span class="s2">&quot;path/to/pretrained_model_dir&quot;</span><span class="p">,</span>
+                                          <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">tokenizer</span><span class="o">.</span><span class="n">padding_side</span> <span class="o">=</span> <span class="s2">&quot;right&quot;</span>
+</pre></div>
+</div>
+<p>Parameter description:</p>
+<ul class="simple">
+<li><p>pretrained_model_name_or_path: The folder path where the files related to the Tokenizer downloaded by HuggingFace are stored.</p></li>
+<li><p>trust_remote_code: Whether to trust the code downloaded remotely, default value: <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+</ul>
+<p>For more features supported by Tokenizer, refer to <a class="reference external" href="https://hf-mirror.com/docs/transformers/main_classes/tokenizer">API interface document</a>, using method can refer to the <a class="reference external" href="https://hf-mirror.com/docs/transformers/main/en/fast_tokenizers">using document</a>.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="logging.html" class="btn btn-neutral float-left" title="Logs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="dataset.html" class="btn btn-neutral float-right" title="Dataset" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

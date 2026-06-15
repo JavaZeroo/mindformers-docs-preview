@@ -1,0 +1,422 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Distributed Parallelism Training &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Training High Availability" href="high_availability.html" />
+    <link rel="prev" title="Resume Training2.0" href="resume_training2.0.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">Models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contribution Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">Modelers Contribution Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">Model-Related FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">Feature-Related FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Static Graph Implementation (Deprecated)</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Full-process Guide to Large Models</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Features</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">Features Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="start_tasks.html">Start Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ckpt.html">Ckpt Weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="safetensors.html">Safetensors Weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">Configuration File Descriptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="load_huggingface_config.html">Loading Hugging Face Model Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html">Logs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tokenizer.html">Using Tokenizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset.html">Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training_hyperparameters.html">Training Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monitor.html">Training Metrics Monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training.html">Resumable Training After Breakpoint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoint_saving_and_loading.html">Checkpoint Saving and Loading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training2.0.html">Resume Training2.0</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Distributed Parallelism Training</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#parallel-modes-and-application-scenarios">Parallel Modes and Application Scenarios</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#parallelism-features-supported-by-mindspore-transformers">Parallelism Features Supported by MindSpore Transformers</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#data-parallelism">Data Parallelism</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#model-parallelism">Model Parallelism</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sequence-parallelism">Sequence parallelism</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#long-sequence-parallelism">Long Sequence Parallelism</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pipeline-parallelism">Pipeline Parallelism</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#optimizer-parallelism">Optimizer parallelism</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#multi-replica-parallelism">Multi-replica Parallelism</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#mindspore-transformers-distributed-parallel-application-practices">MindSpore Transformers Distributed Parallel Application Practices</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="high_availability.html">Training High Availability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory_optimization.html">Memory Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skip_data_and_ckpt_health_monitor.html">Data Skip And Checkpoint Health Monitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pma_fused_checkpoint.html">Pre-trained Model Average Weight Consolidation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="other_training_features.html">Other Training Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantization.html">Quantization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_development/index.html">Advanced Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">Excellent Practice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">Environment Variable Descriptions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Features</a></li>
+      <li class="breadcrumb-item active">Distributed Parallelism Training</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/feature/parallel_training.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">Deprecated</p>
+<p>This page belongs to the <strong>Static Graph (GRAPH_MODE) Implementation</strong> section and has been marked as deprecated. New features are primarily being developed in the “r2.0.0 Dynamic Graph Implementation” section. Please refer to the dynamic graph documentation first.</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="distributed-parallelism-training">
+<h1>Distributed Parallelism Training<a class="headerlink" href="#distributed-parallelism-training" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_en/static_graph/feature/parallel_training.md"><img alt="View Source on AtomGit" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source_en.svg" /></a></p>
+<section id="parallel-modes-and-application-scenarios">
+<h2>Parallel Modes and Application Scenarios<a class="headerlink" href="#parallel-modes-and-application-scenarios" title="Link to this heading"></a></h2>
+<p>Large-scale deep learning model training requires robust computing power, especially in the case of a large dataset and a complex model architecture. As such, a single device usually cannot meet this requirement. To solve this problem, MindSpore provides a set of powerful parallelism strategies for configuration. You can use flexible parallelism strategies to greatly improve training efficiency and reduce computing resource consumption.</p>
+<p>MindSpore offers parallel modes including data parallelism, model parallelism, pipeline parallelism, and sequence parallelism. They can be used independently or combined as a hybrid parallelism strategy to meet different model training requirements. By adopting proper parallelism strategies, you can leverage the computing resources of multiple devices, significantly improving the training efficiency.</p>
+<p>In actual applications, different parallelism strategies apply to different scenarios.</p>
+<ul class="simple">
+<li><p><strong>Data parallelism</strong>: applies to a simple model with a lot of data.</p></li>
+<li><p><strong>Model parallelism</strong>: applies to a model with a huge number of parameters that a single device cannot accommodate.</p></li>
+<li><p><strong>Pipeline parallelism</strong>: applies to ultra-large-scale model training that requires multi-device computing.</p></li>
+<li><p><strong>Sequence parallelism</strong>: applies to a model with input of long sequences, reducing the GPU memory usage of a single device.</p></li>
+<li><p><strong>Multi-copy parallelism</strong>: uses sequential scheduling algorithm to control the parallelism of fine-grained multi-branch operations, improving the overlap of computing and communications.</p></li>
+<li><p><strong>Optimizer parallelism</strong>: distributes computing tasks of optimizers to multiple devices to reduce memory usage and improve training efficiency.</p></li>
+</ul>
+<blockquote>
+<div><p>The parallelism strategy configuration in the YAML file provided by the repository has been optimized. Currently, you are recommended to use semi-automatic parallelism for optimal performance and stability.</p>
+</div></blockquote>
+</section>
+<section id="parallelism-features-supported-by-mindspore-transformers">
+<h2>Parallelism Features Supported by MindSpore Transformers<a class="headerlink" href="#parallelism-features-supported-by-mindspore-transformers" title="Link to this heading"></a></h2>
+<p>MindSpore Transformers supports multiple parallelism features. You can use these features to optimize the training of different model architectures and hardware configurations. The following table outlines these parallelism features and provides links to the details in the MindSpore documentation.</p>
+<section id="data-parallelism">
+<h3>Data Parallelism<a class="headerlink" href="#data-parallelism" title="Link to this heading"></a></h3>
+<p>Data parallelism involves each device (worker) holding a complete set of model weights, dividing the input data into slices, and distributing them to different computing devices for parallel processing. Forward and backward propagation calculations are performed based on the allocated local data. After backward propagation is completed, the gradients computed on all devices are aggregated through a global reduction (AllReduce) operation to ensure consistency of model parameters across devices. When training with multiple data streams simultaneously, communication occurs only once during gradient updates, achieving optimal performance, but memory usage does not decrease. Data parallelism is suitable for scenarios with large data volumes and small model sizes. For the framework-side implementation of data parallelism, refer to the specific content of <a class="reference external" href="https://www.mindspore.cn/docs/en/master/features/parallel/data_parallel.html">MindSpore Data Parallelism</a>.</p>
+<p>MindSpore Transformers supports data parallelism and can be enabled by the following configuration items:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">parallel_config</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">data_parallel</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+<p>Parameter description:</p>
+<ul class="simple">
+<li><p>data_parallel: The number of parallel data sharding, which is set to 1 by default, is configured based on user requirements.</p></li>
+</ul>
+<p>For the configuration method of distributed parallel parameters, see the parallel configuration section in the <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/configuration.html">MindSpore Transformers Configuration Instructions</a>.</p>
+</section>
+<section id="model-parallelism">
+<h3>Model Parallelism<a class="headerlink" href="#model-parallelism" title="Link to this heading"></a></h3>
+<p>In data parallel training, each device stores all model parameters, leading to high memory usage, which may become a bottleneck when the model size is large. Model parallelism splits the entire model and distributes it across an array of devices, with each device maintaining only a portion of the model’s weights. The network performs parallel computations on their respective parts and communicates at positions like LayerNorm, which is the most memory-efficient but involves significant communication. Model parallelism is suitable for scenarios where the model size is large and a single device cannot accommodate the entire model. For framework-side implementations of model parallelism, refer to the specific content of <a class="reference external" href="https://www.mindspore.cn/docs/en/master/features/parallel/operator_parallel.html">MindSpore Model Parallelism</a>.</p>
+<p>MindSpore Transformers supports model parallelism and can be enabled by the following configuration items:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">parallel_config</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">model_parallel</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+<p>Parameter description:</p>
+<ul class="simple">
+<li><p>model_parallel: The number of parallel shards of the model, which is set to 1 by default, is configured according to user requirements.</p></li>
+</ul>
+<p>For the configuration method of distributed parallel parameters, see the parallel configuration section in the <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/configuration.html">MindSpore Transformers Configuration Instructions</a>.</p>
+</section>
+<section id="sequence-parallelism">
+<h3>Sequence parallelism<a class="headerlink" href="#sequence-parallelism" title="Link to this heading"></a></h3>
+<p>The sequence parallel design is used to allocate the memory and computation that cannot be split in parallel in the model, and the inputs of LayerNorm and Dropout in the Transformer layer are segmented according to the sequence dimension, reducing the memory pressure of a single device.</p>
+<p>MindSpore Transformers supports sequence parallelism and can be enabled by the following configuration items:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">parallel_config</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">use_seq_parallel</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+<p>Parameter description:</p>
+<ul class="simple">
+<li><p>use_seq_parallel: Whether to enable sequence parallelism, which is False by default.</p></li>
+</ul>
+<p>For the configuration method of distributed parallel parameters, see the parallel configuration section in the <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/configuration.html">MindSpore Transformers Configuration Instructions</a>.</p>
+</section>
+<section id="long-sequence-parallelism">
+<h3>Long Sequence Parallelism<a class="headerlink" href="#long-sequence-parallelism" title="Link to this heading"></a></h3>
+<p>From generative AI to scientific models, long sequence training is becoming very important. Existing parallel methods such as data, tensor and pipelining cannot slice in the sequence dimension. As the sequence dimension (S) grows, the training memory overhead grows at the rate of O(<span class="math notranslate nohighlight">\(S^2\)</span>). Sequence parallelism slices all inputs and output activations in the sequence dimension, which is used to reduce the limitations on the length of the input sequences and efficiently support ultra-long sequence training.</p>
+<section id="ring-attention-sequence-parallelism">
+<h4>Ring Attention Sequence Parallelism<a class="headerlink" href="#ring-attention-sequence-parallelism" title="Link to this heading"></a></h4>
+<blockquote>
+<div><p>This feature has been deprecated and will be removed in subsequent versions. Currently, you can use other sequence parallel methods. If you have any questions or suggestions, please submit feedback through <strong><a class="reference external" href="https://gitee.com/mindspore/mindformers/issues/new">Community Issue</a></strong>. Thank you for your understanding and support!</p>
+</div></blockquote>
+<p>Long Sequence Parallel Algorithm, Ring Attention, is a representative technique for long sequence parallelism in the current industry, which is used to solve the memory overhead problem during long sequence training, while realizing computation and communication masking. The Ring Attention algorithm utilizes the chunking property of Attention, when the sequence parallelism is N, Q, K, V are sliced into N sub-chunks, and each card calls the Flash Attention algorithm to compute the Attention result of the local QKV sub-chunks respectively. Since each card only needs to compute the Attention of the sliced QKV sub-chunks, its memory occupation is reduced significantly. Ring Attention uses ring communication to collect and send sub-chunks to neighboring cards while doing FA computation to maximize the masking of computation and communication, which guarantees the overall performance of long sequence parallelism.</p>
+<p>MindSpore Transformers has support for configuring Ring Attention sequence parallel schemes, which can be enabled with the following configuration item:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">model</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">model_config</span><span class="p">:</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">use_ring_attention</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="nt">parallel_config</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">context_parallel</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+<p>Parameter Descriptions:</p>
+<ul class="simple">
+<li><p>use_ring_attention: Whether to enable Ring Attention, default is False.</p></li>
+<li><p>context_parallel:  The number of sequence parallel slices, default is 1, configure according to user requirements.</p></li>
+</ul>
+<p>For configuration method of distributed parallel parameters, refer to the contents of the Parallel Configuration section in <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/configuration.html">MindSpore Transformers configuration description</a>.</p>
+</section>
+<section id="ulysses-sequence-parallelism">
+<h4>Ulysses Sequence Parallelism<a class="headerlink" href="#ulysses-sequence-parallelism" title="Link to this heading"></a></h4>
+<p>The <a class="reference external" href="https://arxiv.org/abs/2309.14509">Ulysses long sequence parallelism scheme</a> proposed by DeepSpeed slices the individual samples in the seq dimension to different compute cards; then, prior to the attention computation, an all-to-all communication operation is performed on the QKVs to allow each compute card to receive the complete sequence, allowing each computation card to compute different attention heads in parallel. Finally, another all-to-all is used after the ATTENTION computation to collect results on the attention head while re-slicing on the seq dimension. This scheme effectively extends the length of the trained sequences while keeping the communication relatively low.</p>
+<p>MindSpore Transformers has support for configuring the Ulysses Sequence Parallel Scheme, which can be enabled with the following configuration item:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">model</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">model_config</span><span class="p">:</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">use_attn_mask_compression</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w"> </span><span class="c1"># Enable attention_mask compression</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="nt">parallel</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">enable_alltoall</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w">  </span><span class="c1"># Allow inputting of alltoall operator</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="nt">parallel_config</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">context_parallel</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">context_parallel_algo</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ulysses_cp</span><span class="w">  </span><span class="c1"># Enable Ulysses sequence parallelism</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+<p>Parameter Descriptions:</p>
+<ul class="simple">
+<li><p>use_attn_mask_compression: Whether to mask the Score matrix in Self-Attention, default is False, it is recommended to turn it on to reduce the video memory usage in Ulysses sequence parallel scheme.</p></li>
+<li><p>enable_alltoall: Generate alltoall communication operator, default is False, when the parameter is not enabled, it will be replaced by a combination of other operators such as allgather. See MindSpore <code class="docutils literal notranslate"><span class="pre">set_auto_parallel_context</span></code> <a class="reference external" href="https://www.mindspore.cn/docs/en/master/api_python/mindspore/mindspore.set_auto_parallel_context.html">interface documentation</a>. We expect to be able to directly input allto_all communication operators when we enable the Ulysses scenario, so we turn this configuration item on.</p></li>
+<li><p>context_parallel_algo: Set to <code class="docutils literal notranslate"><span class="pre">ulysses_cp</span></code> to enable Ulysses sequence parallelism.</p></li>
+</ul>
+<p>For configuration method of distributed parallel parameters, refer to the contents of the Parallel Configuration section in <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/configuration.html">MindSpore Transformers configuration description</a>.</p>
+</section>
+<section id="hybrid-sequence-parallelism">
+<h4>Hybrid Sequence Parallelism<a class="headerlink" href="#hybrid-sequence-parallelism" title="Link to this heading"></a></h4>
+<p>Currently, both Ulysses and Ring Attention sequence parallel schemes have certain limitations. Although Ring Attention sequence parallel scheme can theoretically expand the sequence length infinitely, the communication and computation bandwidth utilization is low, and the performance is inferior to that of Ulysses sequence parallel scheme when the sequence block size is low. The sequence parallelism of Ulysses in GQA and MQA scenarios is limited by the number of Heads and the expansion of sequence length is limited. Hybrid sequence parallelism fuses Ulysses and Ring Attention sequence parallelism scheme, which can solve the above defects.</p>
+<p>MindSpore Transformers has support for configuring hybrid sequence parallel schemes, which can be enabled with the following configuration items:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">parallel</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">enable_alltoall</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w">  </span><span class="c1"># Allow inputting of alltoall operator</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="nt">parallel_config</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">context_parallel</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">16</span>
+<span class="w">  </span><span class="nt">context_parallel_algo</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hybrid_cp</span><span class="w">  </span><span class="c1"># Enable hybrid sequence parallel</span>
+<span class="w">  </span><span class="nt">ulysses_degree_in_cp</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+<p>Parameter Descriptions:</p>
+<ul class="simple">
+<li><p>context_parallel_algo: hybrid sequence parallelism is turned on when set to <code class="docutils literal notranslate"><span class="pre">hybrid_cp</span></code>.</p></li>
+<li><p>ulysses_degree_in_cp: the number of parallel slices of the Ulysses sequence.</p></li>
+</ul>
+<p>For configuration method of distributed parallel parameters, refer to the contents of the Parallel Configuration section in <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/configuration.html">MindSpore Transformers configuration description</a>.</p>
+</section>
+</section>
+<section id="pipeline-parallelism">
+<h3>Pipeline Parallelism<a class="headerlink" href="#pipeline-parallelism" title="Link to this heading"></a></h3>
+<section id="multi-pipeline-interleaved-parallelism">
+<h4>Multi-pipeline Interleaved Parallelism<a class="headerlink" href="#multi-pipeline-interleaved-parallelism" title="Link to this heading"></a></h4>
+<p>Multi-pipeline parallel reduces pipeline bubbles through data interweaving, interlayer interlayering, and forward and reverse interweaving. By configuring a pipeline scheduling policy, the model input is segmented according to the sequence dimension and expanded into multiple sequence chunks. On the original 1F1B (One Forward One Backward) and 1F1B-Interleave methods, the dispatch unit was reduced to Sequence Chunk. <code class="docutils literal notranslate"><span class="pre">seq_split_num</span></code> For the number of slices, when <code class="docutils literal notranslate"><span class="pre">seq_split_num</span></code> =1, it degenerates to 1F1B or 1F1B-Interleave. If the global_batch_size bubble is large, the idle time of the cluster can be significantly reduced, and the memory usage will be larger, resulting in additional communication. For more information about the framework-side implementation of pipeline parallelism, see <a class="reference external" href="https://www.mindspore.cn/docs/en/master/features/parallel/pipeline_parallel.html">MindSpore Pipeline Parallelism</a>.</p>
+<p>MindSpore Transformers supports the configuration of multi-pipeline interleaved parallelism, which can be enabled by the following configuration items:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># parallel context</span>
+<span class="nt">parallel</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">pipeline_config</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">pipeline_interleave</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">pipeline_scheduler</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;seqpipe&#39;</span>
+
+<span class="c1"># parallel config</span>
+<span class="nt">parallel_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">seq_split_num</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+
+<span class="c1"># model config</span>
+<span class="nt">model</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">model_config</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">offset</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+</pre></div>
+</div>
+<p>Parameter Descriptions:</p>
+<ul class="simple">
+<li><p>pipeline_interleave: Whether to enable multi-pipeline interleaved parallelism.</p></li>
+<li><p>pipeline_scheduler: The scheduling policy of the pipeline is currently only supported by mindformers ‘seqpipe’.</p></li>
+<li><p>seq_split_num: The number of Sequence Chunk which splits along the sequence dimension of the input.</p></li>
+<li><p>offset: When enabling PP parallelism, set the offset of each stage layer. For details, please refer to <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/configuration.html">MindSpore Transformers configuration description</a>.</p></li>
+</ul>
+<p>Notes:</p>
+<ul class="simple">
+<li><p>Currently, only Llama and DeepSeek series models are supported.</p></li>
+<li><p>Using Megatron’s multi-source datasets for training is not yet supported.</p></li>
+</ul>
+<p>For more information on configuring distributed parallel parameters, see the <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/configuration.html">MindSpore Transformers configuration description</a>, specifically the section on parallel configuration.</p>
+</section>
+</section>
+<section id="optimizer-parallelism">
+<h3>Optimizer parallelism<a class="headerlink" href="#optimizer-parallelism" title="Link to this heading"></a></h3>
+<p>During data parallel training, there is redundant computation in the model parameter update part across cards. By optimizing optimizer parallelism, the computation of the optimizer can be distributed to the cards in the data parallel dimension, effectively reducing memory consumption and improving network performance on large-scale networks. For the framework-side implementation of optimizer parallelism, refer to the specific content of <a class="reference external" href="https://www.mindspore.cn/docs/en/master/features/parallel/optimizer_parallel.html">MindSpore optimizer parallelism</a> .</p>
+<p>MindSpore Transformers supports the optimizer parallelism, which can be enabled by the following configuration items:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">parallel</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">enable_parallel_optimizer</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+<p>Parameter Descriptions:</p>
+<ul class="simple">
+<li><p>enable_parallel_optimizer: Whether to enable optimizer parallelism, which is False by default.</p></li>
+</ul>
+<p>For more information on configuring distributed parallel parameters, see the <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/configuration.html">MindSpore Transformers configuration description</a>, specifically the section on parallel configuration.</p>
+</section>
+<section id="multi-replica-parallelism">
+<h3>Multi-replica Parallelism<a class="headerlink" href="#multi-replica-parallelism" title="Link to this heading"></a></h3>
+<p>Multi-replica parallelism is used to achieve fine-grained parallel control between multiple replicas, optimize performance and resource utilization, and is suitable for efficient training of large-scale models. For more information about the framework-side implementation of multi-copy parallelism, see the <a class="reference external" href="https://www.mindspore.cn/docs/en/master/features/parallel/pipeline_parallel.html#interleaved-pipeline-scheduler">MindSpore multi-replica parallelism</a>.</p>
+<p>MindSpore Transformers supports multi-replica parallelism and can be enabled by the following configuration items:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">model_config</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">fine_grain_interleave</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+<p>Parameter Descriptions:</p>
+<ul class="simple">
+<li><p>fine_grain_interleave: the number of fine-grained multiple replicas.</p></li>
+</ul>
+<p>Notes:</p>
+<ul class="simple">
+<li><p>Currently, only Llama and DeepSeek series models are supported.</p></li>
+</ul>
+<p>For more information on configuring distributed parallel parameters, see the <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/configuration.html">MindSpore Transformers configuration description</a>, specifically the section on parallel configuration.</p>
+</section>
+</section>
+<section id="mindspore-transformers-distributed-parallel-application-practices">
+<h2>MindSpore Transformers Distributed Parallel Application Practices<a class="headerlink" href="#mindspore-transformers-distributed-parallel-application-practices" title="Link to this heading"></a></h2>
+<p>In the <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/configs/qwen3/finetune_qwen3.yaml">Qwen3 fine-tuning configuration</a> file provided on the official website, multiple distributed parallelism strategies are used to improve the training efficiency in the multi-node multi-device environment. The main parallelism parameters involved in the configuration file are as follows:</p>
+<ul class="simple">
+<li><p><strong>Data Parallelism</strong>: Input data is sharded and distributed across different computing devices for parallel processing.</p></li>
+<li><p><strong>Model Parallelism</strong>: The model is partitioned into multiple segments, which are computed on different devices.</p></li>
+<li><p><strong>Pipeline Parallelism</strong>: The model is divided into multiple pipeline stages, which run sequentially on different devices.</p></li>
+<li><p><strong>Sequence Parallelism</strong>: Sequence parallelism is enabled, where the inputs to LayerNorm and Dropout within Transformer layers are partitioned along the sequence dimension. This allows each device to process only a portion of the LayerNorm and Dropout operations, thereby reducing model GPU memory usage.</p></li>
+<li><p><strong>Multi-Replica Parallelism</strong>: Fine-grained multi-branch parallelism is controlled through an execution scheduling algorithm to improve the overlap of computation and communication.</p></li>
+<li><p><strong>Optimizer Parallelism</strong>: Optimizer computations are distributed across multiple devices to reduce memory consumption.</p></li>
+</ul>
+<blockquote>
+<div><p>Sequential parallelism must be turned on at the same time that fine-grained multicopy parallelism is turned on.</p>
+</div></blockquote>
+<p>With the preceding configurations, the distributed training on Qwen3 can effectively utilize hardware resources in a multi-node multi-device environment to implement efficient and stable model training.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="resume_training2.0.html" class="btn btn-neutral float-left" title="Resume Training2.0" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="high_availability.html" class="btn btn-neutral float-right" title="Training High Availability" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

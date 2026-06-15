@@ -1,0 +1,340 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resume Training2.0 &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Distributed Parallelism Training" href="parallel_training.html" />
+    <link rel="prev" title="Checkpoint Saving and Loading" href="checkpoint_saving_and_loading.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">Models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contribution Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">Modelers Contribution Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">Model-Related FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">Feature-Related FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Static Graph Implementation (Deprecated)</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Full-process Guide to Large Models</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Features</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">Features Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="start_tasks.html">Start Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ckpt.html">Ckpt Weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="safetensors.html">Safetensors Weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">Configuration File Descriptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="load_huggingface_config.html">Loading Hugging Face Model Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html">Logs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tokenizer.html">Using Tokenizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset.html">Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training_hyperparameters.html">Training Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monitor.html">Training Metrics Monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training.html">Resumable Training After Breakpoint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoint_saving_and_loading.html">Checkpoint Saving and Loading</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Resume Training2.0</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#checkpoint-introduction">Checkpoint Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuration-description">Configuration Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#weight-saving-declaration">Weight Saving Declaration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scenario-introduction">Scenario Introduction</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#interruption-resume-training">Interruption Resume Training</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scaling-resume-training">Scaling Resume Training</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#incremental-resume-training">Incremental Resume Training</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#automatic-recovery-resume-training">Automatic Recovery Resume Training</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#constraint-description">Constraint Description</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="parallel_training.html">Distributed Parallelism Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="high_availability.html">Training High Availability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory_optimization.html">Memory Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skip_data_and_ckpt_health_monitor.html">Data Skip And Checkpoint Health Monitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pma_fused_checkpoint.html">Pre-trained Model Average Weight Consolidation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="other_training_features.html">Other Training Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantization.html">Quantization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_development/index.html">Advanced Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">Excellent Practice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">Environment Variable Descriptions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Features</a></li>
+      <li class="breadcrumb-item active">Resume Training2.0</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/feature/resume_training2.0.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">Deprecated</p>
+<p>This page belongs to the <strong>Static Graph (GRAPH_MODE) Implementation</strong> section and has been marked as deprecated. New features are primarily being developed in the “r2.0.0 Dynamic Graph Implementation” section. Please refer to the dynamic graph documentation first.</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="resume-training2-0">
+<h1>Resume Training2.0<a class="headerlink" href="#resume-training2-0" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_en/static_graph/feature/resume_training2.0.md"><img alt="View Source on AtomGit" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source_en.svg" /></a></p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>MindSpore Transformers has complete resume training capabilities. The core functions and applicable scenarios are as follows:</p>
+<ol class="arabic simple">
+<li><p><strong>Core Functions</strong>: Supports loading saved checkpoints to quickly resume training progress without starting from scratch;</p></li>
+<li><p><strong>Multi-scenario Adaptation</strong>: Covers four mainstream resume training scenarios</p>
+<ul class="simple">
+<li><p><strong>Interruption Resume Training</strong>: After an abnormal interruption of a normal training task (such as equipment failure, network fluctuation), resume the training process based on the saved checkpoint;</p></li>
+<li><p><strong>Scaling Resume Training</strong>: Adjust the number of cards (expansion / reduction) during training and continue training based on the saved checkpoint;</p></li>
+<li><p><strong>Incremental Resume Training</strong>: On the basis of existing training results, supplement the training dataset and continue training based on the saved checkpoint;</p></li>
+<li><p><strong>Automatic Recovery Resume Training</strong>: Supports the platform to automatically start resume training without manual intervention;</p></li>
+</ul>
+</li>
+</ol>
+<p>For large-scale training tasks (long training cycles and large resource investment), it can avoid progress loss caused by unexpected interruptions and significantly reduce time and computing resource waste.</p>
+<blockquote>
+<div><p>This document only applies to scenarios where <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/checkpoint_saving_and_loading.html">Checkpoint 2.0</a> are used for resume training; if users use Checkpoint 1.0, please refer to the old version <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/resume_training.html">resume training document</a>.</p>
+</div></blockquote>
+</section>
+<section id="checkpoint-introduction">
+<h2>Checkpoint Introduction<a class="headerlink" href="#checkpoint-introduction" title="Link to this heading"></a></h2>
+<p>The training checkpoints of MindSpore Transformers are stored in the <code class="docutils literal notranslate"><span class="pre">output/checkpoint</span></code> directory by default, and each checkpoint is independently saved as a subfolder named after <code class="docutils literal notranslate"><span class="pre">iteration</span></code>. Taking the checkpoint generated in the first step of an 8-card task as an example, its saving format is as follows:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>output
+    ├── checkpoint
+        ├── iteration_0000001
+            ├── metadata.json
+            ├── common.json
+            ├── {prefix}-model-0000000-0000008.safetensor
+            ...
+            ├── {prefix}-model-0000007-0000008.safetensor
+            ├── {prefix}-opt-0000000-0000008.safetensor
+            ...
+            └── {prefix}-opt-0000007-0000008.safetensor
+        ...
+        └── latest_checkpointed_iteration.txt
+</pre></div>
+</div>
+<p>You can refer to <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/checkpoint_saving_and_loading.html">Checkpoint Saving and Loading</a> for more information about checkpoints.</p>
+</section>
+<section id="configuration-description">
+<h2>Configuration Description<a class="headerlink" href="#configuration-description" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter Name</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Value Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>load_checkpoint</p></td>
+<td><p>The path to the checkpoint folder. It can <strong>be filled with the path of the <code class="docutils literal notranslate"><span class="pre">output/checkpoint</span></code> folder or the path of the <code class="docutils literal notranslate"><span class="pre">iteration</span></code> subfolder</strong>.<br />If it is the path of the <code class="docutils literal notranslate"><span class="pre">checkpoint</span></code> folder, the checkpoint in the corresponding <code class="docutils literal notranslate"><span class="pre">iteration</span></code> subfolder will be loaded according to the number of iterations recorded in <code class="docutils literal notranslate"><span class="pre">latest_checkpointed_iteration.txt</span></code>.</p></td>
+<td><p>(str, optional) - Default value: <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>resume_training</p></td>
+<td><p>The switch for the resume training function. When set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, training will restore from the number of iterations corresponding to the checkpoint to be loaded.</p></td>
+<td><p>(bool, optional) - Default value: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="weight-saving-declaration">
+<h2>Weight Saving Declaration<a class="headerlink" href="#weight-saving-declaration" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>When saving weights, MindSpore Transformers only saves and deletes the weights from the current training round, except in special scenarios (deletion logic: when the number of saved weights reaches the set maximum value, old weight files will be deleted).</p></li>
+<li><p>Special scenario: When saving weights, if a directory with the same name is encountered, the old weight directory will be overwritten. Therefore, please back up your weight directory in a timely manner.</p></li>
+</ul>
+</section>
+<section id="scenario-introduction">
+<h2>Scenario Introduction<a class="headerlink" href="#scenario-introduction" title="Link to this heading"></a></h2>
+<section id="interruption-resume-training">
+<h3>Interruption Resume Training<a class="headerlink" href="#interruption-resume-training" title="Link to this heading"></a></h3>
+<p><strong>Overview</strong>: After an abnormal interruption of a normal training task, resume the training process based on the saved checkpoint without changing the distributed strategy.</p>
+<p>MindSpore Transformers provides two ways to start resuming training:</p>
+<ul>
+<li><p>Resume training based on the number of iterations recorded in <code class="docutils literal notranslate"><span class="pre">latest_checkpointed_iteration.txt</span></code></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/checkpoint</span>
+<span class="nt">resume_training</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+</div>
+</li>
+<li><p>Resume training based on the specified number of iterations</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/checkpoint/iteration_{x}</span>
+<span class="nt">resume_training</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>x represents the training iteration step corresponding to the checkpoint. For example, “0000001” indicates the checkpoint corresponding to the 1st training step.</p>
+</div></blockquote>
+</li>
+</ul>
+</section>
+<section id="scaling-resume-training">
+<h3>Scaling Resume Training<a class="headerlink" href="#scaling-resume-training" title="Link to this heading"></a></h3>
+<p><strong>Overview</strong>: When it is necessary to <strong>expand/reduce the cluster scale</strong> or <strong>modify the distributed strategy</strong> to continue the training task, the configuration is the same as <a class="reference internal" href="#interruption-resume-training">Interruption Resume Training</a>. Relying on the online Reshard mechanism, MindSpore Transformers can ensure that the checkpoint weights automatically adapt to any distributed strategy, ensuring smooth resume training.</p>
+<ul>
+<li><p>Resume training based on the number of iterations recorded in <code class="docutils literal notranslate"><span class="pre">latest_checkpointed_iteration.txt</span></code></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/checkpoint</span>
+<span class="nt">resume_training</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+</div>
+</li>
+<li><p>Resume training based on the specified number of iterations</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/checkpoint/iteration_{x}</span>
+<span class="nt">resume_training</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>x represents the training iteration step corresponding to the checkpoint. For example, “0000001” indicates the checkpoint corresponding to the 1st training step.</p>
+</div></blockquote>
+</li>
+</ul>
+</section>
+<section id="incremental-resume-training">
+<h3>Incremental Resume Training<a class="headerlink" href="#incremental-resume-training" title="Link to this heading"></a></h3>
+<p><strong>Overview</strong>: The training dataset needs to be <strong>produced and trained simultaneously</strong>. After the current dataset is trained, add the newly produced dataset to continue training until all datasets are trained. This scenario requires users to preset the total steps of the learning rate curve in advance according to the total amount of data for training.</p>
+<p>Assume that a total of 10T tokens of data are trained, each produced dataset contains only 1T tokens of data, and the entire training process is completed in 10 epochs, which takes a total of 100000 steps.</p>
+<ul>
+<li><p>Step 1: Preset the total training steps to fix the learning rate curve of the entire training process</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">lr_schedule</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">total_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100000</span>
+</pre></div>
+</div>
+</li>
+<li><p>Step 2: Set a sufficiently large epoch value to ensure that all datasets can be trained</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">runner_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">epochs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">15</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>The learning rate curve of the entire training process has been fixed, and the epoch value setting will not affect the learning rate. A larger value can be set to ensure that 10 datasets can be trained.</p>
+</div></blockquote>
+</li>
+<li><p>Step 3: After training one epoch of the dataset, you can replace the dataset to resume training. The following is resume training based on the number of iterations recorded in <code class="docutils literal notranslate"><span class="pre">latest_checkpointed_iteration.txt</span></code>. For other resume training methods, please refer to <a class="reference internal" href="#interruption-resume-training">Interruption Resume Training</a> or <a class="reference internal" href="#scaling-resume-training">Scaling Resume Training</a>.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/checkpoint</span>
+<span class="nt">resume_training</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>When replacing the dataset for resume training, due to the different number of samples in each dataset, the displayed epoch and single-batch step may change, but the total number of training steps remains unchanged, which is a normal phenomenon.</p>
+</div></blockquote>
+</li>
+</ul>
+</section>
+<section id="automatic-recovery-resume-training">
+<h3>Automatic Recovery Resume Training<a class="headerlink" href="#automatic-recovery-resume-training" title="Link to this heading"></a></h3>
+<p><strong>Overview</strong>: To support the platform to automatically start resume training without manual intervention, <code class="docutils literal notranslate"><span class="pre">load_checkpoint</span></code> can be configured as the checkpoint saving directory path: when training for the first time, the directory is empty, and the model initializes parameters randomly; during resume training, it will recover training based on the last saved complete checkpoint in the directory.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/output/checkpoint</span>
+<span class="nt">resume_training</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="constraint-description">
+<h2>Constraint Description<a class="headerlink" href="#constraint-description" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>In multi-machine scenarios, all checkpoint files need to be stored in the same shared directory for resume training. Users need to configure the shared path to the environment variable <code class="docutils literal notranslate"><span class="pre">SHARED_PATHS</span></code>; it is recommended to configure the top-level shared directory first. Example: When the shared directory is <code class="docutils literal notranslate"><span class="pre">/data01</span></code>, execute <code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">SHARED_PATHS=/data01</span></code>.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="checkpoint_saving_and_loading.html" class="btn btn-neutral float-left" title="Checkpoint Saving and Loading" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="parallel_training.html" class="btn btn-neutral float-right" title="Distributed Parallelism Training" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

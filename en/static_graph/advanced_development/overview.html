@@ -1,0 +1,254 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Advanced Development Overview &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Large Model Precision Optimization Guide" href="precision_optimization.html" />
+    <link rel="prev" title="Advanced Development" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">Models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contribution Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">Modelers Contribution Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">Model-Related FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">Feature-Related FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Static Graph Implementation (Deprecated)</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Full-process Guide to Large Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/index.html">Features</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Advanced Development</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Advanced Development Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#diagnostics-and-optimization">Diagnostics and Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#model-development-and-configuration">Model Development and Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#accuracy-comparison">Accuracy Comparison</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#api-reference">API Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="precision_optimization.html">Large Model Precision Optimization Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance_optimization.html">Large Model Performance Optimization Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev_migration.html">Development Migration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yaml_config_inference.html">Guide to Using the Inference Configuration Template</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inference_precision_comparison.html">Comparison of Reasoning Precision</a></li>
+<li class="toctree-l2"><a class="reference internal" href="accuracy_comparison.html">Comparing the Model Precision with that of Megatron-LM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training_template_instruction.html">Training Configuration Template Instruction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="weight_transfer.html">Weight Conversion Development Adaptation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html">API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">Excellent Practice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">Environment Variable Descriptions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Advanced Development</a></li>
+      <li class="breadcrumb-item active">Advanced Development Overview</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/advanced_development/overview.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">Deprecated</p>
+<p>This page belongs to the <strong>Static Graph (GRAPH_MODE) Implementation</strong> section and has been marked as deprecated. New features are primarily being developed in the “r2.0.0 Dynamic Graph Implementation” section. Please refer to the dynamic graph documentation first.</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="advanced-development-overview">
+<h1>Advanced Development Overview<a class="headerlink" href="#advanced-development-overview" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_en/static_graph/advanced_development/overview.md"><img alt="View Source on AtomGit" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source_en.svg" /></a></p>
+<p>MindSpore Transformers advanced development targets scenarios such as model migration, tuning, and accuracy verification, helping users go beyond basic training and inference to perform development migration, debugging, optimization, and accuracy comparison. This section summarizes all advanced development documentation by category: <strong>Diagnostics and Optimization</strong>, <strong>Model Development and Configuration</strong>, <strong>Accuracy Comparison</strong>, and <strong>API Reference</strong>, for quick reference and navigation.</p>
+<section id="diagnostics-and-optimization">
+<h2>Diagnostics and Optimization<a class="headerlink" href="#diagnostics-and-optimization" title="Link to this heading"></a></h2>
+<p>We provide systematic methods for identifying and resolving precision and performance issues during training and inference.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Document</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Architecture Support</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/advanced_development/precision_optimization.html">Precision Optimization</a></p></td>
+<td><p>Common precision issues in large model training and general troubleshooting methods, including checklists, parameter alignment, and long-run validation.</p></td>
+<td><p>Mcore/Legacy</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/advanced_development/performance_optimization.html">Performance Optimization</a></p></td>
+<td><p>Large model performance tuning approach and tools, covering data loading, forward/backward computation, communication, scheduling, and Profile usage.</p></td>
+<td><p>Mcore/Legacy</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="model-development-and-configuration">
+<h2>Model Development and Configuration<a class="headerlink" href="#model-development-and-configuration" title="Link to this heading"></a></h2>
+<p>Support for building or migrating models from scratch and quickly launching training and inference via configuration templates.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Document</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Architecture Support</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/advanced_development/dev_migration.html">Development Migration</a></p></td>
+<td><p>End-to-end workflow for building large models with MindSpore Transformers, including config, model, tokenizer, and YAML configuration.</p></td>
+<td><p>Legacy</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/advanced_development/yaml_config_inference.html">Guide to Using the Inference Configuration Template</a></p></td>
+<td><p>How to use the YAML configuration template for inference, including quick setup with Hugging Face/ModelScope model directories.</p></td>
+<td><p>Mcore</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/advanced_development/training_template_instruction.html">Training Template Instruction</a></p></td>
+<td><p>Overview of general configuration templates for pre-training and fine-tuning (dense/MoE, etc.) and quick start for custom or unsupported model sizes.</p></td>
+<td><p>Mcore</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/advanced_development/weight_transfer.html">Weight Transfer</a></p></td>
+<td><p>Adapting new models to MindSpore Transformers weight conversion for unified Hugging Face to MindSpore weight conversion and loading.</p></td>
+<td><p>Mcore</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="accuracy-comparison">
+<h2>Accuracy Comparison<a class="headerlink" href="#accuracy-comparison" title="Link to this heading"></a></h2>
+<p>Validation of alignment with reference implementations or GPU environments for both training and inference.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Document</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Architecture Support</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/advanced_development/accuracy_comparison.html">Compare Training Accuracy with Megatron-LM</a></p></td>
+<td><p>Training accuracy alignment with Megatron-LM at the model level, including equivalent structure setup and comparison of forward, loss, and gradients.</p></td>
+<td><p>Mcore</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/advanced_development/inference_precision_comparison.html">Comparison of Inference Precision</a></p></td>
+<td><p>Inference precision acceptance workflow and troubleshooting, including online inference checks, dataset evaluation, and common issue resolution.</p></td>
+<td><p>Mcore</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="api-reference">
+<h2>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading"></a></h2>
+<p>Entry point to API documentation for MindSpore Transformers modules.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Document</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/advanced_development/api.html">API</a></p></td>
+<td><p>API index and detailed interface documentation for MindSpore Transformers and submodules.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Advanced Development" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="precision_optimization.html" class="btn btn-neutral float-right" title="Large Model Precision Optimization Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

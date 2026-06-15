@@ -1,0 +1,339 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pre-trained Model Average 权重合并 &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="其它训练特性" href="other_training_features.html" />
+    <link rel="prev" title="数据跳过和健康监测" href="skip_data_and_ckpt_health_monitor.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">介绍</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/quick_start.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">模型支持库</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">安装</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">安装指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">功能特性</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/overview.html">功能特性概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/start_task.html">启动任务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/configuration.html">配置文件说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/logging.html">日志</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/dataset.html">数据集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/training_hyperparameters.html">训练超参数与优化器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/save_and_load_checkpoint.html">权重保存与加载</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/resume_training.html">断点续训</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/monitor.html">训练指标监控与 Profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/static_graph_features.html">静态图实现特性</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">环境变量</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../env_variables.html">环境变量说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">贡献指南</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers贡献指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">魔乐社区贡献指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">模型相关 FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">功能相关 FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">静态图实现（Deprecated）</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">大模型全流程指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">功能特性</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">功能特性概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="start_tasks.html">启动任务</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ckpt.html">Ckpt权重</a></li>
+<li class="toctree-l2"><a class="reference internal" href="safetensors.html">Safetensors权重</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">配置文件说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="load_huggingface_config.html">加载 Hugging Face 模型配置</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html">日志</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tokenizer.html">使用Tokenizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset.html">数据集</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training_hyperparameters.html">训练超参数</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monitor.html">训练指标监控</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training.html">断点续训</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoint_saving_and_loading.html">checkpoint保存和加载</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training2.0.html">断点续训2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l2"><a class="reference internal" href="high_availability.html">训练高可用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skip_data_and_ckpt_health_monitor.html">数据跳过和健康监测</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Pre-trained Model Average 权重合并</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">使用方法</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pmaadamw">PmaAdamW优化器配置介绍</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantization.html">量化</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_development/index.html">高阶开发</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">优秀实践</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">环境变量说明</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">功能特性</a></li>
+      <li class="breadcrumb-item active">Pre-trained Model Average 权重合并</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/feature/pma_fused_checkpoint.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">已废弃（Deprecated）</p>
+<p>本页属于 <strong>静态图（GRAPH_MODE）实现</strong> 章节，已标记为废弃。新特性优先在「r2.0.0 动态图实现」章节演进，请优先查阅动态图相关文档。</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="pre-trained-model-average">
+<h1>Pre-trained Model Average 权重合并<a class="headerlink" href="#pre-trained-model-average" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/static_graph/feature/pma_fused_checkpoint.md"><img alt="查看源文件" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source.svg" /></a></p>
+<section id="id1">
+<h2>概述<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<p>Pre-trained Model Average（PMA）权重合并是指在训练过程中，根据选择 Exponential Moving Average（EMA）算法或 Simple Moving Average（SMA）算法对权重进行融合合并，从而提升模型训练的效果。</p>
+<p>MindSpore Transformers提供了<code class="docutils literal notranslate"><span class="pre">EMA</span></code>算法和<code class="docutils literal notranslate"><span class="pre">SMA</span></code>算法对权重进行融合合并，合并公式如下：</p>
+<p>EMA算法公式：<span class="math notranslate nohighlight">\(PMA_n = (1 - \alpha) \times PMA_{n-1} + \alpha \times W_n\)</span></p>
+<blockquote>
+<div><p>EMA算法通过指数递减的方式分配权重，对最近的模型权重更为敏感，能够快速响应模型在训练后期的变化。</p>
+</div></blockquote>
+<p>SMA算法公式：<span class="math notranslate nohighlight">\(PMA_n = (W_1 + ... + W_n) / n\)</span></p>
+<blockquote>
+<div><p>SMA算法在所有模型权重上均匀分配权重，对待每个权重都一视同仁。</p>
+</div></blockquote>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>参数名称</p></th>
+<th class="head"><p>参数说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(PMA_n\)</span></p></td>
+<td><p>第n步的合并权重</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(PMA_{n-1}\)</span></p></td>
+<td><p>第n-1步的合并权重</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(W_1\)</span></p></td>
+<td><p>第1步的原始权重</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(W_n\)</span></p></td>
+<td><p>第n步的原始权重</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\alpha\)</span></p></td>
+<td><p>融合系数，只有当算法选择EMA时才会生效</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(n\)</span></p></td>
+<td><p>表示n个权重取平均值</p></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<div><ul class="simple">
+<li><p>模型在训练时，会每隔固定步数选取一个权重进行公式计算，并作为中间值<code class="docutils literal notranslate"><span class="pre">pma_weight</span></code>保存在权重中，此时并不会影响原来权重的参数取值。</p></li>
+<li><p>当选取的权重数量达到设定的数量时，权重中间值<code class="docutils literal notranslate"><span class="pre">pma_weight</span></code>写入并覆盖原参数取值后置零，训练进入下一个周期的权重合并。</p></li>
+</ul>
+</div></blockquote>
+<p>参考文献如下：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>@misc{modelmerging,
+      title={Model Merging in Pre-training of Large Language Models},
+      authors={Yunshui Li, Yiyuan Ma, Shen Yan, Chaoyi Zhang, Jing Liu, Jianqiao Lu,
+      Ziwen Xu, Mengzhao Chen, Minrui Wang, Shiyi Zhan, Jin Ma, Xunhao Lai, Deyi Liu, Yao Luo,
+      Xingyan Bin, Hongbin Ren, Mingji Han, Wenhao Hao, Bairen Yi, LingJun Liu, Bole Ma,
+      Xiaoying Jia, Xun Zhou, Siyuan Qiao, Liang Xiang, Yonghui Wu},
+      year={2025},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2505.12082}
+}
+</pre></div>
+</div>
+</section>
+<section id="id2">
+<h2>使用方法<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p><strong>注意</strong>：以下示例所展示的参数数值仅作为实验数据，请以真实训练数据为准。</p>
+<p>本功能通过YAML配置文件使能：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">optimizer</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PmaAdamW</span>
+<span class="w">  </span><span class="nt">betas</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.9</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.999</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">eps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.e-6</span>
+<span class="w">  </span><span class="nt">weight_decay</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0</span>
+<span class="w">  </span><span class="nt">fused_num</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="w">  </span><span class="nt">interleave_step</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span>
+<span class="w">  </span><span class="nt">fused_algo</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;ema&#39;</span>
+<span class="w">  </span><span class="nt">ema_alpha</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.2</span>
+</pre></div>
+</div>
+<p><strong>参数说明：</strong></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>参数名称</p></th>
+<th class="head"><p>描述</p></th>
+<th class="head"><p>类型</p></th>
+<th class="head"><p>是否可选</p></th>
+<th class="head"><p>取值范围</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>type</p></td>
+<td><p>优化器类型，启用PMA特性需要设定为<code class="docutils literal notranslate"><span class="pre">PmaAdamW</span></code>。默认值为<code class="docutils literal notranslate"><span class="pre">AdamW</span></code>。</p></td>
+<td><p>String</p></td>
+<td><p>可选</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>betas</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">moment1</span></code>、 <code class="docutils literal notranslate"><span class="pre">moment2</span></code> 的指数衰减率。每个参数范围为（0.0,1.0）。默认值为<code class="docutils literal notranslate"><span class="pre">(0.9,</span> <span class="pre">0.999)</span></code> 。</p></td>
+<td><p>Union[list(float), tuple(float)]</p></td>
+<td><p>可选</p></td>
+<td><p>(0.0,1.0)</p></td>
+</tr>
+<tr class="row-even"><td><p>eps</p></td>
+<td><p>将添加到分母中，以提高数值稳定性。必须大于0。默认值为 <code class="docutils literal notranslate"><span class="pre">1e-6</span></code> 。</p></td>
+<td><p>float</p></td>
+<td><p>可选</p></td>
+<td><p>正数</p></td>
+</tr>
+<tr class="row-odd"><td><p>weight_decay</p></td>
+<td><p>设定优化器权重衰减系数。默认值为<code class="docutils literal notranslate"><span class="pre">0.0</span></code>。</p></td>
+<td><p>float</p></td>
+<td><p>可选</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p>fused_num</p></td>
+<td><p>设定<code class="docutils literal notranslate"><span class="pre">fused_num</span></code>个权重进行融合，根据融合算法将融合后的权重更新到网络参数中。默认值为<code class="docutils literal notranslate"><span class="pre">10</span></code>。</p></td>
+<td><p>int</p></td>
+<td><p>可选</p></td>
+<td><p>正整数</p></td>
+</tr>
+<tr class="row-odd"><td><p>interleave_step</p></td>
+<td><p>选取待融合权重的step间隔数，每<code class="docutils literal notranslate"><span class="pre">interleave_step</span></code>个step取一次权重作为候选权重进行融合。默认值为<code class="docutils literal notranslate"><span class="pre">1000</span></code>。</p></td>
+<td><p>int</p></td>
+<td><p>可选</p></td>
+<td><p>正整数</p></td>
+</tr>
+<tr class="row-even"><td><p>fused_algo</p></td>
+<td><p>融合算法，支持<code class="docutils literal notranslate"><span class="pre">ema</span></code>和<code class="docutils literal notranslate"><span class="pre">sma</span></code>。默认值为<code class="docutils literal notranslate"><span class="pre">ema</span></code>。</p></td>
+<td><p>string</p></td>
+<td><p>可选</p></td>
+<td><p>[<code class="docutils literal notranslate"><span class="pre">ema</span></code>, <code class="docutils literal notranslate"><span class="pre">sma</span></code>]</p></td>
+</tr>
+<tr class="row-odd"><td><p>ema_alpha</p></td>
+<td><p>融合系数，仅在<code class="docutils literal notranslate"><span class="pre">fused_algo</span></code>=<code class="docutils literal notranslate"><span class="pre">ema</span></code>时生效。默认值为<code class="docutils literal notranslate"><span class="pre">0.2</span></code>。</p></td>
+<td><p>float</p></td>
+<td><p>可选</p></td>
+<td><p>(0, 1)</p></td>
+</tr>
+</tbody>
+</table>
+<section id="pmaadamw">
+<h3>PmaAdamW优化器配置介绍<a class="headerlink" href="#pmaadamw" title="Link to this heading"></a></h3>
+<p>有关PmaAdamW优化器配置相关内容，可参见 <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/mindformers/core/optim/pma_adamw.py">MindSpore Transformers PmaAdamW 源码</a> 的相关链接。</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="skip_data_and_ckpt_health_monitor.html" class="btn btn-neutral float-left" title="数据跳过和健康监测" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="other_training_features.html" class="btn btn-neutral float-right" title="其它训练特性" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

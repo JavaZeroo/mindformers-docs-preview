@@ -1,0 +1,405 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Practice Case: Interconnecting MindSpore Transformers with General Evaluation Tools &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Practice Case: Using GLM4-9B for Multi-Device Model Fine-Tuning" href="../finetune_with_glm4/finetune_with_glm4.html" />
+    <link rel="prev" title="Practical Case: Converting Model Weights to Megatron Model Weights" href="../convert_ckpt_to_megatron/convert_ckpt_to_megatron.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction/models.html">Models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contribution Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution/mindformers_contribution.html">MindSpore Transformers Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribution/modelers_contribution.html">Modelers Contribution Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../faq/model_related.html">Model-Related FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../faq/feature_related.html">Feature-Related FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Static Graph Implementation (Deprecated)</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guide/index.html">Full-process Guide to Large Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/index.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced_development/index.html">Advanced Development</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Excellent Practice</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../docker-installation.html">Practical Case: Creating a Docker Image for MindSpore Transformers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../distilled/distilled.html">Practice Case of Using DeepSeek-R1 for Model Distillation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../convert_ckpt_to_megatron/convert_ckpt_to_megatron.html">Practical Case: Converting Model Weights to Megatron Model Weights</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Practice Case: Interconnecting MindSpore Transformers with General Evaluation Tools</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#environment-preparations">1. Environment Preparations</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mindspore-transformers">1.1 MindSpore Transformers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vllm-mindspore">1.2 vLLM-MindSpore</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lm-eval">1.3 lm-eval</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#opencompass">1.4 opencompass</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#model-deployment">2. Model Deployment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#lm-eval-usage-for-evaluation">3. lm-eval Usage for Evaluation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#processing-the-dataset">3.1 Processing the Dataset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#creating-a-dataset-configuration-file">3.2 Creating a Dataset Configuration File</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#testing-precision">3.3 Testing Precision</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#opencompass-usage-for-evaluation">4. OpenCompass Usage for Evaluation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#preparing-a-dataset">4.1 Preparing a Dataset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#setting-the-config-file-and-running-script">4.2 Setting the config File and Running Script</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#starting-the-evaluation">4.3 Starting the Evaluation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../finetune_with_glm4/finetune_with_glm4.html">Practice Case: Using GLM4-9B for Multi-Device Model Fine-Tuning</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../env_variables.html">Environment Variable Descriptions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Excellent Practice</a></li>
+      <li class="breadcrumb-item active">Practice Case: Interconnecting MindSpore Transformers with General Evaluation Tools</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/static_graph/example/model_test/model_test.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">Deprecated</p>
+<p>This page belongs to the <strong>Static Graph (GRAPH_MODE) Implementation</strong> section and has been marked as deprecated. New features are primarily being developed in the “r2.0.0 Dynamic Graph Implementation” section. Please refer to the dynamic graph documentation first.</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="practice-case-interconnecting-mindspore-transformers-with-general-evaluation-tools">
+<h1>Practice Case: Interconnecting MindSpore Transformers with General Evaluation Tools<a class="headerlink" href="#practice-case-interconnecting-mindspore-transformers-with-general-evaluation-tools" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_en/static_graph/example/model_test/model_test.md"><img alt="View Source on AtomGit" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source_en.svg" /></a></p>
+<p>This article is contributed by Killjoy, chen-xialei, fuyao-15989607593, laozhuang, and oacjiewen.</p>
+<p>During the development of LLMs, after training or fine-tuning models using MindSpore Transformers, users often use general evaluation tools to evaluate the model capabilities on custom datasets. This document describes how to interconnect a deployed MindSpore Transformers model with general evaluation tools. It covers the use of vLLM-MindSpore for model deployment and the evaluation of model capabilities based on two general evaluation frameworks: <code class="docutils literal notranslate"><span class="pre">lm-eval</span></code> and <code class="docutils literal notranslate"><span class="pre">opencompass</span></code>. This practice case helps you understand how to use general evaluation tools to evaluate models trained or fine-tuned using MindSpore Transformers.</p>
+<section id="environment-preparations">
+<h2>1. Environment Preparations<a class="headerlink" href="#environment-preparations" title="Link to this heading"></a></h2>
+<p>You need to install the following environment for model deployment and evaluation.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Dependent Software</p></th>
+<th class="head"><p>Version</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>MindSpore Transformers</p></td>
+<td><p>1.6.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>vLLM-MindSpore</p></td>
+<td><p>0.5.0</p></td>
+</tr>
+<tr class="row-even"><td><p>lm-eval</p></td>
+<td><p>0.4.9</p></td>
+</tr>
+<tr class="row-odd"><td><p>opencompass</p></td>
+<td><p>0.5.0</p></td>
+</tr>
+</tbody>
+</table>
+<section id="mindspore-transformers">
+<h3>1.1 MindSpore Transformers<a class="headerlink" href="#mindspore-transformers" title="Link to this heading"></a></h3>
+<p>Set up the environment by referring to <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/installation.html">MindSpore Transformers Installation Guidelines</a>.</p>
+</section>
+<section id="vllm-mindspore">
+<h3>1.2 vLLM-MindSpore<a class="headerlink" href="#vllm-mindspore" title="Link to this heading"></a></h3>
+<p>Run the following commands to pull the vLLM-MindSpore plugin code repository and build an image:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://atomgit.com/mindspore/vllm-mindspore.git
+bash<span class="w"> </span>build_image.sh
+</pre></div>
+</div>
+<blockquote>
+<div><p>If the image building times out, you can add <code class="docutils literal notranslate"><span class="pre">ENV</span> <span class="pre">UV_HTTP_TIMEOUT=3000</span></code> to the <code class="docutils literal notranslate"><span class="pre">build_image.sh</span></code> script and replace the image repository with a faster one in the <code class="docutils literal notranslate"><span class="pre">install_depend_pkgs.sh</span></code> script.</p>
+</div></blockquote>
+<p>Create a Docker based on the server configuration. For details, see <a class="reference external" href="https://www.mindspore.cn/vllm_mindspore/docs/en/master/getting_started/installation/installation.html">Docker Installation</a>.</p>
+</section>
+<section id="lm-eval">
+<h3>1.3 lm-eval<a class="headerlink" href="#lm-eval" title="Link to this heading"></a></h3>
+<p><strong>Note: It is strongly recommended that you create a separate conda environment with Python 3.10 or later to avoid compatibility issues.</strong></p>
+<p>Note that you need to use the local installation method and do not directly use <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">lm-eval</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/EleutherAI/lm-evaluation-harness.git
+<span class="nb">cd</span><span class="w"> </span>lm-evaluation-harness
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
+</div>
+<p>If the error message <code class="docutils literal notranslate"><span class="pre">Error:</span> <span class="pre">Please</span> <span class="pre">make</span> <span class="pre">sure</span> <span class="pre">the</span> <span class="pre">libxml2</span> <span class="pre">and</span> <span class="pre">libxslt</span> <span class="pre">development</span> <span class="pre">packages</span> <span class="pre">are</span> <span class="pre">installed</span></code> is displayed, run the following command for installation:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>libxml2<span class="w"> </span>libxslt
+</pre></div>
+</div>
+<p>To avoid possible version compatibility issues, install the <code class="docutils literal notranslate"><span class="pre">datasets</span></code> and <code class="docutils literal notranslate"><span class="pre">transformers</span></code> libraries of specific versions.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="nv">datasets</span><span class="o">==</span><span class="m">2</span>.18.0
+pip<span class="w"> </span>install<span class="w"> </span><span class="nv">transformers</span><span class="o">==</span><span class="m">4</span>.35.2
+</pre></div>
+</div>
+</section>
+<section id="opencompass">
+<h3>1.4 opencompass<a class="headerlink" href="#opencompass" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>opencompass
+</pre></div>
+</div>
+<p>During the installation, the following error may be reported:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>AttributeError:<span class="w"> </span>module<span class="w"> </span><span class="s1">&#39;inspect&#39;</span><span class="w"> </span>has<span class="w"> </span>no<span class="w"> </span>attribute<span class="w"> </span><span class="s1">&#39;getargspec&#39;</span>.<span class="w"> </span>Did<span class="w"> </span>you<span class="w"> </span>mean:<span class="w"> </span><span class="s1">&#39;getargs&#39;</span>?
+</pre></div>
+</div>
+<p>Solutions:
+Use the <a class="reference external" href="https://github.com/open-compass/opencompass">source code</a> for installation, and delete <code class="docutils literal notranslate"><span class="pre">pyext</span></code> and <code class="docutils literal notranslate"><span class="pre">rouge</span></code> from the <code class="docutils literal notranslate"><span class="pre">requirements/runtime.txt</span></code> file.</p>
+</section>
+</section>
+<section id="model-deployment">
+<h2>2. Model Deployment<a class="headerlink" href="#model-deployment" title="Link to this heading"></a></h2>
+<p>Set the environment variable.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">VLLM_MS_MODEL_BACKEND</span><span class="o">=</span>MindFormers
+</pre></div>
+</div>
+<p>Deploy the model.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>-m<span class="w"> </span>vllm_mindspore.entrypoints<span class="w"> </span>vllm.entrypoints.openai.api_server<span class="w"> </span>--model<span class="w"> </span>MODEL_PATH<span class="w"> </span>--port<span class="w"> </span>YOUR_PORT<span class="w"> </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>--served-model-name<span class="w"> </span>YOUR_MODEL_NAME
+</pre></div>
+</div>
+</section>
+<section id="lm-eval-usage-for-evaluation">
+<h2>3. lm-eval Usage for Evaluation<a class="headerlink" href="#lm-eval-usage-for-evaluation" title="Link to this heading"></a></h2>
+<p>lm-eval is a large-scale comprehensive evaluation framework, which is applicable to many general-domain test sets (such as MMLU and CEval) and supports convenient custom data tests.</p>
+<section id="processing-the-dataset">
+<h3>3.1 Processing the Dataset<a class="headerlink" href="#processing-the-dataset" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>This step is required for customizing a dataset. When testing a general test set, directly use the <a class="reference external" href="https://github.com/EleutherAI/lm-evaluation-harness">official tutorial</a>.</p>
+</div></blockquote>
+<p>Assume that there is a custom dataset on the local PC. The dataset is a <code class="docutils literal notranslate"><span class="pre">CSV</span></code> file. Each data record is a single-choice question with the following six attributes: a question, four options, and an answer. The file does not have a table header and the file name is <code class="docutils literal notranslate"><span class="pre">output_filtered.csv</span></code>. Run the following codes to convert the <code class="docutils literal notranslate"><span class="pre">CSV</span></code> file into the <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> format that is suitable for model processing:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dataset</span><span class="p">,</span> <span class="n">DatasetDict</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">convert_csv_to_parquet_dataset</span><span class="p">(</span><span class="n">csv_path</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert the CSV file without a header into a Parquet dataset and specify it as the validation split.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        csv_path: Path of the input CSV file (without a header, with columns in the order of question, options A, B, C, and D, and answer).</span>
+<span class="sd">        output_dir: Output directory (saved in the Hugging Face dataset format).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># 1. Read the CSV file (without a header).</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reading the CSV file: </span><span class="si">{</span><span class="n">csv_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">csv_path</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+    <span class="c1"># 2. Add standard column names.</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;question&quot;</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">,</span> <span class="s2">&quot;answer&quot;</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="si">}</span><span class="s2"> records.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># 3. Convert to the Hugging Face dataset format.</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">Dataset</span><span class="o">.</span><span class="n">from_pandas</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+
+    <span class="c1"># 4. Create a DatasetDict and specify it as the validation split.</span>
+    <span class="n">dataset_dict</span> <span class="o">=</span> <span class="n">DatasetDict</span><span class="p">({</span><span class="s2">&quot;validation&quot;</span><span class="p">:</span> <span class="n">dataset</span><span class="p">})</span>
+
+    <span class="c1"># 5. Create the output directory.</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># 6. Save the complete dataset (in the Hugging Face format).</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saving the dataset to: </span><span class="si">{</span><span class="n">output_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">dataset_dict</span><span class="o">.</span><span class="n">save_to_disk</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
+
+    <span class="c1"># 7. (Optional) Save the validation split as a Parquet file separately.</span>
+    <span class="n">validation_parquet_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s2">&quot;validation.parquet&quot;</span><span class="p">)</span>
+    <span class="n">dataset_dict</span><span class="p">[</span><span class="s2">&quot;validation&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="n">validation_parquet_path</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Parquet file saved separately: </span><span class="si">{</span><span class="n">validation_parquet_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">dataset_dict</span>
+
+<span class="c1"># Examples</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># Input and output configuration.</span>
+    <span class="n">input_csv</span> <span class="o">=</span> <span class="s2">&quot;output_filtered.csv&quot;</span>  <span class="c1"># Replace it with the path of your CSV file.</span>
+    <span class="n">output_dir</span> <span class="o">=</span> <span class="s2">&quot;YOUR_OUTPUT_PATH&quot;</span>  <span class="c1"># Output directory.</span>
+
+    <span class="c1"># Execute the conversion.</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">convert_csv_to_parquet_dataset</span><span class="p">(</span><span class="n">input_csv</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">)</span>
+
+    <span class="c1"># Print the verification information.</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> Verification of the conversion result:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dataset structure: </span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of validation split samples: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;validation&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Example of the first data record: </span><span class="si">{</span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;validation&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In this way, the <code class="docutils literal notranslate"><span class="pre">CSV</span></code> file can be converted into the <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> format.</p>
+</section>
+<section id="creating-a-dataset-configuration-file">
+<h3>3.2 Creating a Dataset Configuration File<a class="headerlink" href="#creating-a-dataset-configuration-file" title="Link to this heading"></a></h3>
+<p>Create a folder named <code class="docutils literal notranslate"><span class="pre">YOUR_DATASET_NAME</span></code> under <code class="docutils literal notranslate"><span class="pre">/lm-evaluation-harness/lm_eval/tasks</span></code> and create a <code class="docutils literal notranslate"><span class="pre">YOUR_DATASET_NAME.yaml</span></code> file in the folder. The content is as follows:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">task</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">YOUR_DATASET_NAME</span>
+<span class="nt">dataset_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">YOUR_DATASET_PATH_FOLDER</span>
+<span class="nt">test_split</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">validation</span>
+<span class="nt">output_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">multiple_choice</span>
+<span class="nt">doc_to_text</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{question.strip()}}\nA.</span><span class="nv"> </span><span class="s">{{A}}\nB.</span><span class="nv"> </span><span class="s">{{B}}\nC.</span><span class="nv"> </span><span class="s">{{C}}\nD.</span><span class="nv"> </span><span class="s">{{D}}\n</span><span class="nv"> </span><span class="s">Answer:&quot;</span>
+<span class="nt">doc_to_choice</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;A&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;B&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;C&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;D&quot;</span><span class="p p-Indicator">]</span>
+<span class="nt">doc_to_target</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{[&#39;A&#39;,</span><span class="nv"> </span><span class="s">&#39;B&#39;,</span><span class="nv"> </span><span class="s">&#39;C&#39;,</span><span class="nv"> </span><span class="s">&#39;D&#39;].index(answer)}}&quot;</span>
+<span class="nt">metric_list</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">metric</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acc</span>
+<span class="w">    </span><span class="nt">aggregation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mean</span>
+<span class="w">    </span><span class="nt">higher_is_better</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">metric</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acc_norm</span>
+<span class="w">    </span><span class="nt">aggregation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mean</span>
+<span class="w">    </span><span class="nt">higher_is_better</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0</span>
+</pre></div>
+</div>
+<p>For more creation methods, see the <a class="reference external" href="https://github.com/EleutherAI/lm-evaluation-harness/blob/main/lm_eval/tasks/cmmlu/_default_template_yaml">yaml</a> build of CMMLU in the <strong>tasks</strong> folder.</p>
+</section>
+<section id="testing-precision">
+<h3>3.3 Testing Precision<a class="headerlink" href="#testing-precision" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>lm_eval<span class="w"> </span>--model<span class="w"> </span>local-completions<span class="w">   </span>--tasks<span class="w"> </span>YOUR_DATASET_NAME<span class="w">   </span>--output_path<span class="w"> </span>path/to/save/output<span class="w">  </span>--log_samples<span class="w">   </span>--model_args
+<span class="w">  </span><span class="s1">&#39;{</span>
+<span class="s1">    &quot;model&quot;: &quot;your model name&quot;,</span>
+<span class="s1">    &quot;base_url&quot;: &quot;http://127.0.0.1:port/v1/completions&quot;,</span>
+<span class="s1">    &quot;tokenizer&quot;: &quot;model path&quot;,</span>
+<span class="s1">    &quot;config&quot;: &quot;model path&quot;,</span>
+<span class="s1">    &quot;use_fast_tokenizer&quot;: true,</span>
+<span class="s1">    &quot;num_concurrent&quot;: 1,</span>
+<span class="s1">    &quot;max_retries&quot;: 3,</span>
+<span class="s1">    &quot;tokenized_requests&quot;: false</span>
+<span class="s1">  }&#39;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="opencompass-usage-for-evaluation">
+<h2>4. OpenCompass Usage for Evaluation<a class="headerlink" href="#opencompass-usage-for-evaluation" title="Link to this heading"></a></h2>
+<section id="preparing-a-dataset">
+<h3>4.1 Preparing a Dataset<a class="headerlink" href="#preparing-a-dataset" title="Link to this heading"></a></h3>
+<p>Download the dataset and decompress it to the root directory of OpenCompass.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>wget<span class="w"> </span>https://github.com/open-compass/opencompass/releases/download/0.2.2.rc1/OpenCompassData-core-20240207.zip
+unzip<span class="w"> </span>OpenCompassData-core-20240207.zip
+</pre></div>
+</div>
+</section>
+<section id="setting-the-config-file-and-running-script">
+<h3>4.2 Setting the config File and Running Script<a class="headerlink" href="#setting-the-config-file-and-running-script" title="Link to this heading"></a></h3>
+<p>For details about how to set the <strong>config</strong> file of the model, see <a class="reference external" href="https://opencompass.readthedocs.io/en/latest/advanced_guides/accelerator_intro.html">text</a>.</p>
+<p>Change <code class="docutils literal notranslate"><span class="pre">path</span></code> to the name of the deployed model, change <code class="docutils literal notranslate"><span class="pre">openai_api_base</span></code> to the <code class="docutils literal notranslate"><span class="pre">url</span></code> of the deployed model, and set <code class="docutils literal notranslate"><span class="pre">tokenizer_path</span></code> of the model. You can increase the value of <code class="docutils literal notranslate"><span class="pre">batch_size</span></code> for acceleration.</p>
+<p>Generally, you do not need to configure the dataset. You can obtain the recommended configuration by referring to <a class="reference external" href="https://opencompass.readthedocs.io/en/latest/advanced_guides/accelerator_intro.html">text</a> or find the appropriate configuration in the <strong>config</strong> path of each dataset. For example, in the big bench hard (BBH) dataset, there are <code class="docutils literal notranslate"><span class="pre">bbh_gen_ee62e9.py</span></code> and <code class="docutils literal notranslate"><span class="pre">bbh_0shot_nocot_academic_gen.py</span></code> in <code class="docutils literal notranslate"><span class="pre">opencompass/opencompass/configs/datasets/bbh/</span></code>, which are the configurations of <strong>zero-shot</strong> and <strong>five-shot</strong>, respectively. Select the configuration as required.</p>
+<p>Modify the script by referring to <a class="reference external" href="https://github.com/open-compass/opencompass/blob/main/examples/eval_api_demo.py">eval_api_demo.py</a>. Import the model configurations and datasets to be tested.</p>
+<p><strong>Possible error</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Traceback<span class="w"> </span><span class="o">(</span>most<span class="w"> </span>recent<span class="w"> </span>call<span class="w"> </span>last<span class="o">)</span>:
+...
+/mmengine/config/lazy.py<span class="s2">&quot;, line 205, in __call__</span>
+<span class="s2">    raise RuntimeError()</span>
+<span class="s2">RuntimeError</span>
+</pre></div>
+</div>
+<p>Solution: Hard code the address in the file <code class="docutils literal notranslate"><span class="pre">with</span> <span class="pre">open(os.path.join(hard_coded_path,</span> <span class="pre">'lib_prompt',</span> <span class="pre">f'{_name}.txt'),</span> <span class="pre">'r')</span> <span class="pre">as</span> <span class="pre">f:</span></code> as follows:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">hard_coded_path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;/path/to/datasets/bbh&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>+<span class="w"> </span><span class="s1">&#39;/lib_prompt/&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>+<span class="w"> </span>f<span class="s1">&#39;{_name}.txt&#39;</span>
+</pre></div>
+</div>
+</section>
+<section id="starting-the-evaluation">
+<h3>4.3 Starting the Evaluation<a class="headerlink" href="#starting-the-evaluation" title="Link to this heading"></a></h3>
+<p>Run the following command to start the evaluation:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>opencompass<span class="w"> </span>/path/to/your/scripts
+</pre></div>
+</div>
+<p>If additional parameter settings are required, refer to <a class="reference external" href="https://opencompass.readthedocs.io/en/latest/advanced_guides/accelerator_intro.html">text</a> for additional configurations.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../convert_ckpt_to_megatron/convert_ckpt_to_megatron.html" class="btn btn-neutral float-left" title="Practical Case: Converting Model Weights to Megatron Model Weights" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../finetune_with_glm4/finetune_with_glm4.html" class="btn btn-neutral float-right" title="Practice Case: Using GLM4-9B for Multi-Device Model Fine-Tuning" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

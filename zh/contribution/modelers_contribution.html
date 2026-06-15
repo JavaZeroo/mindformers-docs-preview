@@ -1,0 +1,257 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>魔乐社区贡献指南 &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="模型相关 FAQ" href="../faq/model_related.html" />
+    <link rel="prev" title="MindSpore Transformers贡献指南" href="mindformers_contribution.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">介绍</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/quick_start.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/models.html">模型支持库</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">安装</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">安装指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">功能特性</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../feature/overview.html">功能特性概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/start_task.html">启动任务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/configuration.html">配置文件说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/logging.html">日志</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/dataset.html">数据集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/training_hyperparameters.html">训练超参数与优化器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/save_and_load_checkpoint.html">权重保存与加载</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/resume_training.html">断点续训</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/monitor.html">训练指标监控与 Profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/static_graph_features.html">静态图实现特性</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">环境变量</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">环境变量说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">贡献指南</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="mindformers_contribution.html">MindSpore Transformers贡献指南</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">魔乐社区贡献指南</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">上传模型至魔乐社区</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mindspore-transformers">MindSpore Transformers内置模型</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">自定义模型</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id4">命名规则</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#auto">添加auto映射</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id5">上传模型</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../faq/model_related.html">模型相关 FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/feature_related.html">功能相关 FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">静态图实现（Deprecated）</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/guide/index.html">大模型全流程指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/feature/index.html">功能特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/advanced_development/index.html">高阶开发</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/example/index.html">优秀实践</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/env_variables.html">环境变量说明</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">魔乐社区贡献指南</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/contribution/modelers_contribution.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>魔乐社区贡献指南<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/contribution/modelers_contribution.md"><img alt="查看源文件" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source.svg" /></a></p>
+<section id="id2">
+<h2>上传模型至魔乐社区<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p>魔乐社区是一个模型托管平台，用户可以将自定义模型上传至<a class="reference external" href="https://modelers.cn/">魔乐社区</a>进行托管。</p>
+<section id="mindspore-transformers">
+<h3>MindSpore Transformers内置模型<a class="headerlink" href="#mindspore-transformers" title="Link to this heading"></a></h3>
+<p>若用户的自定义模型使用了MindSpore Transformers提供的内置模型，即模型代码位于mindformers/models下的模型，且对模型结构代码未进行任何修改，则只需上传模型的权重文件和配置即可。</p>
+<p>如，用户使用MindSpore Transformers的内置ChatGLM2模型，进行了微调训练，想分享微调后的模型权重，那么上传模型配置和权重文件即可。</p>
+<p>下面是保存模型配置和权重的示例代码：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">mindspore</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ms</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mindformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChatGLM2Config</span><span class="p">,</span> <span class="n">ChatGLM2ForConditionalGeneration</span>
+
+<span class="n">config</span> <span class="o">=</span> <span class="n">ChatGLM2Config</span><span class="p">()</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">ChatGLM2ForConditionalGeneration</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+<span class="n">ms</span><span class="o">.</span><span class="n">load_checkpoint</span><span class="p">(</span><span class="s2">&quot;path/model.ckpt&quot;</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>  <span class="c1"># 加载自定义权重</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">save_pretrained</span><span class="p">(</span><span class="s2">&quot;./my_model&quot;</span><span class="p">,</span> <span class="n">save_json</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>上述代码运行后会保存config.json文件和mindspore_model.ckpt文件（较大权重会自动拆分保存）。</p>
+<p>保存后可使用openmind_hub库，进行模型上传，可参考<a class="reference external" href="https://modelers.cn/docs/zh/best-practices/community_contribution/model_contribution.html#%E4%BD%BF%E7%94%A8openmind-hub-client%E4%B8%8A%E4%BC%A0%E6%A8%A1%E5%9E%8B">模型上传</a>。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">openmind_hub</span>
+
+<span class="n">openmind_hub</span><span class="o">.</span><span class="n">upload_folder</span><span class="p">(</span>
+    <span class="n">folder_path</span><span class="o">=</span><span class="s2">&quot;/path/to/local/folder&quot;</span><span class="p">,</span>
+    <span class="n">repo_id</span><span class="o">=</span><span class="s2">&quot;username/your-model-name&quot;</span><span class="p">,</span>
+    <span class="n">token</span><span class="o">=</span><span class="s2">&quot;your-token&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>已上传的例子可参考魔乐社区的<a class="reference external" href="https://modelers.cn/models/MindSpore-Lab/llama_7b/tree/main">OpenLlama模型</a>。</p>
+</section>
+<section id="id3">
+<h3>自定义模型<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p>若用户有自定义的模型代码，则需要同时上传模型代码文件，并在json配置文件中添加映射，使其可以通过Auto类导入。</p>
+<section id="id4">
+<h4>命名规则<a class="headerlink" href="#id4" title="Link to this heading"></a></h4>
+<p>上传到社区的自定义代码文件，一般有统一的命名规则。假设自定义模型名为model，其代码命名应当如下：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>---- model
+    |- configuration_model.py  # Config类代码文件
+    |- modeling_model.py       # Model类代码文件
+    |- tokenization_model.py   # Tokenizer代码文件
+</pre></div>
+</div>
+</section>
+<section id="auto">
+<h4>添加auto映射<a class="headerlink" href="#auto" title="Link to this heading"></a></h4>
+<p>为让Auto类使用时，能够顺利找到用户自定义的模型类，需要在config.json文件中，添加auto映射。添加内容如下：</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;auto_map&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;AutoConfig&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;configuration_model.MyConfig&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;AutoModel&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;modeling_model.MyModel&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;AutoModelForCausalLM&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;modeling_model.MyModelForCausalLM&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>若有自定义tokenizer，则需要保存tokenizer：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tokenizer</span><span class="o">.</span><span class="n">save_pretrained</span><span class="p">(</span><span class="s2">&quot;./my_model&quot;</span><span class="p">,</span> <span class="n">save_json</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>并在保存的tokenizer_config.json中添加auto映射：</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;auto_map&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;AutoTokenizer&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;tokenization_model.MyTokenizer&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;tokenization_model.MyFastTokenizer&quot;</span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="id5">
+<h4>上传模型<a class="headerlink" href="#id5" title="Link to this heading"></a></h4>
+<p>可使用openmind_hub库，进行模型上传，可参考<a class="reference external" href="https://modelers.cn/docs/zh/best-practices/community_contribution/model_contribution.html#%E4%BD%BF%E7%94%A8openmind-hub-client%E4%B8%8A%E4%BC%A0%E6%A8%A1%E5%9E%8B">模型上传</a>。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">openmind_hub</span>
+
+<span class="n">openmind_hub</span><span class="o">.</span><span class="n">upload_folder</span><span class="p">(</span>
+    <span class="n">folder_path</span><span class="o">=</span><span class="s2">&quot;/path/to/local/folder&quot;</span><span class="p">,</span>
+    <span class="n">repo_id</span><span class="o">=</span><span class="s2">&quot;username/your-model-name&quot;</span><span class="p">,</span>
+    <span class="n">token</span><span class="o">=</span><span class="s2">&quot;your-token&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>已上传的例子可参考魔乐社区的<a class="reference external" href="https://modelers.cn/models/MindSpore-Lab/internlm2-7b/tree/main">书生2模型</a>。</p>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="mindformers_contribution.html" class="btn btn-neutral float-left" title="MindSpore Transformers贡献指南" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../faq/model_related.html" class="btn btn-neutral float-right" title="模型相关 FAQ" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

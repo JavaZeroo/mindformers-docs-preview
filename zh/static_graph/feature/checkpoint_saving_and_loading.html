@@ -1,0 +1,478 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>checkpoint保存和加载 &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="断点续训2.0" href="resume_training2.0.html" />
+    <link rel="prev" title="断点续训" href="resume_training.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">介绍</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/quick_start.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">模型支持库</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">安装</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">安装指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">功能特性</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/overview.html">功能特性概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/start_task.html">启动任务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/configuration.html">配置文件说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/logging.html">日志</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/dataset.html">数据集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/training_hyperparameters.html">训练超参数与优化器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/save_and_load_checkpoint.html">权重保存与加载</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/resume_training.html">断点续训</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/monitor.html">训练指标监控与 Profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/static_graph_features.html">静态图实现特性</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">环境变量</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../env_variables.html">环境变量说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">贡献指南</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers贡献指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">魔乐社区贡献指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">模型相关 FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">功能相关 FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">静态图实现（Deprecated）</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">大模型全流程指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">功能特性</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">功能特性概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="start_tasks.html">启动任务</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ckpt.html">Ckpt权重</a></li>
+<li class="toctree-l2"><a class="reference internal" href="safetensors.html">Safetensors权重</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">配置文件说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="load_huggingface_config.html">加载 Hugging Face 模型配置</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html">日志</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tokenizer.html">使用Tokenizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset.html">数据集</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training_hyperparameters.html">训练超参数</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monitor.html">训练指标监控</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training.html">断点续训</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">checkpoint保存和加载</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">checkpoint保存</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id3">目录结构</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">配置说明</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">checkpoint加载</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id6">配置说明</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id9">约束说明</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training2.0.html">断点续训2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l2"><a class="reference internal" href="high_availability.html">训练高可用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skip_data_and_ckpt_health_monitor.html">数据跳过和健康监测</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pma_fused_checkpoint.html">Pre-trained Model Average 权重合并</a></li>
+<li class="toctree-l2"><a class="reference internal" href="other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantization.html">量化</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_development/index.html">高阶开发</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">优秀实践</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">环境变量说明</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">功能特性</a></li>
+      <li class="breadcrumb-item active">checkpoint保存和加载</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/feature/checkpoint_saving_and_loading.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">已废弃（Deprecated）</p>
+<p>本页属于 <strong>静态图（GRAPH_MODE）实现</strong> 章节，已标记为废弃。新特性优先在「r2.0.0 动态图实现」章节演进，请优先查阅动态图相关文档。</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="checkpoint">
+<h1>checkpoint保存和加载<a class="headerlink" href="#checkpoint" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/static_graph/feature/checkpoint_saving_and_loading.md"><img alt="查看源文件" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source.svg" /></a></p>
+<section id="id1">
+<h2>概述<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<p>MindSpore Transformers 支持训练过程中保存checkpoint。checkpoint包括<strong>模型权重</strong>、<strong>优化器权重</strong>、<strong>训练上下文信息</strong>和<strong>分布式策略元信息</strong>，核心作用是<strong>中断后恢复训练</strong>、<strong>防止训练失败丢失进度</strong>，同时支持<strong>后续微调</strong>、<strong>推理</strong>或<strong>模型迭代</strong>。</p>
+<p>MindSpore Transformers 推出<strong>Checkpoint 2.0 版本</strong>，通过重构checkpoint保存策略与加载流程，实现易用性与加载效率的综合提升。</p>
+<p>相较于Checkpoint 1.0 版本，核心更新如下：</p>
+<ul class="simple">
+<li><p><strong>全新checkpoint保存<a class="reference internal" href="#id3">目录结构</a></strong>：目录包含<strong>模型权重</strong>、<strong>优化器权重</strong>、<strong>训练上下文信息</strong>、<strong>分布式策略元信息</strong>等文件；</p></li>
+<li><p><strong>新增在线 Reshard 加载机制</strong>：若待加载checkpoint的分布式策略元信息与当前任务不一致，加载时将<strong>自动对权重参数执行 Reshard 转换</strong>，生成适配当前分布式策略的参数；</p></li>
+<li><p><strong>简化加载配置</strong>：依托在线 Reshard 机制，用户<strong>无需手动配置<code class="docutils literal notranslate"><span class="pre">auto_trans_ckpt</span></code>、<code class="docutils literal notranslate"><span class="pre">src_strategy_path_or_dir</span></code>等参数</strong>触发权重策略转换，易用性显著提升。</p></li>
+<li><p><strong>简化yaml配置</strong>：新增yaml文件中的checkpoint一级配置，统一将之前分散的权重相关配置迁移至该配置下。该配置包含checkpoint保存路径、保存间隔步数、保存文件名前缀、保存文件最大数量、断点续训加载权重路径、断点续训开关等参数。且同时兼容Checkpoint 1.0 配置。</p></li>
+</ul>
+<p>MindSpore Transformers 目前默认采用Checkpoint 1.0 版本，用户需在 YAML 配置文件中添加如下参数，即可启用Checkpoint 2.0 版本的保存与加载功能。</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">use_legacy_format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>该文档仅针对用户使用体验Checkpoint 2.0 版本，若使用Checkpoint 1.0 版本，请参考<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/safetensors.html">Safetensors文档</a>或<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/ckpt.html">Ckpt文档</a>。</p>
+</div></blockquote>
+</section>
+<section id="id2">
+<h2>checkpoint保存<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<section id="id3">
+<h3>目录结构<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p>MindSpore Transformers 的训练checkpoint默认存储于 <code class="docutils literal notranslate"><span class="pre">output/checkpoint</span></code> 目录，每个checkpoint独立保存为以 <code class="docutils literal notranslate"><span class="pre">iteration</span></code> 命名的子文件夹。以 8 卡任务第 1 步生成的checkpoint为例，其保存格式如下：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>output
+    ├── checkpoint
+        ├── iteration_00000001
+            ├── metadata.json
+            ├── common.json
+            ├── {prefix}-model-0000000-0000008.safetensors
+            ...
+            ├── {prefix}-model-0000007-0000008.safetensors
+            ├── {prefix}-opt-0000000-0000008.safetensors
+            ...
+            └── {prefix}-opt-0000007-0000008.safetensors
+        ...
+        └── latest_checkpointed_iteration.txt
+</pre></div>
+</div>
+<p>权重相关文件说明</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>文件</p></th>
+<th class="head"><p>描述</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>metadata.json</p></td>
+<td><p>记录各参数的分布式策略元信息与存储信息，为后续加载权重时自动执行 Reshard 转换提供必要的元数据支持，确保转换精准适配当前任务。</p></td>
+</tr>
+<tr class="row-odd"><td><p>common.json</p></td>
+<td><p>记录当前迭代（iteration）的训练信息，为断点续训提供数据支持。</p></td>
+</tr>
+<tr class="row-even"><td><p>{prefix}-model-0000000-0000008.safetensors</p></td>
+<td><p>模型权重存储文件。命名规则说明：<code class="docutils literal notranslate"><span class="pre">prefix</span></code> 为自定义文件名前缀，<code class="docutils literal notranslate"><span class="pre">model</span></code> 标识文件类型为模型权重，<code class="docutils literal notranslate"><span class="pre">0000000</span></code> 是文件序号，<code class="docutils literal notranslate"><span class="pre">0000008</span></code> 代表总文件个数。</p></td>
+</tr>
+<tr class="row-odd"><td><p>{prefix}-opt-0000000-0000008.safetensors</p></td>
+<td><p>优化器权重存储文件。命名规则说明：<code class="docutils literal notranslate"><span class="pre">prefix</span></code> 为自定义文件名前缀，<code class="docutils literal notranslate"><span class="pre">opt</span></code> 标识文件类型为优化器权重，<code class="docutils literal notranslate"><span class="pre">0000000</span></code> 是文件序号，<code class="docutils literal notranslate"><span class="pre">0000008</span></code> 代表总文件个数。</p></td>
+</tr>
+<tr class="row-even"><td><p>latest_checkpointed_iteration.txt</p></td>
+<td><p>记录 <code class="docutils literal notranslate"><span class="pre">output/checkpoint</span></code> 目录下最后一个成功保存的checkpoint对应的迭代步数。</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id4">
+<h3>配置说明<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<section id="checkpoint-2-0">
+<h4>Checkpoint 2.0 配置<a class="headerlink" href="#checkpoint-2-0" title="Link to this heading"></a></h4>
+<p>用户可通过修改 YAML 配置文件中 <code class="docutils literal notranslate"><span class="pre">checkpoint</span></code> 下的相关字段，控制权重保存行为，具体参数说明如下：</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>参数</p></th>
+<th class="head"><p>描述</p></th>
+<th class="head"><p>类型</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>save_path</p></td>
+<td><p>设置权重文件的保存目录。若未配置，则默认保存在<code class="docutils literal notranslate"><span class="pre">output_dir</span></code> 指定路径下的 <code class="docutils literal notranslate"><span class="pre">checkpoint/</span></code> 子目录中。</p></td>
+<td><p>str</p></td>
+</tr>
+<tr class="row-odd"><td><p>save_max</p></td>
+<td><p>最多保留的权重文件数量。当保存数量超过该值时，系统将按创建时间顺序删除最早的文件，确保总数不超过此限制。用于控制磁盘空间使用。默认值<code class="docutils literal notranslate"><span class="pre">5</span></code>。</p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-even"><td><p>save_interleaved_steps</p></td>
+<td><p>以训练步数间隔方式设置自动保存权重的周期（单位：steps）。例如每1000步保存一次。默认值<code class="docutils literal notranslate"><span class="pre">1</span></code>。</p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-odd"><td><p>no_save_optim</p></td>
+<td><p>优化器权重保存功能开关（控制是否保存优化器权重信息）。默认值<code class="docutils literal notranslate"><span class="pre">True</span></code>。</p></td>
+<td><p>bool</p></td>
+</tr>
+<tr class="row-even"><td><p>async_save</p></td>
+<td><p>是否异步执行权重保存。开启后保存操作不会阻塞训练主流程，提升训练效率，但需注意 I/O 资源竞争可能导致延迟写入。默认值<code class="docutils literal notranslate"><span class="pre">False</span></code>。</p></td>
+<td><p>bool</p></td>
+</tr>
+<tr class="row-odd"><td><p>prefix</p></td>
+<td><p>设置保存权重文件名的前缀。例如生成<code class="docutils literal notranslate"><span class="pre">CKP-100.ckpt</span></code>。若未配置，则使用默认值 <code class="docutils literal notranslate"><span class="pre">'CKP'</span></code>。</p></td>
+<td><p>str</p></td>
+</tr>
+<tr class="row-even"><td><p>save_remove_redundancy</p></td>
+<td><p>保存权重时是否去除模型权重的冗余，默认值为<code class="docutils literal notranslate"><span class="pre">False</span></code>。</p></td>
+<td><p>bool</p></td>
+</tr>
+</tbody>
+</table>
+<p>配置示例如下：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">use_legacy_format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+
+<span class="nt">checkpoint</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">save_path</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;./output_dir/checkpoint/&#39;</span>
+<span class="w">  </span><span class="nt">save_max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+<span class="w">  </span><span class="nt">save_interleaved_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span>
+<span class="w">  </span><span class="nt">no_save_optim</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">async_save</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;qwen3&quot;</span>
+<span class="w">  </span><span class="nt">save_remove_redundancy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+</pre></div>
+</div>
+</section>
+<section id="checkpoint-1-0">
+<h4>Checkpoint 1.0 配置<a class="headerlink" href="#checkpoint-1-0" title="Link to this heading"></a></h4>
+<p>用户可通过修改 YAML 配置文件中 <code class="docutils literal notranslate"><span class="pre">CheckpointMonitor</span></code> 下的相关字段，控制权重保存行为，具体参数说明如下：</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>参数名称</p></th>
+<th class="head"><p>描述</p></th>
+<th class="head"><p>取值说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>prefix</p></td>
+<td><p>权重文件名自定义前缀，建议填写模型名称以区分不同模型的checkpoint。</p></td>
+<td><p>(str, 可选) - 默认值： <code class="docutils literal notranslate"><span class="pre">&quot;CKP&quot;</span></code> 。</p></td>
+</tr>
+<tr class="row-odd"><td><p>directory</p></td>
+<td><p>checkpoint保存路径，未配置时默认存储于 <code class="docutils literal notranslate"><span class="pre">./output/checkpoint</span></code>。</p></td>
+<td><p>(str, 可选) - 默认值： <code class="docutils literal notranslate"><span class="pre">None</span></code> 。</p></td>
+</tr>
+<tr class="row-even"><td><p>save_checkpoint_steps</p></td>
+<td><p>设置保存checkpoint的训练间隔步数（即每训练指定步数保存一次checkpoint）。</p></td>
+<td><p>(int, 可选) - 默认值： <code class="docutils literal notranslate"><span class="pre">1</span></code> ，不设置时不保存模型权重。</p></td>
+</tr>
+<tr class="row-odd"><td><p>keep_checkpoint_max</p></td>
+<td><p>设置checkpoint最大保留数量，达到上限后，保存新checkpoint时会自动删除最旧的checkpoint。</p></td>
+<td><p>(int, 可选) - 默认值： <code class="docutils literal notranslate"><span class="pre">5</span></code> 。</p></td>
+</tr>
+<tr class="row-even"><td><p>async_save</p></td>
+<td><p>checkpoint异步保存功能开关（控制是否启用异步保存机制）。</p></td>
+<td><p>(bool, 可选) - <code class="docutils literal notranslate"><span class="pre">True</span></code> 时将使用异步线程保存checkpoint。默认值： <code class="docutils literal notranslate"><span class="pre">False</span></code> 。</p></td>
+</tr>
+<tr class="row-odd"><td><p>checkpoint_format</p></td>
+<td><p>checkpoint权重保存格式，Checkpoint 2.0 版本仅支持 <code class="docutils literal notranslate"><span class="pre">'safetensors'</span></code>；若已配置 <code class="docutils literal notranslate"><span class="pre">use_legacy_format:</span> <span class="pre">False</span></code>，该字段将自动转换为 <code class="docutils literal notranslate"><span class="pre">'safetensors'</span></code>。</p></td>
+<td><p>(str, 可选) - 默认值： <code class="docutils literal notranslate"><span class="pre">'safetensors'</span></code> 。</p></td>
+</tr>
+<tr class="row-even"><td><p>remove_redundancy</p></td>
+<td><p>checkpoint去冗余保存功能开关（控制是否启用去冗余保存机制）。</p></td>
+<td><p>(bool, 可选) - 默认值： <code class="docutils literal notranslate"><span class="pre">False</span></code> 。</p></td>
+</tr>
+<tr class="row-odd"><td><p>save_optimizer</p></td>
+<td><p>优化器权重保存功能开关（控制是否保存优化器权重信息）。</p></td>
+<td><p>(bool, 可选) - 默认值： <code class="docutils literal notranslate"><span class="pre">True</span></code> 。</p></td>
+</tr>
+</tbody>
+</table>
+<p>配置示例如下：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">use_legacy_format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+
+<span class="nt">callbacks</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">- type</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CheckpointMonitor</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">prefix</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;qwen3&quot;</span>
+<span class="w">    </span><span class="nt">save_checkpoint_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span>
+<span class="w">    </span><span class="nt">keep_checkpoint_max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+<span class="w">    </span><span class="nt">async_save</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">    </span><span class="nt">checkpoint_format</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;safetensors&quot;</span>
+<span class="w">    </span><span class="nt">save_optimizer</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>若是配置了 <code class="docutils literal notranslate"><span class="pre">checkpoint</span></code>，则 <code class="docutils literal notranslate"><span class="pre">use_legacy_format</span></code> 参数将自动转换为 <code class="docutils literal notranslate"><span class="pre">False</span></code>。上述配置指定训练任务以 “qwen3” 作为 safetensors 文件名前缀，采用同步保存模式，每 1000 步保存一次包含模型权重与优化器权重的checkpoint，且训练全程最多保留最新的 5 个checkpoint。</p>
+</div></blockquote>
+<p>如果您想了解更多有关 CheckpointMonitor 的知识，可以参考 <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/core/mindformers.core.CheckpointMonitor.html">CheckpointMonitor API 文档</a>。</p>
+</section>
+</section>
+</section>
+<section id="id5">
+<h2>checkpoint加载<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
+<p>MindSpore Transformers 提供灵活的checkpoint加载能力，覆盖单卡与多卡全场景，核心特性如下：</p>
+<ol class="arabic simple">
+<li><p>Checkpoint 2.0 版本适配性升级：依托在线 Reshard 机制，加载时权重可自动适配任意分布式策略任务，无需手动调整，降低多场景部署成本；</p></li>
+<li><p>跨平台权重兼容：通过专用转换接口，支持加载 HuggingFace 社区发布的权重文件，当前已实现 Qwen3 模型训练场景的兼容适配，方便用户复用社区资源。</p></li>
+</ol>
+<section id="id6">
+<h3>配置说明<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<section id="id7">
+<h4>Checkpoint 2.0 配置<a class="headerlink" href="#id7" title="Link to this heading"></a></h4>
+<p>用户可通过修改 YAML 配置文件中的相关字段，控制权重加载行为。</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>参数名称</p></th>
+<th class="head"><p>描述</p></th>
+<th class="head"><p>取值说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>load_path</p></td>
+<td><p>加载权重的文件或文件夹路径，支持以下三种场景：<br/>1. 完整权重文件路径；<br/>2. 离线切分后的分布式权重文件夹路径；<br/>3. 包含 LoRA 增量权重和 base 模型权重的文件夹路径。<br/>各种权重的获取方式详见 <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/ckpt.html">权重转换功能</a>。默认值为<code class="docutils literal notranslate"><span class="pre">''</span></code>。</p></td>
+<td><p>str</p></td>
+</tr>
+<tr class="row-odd"><td><p>load_balanced</p></td>
+<td><p>权重均衡加载功能开关，<strong>仅支持在分布式任务中开启</strong>；设为 <code class="docutils literal notranslate"><span class="pre">True</span></code> 时，各 rank 按参数均衡分配策略加载权重，再通过参数广播获取最终权重。默认值为<code class="docutils literal notranslate"><span class="pre">False</span></code>。</p></td>
+<td><p>str</p></td>
+</tr>
+<tr class="row-even"><td><p>no_load_optim</p></td>
+<td><p>加载权重文件时是否加载优化器参数。是否开启断点续训功能取反。开启后将从<code class="docutils literal notranslate"><span class="pre">load_checkpoint</span></code> 指定的路径恢复优化器状态、学习率调度器状态等，继续训练。详情见 <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/resume_training.html#%E6%96%AD%E7%82%B9%E7%BB%AD%E8%AE%AD">断点续训功能</a>。默认值为<code class="docutils literal notranslate"><span class="pre">True</span></code>。</p></td>
+<td><p>bool</p></td>
+</tr>
+<tr class="row-odd"><td><p>reshard_worker_number</p></td>
+<td><p>指定并行权重 Reshard 的线程数。对于权重需要在线 Reshard 的场景，可配置该字段进行并行加速。默认值 <code class="docutils literal notranslate"><span class="pre">1</span></code>。</p></td>
+<td><p>int</p></td>
+</tr>
+</tbody>
+</table>
+<p>当 <code class="docutils literal notranslate"><span class="pre">load_path</span></code> 配置为 <code class="docutils literal notranslate"><span class="pre">output/checkpoint</span></code> 文件夹路径时，用户可通过修改 <code class="docutils literal notranslate"><span class="pre">latest_checkpointed_iteration.txt</span></code> 中记录的步数，实现指定 <code class="docutils literal notranslate"><span class="pre">iteration</span></code> 权重的加载。</p>
+</section>
+<section id="id8">
+<h4>Checkpoint 1.0 配置<a class="headerlink" href="#id8" title="Link to this heading"></a></h4>
+<p>用户可通过修改 YAML 配置文件中的相关字段，控制权重加载行为。</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>参数名称</p></th>
+<th class="head"><p>描述</p></th>
+<th class="head"><p>取值说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>load_checkpoint</p></td>
+<td><p>checkpoint文件夹路径，可<strong>填写<code class="docutils literal notranslate"><span class="pre">output/checkpoint</span></code>文件夹路径或<code class="docutils literal notranslate"><span class="pre">iteration</span></code>子文件夹路径</strong>。<br>若为<code class="docutils literal notranslate"><span class="pre">checkpoint</span></code>文件夹路径，按照<code class="docutils literal notranslate"><span class="pre">latest_checkpointed_iteration.txt</span></code>中记录的步数加载对应<code class="docutils literal notranslate"><span class="pre">iteration</span></code>子文件夹checkpoint。</p></td>
+<td><p>(str，可选) - 默认值：<code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>pretrained_model_dir</p></td>
+<td><p>指定 HuggingFace 社区权重的文件夹路径；若同时配置了 <code class="docutils literal notranslate"><span class="pre">load_checkpoint</span></code>，该字段将自动失效。</p></td>
+<td><p>(str，可选) - 默认值：<code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>balanced_load</p></td>
+<td><p>权重均衡加载功能开关，<strong>仅支持在分布式任务中开启</strong>；设为 <code class="docutils literal notranslate"><span class="pre">True</span></code> 时，各 rank 按参数均衡分配策略加载权重，再通过参数广播获取最终权重。</p></td>
+<td><p>(bool，可选) - 默认值：<code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>use_legacy_format</p></td>
+<td><p>Checkpoint 1.0 版本启用开关，需设置为 <code class="docutils literal notranslate"><span class="pre">False</span></code>（使用Checkpoint 2.0 版本）。</p></td>
+<td><p>(bool，可选) - 默认值：<code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>load_ckpt_format</p></td>
+<td><p>指定加载权重的格式，需设置为 <code class="docutils literal notranslate"><span class="pre">'safetensors'</span></code>（适配Checkpoint 2.0 版本）。</p></td>
+<td><p>(str，可选) - 默认值：<code class="docutils literal notranslate"><span class="pre">'ckpt'</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>reshard_worker_num</p></td>
+<td><p>指定并行权重 Reshard 的线程数。对于权重需要在线 Reshard 的场景，可配置该字段进行并行加速。</p></td>
+<td><p>(int, 可选) - 默认值： <code class="docutils literal notranslate"><span class="pre">1</span></code> 。</p></td>
+</tr>
+</tbody>
+</table>
+<p>当 <code class="docutils literal notranslate"><span class="pre">load_checkpoint</span></code> 配置为 <code class="docutils literal notranslate"><span class="pre">output/checkpoint</span></code> 文件夹路径时，用户可通过修改 <code class="docutils literal notranslate"><span class="pre">latest_checkpointed_iteration.txt</span></code> 中记录的步数，实现指定 <code class="docutils literal notranslate"><span class="pre">iteration</span></code> 权重的加载。</p>
+</section>
+</section>
+</section>
+<section id="id9">
+<h2>约束说明<a class="headerlink" href="#id9" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>多机场景下，所有文件需存储于<strong>同一共享目录</strong>，用户需将该<strong>共享路径配置至环境变量 <code class="docutils literal notranslate"><span class="pre">SHARED_PATHS</span></code></strong>。建议优先配置为最上层共享目录路径，示例：若共享目录为 <code class="docutils literal notranslate"><span class="pre">/data01</span></code>（工程目录位于其下），可执行 <code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">SHARED_PATHS=/data01</span></code>。</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="resume_training.html" class="btn btn-neutral float-left" title="断点续训" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="resume_training2.0.html" class="btn btn-neutral float-right" title="断点续训2.0" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

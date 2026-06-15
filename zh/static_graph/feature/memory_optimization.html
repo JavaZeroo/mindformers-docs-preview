@@ -1,0 +1,561 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>训练内存优化 &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="数据跳过和健康监测" href="skip_data_and_ckpt_health_monitor.html" />
+    <link rel="prev" title="训练高可用" href="high_availability.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">介绍</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/quick_start.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">模型支持库</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">安装</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">安装指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">功能特性</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/overview.html">功能特性概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/start_task.html">启动任务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/configuration.html">配置文件说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/logging.html">日志</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/dataset.html">数据集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/training_hyperparameters.html">训练超参数与优化器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/save_and_load_checkpoint.html">权重保存与加载</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/resume_training.html">断点续训</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/monitor.html">训练指标监控与 Profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/static_graph_features.html">静态图实现特性</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">环境变量</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../env_variables.html">环境变量说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">贡献指南</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers贡献指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">魔乐社区贡献指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">模型相关 FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">功能相关 FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">静态图实现（Deprecated）</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">大模型全流程指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">功能特性</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">功能特性概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="start_tasks.html">启动任务</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ckpt.html">Ckpt权重</a></li>
+<li class="toctree-l2"><a class="reference internal" href="safetensors.html">Safetensors权重</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">配置文件说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="load_huggingface_config.html">加载 Hugging Face 模型配置</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html">日志</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tokenizer.html">使用Tokenizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset.html">数据集</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training_hyperparameters.html">训练超参数</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monitor.html">训练指标监控</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training.html">断点续训</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoint_saving_and_loading.html">checkpoint保存和加载</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training2.0.html">断点续训2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l2"><a class="reference internal" href="high_availability.html">训练高可用</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">训练内存优化</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">重计算</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id3">概述</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">配置与使用</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#swap">细粒度激活值SWAP</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id6">概述</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id7">使用说明</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id11">使用示例</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="skip_data_and_ckpt_health_monitor.html">数据跳过和健康监测</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pma_fused_checkpoint.html">Pre-trained Model Average 权重合并</a></li>
+<li class="toctree-l2"><a class="reference internal" href="other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantization.html">量化</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_development/index.html">高阶开发</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">优秀实践</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">环境变量说明</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">功能特性</a></li>
+      <li class="breadcrumb-item active">训练内存优化</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/feature/memory_optimization.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">已废弃（Deprecated）</p>
+<p>本页属于 <strong>静态图（GRAPH_MODE）实现</strong> 章节，已标记为废弃。新特性优先在「r2.0.0 动态图实现」章节演进，请优先查阅动态图相关文档。</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>训练内存优化<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/static_graph/feature/memory_optimization.md"><img alt="View Source on AtomGit" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source.svg" /></a></p>
+<section id="id2">
+<h2>重计算<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<section id="id3">
+<h3>概述<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p>重计算可以显著降低训练时的激活内存，但会额外增加一些计算。关于重计算的原理和框架侧能力可参考 <a class="reference external" href="https://www.mindspore.cn/tutorials/zh-CN/master/parallel/recompute.html">MindSpore 教程文档：重计算</a>。</p>
+</section>
+<section id="id4">
+<h3>配置与使用<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<section id="yaml">
+<h4>YAML 参数配置<a class="headerlink" href="#yaml" title="Link to this heading"></a></h4>
+<p>用户可通过在模型训练的 yaml 配置文件中新增 <code class="docutils literal notranslate"><span class="pre">recompute_config</span></code> 模块来使用重计算。</p>
+<p>以 <a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/example/deepseek3/pretrain_deepseek3_671b.yaml">DeepSeek-V3 预训练 yaml</a> 为例，可做如下配置：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># recompute config</span>
+<span class="nt">recompute_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">recompute</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">3</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">4</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">4</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">4</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">4</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">4</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">4</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">4</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">4</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">4</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">4</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">4</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">4</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">3</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">select_recompute</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">parallel_optimizer_comm_recompute</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">mp_comm_recompute</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">recompute_slice_activation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+</div>
+<p>如果需要对某几个特定层进行选择重计算配置，可以使用 tuple 的方式进行配置。</p>
+<p>例如：一个网络有48层， <code class="docutils literal notranslate"><span class="pre">pp_interleave_num</span></code> 为 <code class="docutils literal notranslate"><span class="pre">2</span></code> ， <code class="docutils literal notranslate"><span class="pre">pipeline_stage</span></code> 为 <code class="docutils literal notranslate"><span class="pre">5</span></code> ，offset设为 <code class="docutils literal notranslate"><span class="pre">[[0,1,1,1,1],[1,1,1,1,0]]</span></code> ，重计算配置如下：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># recompute config</span>
+<span class="nt">recompute_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">recompute</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[[</span><span class="nv">2</span><span class="p p-Indicator">,</span><span class="nv">1</span><span class="p p-Indicator">,</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="nv">0</span><span class="p p-Indicator">],[</span><span class="nv">1</span><span class="p p-Indicator">,</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="nv">0</span><span class="p p-Indicator">]]</span>
+<span class="w">  </span><span class="nt">select_recompute</span><span class="p">:</span>
+<span class="w">    </span><span class="s">&#39;feed_forward\.w1\.activation\.silu&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">    </span><span class="s">&#39;feed_forward\.mul&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">    </span><span class="s">&#39;feed_forward\.w1\.matmul&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">[[</span><span class="nv">1</span><span class="p p-Indicator">,</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="nv">0</span><span class="p p-Indicator">],[</span><span class="nv">2</span><span class="p p-Indicator">,</span><span class="nv">1</span><span class="p p-Indicator">,</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="nv">0</span><span class="p p-Indicator">]]</span>
+<span class="w">    </span><span class="s">&#39;feed_forward\.w3\.matmul&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">2</span><span class="p p-Indicator">,</span><span class="nv">1</span><span class="p p-Indicator">,</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="nv">0</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">select_comm_recompute</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;ffn_norm\.norm&#39;</span><span class="p p-Indicator">,</span><span class="s">&#39;attention_norm\.norm&#39;</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+<p>在日志中会打印将输入格式规范化后的重计算策略信息：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>INFO - Formative layer_recompute: [[2, 1, 0, 0, 0], [1, 0, 0, 0, 0]]
+INFO - Formative select_recompute: {&#39;feed_forward\.w1\.activation\.silu&#39;: [[4, 5, 5, 5, 5], [5, 5, 5, 5, 4]], &#39;feed_forward\.mul&#39;: [[4, 5, 5, 5, 5], [5, 5, 5, 5, 4]], &#39;feed_forward\.w1\.matmul&#39;: [[1, 0, 0, 0, 0], [2, 1, 0, 0, 0]], &#39;feed_forward\.w3\.matmul&#39;: [[1, 1, 0, 0, 0], [1, 0, 0, 0, 0]]}
+INFO - Formative select_comm_recompute: {&#39;ffn_norm\.norm&#39;: [[4, 5, 5, 5, 5], [5, 5, 5, 5, 4]], &#39;attention_norm\.norm&#39;: [[4, 5, 5, 5, 5], [5, 5, 5, 5, 4]]}
+</pre></div>
+</div>
+<p>随后会打印每一层重计算的配置方式。</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>如果某一层同时配置了完全重计算与选择重计算，则按完全重计算生效。</p></li>
+<li><p>在一维整数型 list 或 tuple 中的整数可以替换为 True 或 False，代表对所有层启用或关闭重计算。</p></li>
+</ol>
+</div></blockquote>
+</section>
+<section id="id5">
+<h4>主要配置参数介绍<a class="headerlink" href="#id5" title="Link to this heading"></a></h4>
+<p>有关重计算配置的主要参数如下表所列：</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>参数</p></th>
+<th class="head"><p>描述</p></th>
+<th class="head"><p>取值说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>recompute</p></td>
+<td><p>（按层）完全重计算。</p></td>
+<td><p>可配置为 bool，整数型的 list 或 tuple，或二维 list 或 tuple。<br>配置为 bool 类型时，对所有层开启或关闭完全重计算；<br>配置为整数型 list 或 tuple 时，代表每个 <code class="docutils literal notranslate"><span class="pre">pipeline_stage</span></code> 中有多少层开启完全重计算， <code class="docutils literal notranslate"><span class="pre">pp_interleave_num</span> <span class="pre">&gt;</span> <span class="pre">1</span></code> 时开启的重计算层数会均匀分配到各 interleave 中；<br>配置为整数型二维 list 或 tuple 时，代表每个 mini stage 中有多少层开启完全重计算。</p></td>
+</tr>
+<tr class="row-odd"><td><p>select_recompute</p></td>
+<td><p>（按算子）选择重计算。</p></td>
+<td><p>可配置为 bool，整数型的 list 或 tuple，或二维 list 或 tuple，字符串的 list 或 tuple，以及 dict。<br>默认选择重计算算子为 <code class="docutils literal notranslate"><span class="pre">['feed_forward\\.mul',</span> <span class="pre">'feed_forward\\.w1\\.activation\\.silu']</span></code> 。<br>配置为 bool 类型时，对所有层开启或关闭默认算子的选择重计算；<br>配置为整数型 list 或 tuple 时，代表每个 <code class="docutils literal notranslate"><span class="pre">pipeline_stage</span></code> 中有多少层开启默认算子的选择重计算， <code class="docutils literal notranslate"><span class="pre">pp_interleave_num</span> <span class="pre">&gt;</span> <span class="pre">1</span></code> 时开启的选择重计算层数会均匀分配到各 interleave 中；<br>配置为整数型二维 list 或 tuple 时，代表每个 mini stage 中有多少层开启默认算子的选择重计算。<br>配置为字符串 list 或 tuple 时，代表对哪些算子开启选择重计算，算子名通过正则表达式匹配，层级关系通过 <code class="docutils literal notranslate"><span class="pre">'\\.'</span></code> 分割；<br>配置为 dict 时，key 值对应算子名，value 值对应选择重计算的配置方式，这种配法可以对每个算子精细配置重计算策略。</p></td>
+</tr>
+<tr class="row-even"><td><p>select_comm_recompute</p></td>
+<td><p>（按算子）选择通信重计算。</p></td>
+<td><p>配置方式与 <strong>select_recompute</strong> 相同，默认选择通信重计算算子为 <code class="docutils literal notranslate"><span class="pre">['.*\\.norm']</span></code> 。一般仅对 layer_norm 或类似层进行配置。</p></td>
+</tr>
+<tr class="row-odd"><td><p>parallel_optimizer_comm_recompute</p></td>
+<td><p>优化器并行通信重计算。在优化器并行下，是否重计算 AllGather 通信。</p></td>
+<td><p>(bool, 可选) - 开启后在自动并行或半自动并行模式下，指定 Cell 内部由优化器并行引入的 AllGather 通信是否重计算。默认值： <code class="docutils literal notranslate"><span class="pre">False</span></code> 。</p></td>
+</tr>
+<tr class="row-even"><td><p>mp_comm_recompute</p></td>
+<td><p>模型并行通信重计算，在模型并行下，是否重计算通信算子。</p></td>
+<td><p>(bool, 可选) - 开启后在自动并行或半自动并行模式下，指定 Cell 内部由模型并行引入的通信操作是否重计算。默认值： <code class="docutils literal notranslate"><span class="pre">True</span></code> 。</p></td>
+</tr>
+<tr class="row-odd"><td><p>recompute_slice_activation</p></td>
+<td><p>切片重计算，是否对将保留在内存中的 Cell 输出进行切片。该参数仅支持Legacy模型。</p></td>
+<td><p>(bool, 可选) - 默认值： <code class="docutils literal notranslate"><span class="pre">False</span></code> 。</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+<section id="swap">
+<h2>细粒度激活值SWAP<a class="headerlink" href="#swap" title="Link to this heading"></a></h2>
+<section id="id6">
+<h3>概述<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<p>在传统大模型训练任务中，计算卡的显存资源常常成为训练瓶颈。采用更大规模的模型并行（model parallel, mp）和流水线并行（pipeline parallel, pp）切分策略，虽然能一定程度上缓解单张计算卡的显存压力，但需要更大规模的集群资源，且引入过多的通信会极大地降低模型的MFU。在集群资源有限的情况下，重计算是另一个缓解内存压力的有效手段，其通过放弃存储正向传播阶段的激活值，并在梯度反向回传时重新计算所需激活值，来降低激活值的显存占用。由于重计算需引入额外的计算开销，因此该方法同样会显著降低模型训练的MFU（Model FLOPs Utilization）。</p>
+<p>在此背景下，细粒度激活值SWAP技术可以提供第三种降低内存占用的有效手段，且拥有更大的性能优势。具体地，激活值SWAP技术在模型正向传播阶段，将需要长期存储的激活值卸载至host侧，并在反向传播阶段使用该激活值时，提前将其预取回device侧。资源使用方面，激活值SWAP技术使用D2H/H2D带宽，可以在训练阶段与计算任务、D2D通信任务并发，实现对内存搬运开销的掩盖。</p>
+<p>细粒度激活值SWAP技术具备较高的使用灵活度。大模型训练的正向传播阶段，将产生数据量大小不同的若干激活值，用户可按需选择特定的激活值进行SWAP，且选择激活值的粒度为算子级。当模型类型或规格改变时，用户可灵活调整对应的SWAP策略，以追求最低的内存开销和最优的性能。</p>
+</section>
+<section id="id7">
+<h3>使用说明<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<section id="id8">
+<h4>约束场景<a class="headerlink" href="#id8" title="Link to this heading"></a></h4>
+<ul>
+<li><p>仅支持静态图O0/O1模式</p></li>
+<li><p>Somas不支持异构，需在配置文件中设置</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">context</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">memory_optimize_level</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">O0</span>
+</pre></div>
+</div>
+</li>
+<li><p>仅支持Ascend后端</p></li>
+</ul>
+</section>
+<section id="id9">
+<h4>接口说明<a class="headerlink" href="#id9" title="Link to this heading"></a></h4>
+<p>细粒度激活值SWAP特性通过YAML配置<code class="docutils literal notranslate"><span class="pre">model_config</span></code>字段使能，包括<code class="docutils literal notranslate"><span class="pre">cpu_offloading</span></code>、<code class="docutils literal notranslate"><span class="pre">default_prefetch</span></code>、<code class="docutils literal notranslate"><span class="pre">cpu_offloading_num_layers</span></code>、<code class="docutils literal notranslate"><span class="pre">op_swap</span></code>四个功能接口，用户可通过此接口灵活选择特定层或特定层的特定算子使能激活值SWAP功能。</p>
+<blockquote>
+<div><p>本文档主要介绍Mcore模型的配置方式，配置项位于<code class="docutils literal notranslate"><span class="pre">model_config</span></code>字段下。如果使用Legacy模型，配置项位于<code class="docutils literal notranslate"><span class="pre">swap_config</span></code>字段下，参数名称有所不同，具体配置参数可参考<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/configuration.html#%E6%A8%A1%E5%9E%8B%E4%BC%98%E5%8C%96%E9%85%8D%E7%BD%AE">配置文件说明</a>中的Legacy配置表格。</p>
+<p>当前MindSpore框架将内存搬运与内存释放解耦。将激活值从device侧卸载至host侧时，即便数据已全部卸载，其在device侧占用的内存空间并未被立刻释放，而是需要再触发释放操作。内存释放操作触发前，会检测激活值卸载是否完成，若未完成，则进程会原地等待，直至激活值卸载完成。</p>
+</div></blockquote>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>配置项</p></th>
+<th class="head text-center"><p>类型</p></th>
+<th class="head text-left"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p>cpu_offloading</p></td>
+<td class="text-center"><p>Bool</p></td>
+<td class="text-left"><p>默认值False。当为False时，本特性的四个功能接口全部不生效；当为True时，激活值SWAP功能开启，并检查<code class="docutils literal notranslate"><span class="pre">cpu_offloading_num_layers</span></code>与<code class="docutils literal notranslate"><span class="pre">op_swap</span></code>是否为None，若均为None，则启用默认的SWAP策略，该策略将对所有层中的<code class="docutils literal notranslate"><span class="pre">flash_attention</span></code>算子使能SWAP。若<code class="docutils literal notranslate"><span class="pre">cpu_offloading_num_layers</span></code>与<code class="docutils literal notranslate"><span class="pre">op_swap</span></code>存在非None值，则屏蔽默认策略并按照<code class="docutils literal notranslate"><span class="pre">cpu_offloading_num_layers</span></code>与<code class="docutils literal notranslate"><span class="pre">op_swap</span></code>的配置使能SWAP功能。</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>default_prefetch</p></td>
+<td class="text-center"><p>Int</p></td>
+<td class="text-left"><p>默认值1。当cpu_offloading=True、cpu_offloading_num_layers=None、op_swap=None时生效。<code class="docutils literal notranslate"><span class="pre">default_prefetch</span></code>用于调控默认SWAP策略的激活值内存释放时机和预取开始时机。当<code class="docutils literal notranslate"><span class="pre">default_prefetch</span></code>较大时，正向阶段释放内存时机较晚，激活值占用的device内存会在激活值卸载完成后被长期锁住，不被其他数据块复用，同时反向阶段开始将激活值从host侧拷贝至device侧的时机较早，申请相应内存空间的时间较早，内存压力未得到真正缓解；当<code class="docutils literal notranslate"><span class="pre">default_prefetch</span></code>较小时，正向阶段内存释放时机较早，存在等待激活值拷贝任务完成的空等时间，且反向阶段预取的开始时机较晚，若在使用激活值计算时仍未完成激活值预取，则也会引入等待时间，影响端到端性能。因此开放本接口，供用户调试内存释放时机与激活值预期时机，以达到最少的内存占用和最优的端到端性能。</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>cpu_offloading_num_layers</p></td>
+<td class="text-center"><p>List</p></td>
+<td class="text-left"><p>默认值None。当为None时，本接口不生效；当为List类型时，本接口包含若干Dict类型的列表元素，每个Dict类型元素包含<code class="docutils literal notranslate"><span class="pre">backward_prefetch</span></code>与<code class="docutils literal notranslate"><span class="pre">layers</span></code>两个键，提供使能SWAP的预取时机（即开始搬回操作的时机）和对应的层索引。</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>op_swap</p></td>
+<td class="text-center"><p>List</p></td>
+<td class="text-left"><p>默认值None。当为None时，本接口不生效；当为List类型时，本接口包含若干Dict类型的列表元素，每个Dict类型元素包含<code class="docutils literal notranslate"><span class="pre">op_name</span></code>、<code class="docutils literal notranslate"><span class="pre">backward_prefetch</span></code>与<code class="docutils literal notranslate"><span class="pre">layers</span></code>三个键，提供使能SWAP的预取时机和对应的算子名、层索引。</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id10">
+<h4>混合重计算<a class="headerlink" href="#id10" title="Link to this heading"></a></h4>
+<p>细粒度激活值SWAP与重计算存在耦合：</p>
+<ol class="arabic simple">
+<li><p>任意算子在同时使能重计算与SWAP时，重计算将生效，SWAP不生效。</p></li>
+<li><p>对于任意使能了SWAP的算子，若使用其输出的算子使能了重计算，则该算子的SWAP不生效。</p></li>
+<li><p>重计算的YAML配置接口只支持从前至后选择特定数量的层使能重计算，而不支持选择特定层或特定层的特定算子使能重计算，这意味着同时使用SWAP与重计算时，SWAP只能使能靠后的层或靠后层中的算子，无法获取SWAP特性的最大收益。因此当且仅当<code class="docutils literal notranslate"><span class="pre">cpu_offloading=True</span></code>时，重计算接口功能将按下表调整。</p></li>
+</ol>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>接口名称</p></th>
+<th class="head text-left"><p>原功能</p></th>
+<th class="head text-left"><p>开启SWAP后功能</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p>recompute</p></td>
+<td class="text-left"><p>确定各pipeline stage中使能重计算的层数</p></td>
+<td class="text-left"><p>不感知pipeline stage，仅接受bool/list类型入参。当为bool类型时，所有层使能重计算；当为list类型时，列表元素为层索引，按索引选择特定层使能重计算</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>select_recompute</p></td>
+<td class="text-left"><p>确定各pipeline stage中特定算子使能重计算的层数</p></td>
+<td class="text-left"><p>不感知pipeline stage，对于每个算子的键值对，仅接受bool/list类型入参。当为bool类型时，所有层使能重计算；当为list类型时，列表元素为层索引，按索引选择特定层使能重计算</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>select_comm_recompute</p></td>
+<td class="text-left"><p>确定各pipeline stage中通信算子使能重计算的层数</p></td>
+<td class="text-left"><p>不感知pipeline stage，仅接受bool/list类型入参。当为bool类型时，所有层使能重计算；当为list类型时，列表元素为层索引，按索引选择特定层使能重计算</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="id11">
+<h3>使用示例<a class="headerlink" href="#id11" title="Link to this heading"></a></h3>
+<p>本章节以 <a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/example/deepseek3/pretrain_deepseek3_671b.yaml">DeepSeek-V3 预训练 yaml</a> 为例，演示细粒度激活值SWAP特性的使用。</p>
+<section id="id12">
+<h4>环境准备<a class="headerlink" href="#id12" title="Link to this heading"></a></h4>
+<p>下载 MindSpore Transformers，并准备预训练数据集，如wikitext等。</p>
+</section>
+<section id="id13">
+<h4>示例一：默认SWAP策略<a class="headerlink" href="#id13" title="Link to this heading"></a></h4>
+<p>在YAML中修改补充重计算与SWAP配置，主要配置参数如下：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">context</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">memory_optimize_level</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;O0&quot;</span>
+<span class="nt">model</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">model_config</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">num_layers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">    </span><span class="nt">cpu_offloading</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">    </span><span class="nt">default_prefetch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="nt">recompute_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">recompute</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">select_recompute</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">select_comm_recompute</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+</pre></div>
+</div>
+<p>执行以下脚本启动单机八卡训练，启动脚本所在路径为MindSpore Transformers代码根目录，执行脚本需用户指定YAML文件路径（其中，machine_ip需要填写本地环境IP）：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">GLOG_v</span><span class="o">=</span><span class="m">1</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MS_MEMORY_STATISTIC</span><span class="o">=</span><span class="m">1</span>
+<span class="nv">YAML_FILE</span><span class="o">=</span><span class="nv">$1</span><span class="w"> </span><span class="c1"># 用户指定YAML文件路径</span>
+<span class="nv">ROOT_PATH</span><span class="o">=</span><span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>
+
+bash<span class="w"> </span>./scripts/msrun_launcher.sh<span class="w"> </span><span class="s2">&quot;run_mindformer.py \</span>
+<span class="s2">    --config </span><span class="si">${</span><span class="nv">ROOT_PATH</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">YAML_FILE</span><span class="si">}</span><span class="s2"> \</span>
+<span class="s2">    --run_mode train \</span>
+<span class="s2">    --use_parallel True&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="m">8</span><span class="w"> </span><span class="m">8</span><span class="w"> </span>&lt;machine_ip&gt;<span class="w"> </span><span class="m">8118</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>output/msrun<span class="w"> </span>False<span class="w"> </span><span class="m">300</span>
+</pre></div>
+</div>
+<p>训练完毕后执行命令<code class="docutils literal notranslate"><span class="pre">cat</span> <span class="pre">output/msrun/worker_0.log</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">'attention.flash_attention'</span></code>查看默认SWAP策略的执行情况：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>-INFO - Set op_swap at layer 0: attention.flash_attention, value=10
+-INFO - Set op_swap at layer 1: attention.flash_attention, value=10
+-INFO - Set op_swap at layer 2: attention.flash_attention, value=10
+-INFO - Set op_swap at layer 3: attention.flash_attention, value=10
+</pre></div>
+</div>
+<p>默认SWAP策略执行成功。</p>
+</section>
+<section id="id14">
+<h4>示例二：选择特定层使能SWAP<a class="headerlink" href="#id14" title="Link to this heading"></a></h4>
+<p>在YAML中修改补充重计算与SWAP配置，主要配置参数如下：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">context</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">memory_optimize_level</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;O0&quot;</span>
+<span class="nt">model</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">model_config</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">num_layers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">    </span><span class="nt">cpu_offloading</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">    </span><span class="nt">cpu_offloading_num_layers</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">backward_prefetch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span>
+<span class="w">        </span><span class="nt">layers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="nv">3</span><span class="p p-Indicator">]</span>
+<span class="nt">recompute_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">recompute</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">select_recompute</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">select_comm_recompute</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+</pre></div>
+</div>
+<p>执行以下脚本启动单机八卡训练，启动脚本所在路径为MindSpore Transformers代码根目录，执行脚本需用户指定YAML文件路径（其中，machine_ip需要填写本地环境IP）：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">GLOG_v</span><span class="o">=</span><span class="m">1</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MS_MEMORY_STATISTIC</span><span class="o">=</span><span class="m">1</span>
+<span class="nv">YAML_FILE</span><span class="o">=</span><span class="nv">$1</span><span class="w"> </span><span class="c1"># 用户指定YAML文件路径</span>
+<span class="nv">ROOT_PATH</span><span class="o">=</span><span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>
+
+bash<span class="w"> </span>./scripts/msrun_launcher.sh<span class="w"> </span><span class="s2">&quot;run_mindformer.py \</span>
+<span class="s2">    --config </span><span class="si">${</span><span class="nv">ROOT_PATH</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">YAML_FILE</span><span class="si">}</span><span class="s2"> \</span>
+<span class="s2">    --run_mode train \</span>
+<span class="s2">    --use_parallel True&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="m">8</span><span class="w"> </span><span class="m">8</span><span class="w"> </span>&lt;machine_ip&gt;<span class="w"> </span><span class="m">8118</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>output/msrun<span class="w"> </span>False<span class="w"> </span><span class="m">300</span>
+</pre></div>
+</div>
+<p>训练完毕后执行命令<code class="docutils literal notranslate"><span class="pre">cat</span> <span class="pre">output/msrun/worker_0.log</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">'Set</span> <span class="pre">layer</span> <span class="pre">swap</span> <span class="pre">at'</span></code>查看选择特定层使能SWAP策略的执行情况：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>-INFO - Set layer swap at layer 0 and value is: 20
+-INFO - Set layer swap at layer 3 and value is: 20
+</pre></div>
+</div>
+<p>选择特定层使能SWAP的策略执行成功。</p>
+</section>
+<section id="id15">
+<h4>示例三：选择特定层的特定算子使能SWAP<a class="headerlink" href="#id15" title="Link to this heading"></a></h4>
+<p>在YAML中修改补充重计算与SWAP配置，主要配置参数如下：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">context</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">memory_optimize_level</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;O0&quot;</span>
+<span class="nt">model</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">model_config</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">num_layers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">    </span><span class="nt">cpu_offloading</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">    </span><span class="nt">op_swap</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">op_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;attention&#39;</span>
+<span class="w">        </span><span class="nt">backward_prefetch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span>
+<span class="w">        </span><span class="nt">layers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="nv">1</span><span class="p p-Indicator">,</span><span class="nv">2</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">op_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;attention&#39;</span>
+<span class="w">        </span><span class="nt">backward_prefetch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="w">        </span><span class="nt">layers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">3</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">op_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;feed_forward&#39;</span>
+<span class="w">        </span><span class="nt">backward_prefetch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">15</span>
+<span class="w">        </span><span class="nt">layers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1</span><span class="p p-Indicator">,</span><span class="nv">2</span><span class="p p-Indicator">]</span>
+<span class="nt">recompute_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">recompute</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">select_recompute</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">select_comm_recompute</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+</pre></div>
+</div>
+<p>执行以下脚本启动单机八卡训练，启动脚本所在路径为MindSpore Transformers代码根目录，执行脚本需用户指定YAML文件路径（其中，machine_ip需要填写本地环境IP）：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">GLOG_v</span><span class="o">=</span><span class="m">1</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MS_MEMORY_STATISTIC</span><span class="o">=</span><span class="m">1</span>
+<span class="nv">YAML_FILE</span><span class="o">=</span><span class="nv">$1</span><span class="w"> </span><span class="c1"># 用户指定YAML文件路径</span>
+<span class="nv">ROOT_PATH</span><span class="o">=</span><span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>
+
+bash<span class="w"> </span>./scripts/msrun_launcher.sh<span class="w"> </span><span class="s2">&quot;run_mindformer.py \</span>
+<span class="s2">    --config </span><span class="si">${</span><span class="nv">ROOT_PATH</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">YAML_FILE</span><span class="si">}</span><span class="s2"> \</span>
+<span class="s2">    --run_mode train \</span>
+<span class="s2">    --use_parallel True&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="m">8</span><span class="w"> </span><span class="m">8</span><span class="w"> </span>&lt;machine_ip&gt;<span class="w"> </span><span class="m">8118</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>output/msrun<span class="w"> </span>False<span class="w"> </span><span class="m">300</span>
+</pre></div>
+</div>
+<p>训练完毕后执行命令<code class="docutils literal notranslate"><span class="pre">cat</span> <span class="pre">output/msrun/worker_0.log</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">'Set</span> <span class="pre">op_swap</span> <span class="pre">at</span> <span class="pre">layer'</span></code>查看选择特定层的特定算子使能SWAP策略的执行情况：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>-INFO - Set op_swap at layer 0: .attention, value=20
+-INFO - Set op_swap at layer 1: .attention, value=20, .feed_forward, value=15
+-INFO - Set op_swap at layer 2: .attention, value=20, .feed_forward, value=15
+-INFO - Set op_swap at layer 3: .attention, value=10
+</pre></div>
+</div>
+<p>选择特定层的特定算子使能SWAP成功。</p>
+</section>
+<section id="id16">
+<h4>示例四：细粒度激活值SWAP与重计算混用<a class="headerlink" href="#id16" title="Link to this heading"></a></h4>
+<p>在YAML中修改补充重计算与SWAP配置，主要配置参数如下：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">context</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">memory_optimize_level</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;O0&quot;</span>
+<span class="nt">model</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">model_config</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">num_layers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">    </span><span class="nt">cpu_offloading</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">    </span><span class="nt">op_swap</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">op_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;attention&#39;</span>
+<span class="w">        </span><span class="nt">backward_prefetch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span>
+<span class="w">        </span><span class="nt">layers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="nv">1</span><span class="p p-Indicator">,</span><span class="nv">2</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">op_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;attention&#39;</span>
+<span class="w">        </span><span class="nt">backward_prefetch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="w">        </span><span class="nt">layers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">3</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">op_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;feed_forward&#39;</span>
+<span class="w">        </span><span class="nt">backward_prefetch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">15</span>
+<span class="w">        </span><span class="nt">layers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1</span><span class="p p-Indicator">,</span><span class="nv">2</span><span class="p p-Indicator">]</span>
+<span class="nt">recompute_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">recompute</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">select_recompute</span><span class="p">:</span>
+<span class="w">    </span><span class="s">&#39;feed_forward&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="nv">3</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">select_comm_recompute</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+</pre></div>
+</div>
+<p>执行以下脚本启动单机八卡训练，启动脚本所在路径为MindSpore Transformers代码根目录，执行脚本需用户指定YAML文件路径（其中，machine_ip需要填写本地环境IP）：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">GLOG_v</span><span class="o">=</span><span class="m">1</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MS_MEMORY_STATISTIC</span><span class="o">=</span><span class="m">1</span>
+<span class="nv">YAML_FILE</span><span class="o">=</span><span class="nv">$1</span><span class="w"> </span><span class="c1"># 用户指定YAML文件路径</span>
+<span class="nv">ROOT_PATH</span><span class="o">=</span><span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>
+
+bash<span class="w"> </span>./scripts/msrun_launcher.sh<span class="w"> </span><span class="s2">&quot;run_mindformer.py \</span>
+<span class="s2">    --config </span><span class="si">${</span><span class="nv">ROOT_PATH</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">YAML_FILE</span><span class="si">}</span><span class="s2"> \</span>
+<span class="s2">    --run_mode train \</span>
+<span class="s2">    --use_parallel True&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="m">8</span><span class="w"> </span><span class="m">8</span><span class="w"> </span>&lt;machine_ip&gt;<span class="w"> </span><span class="m">8118</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>output/msrun<span class="w"> </span>False<span class="w"> </span><span class="m">300</span>
+</pre></div>
+</div>
+<p>训练完毕后执行命令<code class="docutils literal notranslate"><span class="pre">cat</span> <span class="pre">output/msrun/worker_0.log</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">'Set</span> <span class="pre">op_swap</span> <span class="pre">at</span> <span class="pre">layer'</span> <span class="pre">-C</span> <span class="pre">1</span></code>查看细粒度激活值SWAP与重计算混用的执行情况：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>-INFO - Set select recompute at layer 0: feed_forward
+-INFO - Set op_swap at layer 0: .attention, value=20
+-INFO - Set op_swap at layer 1: .attention, value=20, .feed_forward, value=15
+-INFO - Set op_swap at layer 2: .attention, value=20, .feed_forward, value=15
+-INFO - Set select recompute at layer 3: feed_forward
+-INFO - Set op_swap at layer 3: .attention, value=10
+</pre></div>
+</div>
+<p>细粒度激活值SWAP与重计算混用成功。</p>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="high_availability.html" class="btn btn-neutral float-left" title="训练高可用" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="skip_data_and_ckpt_health_monitor.html" class="btn btn-neutral float-right" title="数据跳过和健康监测" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

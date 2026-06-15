@@ -1,0 +1,559 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MindSpore Transformers贡献指南 &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="魔乐社区贡献指南" href="modelers_contribution.html" />
+    <link rel="prev" title="环境变量说明" href="../env_variables.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">介绍</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/quick_start.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/models.html">模型支持库</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">安装</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">安装指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">功能特性</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../feature/overview.html">功能特性概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/start_task.html">启动任务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/configuration.html">配置文件说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/logging.html">日志</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/dataset.html">数据集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/training_hyperparameters.html">训练超参数与优化器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/save_and_load_checkpoint.html">权重保存与加载</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/resume_training.html">断点续训</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/monitor.html">训练指标监控与 Profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/static_graph_features.html">静态图实现特性</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">环境变量</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">环境变量说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">贡献指南</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">MindSpore Transformers贡献指南</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">贡献代码至MindSpore Transformers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">代码风格要求</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fork-pull">Fork-Pull 开发模型指导</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">文件及代码格式</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id4">文件格式及位置</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pr">提交PR的要求</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#commit">只有一个commit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">PR描述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">门禁要求</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id7">测试用例贡献</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id8">组织形式</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id9">目录结构</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id10">基本规范</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id11">执行示例</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id12">用例示例</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modelers_contribution.html">魔乐社区贡献指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../faq/model_related.html">模型相关 FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/feature_related.html">功能相关 FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">静态图实现（Deprecated）</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/guide/index.html">大模型全流程指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/feature/index.html">功能特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/advanced_development/index.html">高阶开发</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/example/index.html">优秀实践</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/env_variables.html">环境变量说明</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">MindSpore Transformers贡献指南</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/contribution/mindformers_contribution.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="mindspore-transformers">
+<h1>MindSpore Transformers贡献指南<a class="headerlink" href="#mindspore-transformers" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/contribution/mindformers_contribution.md"><img alt="查看源文件" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source.svg" /></a></p>
+<section id="id1">
+<h2>贡献代码至MindSpore Transformers<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<section id="id2">
+<h3>代码风格要求<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<p>请遵循此风格，以便MindSpore Transformers审查、维护和开发。</p>
+<ul>
+<li><p>编码指南</p>
+<p>MindSpore Transformers社区使用<code class="docutils literal notranslate"><span class="pre">Python</span> <span class="pre">PEP</span> <span class="pre">8</span></code> 编码风格。建议在IDE中安装以下插件，用于检查代码格式：<code class="docutils literal notranslate"><span class="pre">Lizard</span></code>、<code class="docutils literal notranslate"><span class="pre">ShellCheck</span></code> 和<code class="docutils literal notranslate"><span class="pre">PyLint</span></code>。</p>
+</li>
+<li><p>单元测试指南</p>
+<p>MindSpore Transformers社区使用Python单元测试框架pytest。注释名称需反映测试用例的设计意图。</p>
+</li>
+<li><p>重构指南</p>
+<p>我们鼓励开发人员重构代码，以消除代码坏味道。所有代码都要符合编码风格和测试风格，重构代码也不例外。无注释的代码行（nloc）的Lizard阈值为100，圈复杂度（ccn）的阈值为20。当收到Lizard警告时，必须重构要合并的代码。</p>
+</li>
+<li><p>文档指南</p>
+<p>我们使用MarkdownLint来检查Markdown文档格式。基于默认配置修改了以下规则：</p>
+<ol class="arabic simple">
+<li><p>MD009（行尾空格）：参数br_spaces设置为2，表示行尾可以有0或2个空格。</p></li>
+<li><p>MD029（有序列表的序列号）：参数style设置为ordered，表示升序。</p></li>
+</ol>
+</li>
+</ul>
+</section>
+<section id="fork-pull">
+<h3>Fork-Pull 开发模型指导<a class="headerlink" href="#fork-pull" title="Link to this heading"></a></h3>
+<ul>
+<li><p>Fork MindSpore Transformers代码仓</p>
+<p>在提交代码至MindSpore Transformers项目之前，请确保已fork此项目到您自己的代码仓。MindSpore Transformers代码仓和您自己的代码仓之间可能会并行开发，请注意保持它们之间的一致性。</p>
+</li>
+<li><p>克隆远程代码仓</p>
+<p>如果您想将代码下载到本地计算机，最好使用git方法。</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># 在AtomGit上克隆仓库</span>
+git<span class="w"> </span>clone<span class="w"> </span>https://atomgit.com/<span class="o">(</span>insert_your_forked_repo<span class="o">)</span>/mindformers.git
+</pre></div>
+</div>
+</li>
+<li><p>本地开发代码</p>
+<p><code class="docutils literal notranslate"><span class="pre">master</span></code>为开发分支，请从<code class="docutils literal notranslate"><span class="pre">master</span></code>分支拉取最新代码进行开发。在提交Pull Request时，请提交到<code class="docutils literal notranslate"><span class="pre">master</span></code>分支。</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span><span class="o">{</span>新分支名称<span class="o">}</span><span class="w"> </span>origin/master
+</pre></div>
+</div>
+</li>
+<li><p>提交PR到MindSpore Transformers代码仓</p>
+<p>在最后一步中，您需要在新分支和<code class="docutils literal notranslate"><span class="pre">MindSpore</span> <span class="pre">Transformers</span></code>主分支之间创建Pull Request。完成Pull Request后，<code class="docutils literal notranslate"><span class="pre">Jenkins</span> <span class="pre">CI</span></code>将自动进行构建测试。PR应该尽快合并到上游master分支中，以降低合并风险。</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># 添加所有更改到暂存区</span>
+git<span class="w"> </span>add<span class="w"> </span>.
+
+<span class="c1"># 查看更新状态</span>
+git<span class="w"> </span>status
+
+<span class="c1"># 提交更改，使用-m选项添加commit标题</span>
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;你的commit标题&quot;</span>
+
+<span class="c1"># 添加commit的具体描述，使用-s选项添加签名，`--amend`选项修改最近一次提交</span>
+git<span class="w"> </span>commit<span class="w"> </span>-s<span class="w"> </span>--amend
+
+<span class="c1"># 推送更改到远程仓库的新分支</span>
+git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span><span class="o">{</span>新分支名称<span class="o">}</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="id3">
+<h3>文件及代码格式<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p>若希望将自定义模型合入<code class="docutils literal notranslate"><span class="pre">MindSpore</span> <span class="pre">Transformers</span></code>代码仓库，需要注意以下几点：</p>
+<ol class="arabic simple">
+<li><p>文件格式及位置要遵循规范。</p></li>
+<li><p>将新模型在代码中进行注册，以适配高阶接口使用。</p></li>
+</ol>
+<section id="id4">
+<h4>文件格式及位置<a class="headerlink" href="#id4" title="Link to this heading"></a></h4>
+<ol class="arabic">
+<li><p>模型代码文件统一放置于<code class="docutils literal notranslate"><span class="pre">research/{model_name}</span></code>文件夹下，格式如下：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>research/{model_name}
+├── {model_name}
+| ├── {pretrain/finetune/predict}_{model_name}_{n}b.yaml
+| ├── convert_weight.py # Torch权重转MindSpore权重脚本（迁移模型需提供）
+| ├── convert_reversed.py # MindSpore权重转Torch权重脚本（迁移模型需提供）
+| ├── run_{model_name}.py # 运行代码文件
+| ├── {model_name}.py   # Model类代码文件
+| └── {model_name}_tokenizer.py # Tokenizer代码文件
+</pre></div>
+</div>
+</li>
+<li><p>模型文档放置于同一<code class="docutils literal notranslate"><span class="pre">research/{model_name}</span></code>文件夹下。</p></li>
+</ol>
+</section>
+</section>
+</section>
+<section id="pr">
+<h2>提交PR的要求<a class="headerlink" href="#pr" title="Link to this heading"></a></h2>
+<section id="commit">
+<h3>只有一个commit<a class="headerlink" href="#commit" title="Link to this heading"></a></h3>
+<p>对于多commit的PR，请使用<code class="docutils literal notranslate"><span class="pre">squash</span></code>命令将多个commit合并为一个。
+例如使用：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>rebase<span class="w"> </span>-i<span class="w"> </span>HEAD~3
+</pre></div>
+</div>
+<p>可以看到:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pick<span class="w"> </span><span class="m">1234567</span><span class="w"> </span>添加新功能A
+pick<span class="w"> </span>89abcdef<span class="w"> </span>修复了功能A中的bug
+pick<span class="w"> </span><span class="m">01234567</span><span class="w"> </span>对功能A进行了一些优化
+</pre></div>
+</div>
+<p>squash合并commit（可简化为 s, p, f 等简写）</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pick<span class="w"> </span><span class="m">1234567</span><span class="w"> </span>添加新功能A
+squash<span class="w"> </span>89abcdef<span class="w"> </span>修复了功能A中的bug
+squash<span class="w"> </span><span class="m">01234567</span><span class="w"> </span>对功能A进行了一些优化
+</pre></div>
+</div>
+</section>
+<section id="id5">
+<h3>PR描述<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<p>请使用以下md模板：</p>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="gu">### 相关的Issue</span>
+
+<span class="gu">### 原因（目的、解决的问题等）</span>
+
+<span class="gu">### 描述（做了什么，变更了什么）</span>
+
+<span class="gu">### check list</span>
+
+<span class="gu">#### 是否完成方案评审或问题根因分析（Y/N）</span>
+
+<span class="gu">#### 是否完成了功能模块的UT/ST，并执行通过，附上结果（Y/N）</span>
+
+<span class="gu">#### 是否涉及公共组件或对外接口修改，涉及时需给出修改范围和影响评估（Y/N）</span>
+
+<span class="gu">#### 是否涉及资料修改，涉及时需同步修改（Y/N）</span>
+</pre></div>
+</div>
+</section>
+<section id="id6">
+<h3>门禁要求<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p>提交PR需要<a class="reference external" href="https://www.mindspore.cn/icla">签署CLA</a>。</p></li>
+<li><p>提交PR需要通过CI门禁检查。门禁失败修改代码后，需要在评论下评论<code class="docutils literal notranslate"><span class="pre">/retest</span></code>手动重启门禁检查。</p></li>
+</ol>
+</section>
+</section>
+<section id="id7">
+<h2>测试用例贡献<a class="headerlink" href="#id7" title="Link to this heading"></a></h2>
+<section id="id8">
+<h3>组织形式<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
+<section id="id9">
+<h4>目录结构<a class="headerlink" href="#id9" title="Link to this heading"></a></h4>
+<div class="highlight-ColdFusion notranslate"><div class="highlight"><pre><span></span>    tests/  
+    ├── st/                        # 系统测试：验证多组件协同的端到端流程  
+    │   ├── test_auto_register/        # 测试自定义模型/算子自动注册  
+    │   ├── test_ckpt_health_monitor/  # 测试模型权重完整性检查  
+    │   ├── test_docs/                 # 测试文档示例代码可运行性  
+    │   ├── test_grace_exit_save_ckpt/ # 测试训练中断时权重保存  
+    │   ├── test_infer/                # 测试单卡/多卡/离线推理流程  
+    │   ├── test_model/                # 测试模型多设备运行一致性  
+    │   ├── test_multi_cards_cases/    # 测试多卡分布式训练/推理  
+    │   ├── test_optim/                # 测试优化器/学习率/混合精度  
+    │   ├── test_resume/               # 测试训练断点恢复功能  
+    │   ├── test_safetensors/          # 测试Safetensors权重加载/保存  
+    ├── utils/                     # 测试工具库：数据生成、设备检测等  
+    ├── conftest.py                # pytest全局配置：环境检查、初始化
+</pre></div>
+</div>
+</section>
+<section id="id10">
+<h4>基本规范<a class="headerlink" href="#id10" title="Link to this heading"></a></h4>
+<ol class="arabic simple">
+<li><p>测试用例mark规则：</p>
+<ul class="simple">
+<li><p>npu用例：<code class="docutils literal notranslate"><span class="pre">&#64;pytest.mark.platform_arm_ascend910b_training</span></code></p></li>
+<li><p>cpu用例：<code class="docutils literal notranslate"><span class="pre">&#64;pytest.mark.platform_x86_cpu</span></code></p></li>
+<li><p>单卡用例：<code class="docutils literal notranslate"><span class="pre">&#64;pytest.mark.env_onecard</span></code></p></li>
+<li><p>多卡用例（默认八卡）：<code class="docutils literal notranslate"><span class="pre">&#64;pytest.mark.platform_env_single</span></code></p></li>
+</ul>
+</li>
+<li><p>测试用例开发规范：</p>
+<ul class="simple">
+<li><p>测试用例在用例文件目录下生成缓存文件</p></li>
+<li><p>所有测试用例在方法（包括类方法）上方添加执行规则相关mark，不能在类上方添加</p></li>
+<li><p>测试文件以test_开头，类以Test开头，方法以test开头</p></li>
+</ul>
+</li>
+<li><p>用例级别规范：</p>
+<ul class="simple">
+<li><p>level0：组合接口用例（仅并行接口归类至该级别）</p></li>
+<li><p>level1：整网功能用例、并行计算接口的单卡用例、原子接口用例</p></li>
+</ul>
+</li>
+</ol>
+</section>
+</section>
+<section id="id11">
+<h3>执行示例<a class="headerlink" href="#id11" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p>安装依赖</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip3<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</pre></div>
+</div>
+</li>
+<li><p>单个测试文件执行</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>test/st
+pytest<span class="w"> </span>test_demo.py
+</pre></div>
+</div>
+</li>
+<li><p>按标记筛选执行</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 可通过-m参数筛选指定标记的用例</span>
+<span class="c1"># 执行所有npu单卡用例</span>
+pytest<span class="w"> </span>test_demo.py<span class="w"> </span>-v<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;platform_arm_ascend910b_training and env_onecard&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p>指定单个测试方法执行</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 执行npu单卡训练用例</span>
+pytest<span class="w"> </span>test_demo.py::TestMyModelTrainPredict::test_train_ascend_single_card<span class="w"> </span>-v
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="id12">
+<h3>用例示例<a class="headerlink" href="#id12" title="Link to this heading"></a></h3>
+<p>以下为符合规范的tests/st/test_demo.py完整实现，覆盖 Ascend 单卡训练、Ascend 多卡推理核心场景：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">mindspore</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ms</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mindspore</span><span class="w"> </span><span class="kn">import</span> <span class="n">nn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mindspore.dataset</span><span class="w"> </span><span class="kn">import</span> <span class="n">GeneratorDataset</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mindformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Trainer</span><span class="p">,</span> <span class="n">TrainingArguments</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mindformers.core.optim</span><span class="w"> </span><span class="kn">import</span> <span class="n">AdamW</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mindformers.tools.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mindformers.models.llama</span><span class="w"> </span><span class="kn">import</span> <span class="n">LlamaForCausalLM</span><span class="p">,</span> <span class="n">LlamaConfig</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mindformers.trainer.optimizer_grouped_parameters</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">get_optimizer_grouped_parameters</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<span class="c1"># 命名规范：测试文件以test_开头，类以Test开头，格式为Test+模型名+核心功能</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">TestSimpleCPUModel</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Cell</span><span class="p">):</span>
+     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">fc1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">relu</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">()</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">fc2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+     <span class="k">def</span><span class="w"> </span><span class="nf">construct</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+         <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fc1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+         <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+         <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fc2</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+         <span class="k">return</span> <span class="n">x</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TestMyModelTrainPredict</span><span class="p">:</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setup_class</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;类级初始化：初始化模型/训练配置&quot;&quot;&quot;</span>
+        <span class="n">ms</span><span class="o">.</span><span class="n">set_device</span><span class="p">(</span><span class="s2">&quot;Ascend&quot;</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">num_layers</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">seq_length</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">vocab_size</span> <span class="o">=</span> <span class="mi">32000</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">step_num</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="bp">cls</span><span class="o">.</span><span class="n">model_config</span> <span class="o">=</span> <span class="n">LlamaConfig</span><span class="p">(</span>
+            <span class="n">num_layers</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">num_layers</span><span class="p">,</span>
+            <span class="n">seq_length</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">seq_length</span><span class="p">,</span>
+            <span class="n">use_flash_attention</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">train_args</span> <span class="o">=</span> <span class="n">TrainingArguments</span><span class="p">(</span>
+            <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_train_epochs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sink_mode</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">loss_scale_value</span><span class="o">=</span><span class="mi">1024</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">gen_dummy_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;生成测试用虚拟数据集&quot;&quot;&quot;</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">step_num</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_args</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model_config</span><span class="o">.</span><span class="n">seq_length</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">input_ids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vocab_size</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">int32</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">input_id</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">input_ids</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="n">input_id</span>
+
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">level1</span>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">platform_x86_cpu</span>  
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">env_onecard</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_train_x86_cpu_single_card</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Feature: mindformers模型训练</span>
+<span class="sd">        Description: 测试X86架构CPU单卡模型训练与推理功能</span>
+<span class="sd">        Expectation: 执行成功</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">gen_data</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+                <span class="n">label</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+                <span class="k">yield</span> <span class="n">data</span><span class="p">,</span> <span class="n">label</span>
+
+        <span class="n">dataset</span> <span class="o">=</span> <span class="n">GeneratorDataset</span><span class="p">(</span><span class="n">gen_data</span><span class="p">,</span> <span class="n">column_names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">])</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">batch</span><span class="p">(</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">net</span> <span class="o">=</span> <span class="n">TestSimpleCPUModel</span><span class="p">()</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">SoftmaxCrossEntropyWithLogits</span><span class="p">(</span><span class="n">sparse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">)</span>
+        <span class="n">optim</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">trainable_params</span><span class="p">(),</span> <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">ms</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">loss_fn</span><span class="o">=</span><span class="n">loss</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">optim</span><span class="p">)</span>
+
+        <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">epoch</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">train_dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">dataset_sink_mode</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">test_input</span> <span class="o">=</span> <span class="n">ms</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">))</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">net</span><span class="p">(</span><span class="n">test_input</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">net</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">assert</span> <span class="n">output</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;X86 CPU single card training test passed!&quot;</span><span class="p">)</span>
+
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">level0</span>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">platform_arm_ascend910b_training</span>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">env_onecard</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_train_ascend_single_card</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Feature: mindformers模型训练</span>
+<span class="sd">        Description: 测试Atlas800T A2单卡Llama模型训练功能</span>
+<span class="sd">        Expectation: 执行成功</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="n">GeneratorDataset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gen_dummy_data</span><span class="p">,</span> <span class="n">column_names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">])</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">batch</span><span class="p">(</span><span class="n">batch_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">train_args</span><span class="o">.</span><span class="n">batch_size</span><span class="p">)</span>
+
+        <span class="n">model</span> <span class="o">=</span> <span class="n">LlamaForCausalLM</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model_config</span><span class="p">)</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">construct</span> <span class="o">=</span> <span class="n">ms</span><span class="o">.</span><span class="n">jit</span><span class="p">(</span><span class="n">jit_level</span><span class="o">=</span><span class="s2">&quot;O1&quot;</span><span class="p">)(</span><span class="n">model</span><span class="o">.</span><span class="n">construct</span><span class="p">)</span>
+        <span class="n">group_params</span> <span class="o">=</span> <span class="n">get_optimizer_grouped_parameters</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
+        <span class="n">optimizer</span> <span class="o">=</span> <span class="n">AdamW</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">group_params</span><span class="p">)</span>
+
+        <span class="n">trainer</span> <span class="o">=</span> <span class="n">Trainer</span><span class="p">(</span>
+            <span class="n">task</span><span class="o">=</span><span class="s2">&quot;text_generation&quot;</span><span class="p">,</span>
+            <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+            <span class="n">args</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">train_args</span><span class="p">,</span>
+            <span class="n">train_dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span>
+            <span class="n">optimizers</span><span class="o">=</span><span class="n">optimizer</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">trainer</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">callbacks</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">callbacks</span><span class="p">[:</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">train_result</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">train_result</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">train_result</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;loss&quot;</span><span class="p">:</span><span class="mf">0.0</span><span class="p">}</span>
+
+        <span class="k">assert</span> <span class="n">model</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;Model initialization failed after training&quot;</span>
+        <span class="k">assert</span> <span class="n">train_result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;Training returned no result&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Ascend single card training test passed!&quot;</span><span class="p">)</span>
+
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">level1</span>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">platform_arm_ascend910b_training</span>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">env_single</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_predict_ascend_multi_card</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Feature: mindformers模型推理</span>
+<span class="sd">        Description: 测试Atlas800T A2多卡Llama模型推理功能</span>
+<span class="sd">        Expectation: 执行成功</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">LlamaForCausalLM</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model_config</span><span class="p">)</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate</span><span class="p">([</span><span class="mi">1</span><span class="p">],</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">do_sample</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">output</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;Inference output is empty&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Ascend multi card inference test passed!&quot;</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># 本地调试执行：默认 NPU 单卡测试用例</span>
+    <span class="n">pytest</span><span class="o">.</span><span class="n">main</span><span class="p">([</span><span class="s2">&quot;-v&quot;</span><span class="p">,</span> <span class="vm">__file__</span><span class="p">,</span> <span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="s2">&quot;platform_arm_ascend910b_training and env_onecard&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../env_variables.html" class="btn btn-neutral float-left" title="环境变量说明" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="modelers_contribution.html" class="btn btn-neutral float-right" title="魔乐社区贡献指南" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

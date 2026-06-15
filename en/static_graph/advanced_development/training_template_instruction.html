@@ -1,0 +1,298 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Training Configuration Template Instruction &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Weight Conversion Development Adaptation" href="weight_transfer.html" />
+    <link rel="prev" title="Comparing the Model Precision with that of Megatron-LM" href="accuracy_comparison.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">Models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contribution Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">Modelers Contribution Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">Model-Related FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">Feature-Related FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Static Graph Implementation (Deprecated)</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Full-process Guide to Large Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/index.html">Features</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Advanced Development</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">Advanced Development Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="precision_optimization.html">Large Model Precision Optimization Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance_optimization.html">Large Model Performance Optimization Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev_migration.html">Development Migration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yaml_config_inference.html">Guide to Using the Inference Configuration Template</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inference_precision_comparison.html">Comparison of Reasoning Precision</a></li>
+<li class="toctree-l2"><a class="reference internal" href="accuracy_comparison.html">Comparing the Model Precision with that of Megatron-LM</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Training Configuration Template Instruction</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#instructions-for-use">Instructions for Use</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#module-description">Module Description</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#basic-configuration-modification">Basic Configuration Modification</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#dataset-configuration-modification">Dataset Configuration Modification</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#model-configuration-modification">Model Configuration Modification</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#advanced-configuration-modification">Advanced Configuration Modification</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Basic Configuration Modification</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#training-parameter-modification">Training Parameter Modification</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#callback-function-configuration-modification">Callback Function Configuration Modification</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#resume-training">Resume Training</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="weight_transfer.html">Weight Conversion Development Adaptation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html">API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">Excellent Practice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">Environment Variable Descriptions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Advanced Development</a></li>
+      <li class="breadcrumb-item active">Training Configuration Template Instruction</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/advanced_development/training_template_instruction.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">Deprecated</p>
+<p>This page belongs to the <strong>Static Graph (GRAPH_MODE) Implementation</strong> section and has been marked as deprecated. New features are primarily being developed in the “r2.0.0 Dynamic Graph Implementation” section. Please refer to the dynamic graph documentation first.</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="training-configuration-template-instruction">
+<h1>Training Configuration Template Instruction<a class="headerlink" href="#training-configuration-template-instruction" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_en/static_graph/advanced_development/training_template_instruction.md"><img alt="View Source on AtomGit" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source_en.svg" /></a></p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>MindSpore Transformers provides a universal configuration file template for training, which can be used in two main scenarios:</p>
+<ol class="arabic simple">
+<li><p>User-developed models can be adapted by writing training configurations based on templates.</p></li>
+<li><p>For the existing models of MindSpore Transformers, when users wish to use specific specification models that are not currently configured, they can use configuration templates and combine them with HuggingFace or ModelScope model configurations to initiate training tasks.</p></li>
+</ol>
+<p>MindSpore Transformers provides corresponding configuration templates for different training scenarios, as follows:</p>
+<p>When pre-training DENSE model, please use <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/configs/general/llm_pretrain_dense_template.yaml">llm_pretrain_dense_template.yaml</a>.</p>
+<p>When pre-training MOE model, please use <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/configs/general/llm_pretrain_moe_template.yaml">llm_pretrain_moe_template.yaml</a>.</p>
+<p>When fine-tuning DENSE model training, please use <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/configs/general/llm_finetune_dense_template.yaml">llm_finetune_dense_template.yaml</a>.</p>
+<p>When fine-tuning MOE model training, please use <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/configs/general/llm_finetune_moe_template.yaml">llm_finetune_moe_template.yaml</a>.</p>
+</section>
+<section id="instructions-for-use">
+<h2>Instructions for Use<a class="headerlink" href="#instructions-for-use" title="Link to this heading"></a></h2>
+<section id="module-description">
+<h3>Module Description<a class="headerlink" href="#module-description" title="Link to this heading"></a></h3>
+<p>The template mainly covers the configuration of the following nine functional modules, and detailed parameter configuration instructions can be referred to <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/configuration.html">Profile Description</a>.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Module Name</p></th>
+<th class="head"><p>Module Usage</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Basic Configuration</p></td>
+<td><p>The basic configuration is mainly used to specify MindSpore random seeds and related settings for loading weights.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Dataset Configuration</p></td>
+<td><p>Dataset configuration is mainly used for dataset-related settings during MindSpore model training. For details, please refer to the <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/dataset.html">Dataset</a>.</p></td>
+</tr>
+<tr class="row-even"><td><p>Model Configuration</p></td>
+<td><p>There are differences in the configuration parameters of different models, and the parameters in the template are universal configurations.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Model Optimization Configuration</p></td>
+<td><p>MindSpore Transformers provides configuration related to recalculation to reduce the memory usage of the model during training. For details, please refer to <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/advanced_development/performance_optimization.html#recomputation">Recalculation</a>.</p></td>
+</tr>
+<tr class="row-even"><td><p>Model Training Configuration</p></td>
+<td><p>When starting model training, the configuration module for relevant parameters is mainly included in the template, which includes parameters for the required training modules such as trainer, runner_config, runner_wrapper, learning rate (lr_schedule), and optimizer.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Parallel Configuration</p></td>
+<td><p>In order to improve the performance of the model, it is usually necessary to configure parallel strategies for the model in large-scale cluster usage scenarios. For details, please refer to <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/parallel_training.html">Distributed Parallel</a>.</p></td>
+</tr>
+<tr class="row-even"><td><p>Callback Function Configuration</p></td>
+<td><p>MindSpore Transformers provides encapsulated callbacks function classes, which mainly implement operations such as returning the training state of the model and outputting, saving the model weight file, etc. during the model training process. Currently, the following callback function classes are supported. <br> 1.MFLossMonitor <br> This callback function class is mainly used to print information such as training progress, model loss, and learning rate during the training process. <br> 2.SummaryMonitor <br> This callback function class is mainly used to collect Summary data. For details, please refer to <a class="reference external" href="https://www.mindspore.cn/docs/en/master/api_python/mindspore/mindspore.SummaryCollector.html">mindspore.SummaryCollector</a>. <br> 3.CheckpointMonitor<br>This callback function class is mainly used to save the model weight file during the model training process.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Context configuration</p></td>
+<td><p>Context configuration is mainly used to specify the related parameters in <a class="reference external" href="https://www.mindspore.cn/docs/en/master/api_python/mindspore/mindspore.set_context.html">mindspore.set_context</a>.</p></td>
+</tr>
+<tr class="row-even"><td><p>Performance Analysis Tool Configuration</p></td>
+<td><p>MindSpore Transformers provides Profile as the main tool for model performance tuning. For details, please refer to the <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/advanced_development/performance_optimization.html">Performance Tuning Guide</a>.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="basic-configuration-modification">
+<h2>Basic Configuration Modification<a class="headerlink" href="#basic-configuration-modification" title="Link to this heading"></a></h2>
+<p>When using a configuration template for training, modify the following basic configurations to quickly start.</p>
+<p>The default configuration template uses 8 cards.</p>
+<section id="dataset-configuration-modification">
+<h3>Dataset Configuration Modification<a class="headerlink" href="#dataset-configuration-modification" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p>The pre-training scenario uses the Megatron dataset. For details, please refer to the <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/dataset.html#megatron-dataset">Megatron Dataset</a>.</p></li>
+<li><p>Fine-tune the scenario using the HuggingFace dataset. Please refer to <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/dataset.html#hugging-face-dataset">HuggingFace dataset</a> for details.</p></li>
+</ol>
+</section>
+<section id="model-configuration-modification">
+<h3>Model Configuration Modification<a class="headerlink" href="#model-configuration-modification" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p>When modifying the model configuration, you can choose to download the HuggingFace model and directly modify the pretrained-model-dir in the YAML configuration to read the model configuration (this feature does not currently support pretraining). During model training, a tokenizer and model_config will be automatically generated, and the model list is supported:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Model Name</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Deepseek3</p></td>
+</tr>
+<tr class="row-odd"><td><p>Qwen3</p></td>
+</tr>
+<tr class="row-even"><td><p>Qwen2_5</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>The generated model configuration shall be based on the YAML configuration first, and if no parameters are configured, the parameters in the config.json file under the pretrained-model-dir path shall be taken as the values. If you want to modify the custom model configuration, you only need to add the relevant configuration in model_config.</p></li>
+<li><p>For general configuration details, please refer to <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/configuration.html#basic-configuration">Model Configuration</a>.</p></li>
+</ol>
+</section>
+</section>
+<section id="advanced-configuration-modification">
+<h2>Advanced Configuration Modification<a class="headerlink" href="#advanced-configuration-modification" title="Link to this heading"></a></h2>
+<p>Further modifications can be made in the following way to customize the training.</p>
+<section id="id1">
+<h3>Basic Configuration Modification<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<p>When conducting pre-training, the generated weight format can be modified through load_ckpt_format, which supports safetensors and ckpt. It is recommended to use safetensors. The path for generating logs, weights, and policy files during the training process can be specified through output_dir.</p>
+</section>
+<section id="training-parameter-modification">
+<h3>Training Parameter Modification<a class="headerlink" href="#training-parameter-modification" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p>Configuration modifications related to recompute_config, optimizer, and lr_schedule can affect the accuracy of model training results.</p></li>
+<li><p>If insufficient memory occurs, preventing the model from starting training, we can consider enabling recomputation to reduce the model memory usage during training.</p></li>
+<li><p>By modifying the learning rate configuration, the learning effect during model training can be achieved.</p></li>
+<li><p>Modifying optimizer configuration can modify the gradient during model training.</p></li>
+<li><p>Configurations related to parallel (model parallelism) and context can affect the performance of model training.</p></li>
+<li><p>During model training, the performance can be improved by enabling use_parallel=True, and the expected performance can be achieved by debugging and configuring parallel strategies. Please refer to <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/configuration.html#parallel-configuration">Parallel Configuration</a> for detailed parameter configuration.</p></li>
+<li><p>For specific configurations, refer to <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/configuration.html#model-training-configuration">Model Training Configuration</a>.</p></li>
+</ol>
+</section>
+<section id="callback-function-configuration-modification">
+<h3>Callback Function Configuration Modification<a class="headerlink" href="#callback-function-configuration-modification" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p>The template provides callback functions related to saving weights: save_checkpoint_steps can modify the interval for saving weights; keep_checkpoint_max can set the maximum number of weights to be saved, effectively controlling the disk space for weight saving.</p></li>
+<li><p>Please refer to <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/configuration.html#callbacks-configuration">callback function configuration</a> for other callback function applications.</p></li>
+</ol>
+</section>
+<section id="resume-training">
+<h3>Resume Training<a class="headerlink" href="#resume-training" title="Link to this heading"></a></h3>
+<p>When performing resumable training after breakpoint, it is necessary to modify the load_checkpoint to the weight directory saved in the previous training task based on the YAML configuration file used in the previous training, that is, the checkpoint directory under the directory specified by the output_dir parameter, and set the resume_training to True. For details, please refer to <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/resume_training.html">Resume training</a>.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="accuracy_comparison.html" class="btn btn-neutral float-left" title="Comparing the Model Precision with that of Megatron-LM" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="weight_transfer.html" class="btn btn-neutral float-right" title="Weight Conversion Development Adaptation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

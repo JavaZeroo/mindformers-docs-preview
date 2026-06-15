@@ -1,0 +1,912 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>大模型精度调优指南 &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="大模型性能调优指南" href="performance_optimization.html" />
+    <link rel="prev" title="高阶开发概述" href="overview.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">介绍</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/quick_start.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">模型支持库</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">安装</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">安装指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">功能特性</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/overview.html">功能特性概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/start_task.html">启动任务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/configuration.html">配置文件说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/logging.html">日志</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/dataset.html">数据集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/training_hyperparameters.html">训练超参数与优化器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/save_and_load_checkpoint.html">权重保存与加载</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/resume_training.html">断点续训</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/monitor.html">训练指标监控与 Profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feature/static_graph_features.html">静态图实现特性</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">环境变量</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../env_variables.html">环境变量说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">贡献指南</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers贡献指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">魔乐社区贡献指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">模型相关 FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">功能相关 FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">静态图实现（Deprecated）</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">大模型全流程指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/index.html">功能特性</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">高阶开发</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">高阶开发概述</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">大模型精度调优指南</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">精度问题概述和场景</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id3">描述</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">常见问题归类总结</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#checklist">精度问题定位CheckList</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id5">网络结构CheckList</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id7">优化器CheckList</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id8">权重CheckList</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id9">混合精度CheckList</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id10">并行策略CheckList</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id11">其他CheckList</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id12">精度调试工具介绍</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id13">其他介绍</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id14">模型迁移精度定位通用流程</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id15">阶段1：训练前准备</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id19">阶段2：基础问题排查</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id21">阶段3：长稳训练排查</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id26">大模型迁移精度标准</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id30">案例详解</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="performance_optimization.html">大模型性能调优指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev_migration.html">开发迁移</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yaml_config_inference.html">推理配置模板使用指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inference_precision_comparison.html">推理精度比对</a></li>
+<li class="toctree-l2"><a class="reference internal" href="accuracy_comparison.html">与 Megatron-LM 比对训练精度</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training_template_instruction.html">训练配置模板使用说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="weight_transfer.html">权重转换开发适配</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html">API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">优秀实践</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">环境变量说明</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">高阶开发</a></li>
+      <li class="breadcrumb-item active">大模型精度调优指南</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/advanced_development/precision_optimization.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">已废弃（Deprecated）</p>
+<p>本页属于 <strong>静态图（GRAPH_MODE）实现</strong> 章节，已标记为废弃。新特性优先在「r2.0.0 动态图实现」章节演进，请优先查阅动态图相关文档。</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>大模型精度调优指南<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/static_graph/advanced_development/precision_optimization.md"><img alt="查看源文件" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source.svg" /></a></p>
+<section id="id2">
+<h2>精度问题概述和场景<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<section id="id3">
+<h3>描述<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p>随着昇腾AI处理器（以下简称为NPU）在深度学习中的广泛应用，基于昇腾NPU原生开发的MindSpore框架展现出了更好的性能优势。在大规模集群训练过程中，性能的提升将极大节省用户进行大模型开发的成本。因此，越来越多的用户逐渐将原本训练模型迁移至MindSpore中。然而，由于硬件以及框架使用上的差异，用户在完成模型迁移后可能会遇到精度问题。</p>
+<p>本文总结了大模型训练过程中常见精度问题及通用的精度问题定位方法，力求帮助用户快速排查精度问题，缩短模型精度问题定位的时间。开始大模型精度调优工作时，应具备大模型的基础知识。为避免发散，本文档将不会解释大模型相关基础概念，聚焦精度调优介绍。</p>
+</section>
+<section id="id4">
+<h3>常见问题归类总结<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p>大模型训练中经常出现各种精度问题，常见的问题包括loss无法收敛、loss收敛效果不佳、训练后期loss不收敛、精度溢出、loss下降过程中与标杆无法拟合等；造成这些精度问题可能有多种原因，包括模型结构、数据集、超参数、前反向计算精度、优化器计算、浮点计算精度、随机性等。</p>
+<p>当出现精度问题时，可以从造成这些精度误差的原因进行问题分析。先根据CheckList快速排查，然后对齐参数和权重、固定随机性和开启确定性计算，接着排查基础问题，最后通过长稳训练排查异常Step的问题。在当前阶段，本文主要针对有精度标杆的场景，介绍精度定位的通用方法，后续将陆续添加无精度标杆下的精度问题定位内容。</p>
+</section>
+</section>
+<section id="checklist">
+<h2>精度问题定位CheckList<a class="headerlink" href="#checklist" title="Link to this heading"></a></h2>
+<p>在定位算子精度问题之前，首先要排除其他非算子因素的干扰。结合以往精度定位案例，总结了精度定位前的CheckList。为了在定位过程中少走弯路，用户可先根据CheckList进行快速的排查。</p>
+<section id="id5">
+<h3>网络结构CheckList<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<section id="id6">
+<h4>通用结构<a class="headerlink" href="#id6" title="Link to this heading"></a></h4>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>关键参数</strong>                  </p></th>
+<th class="head"><p><strong>说明</strong></p></th>
+<th class="head"><p><strong>检查项</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>num_layers</p></td>
+<td><p>transformer层数</p></td>
+<td><p>检查标杆的对应参数是否一致。</p></td>
+</tr>
+<tr class="row-odd"><td><p>num_heads</p></td>
+<td><p>transformer中attention heads数量</p></td>
+<td><p>检查标杆的对应参数是否一致。</p></td>
+</tr>
+<tr class="row-even"><td><p>hidden_size</p></td>
+<td><p>transformer隐藏层大小</p></td>
+<td><p>检查标杆的对应参数是否一致。</p></td>
+</tr>
+<tr class="row-odd"><td><p>intermediate_size</p></td>
+<td><p>Feed-Forward Network的隐藏层大小</p></td>
+<td><p>检查标杆的对应参数是否一致。</p></td>
+</tr>
+<tr class="row-even"><td><p>n_kv_heads</p></td>
+<td><p>kv分组数</p></td>
+<td><p>检查标杆的对应参数是否一致。</p></td>
+</tr>
+<tr class="row-odd"><td><p>正则化函数</p></td>
+<td><p>正则化函数，常见结构有LayerNorm、RMSNorm</p></td>
+<td><p>MindSpore Transformers中使用指定的正则化函数，Legacy模型无法通过配置修改。</p></td>
+</tr>
+<tr class="row-even"><td><p>rms_norm_eps</p></td>
+<td><p>正则化的epsilon参数</p></td>
+<td><p>检查标杆的对应参数是否一致。</p></td>
+</tr>
+<tr class="row-odd"><td><p>dropout</p></td>
+<td><p>网络中的dropout</p></td>
+<td><p>当前MindSpore开启dropout时，不能开重计算；若进行精度比对，建议两边都关闭，减少随机因素。</p></td>
+</tr>
+<tr class="row-even"><td><p>融合计算</p></td>
+<td><p>常见的融合算子包括FA、ROPE、Norm、SwiGLU；部分用户会将Wq、Wk、Wv进行融合计算</p></td>
+<td><p>1. 同硬件下进行精度比对时，若有使用融合算子，需要保持一致。 <br>2. 不同硬件下进行精度比对时，重点检查融合计算部分是否有计算差异。</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="moe">
+<h4>MOE结构<a class="headerlink" href="#moe" title="Link to this heading"></a></h4>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>关键参数</strong>                                  </p></th>
+<th class="head"><p><strong>说明</strong></p></th>
+<th class="head"><p><strong>检查项</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>expert_num</p></td>
+<td><p>专家数量</p></td>
+<td><p>对应Megatron的num-experts，检查是否一致。</p></td>
+</tr>
+<tr class="row-odd"><td><p>num_experts_chosen</p></td>
+<td><p>每个token选择的专家数目</p></td>
+<td><p>对应Megatron的moe-router-topk，检查是否一致。</p></td>
+</tr>
+<tr class="row-even"><td><p>capacity_factor</p></td>
+<td><p>专家容量系数</p></td>
+<td><p>对应Megatron的moe_expert_capacity_factor参数，检查是否一致。</p></td>
+</tr>
+<tr class="row-odd"><td><p>aux_loss_factor</p></td>
+<td><p>负载均衡loss贡献因子</p></td>
+<td><p>开启时，建议小于0.05。若进行精度对齐，不建议开启，否则会与Megatron的loss打印方式不一致。</p></td>
+</tr>
+<tr class="row-even"><td><p>enable_sdrop</p></td>
+<td><p>是否开启sdrop（drop实现）方式</p></td>
+<td><p>建议设置成true，对应Megatron需要设置如下参数：<br>  <code class="docutils literal notranslate"><span class="pre">moe-token-drop-policy:</span> <span class="pre">position</span></code> <br>  <code class="docutils literal notranslate"><span class="pre">moe-pad-expert-input-to-capacity:</span> <span class="pre">True</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>router_dense_type</p></td>
+<td><p>决定专家的dense层</p></td>
+<td><p>MindSpore Transformers中可配置，建议使用FP32计算，防止溢出；Megatron中不可配置。</p></td>
+</tr>
+<tr class="row-even"><td><p>use_fused_ops_topkrouter</p></td>
+<td><p>是否使用融合算子进行dispatch以及combine的索引计算</p></td>
+<td><p>MindSpore Transformers中融合算子只有在设置<code class="docutils literal notranslate"><span class="pre">enable_sdrop=True</span></code>时才生效，精度对齐建议设置成True。</p></td>
+</tr>
+<tr class="row-odd"><td><p>use_shared_expert_gating</p></td>
+<td><p>共享专家网络中是否使用gating系数</p></td>
+<td><p>检查网络的共享专家是否使用gating系数，如果有，设置成True。</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="id7">
+<h3>优化器CheckList<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>关键参数</strong></p></th>
+<th class="head"><p><strong>说明</strong></p></th>
+<th class="head"><p><strong>检查项</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>adam优化器</p></td>
+<td><p>优化器类型</p></td>
+<td><p>若Megatron使用adam优化器，MindSpore Transformers的数学等价实现为AdamW。</p></td>
+</tr>
+<tr class="row-odd"><td><p>eps</p></td>
+<td><p>adam优化器极小值参数</p></td>
+<td><p>检查参数是否一致，推荐值1e-8。</p></td>
+</tr>
+<tr class="row-even"><td><p>beta1</p></td>
+<td><p>adam优化器梯度动量参数</p></td>
+<td><p>检查参数是否一致，推荐值0.9。</p></td>
+</tr>
+<tr class="row-odd"><td><p>beta2</p></td>
+<td><p>adam优化器梯度方差参数</p></td>
+<td><p>检查参数是否一致，推荐值0.95。</p></td>
+</tr>
+<tr class="row-even"><td><p>weight_decay</p></td>
+<td><p>权重衰减</p></td>
+<td><p>默认情况下bias及一维权重不进行衰减，检查用户是否有特殊操作。</p></td>
+</tr>
+<tr class="row-odd"><td><p>lr</p></td>
+<td><p>学习率</p></td>
+<td><p>在设置了warmup、学习率衰减后，画图查看学习率变化是否一致。</p></td>
+</tr>
+<tr class="row-even"><td><p>lr_warmup_fraction</p></td>
+<td><p>学习率预热步数占比</p></td>
+<td><p>在设置了warmup、学习率衰减后，画图查看学习率变化是否一致。</p></td>
+</tr>
+<tr class="row-odd"><td><p>clip_grad</p></td>
+<td><p>修剪梯度</p></td>
+<td><p>检查参数是否一致，推荐值1.0。</p></td>
+</tr>
+<tr class="row-even"><td><p>global_batch_size</p></td>
+<td><p>全局批大小</p></td>
+<td><p>检查参数是否一致，可以通过训练过程中的打印日志检查。</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id8">
+<h3>权重CheckList<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>关键参数</strong></p></th>
+<th class="head"><p><strong>说明</strong></p></th>
+<th class="head"><p><strong>检查项</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>params_dtype</p></td>
+<td><p>权重初始化类型</p></td>
+<td><p>MindSpore Transformers通常会设置params_dtype类型为FP32，这是因为梯度通信类型是跟权重类型一致，控制通信类型为FP32。而Megatron的梯度通信类型默认为FP32，不与权重类型绑定。</p></td>
+</tr>
+<tr class="row-odd"><td><p>init-method-std</p></td>
+<td><p>权重随机初始化的分布</p></td>
+<td><p>若使用权重随机初始化，需要检查随机分布中的mean/std等参数是否一致。</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id9">
+<h3>混合精度CheckList<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>关键参数</strong>                            </p></th>
+<th class="head"><p><strong>说明</strong></p></th>
+<th class="head"><p><strong>检查项</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>compute_dtype</p></td>
+<td><p>计算精度</p></td>
+<td><p>Megatron 设置 <code class="docutils literal notranslate"><span class="pre">--bf16:</span> <span class="pre">true</span></code> 则为BF16，否则为FP16。</p></td>
+</tr>
+<tr class="row-odd"><td><p>layernorm_compute_type</p></td>
+<td><p>LayerNorm/RMSNorm的计算精度</p></td>
+<td><p>Megatron不可配置，需要检查实现是否保持一致。</p></td>
+</tr>
+<tr class="row-even"><td><p>softmax_compute_type</p></td>
+<td><p>MindSpore使用FA时，内部Softmax固定用FA计算，仅在小算子拼接实现时可配置计算类型。</p></td>
+<td><p>Megatron不可配置，需要检查实现是否保持一致。</p></td>
+</tr>
+<tr class="row-odd"><td><p>rotary_dtype</p></td>
+<td><p>旋转位置编码的计算精度</p></td>
+<td><p>Megatron不可配置，需要检查实现是否保持一致。</p></td>
+</tr>
+<tr class="row-even"><td><p>各权重计算</p></td>
+<td><p>Embedding、lm_head等各权重精度计算</p></td>
+<td><p>由于MindSpore Transformers权重初始化需要设置为FP32，而通常计算精度为BF16/FP16，需要确认权重计算前，是否将权重数据类型转为BF16/FP16。</p></td>
+</tr>
+<tr class="row-odd"><td><p>bias add</p></td>
+<td><p>线性层的bias</p></td>
+<td><p>线性层若有bias，检查add的计算精度是否一致。</p></td>
+</tr>
+<tr class="row-even"><td><p>residual add</p></td>
+<td><p>残差相加</p></td>
+<td><p>检查残差的计算精度是否与标杆一致。</p></td>
+</tr>
+<tr class="row-odd"><td><p>loss</p></td>
+<td><p>loss计算模块</p></td>
+<td><p>检查整个loss模块的计算精度是否与标杆一致。</p></td>
+</tr>
+<tr class="row-even"><td><p>算子高精度模式</p></td>
+<td><p>昇腾算子支持高精度模式</p></td>
+<td><p>开启方式： 在启动脚本中添加代码<code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">mindspore</span> <span class="pre">as</span> <span class="pre">ms;ms.device_context.ascend.op_precision.precision_mode(&quot;force_fp32&quot;)</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id10">
+<h3>并行策略CheckList<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>关键参数</strong></p></th>
+<th class="head"><p><strong>说明</strong></p></th>
+<th class="head"><p><strong>检查项</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>data_parallel</p></td>
+<td><p>数据并行</p></td>
+<td><p>并行切分会影响通信行为，切分后引入通信的计算跟单卡计算可能会有细微差异。</p></td>
+</tr>
+<tr class="row-odd"><td><p>model_parallel</p></td>
+<td><p>模型并行</p></td>
+<td><p>并行切分会影响通信行为，切分后引入通信的计算跟单卡计算可能会有细微差异。</p></td>
+</tr>
+<tr class="row-even"><td><p>pipeline_stage</p></td>
+<td><p>流水并行</p></td>
+<td><p>并行切分会影响通信行为，切分后引入通信的计算跟单卡计算可能会有细微差异。</p></td>
+</tr>
+<tr class="row-odd"><td><p>use_seq_parallel</p></td>
+<td><p>对应Megatron短序列并行</p></td>
+<td><p>并行切分会影响通信行为，切分后引入通信的计算跟单卡计算可能会有细微差异。</p></td>
+</tr>
+<tr class="row-even"><td><p>enable_parallel_optimizer</p></td>
+<td><p>优化器并行</p></td>
+<td><p>优化器并行MindSpore与PyTorch两个框架的实现方案不同，通信行为不一致。进行精度对齐时，建议关闭。</p></td>
+</tr>
+<tr class="row-odd"><td><p>micro_batch_interleave_num</p></td>
+<td><p>多副本并行</p></td>
+<td><p>优化器并行MindSpore与PyTorch两个框架的实现方案不同，进行精度对齐时，建议关闭。</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id11">
+<h3>其他CheckList<a class="headerlink" href="#id11" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>关键点</strong></p></th>
+<th class="head"><p><strong>检查项</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>数据检查</p></td>
+<td><p>查看数据是否异常，可随机抽取部分数据进行decode、encode检查，查看input与label的位置是否正确对应。</p></td>
+</tr>
+<tr class="row-odd"><td><p>特殊词检查</p></td>
+<td><p>检查bos_token_id、eos_token_id、pad_token_id等特殊ids是否与数据制作时的ids保持一致。</p></td>
+</tr>
+<tr class="row-even"><td><p>inputs_id校验</p></td>
+<td><p>检查Embedding中的inputs_id是否符合0&lt;=inputs_id&lt;vocab_size；若有越界行为，会取脏数据，导致精度异常。</p></td>
+</tr>
+<tr class="row-odd"><td><p>溢出检测</p></td>
+<td><p>溢出状态对齐PyTorch方式，建议使用INFNAN_MODE，即<code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">MS_ASCEND_CHECK_OVERFLOW_MODE=INFNAN_MODE</span></code>。</p></td>
+</tr>
+<tr class="row-even"><td><p>图算融合</p></td>
+<td><p>关闭图算融合，即<code class="docutils literal notranslate"><span class="pre">enable_graph_kernel:</span> <span class="pre">False</span></code>。</p></td>
+</tr>
+<tr class="row-odd"><td><p>训推模板一致</p></td>
+<td><p>若进行SFT训练，需要确认训练推理时使用的输入模板一致。</p></td>
+</tr>
+<tr class="row-even"><td><p>版本检查</p></td>
+<td><p>检查MindSpore、MindSpore Transformers、CANN版本是否配套，建议使用<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/installation.html#%E7%A1%AE%E8%AE%A4%E7%89%88%E6%9C%AC%E5%8C%B9%E9%85%8D%E5%85%B3%E7%B3%BB">最新的配套版本</a>。</p></td>
+</tr>
+<tr class="row-odd"><td><p>与开源差异</p></td>
+<td><p>MindSpore Transformers中已支持主流的开源LLM模型，也经过了较为充分的测试。如果用户基于MindSpore Transformers中开源模型进行开发，可以重点排查与MindSpore Transformers开源模型的差异。</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="id12">
+<h2>精度调试工具介绍<a class="headerlink" href="#id12" title="Link to this heading"></a></h2>
+<p>精度定位中，主要使用MindSpore的Dump工具，详细介绍参考<a class="reference external" href="https://www.mindspore.cn/tutorials/zh-CN/master/debug/dump.html">Dump功能调试</a>。</p>
+<p>MindSpore的Dump工具通过配置JSON文件进行使能，该方式Dump出网络中的所有算子数据，保存tensor及统计信息的statistic.csv表格。以下给出全量算子Dump的JSON示例：</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;common_dump_settings&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;op_debug_mode&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;dump_mode&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/absolute_path&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;net_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Qwen3&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;iteration&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;0|5-8|100-120&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;saved_data&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tensor&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;input_output&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;kernels&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;Default&quot;</span><span class="p">],</span>
+<span class="w">        </span><span class="nt">&quot;support_device&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">]</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;e2e_dump_settings&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;enable&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;trans_flag&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>配置参数的字段含义参考<a class="reference external" href="https://www.mindspore.cn/tutorials/zh-CN/master/debug/dump.html">Dump功能调试</a>。</p>
+<p>配置好JSON文件后，设置Dump环境变量指向配置的JSON文件，需要设置绝对路径：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">MINDSPORE_DUMP_CONFIG</span><span class="o">=</span><span class="si">${</span><span class="nv">JSON_PATH</span><span class="si">}</span>
+</pre></div>
+</div>
+<p>设置环境变量后，启动程序训练，即可获取相应的Dump数据。</p>
+<section id="id13">
+<h3>其他介绍<a class="headerlink" href="#id13" title="Link to this heading"></a></h3>
+<p>除了上述介绍的全量算子Dump，工具还支持部分数据Dump、溢出Dump、指定条件Dump等。限于篇幅，感兴趣的用户可以参考<a class="reference external" href="https://www.mindspore.cn/tutorials/zh-CN/master/debug/dump.html">Dump功能调试</a>进行配置使用。此外，还提供了msprobe精度调试工具。msprobe是 MindStudio Training Tools 工具链下精度调试部分的工具包，主要包括精度预检、溢出检测和精度比对等功能，详细请参考<a class="reference external" href="https://atomgit.com/Ascend/mstt/tree/master/debug/accuracy_tools/msprobe">msprobe使用手册</a>。</p>
+<p>需要特别注意的是，开启<strong>确定性计算</strong>和使用<strong>Dump</strong>功能时，模型训练的<strong>性能</strong>会明显下降。这可能导致训练步长变大、运行速度变慢，这是正常现象。</p>
+</section>
+</section>
+<section id="id14">
+<h2>模型迁移精度定位通用流程<a class="headerlink" href="#id14" title="Link to this heading"></a></h2>
+<p>通过章节<a class="reference internal" href="#checklist">精度问题定位CheckList</a>进行快速的排查。若完成CheckList的检查后，精度问题依然存在且无明显指向时，可通过本章节的精度定位通用流程缩小问题范围，进行下一步排查。当前通用流程主要针对有标杆的场景，下文将以 GPU+PyTorch 与 Ascend+MindSpore 精度对比的场景为例，对精度定位流程进行介绍。</p>
+<p>问题定位的主要思路有两点：</p>
+<ul class="simple">
+<li><p>简化训练的场景，基于单卡/单机、小规模模型复现问题。</p></li>
+<li><p>固定随机因素，对比训练过程中与标杆的loss差异，定位出产生精度差异的原因。</p></li>
+</ul>
+<p>模型的训练过程可以分解为如下过程：数据输入、前向计算、loss、反向计算、梯度、优化器权重更新、下一个step。下面将结合如下图的流程，介绍如何对训练各阶段进行排查。</p>
+<p><img alt="general_process" src="../../_images/general_process.png" /></p>
+<section id="id15">
+<h3>阶段1：训练前准备<a class="headerlink" href="#id15" title="Link to this heading"></a></h3>
+<p>对比 GPU+PyTorch 与 Ascend+MindSpore 精度，需要简化场景及固定随机性，再进行问题的复现。主要有如下三个部分：</p>
+<ul class="simple">
+<li><p>对齐参数，缩小模型规模，单卡/单机复现问题；</p></li>
+<li><p>加载相同的权重训练；</p></li>
+<li><p>每个step训练相同的数据。</p></li>
+</ul>
+<section id="id16">
+<h4>参数对齐<a class="headerlink" href="#id16" title="Link to this heading"></a></h4>
+<p>在参数对齐环节，以下参数需注意检查，保证PyTorch与MindSpore参数一致。参数设置说明：</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>参数</p></th>
+<th class="head"><p>参数建议</p></th>
+<th class="head"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>num_layers</p></td>
+<td><p>2</p></td>
+<td><p>缩小模型规模，方便快速验证在仅有数据并行情况下单卡可运行。</p></td>
+</tr>
+<tr class="row-odd"><td><p>learning_rate_type</p></td>
+<td><p>常量</p></td>
+<td><p>固定学习率，保证与标杆学习率一致。</p></td>
+</tr>
+<tr class="row-even"><td><p>warmup_steps</p></td>
+<td><p>0</p></td>
+<td><p>warmup的步数。</p></td>
+</tr>
+<tr class="row-odd"><td><p>adam_eps</p></td>
+<td><p>1e-8</p></td>
+<td><p>用户若无特殊要求，按照默认值设置。</p></td>
+</tr>
+<tr class="row-even"><td><p>dropout</p></td>
+<td><p>0</p></td>
+<td><p>关闭随机性参数，如有其他随机性参数均关闭。</p></td>
+</tr>
+</tbody>
+</table>
+<p>由于模型并行、流水并行、序列并行、优化器并行等特性会增加精度对齐难度，建议先关闭，对齐后再逐步增加并行特性。</p>
+</section>
+<section id="id17">
+<h4>权重转换<a class="headerlink" href="#id17" title="Link to this heading"></a></h4>
+<p>训练过程中，MindSpore与PyTorch加载同一份权重。若是预训练场景，可以使用PyTorch保存一个初始化权重后，转换为MindSpore权重。因为MindSpore的权重名称与PyTorch有差异，权重转换的本质是将PyTorch权重dict中的名字改为MindSpore权重名字，以支持MindSpore加载。权重转换参考<a class="reference external" href="https://www.mindspore.cn/mindformers/docs/zh-CN/master/static_graph/feature/ckpt.html#%E6%9D%83%E9%87%8D%E6%A0%BC%E5%BC%8F%E8%BD%AC%E6%8D%A2">权重转换指导</a>。</p>
+<p>MindSpore与PyTorch均支持<code class="docutils literal notranslate"><span class="pre">bin</span></code>格式数据，加载相同的数据集进行训练，保证每个step一致。</p>
+</section>
+<section id="id18">
+<h4>固定随机性，开启确定性计算<a class="headerlink" href="#id18" title="Link to this heading"></a></h4>
+<p>训练过程中固定随机性，开启确定性计算，方式如下：</p>
+<ul>
+<li><p>NPU添加如下环境变量：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">HCCL_DETERMINISTIC</span><span class="o">=</span><span class="nb">true</span><span class="w">  </span><span class="c1"># HCCL确定性</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">ASCEND_LAUNCH_BLOCKING</span><span class="o">=</span><span class="m">1</span><span class="w">  </span><span class="c1"># 硬件确定性</span>
+</pre></div>
+</div>
+</li>
+<li><p>PyTorch代码，在<a class="reference external" href="https://github.com/NVIDIA/Megatron-LM/blob/main/pretrain_gpt.py">pretrain_gpt.py</a>中，新增seed_all方法，并在main方法中调用，添加方法如下：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">seed_all</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">):</span>
+    <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;PYTHONHASHSEED&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">use_deterministic_algorithms</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">manual_seed_all</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">cudnn</span><span class="o">.</span><span class="n">deterministic</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">cudnn</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">cudnn</span><span class="o">.</span><span class="n">benchmark</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">seed_all</span><span class="p">()</span>
+
+    <span class="c1"># 原始代码</span>
+</pre></div>
+</div>
+</li>
+<li><p>MindSpore代码，在<a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/run_mindformer.py">run_mindformer.py</a>中，新增seed_all方法，并在main方法中调用，添加方法如下：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">mindspore</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">seed_all</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">):</span>
+    <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;PYTHONHASHSEED&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">mindspore</span><span class="o">.</span><span class="n">set_deterministic</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
+    <span class="n">seed_all</span><span class="p">()</span>
+
+    <span class="c1"># 原始代码</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p>完成上面的准备工作后，启动单卡训练。若问题未复现，则拓展场景，如添加相关特性、扩大模型规模等，直至问题复现，从而定位到问题原因。若问题复现，或者需要复现的时间比较久，则可以开启阶段2的问题定位。</p>
+</section>
+</section>
+<section id="id19">
+<h3>阶段2：基础问题排查<a class="headerlink" href="#id19" title="Link to this heading"></a></h3>
+<p>通过对比第一个step（step1）和第二个step（step2）的loss及local norm，依次排查前向计算、反向计算、优化器计算。</p>
+<section id="step1loss">
+<h4>step1的loss对比<a class="headerlink" href="#step1loss" title="Link to this heading"></a></h4>
+<p>在固定权重、数据集、随机性后，对比训练第一个step的loss值差异。第一个step的loss值由网络的前向计算获得，若与标杆loss的差异较大，则可判定前向计算存在精度差异，这可能是模型结构未对齐、算子精度异常导致。可通过打印或者Dump工具获取MindSpore及PyTorch每层的tensor值，初步通过max、min、L2Norm统计量信息，判断两边数据输入输出的差异程度。若需要进一步的对比，可以加载相应的真实数据进行详细比对。</p>
+<p>在静态图模式下，建议采用“由粗到细”的分层定位策略，通过从模块级到算子级的分层递进式排查，提升精度问题的定位效率：</p>
+<ol class="arabic simple">
+<li><p>L0 级别数据采集：先对整体或模块级输出进行数据 Dump，并利用工具的自动比对功能，定位差异较大的模块；</p></li>
+<li><p>L2 级别精细 Dump：在初步定位的基础上，针对模块内部可疑算子进行细粒度数据采集，进一步排查具体算子的精度偏差。</p></li>
+</ol>
+<p>当前，msprobe 精度分析工具提供了分级的数据采集与比对能力，可有效支持此类问题的定位。相关操作可参考以下文档：</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://atomgit.com/Ascend/mstt/blob/master/debug/accuracy_tools/msprobe/docs/zh/dump/mindspore_data_dump_instruct.md">msprobe 工具 MindSpore场景精度数据采集指南</a></p></li>
+<li><p><a class="reference external" href="https://atomgit.com/Ascend/mstt/blob/master/debug/accuracy_tools/msprobe/docs/zh/dump/pytorch_data_dump_instruct.md">msprobe 工具 PyTorch场景精度数据采集指南</a></p></li>
+<li><p><a class="reference external" href="https://atomgit.com/Ascend/mstt/blob/master/debug/accuracy_tools/msprobe/docs/zh/accuracy_compare/mindspore_accuracy_compare_instruct.md">MindSpore 场景的精度比对</a></p></li>
+</ul>
+</section>
+<section id="step1local-norm">
+<h4>step1的local norm值对比<a class="headerlink" href="#step1local-norm" title="Link to this heading"></a></h4>
+<p>local norm反映的某个权重切片在该设备上的梯度平方和，与标杆对比local norm值，可以初步评估反向计算的差异。计算公式如下：</p>
+<div class="math notranslate nohighlight">
+\[
+localnorm = \sqrt{x_1^2 + x_2^2 + \cdots + x_n^2}
+\]</div>
+<p>其中 <span class="math notranslate nohighlight">\(x_1 ， x_2， \cdots， x_n\)</span> 为某一个权重的梯度。MindSpore Transformers中支持通过yaml配置打印local norm，配置方式如下所示：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># wrapper cell config</span>
+<span class="nt">runner_wrapper</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MFTrainOneStepCell</span>
+<span class="w">  </span><span class="nt">local_norm</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">scale_sense</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">loss_scale_value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">65536</span>
+<span class="w">  </span><span class="nt">use_clip_grad</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+</div>
+<p>Megatron中无配置打印local的入参，需要嵌入式修改文件<a class="reference external" href="https://github.com/NVIDIA/Megatron-LM/blob/main/megatron/core/optimizer/optimizer.py">megatron/core/optimizer/optimizer.py</a>：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">megatron.training</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_args</span><span class="p">,</span> <span class="n">print_rank_0</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">get_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">grad_norm_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">param_group</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">param_groups</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">param_group</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">]:</span>
+            <span class="n">grad_norm</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">grad</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">grad_norm_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">grad_norm</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
+    <span class="c1"># 嵌入式修改</span>
+    <span class="n">print_rank_0</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;print torch local norm:&quot;</span><span class="p">)</span>
+    <span class="n">print_rank_0</span><span class="p">(</span><span class="n">grad_norm_list</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">params</span>
+</pre></div>
+</div>
+<p>下图是local norm对比的示例，对比权重对应的local norm值。</p>
+<p><img alt="local norm" src="../../_images/local_norm.png" /></p>
+<p>可发现在该图示的场景下，model.tok_embeddings.embedding_weight的local norm值差异较大，可重点排查Embedding的实现及计算精度等。</p>
+<p>Local norm值仅作为反向计算是否正确的初步判断，若要深入对比反向计算，需要通过Dump工具逐层对比MindSpore及PyTorch反向计算值。</p>
+</section>
+<section id="id20">
+<h4>优化器计算排查<a class="headerlink" href="#id20" title="Link to this heading"></a></h4>
+<p>在step1的loss和local norm对齐的情况下，若step2的loss差异较大，则需要进一步排查优化器计算。具体步骤如下：</p>
+<ol class="arabic simple">
+<li><p>首先排查影响梯度更新的参数，如检查learning rate、优化器参数、weight decay等是否与标杆一致。</p></li>
+<li><p>其次排查优化器计算，步骤如下：</p>
+<ol class="arabic simple">
+<li><p>保存PyTorch step1的梯度。</p></li>
+<li><p>在MindSpore step1加载PyTorch的梯度进行优化器更新。</p></li>
+<li><p>对比更新后的权重差异或step2的loss值差异。</p></li>
+</ol>
+</li>
+</ol>
+<p>若有显著差异，则说明优化器更新存在问题，需要进一步针对优化器进行定位。</p>
+<p>PyTorch保存权重梯度，以使用apex为例，修改<a class="reference external" href="https://github.com/NVIDIA/Megatron-LM/blob/main/megatron/core/optimizer/optimizer.py">megatron/core/optimizer/optimizer.py</a>文件：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">get_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">grad_id</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">param_group</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">param_groups</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">param_group</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">]:</span>
+            <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
+            <span class="n">grad_id</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="c1"># 嵌入式修改，将torch的梯度保存为numpy</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;xx/grad_</span><span class="si">{</span><span class="n">grad_id</span><span class="si">}</span><span class="s2">.npy&quot;</span><span class="p">,</span> <span class="n">param</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">params</span>
+</pre></div>
+</div>
+<p>MindSpore Transformers加载梯度参考<a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/mindformers/wrapper/wrapper.py">mindformers/wrapper/wrapper.py</a>实现。注意，需要用户自行找到MindSpore Transformers与PyTorch梯度的对应关系，参考如下修改代码：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MFTrainOneStepCell</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">TrainOneStepWithLossScaleCell</span><span class="p">):</span>
+    <span class="o">...</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># 嵌入式修改，加载torch的权重</span>
+        <span class="n">grad_0</span> <span class="o">=</span> <span class="n">Tensor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;xxx/grad_1.npy&quot;</span><span class="p">))</span>
+        <span class="n">grad_1</span> <span class="o">=</span> <span class="n">Tensor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;xxx/grad_x.npy&quot;</span><span class="p">))</span>
+        <span class="o">...</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grads</span> <span class="o">=</span> <span class="p">[</span><span class="n">grad_0</span><span class="p">,</span> <span class="n">grad_1</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">construct</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">inputs</span><span class="p">):</span>
+        <span class="o">...</span>
+        <span class="c1"># 嵌入式修改，将梯度强制替换为torch梯度</span>
+        <span class="n">grads</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grads</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_clip_grad</span><span class="p">:</span>
+            <span class="n">grads</span><span class="p">,</span> <span class="n">global_norm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clip_grad_norm</span><span class="p">(</span><span class="n">grads</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>以上代码，仅为实现参考，需要根据实际情况进行代码修改。</p>
+<p>若排查出优化器计算不存在问题，同时step2的loss差异较大，则需要通过Dump方式重新详细对比step1的反向计算。</p>
+</section>
+</section>
+<section id="id21">
+<h3>阶段3：长稳训练排查<a class="headerlink" href="#id21" title="Link to this heading"></a></h3>
+<p>经过上述操作对齐step1和step2的loss及local norm，排查前向计算、反向计算、优化器更新后，启动长稳训练，对比每个step的loss。</p>
+<section id="id22">
+<h4>权重不更新实验<a class="headerlink" href="#id22" title="Link to this heading"></a></h4>
+<p>设置learning rate = 0，即权重不更新，训练1千step，对比loss值及global norm的差异。在当前阶段，由于数据较多，详细对比每个step每个权重的local norm工作量大，因此通过对比global norm来判断反向计算误差，是一种简单的快速验证反向计算的方式。若有某个step loss或norm的值差异较大，则单独使用该数据分析前向及反向。注意，global norm在Megatron打印的字段为grad norm。</p>
+</section>
+<section id="id23">
+<h4>标杆误差确认<a class="headerlink" href="#id23" title="Link to this heading"></a></h4>
+<p>在进行权重更新的训练前，需要先确认标杆误差，即关闭确定性计算，重复跑两次标杆训练，查看标杆自身的误差，以此判断误差是否合理。由于硬件或底层调用算子的差异，训练的计算过程会不可避免地存在一定的误差。MindSpore与标杆模型进行loss对比时，若误差在标杆误差范围内，且误差围绕0轴上下波动，则可以认为误差合理。</p>
+</section>
+<section id="loss">
+<h4>loss发散<a class="headerlink" href="#loss" title="Link to this heading"></a></h4>
+<p>设置learning rate &gt; 0，权重更新，进行长稳测试。训练至某个step出现loss差异较大的现象，之后训练loss开始发散，如图所示：</p>
+<p><img alt="loss1" src="../../_images/loss1.png" /></p>
+<p>在该场景下，可针对突变前后的训练进行排查，可尝试如下排查方式：</p>
+<ul class="simple">
+<li><p>检查loss突变附近的数据情况，排查是否有异常数据。通过tokenizer将数据decode为文字，查看数据是否异常；同时可尝试跳过这批数据进行训练，验证是否由数据导致。</p></li>
+<li><p>检查在突变附近是否有精度溢出情况。</p></li>
+<li><p>可以查看local norm是否有异常，检查Dump突变step的训练数据，排查计算的突变点，分析是否有算子异常输出。</p></li>
+</ul>
+</section>
+<section id="id24">
+<h4>loss后期差异较大<a class="headerlink" href="#id24" title="Link to this heading"></a></h4>
+<p>长稳测试中，还可能出现训练前期拟合较好，后期收敛loss出现较大差异，如图所示：</p>
+<p><img alt="loss2" src="../../_images/loss2.png" /></p>
+<p>在该场景下，可从如下角度进行排查：</p>
+<ul class="simple">
+<li><p>排查参数是否对齐：重点排查与优化器相关的参数，如优化器类型、learning rate、weight decay等。可通过画图对比训练过程中的learning rate变化是否一致，另外需要确认进行weight decay的权重是否与标杆一致。</p></li>
+<li><p>混合精度排查：通过Dump工具，细致排查计算过程中混合精度是否与标杆一致。</p></li>
+<li><p>若收敛时loss存在差异，但差异很小，如小于1%，可通过评测下游任务进行精度验收。</p></li>
+</ul>
+</section>
+<section id="id25">
+<h4>场景扩展<a class="headerlink" href="#id25" title="Link to this heading"></a></h4>
+<p>在完成单卡对齐的情况下，逐步由单卡扩展为多卡测试、集群测试，模型规模、相关特性如模型并行以及流水并行、优化器并行等，视情况添加。由简单场景逐步扩展至实际训练的场景，从而排查新增的特性对精度的影响。</p>
+</section>
+</section>
+<section id="id26">
+<h3>大模型迁移精度标准<a class="headerlink" href="#id26" title="Link to this heading"></a></h3>
+<p>大模型迁移精度标准是指，将其他第三方硬件或框架训练完成的模型，迁移至 MindSpore 和昇腾硬件后，为保证迁移前后模型精度基本持平，对关键指标设置的精度标准，该标准根据 MindSpore 大模型实际迁移场景总结形成，供开发者参考。由于大模型的精度与应用领域、模型结构、参数量、超参等强相关，且不具备完全的可解释性，目前没有形成完整统一的强制标准。因此，该标准仅作为参考标准，帮助用户对模型迁移精度做出基本的判断。</p>
+<section id="id27">
+<h4>精度标准规范<a class="headerlink" href="#id27" title="Link to this heading"></a></h4>
+<ol class="arabic simple">
+<li><p>相对误差统一按照百分比（x.x%）形式描述，绝对误差统一按照小数（0.xx）形式描述；</p></li>
+<li><p>如果第三方模型训练的精度波动情况已不符合该精度标准，应对原模型进行充分测试，并按照原模型波动情况放宽标准；</p></li>
+</ol>
+</section>
+<section id="id28">
+<h4>默认配置<a class="headerlink" href="#id28" title="Link to this heading"></a></h4>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>类别</p></th>
+<th class="head"><p>默认值</p></th>
+<th class="head"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>数据集</p></td>
+<td><p>[pretrain] wikitext-103 </br>[sft] alpaca</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>精度模式</p></td>
+<td><p>BF16</p></td>
+<td><p>混合精度配置保持一致，并注意区分网络中各API实际的 FP32/FP16/BF16 配置情况。</p></td>
+</tr>
+<tr class="row-even"><td><p>并行方式</p></td>
+<td><p>数据并行</p></td>
+<td><p>可根据计算资源调整并行方式。</p></td>
+</tr>
+<tr class="row-odd"><td><p>集群规模</p></td>
+<td><p>单机8卡</p></td>
+<td><p>可根据计算资源调整。</p></td>
+</tr>
+<tr class="row-even"><td><p>checkpoint</p></td>
+<td><p>[pretrain] 脚本默认初始化 </br> [sft]加载预训练权重</p></td>
+<td><p>ckpt对精度指标影响较大，优先选择loss波动小，整体loss下降趋势明显的权重。</p></td>
+</tr>
+<tr class="row-odd"><td><p>确定性</p></td>
+<td><p>打开</p></td>
+<td><p>确定精度指标阶段可以关闭确定性。比对阶段需打开确定性，以便减少随机误差干扰。</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id29">
+<h4>精度标准指标<a class="headerlink" href="#id29" title="Link to this heading"></a></h4>
+<ul>
+<li><p>测试标准</p>
+<ol class="arabic simple">
+<li><p>无用户特殊指定下，默认连续观测5000个step或12个小时，可根据资源情况缩减step数，但不建议小于1000个step。</p></li>
+<li><p>加载相同的权重，保持所有超参配置一致，关闭所有随机性。</p></li>
+<li><p>loss等指标的波动受模型、权重、超参的影响较大，优先选择loss波动平稳的组合作为标杆，减少随机波动对精度结果的判断。</p></li>
+<li><p>对第三方模型的随机性进行充分的测试，在关闭确定性的情况下，重复实验至少2次，观察精度指标的波动范围。</p></li>
+</ol>
+</li>
+<li><p>loss 精度标准</p>
+<ol class="arabic simple">
+<li><p>首个loss绝对误差小于 0.005，或相对误差小于 0.5%。</p></li>
+<li><p>平均绝对误差小于 0.01，或平均相对误差小于 1%。</p></li>
+</ol>
+</li>
+<li><p>监控指标</p>
+<p>global norm 平均相对误差不超过 10% 。</p>
+</li>
+</ul>
+</section>
+</section>
+<section id="id30">
+<h3>案例详解<a class="headerlink" href="#id30" title="Link to this heading"></a></h3>
+<p>本节将结合实际案例，介绍基于上述的精度定位流程完成精度排查。</p>
+<section id="id31">
+<h4>问题现象<a class="headerlink" href="#id31" title="Link to this heading"></a></h4>
+<p>在128卡集群下训练模型，使用 Ascend+MindSpore 训练与 GPU+PyTorch 训练进行对比，发现训练后期收敛的loss比 GPU+PyTorch 高0.1左右。如图所示，收敛不符合预期：</p>
+<p><img alt="loss3" src="../../_images/loss3.png" /></p>
+<p>红色线为 Ascend+MindSpore 训练曲线，蓝色线为 GPU+PyTorch 训练曲线。</p>
+</section>
+<section id="id32">
+<h4>问题定位过程<a class="headerlink" href="#id32" title="Link to this heading"></a></h4>
+<p>在定位前，先对照CheckList进行检查，确认无误后启动问题的定位。</p>
+<p>首先step1的loss对齐确认没问题。对比step1的local norm，计算每个权重的local norm值与标杆的差异，发现Embedding权重的local norm值与标杆的差异大。</p>
+<p><img alt="local norm" src="../../_images/local_norm.png" /></p>
+<p>排查原因为MindSpore Transformers使用FP32进行权重初始化，前向计算及反向计算Embedding时均使用FP32精度计算；而PyTorch的前向及反向计算均为BF16，由此导致了计算出来的local norm值存在差异。</p>
+<p>计算精度对齐后，排查优化器计算也没有问题，开始进行长稳训练对齐。</p>
+<p>长稳训练排查将由单卡实验扩展到多卡实验，先设置learning rate=0，即权重不更新。前向计算每个step的loss差异在0.001左右，前向计算误差符合预期。反向计算每个step的global norm差异在0.05左右，反向计算差异不大；初步判断模型迁移代码正确，模型结构一致，前反向计算差异不大。</p>
+<p><img alt="loss4" src="../../_images/loss4.png" /></p>
+<p>再权重更新，单卡训练，设置learning rate=1e-5，训练1千step。收敛后期loss有稳定的0.1的差异，复现问题。</p>
+<p><img alt="loss5" src="../../_images/loss5.png" /></p>
+<p>进行问题排查。识别如下问题：</p>
+<ul class="simple">
+<li><p>通过Dump的文件排查，识别训练过程中存在计算精度不一致的地方，并将不一致的地方统一。</p></li>
+<li><p>Weight decay实现不一致，用户PyTorch网络所有权重均进行weight decay。MindSpore Transformers中bias权重及一维权重默认不进行weight decay。</p></li>
+</ul>
+<p>修复问题后，再次进行实验，训练1万step，loss差异在0轴附近波动，且小于0.03， 精度符合预期，单卡精度对齐。</p>
+<p>完成单卡训练后，启动多卡训练测试：设置learning rate=1e-5，训练1千step。训练后期收敛一致，但训练中期存在稳定的0.05误差。</p>
+<p><img alt="loss6" src="../../_images/loss6.png" /></p>
+<p>为验证该误差在合理范围内，关闭确定性计算，重复跑两次GPU实验。图中红线为MindSpore训练的曲线，蓝色、绿色线分别是第一次、第二次GPU训练的曲线。在7千step左右训练不稳定处，MindSpore训练的曲线正处于两次GPU训练的曲线之间，说明误差处于合理范围内，问题最终解决。</p>
+<p><img alt="loss7" src="../../_images/loss7.png" /></p>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="overview.html" class="btn btn-neutral float-left" title="高阶开发概述" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="performance_optimization.html" class="btn btn-neutral float-right" title="大模型性能调优指南" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

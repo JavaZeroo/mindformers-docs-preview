@@ -1,0 +1,744 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ckpt Weights &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Safetensors Weights" href="safetensors.html" />
+    <link rel="prev" title="Start Tasks" href="start_tasks.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">Models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contribution Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">Modelers Contribution Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">Model-Related FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">Feature-Related FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Static Graph Implementation (Deprecated)</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Full-process Guide to Large Models</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Features</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">Features Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="start_tasks.html">Start Tasks</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Ckpt Weights</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#weight-format-conversion">Weight Format Conversion</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#conversion-procedure">Conversion Procedure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#conversion-example">Conversion Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#supported-models">Supported Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#developing-weight-conversion-for-unsupported-models">Developing Weight Conversion for Unsupported Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#example-of-developing-model-weight-conversion">Example of Developing Model Weight Conversion</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#distributed-weight-slicing-and-merging">Distributed Weight Slicing and Merging</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id2">Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#automatic-conversion">Automatic Conversion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#offline-conversion">Offline Conversion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#special-scenarios">Special Scenarios</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lora-weight-merging">LoRA Weight Merging</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="safetensors.html">Safetensors Weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">Configuration File Descriptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="load_huggingface_config.html">Loading Hugging Face Model Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html">Logs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tokenizer.html">Using Tokenizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset.html">Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training_hyperparameters.html">Training Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monitor.html">Training Metrics Monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training.html">Resumable Training After Breakpoint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoint_saving_and_loading.html">Checkpoint Saving and Loading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training2.0.html">Resume Training2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel_training.html">Distributed Parallelism Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="high_availability.html">Training High Availability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory_optimization.html">Memory Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skip_data_and_ckpt_health_monitor.html">Data Skip And Checkpoint Health Monitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pma_fused_checkpoint.html">Pre-trained Model Average Weight Consolidation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="other_training_features.html">Other Training Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantization.html">Quantization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_development/index.html">Advanced Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">Excellent Practice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">Environment Variable Descriptions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Features</a></li>
+      <li class="breadcrumb-item active">Ckpt Weights</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/feature/ckpt.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">Deprecated</p>
+<p>This page belongs to the <strong>Static Graph (GRAPH_MODE) Implementation</strong> section and has been marked as deprecated. New features are primarily being developed in the “r2.0.0 Dynamic Graph Implementation” section. Please refer to the dynamic graph documentation first.</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="ckpt-weights">
+<h1>Ckpt Weights<a class="headerlink" href="#ckpt-weights" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_en/static_graph/feature/ckpt.md"><img alt="View Source on AtomGit" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source_en.svg" /></a></p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>Ckpt is a common file format used to save model training status in the deep learning framework. It contains model parameters, optimizer status, and training progress. It is used to restore training or fine-tune models. This document describes how MindSpore Transformers supports conversion, slice and merge.</p>
+<blockquote>
+<div><p>The ckpt format is planned to be offline. The safetensors format is recommended for weights. Safetensors is a reliable and portable machine learning model storage format from Huggingface for storing Tensors securely and with fast storage (zero copies). For details, see <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/safetensors.html">Safetensors Weights</a>.</p>
+</div></blockquote>
+</section>
+<section id="weight-format-conversion">
+<h2>Weight Format Conversion<a class="headerlink" href="#weight-format-conversion" title="Link to this heading"></a></h2>
+<section id="id1">
+<h3>Overview<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<p>MindSpore Transformers provides a unified weight conversion tool that allows model weights to be converted between the HuggingFace and MindSpore Transformers formats. This helps you:</p>
+<ul class="simple">
+<li><p>Convert a HuggingFace weight to a MindSpore Transformers one for fine-tuning, evaluation, or inference on MindSpore Transformers.</p></li>
+<li><p>Convert the weights trained or fine-tuned using MindSpore Transformers to HuggingFace weights and use them on other frameworks.</p></li>
+</ul>
+</section>
+<section id="conversion-procedure">
+<h3>Conversion Procedure<a class="headerlink" href="#conversion-procedure" title="Link to this heading"></a></h3>
+<p>To perform weight conversion, clone the complete HuggingFace repository of the model to be converted locally, and execute the <code class="docutils literal notranslate"><span class="pre">mindformers/convert_weight.py</span></code> script. This script automatically converts the HuggingFace model weight file into a weight file applicable to MindSpore Transformers. If you want to convert a MindSpore Transformers weight to a HuggingFace one, set <code class="docutils literal notranslate"><span class="pre">reversed</span></code> to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+<p>The weight conversion script depends on torch. Please execute the following command to install torch before running it:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>torch&gt;<span class="o">=</span><span class="m">2</span>.10.0
+</pre></div>
+</div>
+<p>Then proceed with the weight conversion:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>convert_weight.py<span class="w"> </span><span class="o">[</span>-h<span class="o">]</span><span class="w"> </span>--model<span class="w"> </span>MODEL<span class="w"> </span><span class="o">[</span>--reversed<span class="o">]</span><span class="w"> </span>--input_path<span class="w"> </span>INPUT_PATH<span class="w">  </span>--output_path<span class="w"> </span>OUTPUT_PATH<span class="w"> </span><span class="o">[</span>--dtype<span class="w"> </span>DTYPE<span class="o">]</span><span class="w"> </span><span class="o">[</span>--telechat_type<span class="w"> </span>TELECHAT_TYPE<span class="o">]</span>
+</pre></div>
+</div>
+<section id="parameters">
+<h4>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>model: model name.</p></li>
+<li><p>reversed: converts a MindSpore Transformers weight to the HuggingFace one.</p></li>
+<li><p>input_path: path of the HuggingFace weight folder, which points to the downloaded weight file.</p></li>
+<li><p>output_path: path for storing the MindSpore Transformers weight file after conversion.</p></li>
+<li><p>dtype: weight data type after conversion.</p></li>
+<li><p>telechat_type: version of the TeleChat model. This parameter takes effect only for the TeleChat model.</p></li>
+</ul>
+</section>
+</section>
+<section id="conversion-example">
+<h3>Conversion Example<a class="headerlink" href="#conversion-example" title="Link to this heading"></a></h3>
+<p>Assume that you have downloaded the <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/research/qwen2_5/README.md#%E6%A8%A1%E5%9E%8B%E6%9D%83%E9%87%8D%E4%B8%8B%E8%BD%BD">Qwen2.5 model weight</a> and saved it in the <code class="docutils literal notranslate"><span class="pre">/home/user/torch_weights</span></code> path, to convert it to the MindSpore Transformers weight and save it in the <code class="docutils literal notranslate"><span class="pre">/home/user/ms_weights</span></code> path, run the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>convert_weight.py<span class="w"> </span>--model<span class="w"> </span>qwen2_5<span class="w"> </span>--input_path<span class="w"> </span>/home/user/torch_weights<span class="w"> </span>--output_path<span class="w"> </span>/home/user/ms_weights/qwen2_5.ckpt
+</pre></div>
+</div>
+<p>After the preceding steps are performed, the HuggingFace weight is successfully converted to a MindSpore Transformers weight, facilitating model training or inference on MindSpore Transformers.</p>
+</section>
+<section id="supported-models">
+<h3>Supported Models<a class="headerlink" href="#supported-models" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter Value</p></th>
+<th class="head"><p>Supported models</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>glm-n</p></td>
+<td><p>GLM4</p></td>
+</tr>
+<tr class="row-odd"><td><p>qwen2_5</p></td>
+<td><p>Qwen2.5</p></td>
+</tr>
+<tr class="row-even"><td><p>mixtral</p></td>
+<td><p>Mixtral</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="developing-weight-conversion-for-unsupported-models">
+<h3>Developing Weight Conversion for Unsupported Models<a class="headerlink" href="#developing-weight-conversion-for-unsupported-models" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p>Add the <code class="docutils literal notranslate"><span class="pre">convert_weight.py</span></code> and <code class="docutils literal notranslate"><span class="pre">convert_reversed.py</span></code> files to the extended model directory.</p></li>
+<li><p>Compile the <code class="docutils literal notranslate"><span class="pre">convert_pt_to_ms</span></code> and <code class="docutils literal notranslate"><span class="pre">convert_ms_to_pt</span></code> weight conversion functions in the files. The function parameters are <code class="docutils literal notranslate"><span class="pre">input_path</span></code>, <code class="docutils literal notranslate"><span class="pre">output_path</span></code>, <code class="docutils literal notranslate"><span class="pre">dtype</span></code>, and an additional parameter <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code>.</p></li>
+<li><p>Add the extended model name and conversion function import paths to the <code class="docutils literal notranslate"><span class="pre">convert_map</span></code> and <code class="docutils literal notranslate"><span class="pre">reversed_convert_map</span></code> dictionaries in the <code class="docutils literal notranslate"><span class="pre">convert_weight.py</span></code> file in the MindSpore Transformers code root directory.</p></li>
+<li><p>Call the <code class="docutils literal notranslate"><span class="pre">parser.add_argument()</span></code> method in the <code class="docutils literal notranslate"><span class="pre">main</span></code> function to add the additional parameter.</p></li>
+</ol>
+</section>
+<section id="example-of-developing-model-weight-conversion">
+<h3>Example of Developing Model Weight Conversion<a class="headerlink" href="#example-of-developing-model-weight-conversion" title="Link to this heading"></a></h3>
+<p><a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/docs/model_cards/glm4.md">GLM-4</a> is used as an example. To convert a HuggingFace weight to a MindSpore Transformers one, define the <code class="docutils literal notranslate"><span class="pre">convert_pt_to_ms</span></code> function in <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/mindformers/models/glm2/convert_weight.py">convert_weight.py</a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">convert_pt_to_ms</span><span class="p">(</span><span class="n">input_path</span><span class="p">,</span> <span class="n">output_path</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">ms</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Convert pytorch model file to MindSpore model file. &quot;&quot;&quot;</span>
+    <span class="n">config</span><span class="p">:</span> <span class="n">ChatGLM2Config</span> <span class="o">=</span> <span class="n">MindFormerConfig</span><span class="p">(</span><span class="n">config</span><span class="p">)[</span><span class="s1">&#39;model&#39;</span><span class="p">][</span><span class="s1">&#39;model_config&#39;</span><span class="p">]</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">ChatGLM2Config</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">AutoModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">input_path</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;parameter convert....&#39;</span><span class="p">)</span>
+    <span class="n">ms_param</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">state_dict</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+        <span class="k">if</span> <span class="s2">&quot;word_embeddings.weight&quot;</span> <span class="ow">in</span> <span class="n">k</span><span class="p">:</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;word_embeddings.weight&quot;</span><span class="p">,</span> <span class="s2">&quot;embedding_weight&quot;</span><span class="p">)</span>
+        <span class="n">ms_param</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">k</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">v</span><span class="p">})</span>
+    <span class="c1"># qkv weight split</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">config</span><span class="o">.</span><span class="n">qkv_concat</span> <span class="ow">or</span> <span class="n">config</span><span class="o">.</span><span class="n">use_rearrange_rope</span><span class="p">:</span>
+        <span class="n">attn_split</span><span class="p">(</span><span class="n">ms_param</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">dtype</span><span class="p">)</span>
+
+    <span class="c1"># mlp weight split</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">config</span><span class="o">.</span><span class="n">mlp_concat</span><span class="p">:</span>
+        <span class="n">mlp_split</span><span class="p">(</span><span class="n">ms_param</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">dtype</span><span class="p">)</span>
+
+    <span class="n">tmp_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">pop_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ms_param</span><span class="p">):</span>
+        <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="n">item</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">ms</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+            <span class="n">tmp_list</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">k</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">pt2ms</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">dtype</span><span class="p">)})</span>
+            <span class="n">pop_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">pop_list</span><span class="p">):</span>
+        <span class="n">ms_param</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">ms_param</span> <span class="o">+=</span> <span class="n">tmp_list</span>
+
+    <span class="n">ms</span><span class="o">.</span><span class="n">save_checkpoint</span><span class="p">(</span><span class="n">ms_param</span><span class="p">,</span> <span class="n">output_path</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Convert finished, the output is saved to </span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To convert a MindSpore Transformers weight to a HuggingFace one, define the <code class="docutils literal notranslate"><span class="pre">convert_ms_to_pt</span></code> function in <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/mindformers/models/glm2/convert_reversed.py">convert_reversed.py</a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">convert_ms_to_pt</span><span class="p">(</span><span class="n">input_path</span><span class="p">,</span> <span class="n">output_path</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Convert MindSpore model file to pytorch model file. &quot;&quot;&quot;</span>
+    <span class="n">ckpt_dict</span> <span class="o">=</span> <span class="n">ms</span><span class="o">.</span><span class="n">load_checkpoint</span><span class="p">(</span><span class="n">input_path</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;parameter convert....&#39;</span><span class="p">)</span>
+    <span class="n">pt_param</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">ckpt_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">ms2pt</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">dtype</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;embedding_weight&quot;</span> <span class="ow">in</span> <span class="n">k</span><span class="p">:</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;embedding_weight&quot;</span><span class="p">,</span> <span class="s2">&quot;word_embeddings.weight&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">is_lora_param</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.tk_delta_lora_a&quot;</span><span class="p">,</span> <span class="s2">&quot;.lora_A.weight&quot;</span><span class="p">)</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.tk_delta_lora_b&quot;</span><span class="p">,</span> <span class="s2">&quot;.lora_B.weight&quot;</span><span class="p">)</span>
+        <span class="n">pt_param</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+
+    <span class="c1"># Convert pytorch model file to MindSpore model file.</span>
+    <span class="n">config</span><span class="p">:</span> <span class="n">ChatGLM2Config</span> <span class="o">=</span> <span class="n">MindFormerConfig</span><span class="p">(</span><span class="n">config</span><span class="p">)[</span><span class="s1">&#39;model&#39;</span><span class="p">][</span><span class="s1">&#39;model_config&#39;</span><span class="p">]</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">ChatGLM2Config</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="p">)</span>
+
+    <span class="c1"># qkv weight split</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">config</span><span class="o">.</span><span class="n">qkv_concat</span><span class="p">:</span>
+        <span class="n">attn_merge</span><span class="p">(</span><span class="n">pt_param</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">attn_rearange</span><span class="p">(</span><span class="n">pt_param</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+
+    <span class="c1"># mlp weight split</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">config</span><span class="o">.</span><span class="n">mlp_concat</span><span class="p">:</span>
+        <span class="n">mlp_merge</span><span class="p">(</span><span class="n">pt_param</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;saving pt ckpt....&#39;</span><span class="p">)</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">pt_param</span><span class="p">,</span> <span class="n">output_path</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Convert finished, the output is saved to </span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="distributed-weight-slicing-and-merging">
+<h2>Distributed Weight Slicing and Merging<a class="headerlink" href="#distributed-weight-slicing-and-merging" title="Link to this heading"></a></h2>
+<section id="id2">
+<h3>Overview<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<p>In a current distributed training and inference environment, if a pre-trained weight does not match a distributed strategy, the pre-trained weight needs to be converted to adapt to the corresponding distributed strategy. MindSpore Transformers provides a set of weight conversion tools to meet the requirements in different scenarios. This tool can be used to slice a single-device weight into multi-device weights, convert between multi-device weights, and merge multi-device weights into a single-device weight. You can select <a class="reference internal" href="#automatic-conversion">Automatic Conversion</a> or <a class="reference internal" href="#offline-conversion">Offline Conversion</a> as required so that a model can quickly switch between different distributed scenarios.</p>
+<p>In addition, MindSpore Transformers supports <a class="reference internal" href="#lora-weight-merging">LoRA Weight Merging</a> to facilitate the deployment of models fine-tuned using LoRA.</p>
+</section>
+<section id="automatic-conversion">
+<h3>Automatic Conversion<a class="headerlink" href="#automatic-conversion" title="Link to this heading"></a></h3>
+<p>When a model loads a weight, it automatically checks whether the weight is matching the distributed slicing strategy of the current model. If they do not match, the weight is automatically converted.</p>
+<section id="id3">
+<h4>Parameters<a class="headerlink" href="#id3" title="Link to this heading"></a></h4>
+<p>Parameters in the <code class="docutils literal notranslate"><span class="pre">yaml</span></code> file related to <strong>automatic weight conversion</strong> are described as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>load_checkpoint</p></td>
+<td><p>Absolute path or folder path of the pre-loaded weights.<br> - For a complete set of weights, set this parameter to an absolute path.<br> - For a distributed weight, set this parameter to the folder path. The distributed weight must be stored in the <code class="docutils literal notranslate"><span class="pre">model_dir/rank_x/xxx.ckpt</span></code> format. The folder path is <code class="docutils literal notranslate"><span class="pre">model_dir</span></code>.<br><strong>If there are multiple CKPT files in the rank_x folder, the last CKPT file in the file name sequence is used for conversion by default.</strong></p></td>
+</tr>
+<tr class="row-odd"><td><p>src_strategy_path_or_dir</p></td>
+<td><p>Path of <a class="reference internal" href="#offline-conversion-configuration">the distributed strategy file</a> corresponding to the pre-loaded weights.<br> - If the pre-loaded weights are a complete set of weights, leave this parameter <strong>blank</strong>.<br> - If the pre-loaded weights are distributed and pipeline parallelism is used when the pre-loaded weights are saved, set this parameter to the <strong>merged strategy file path</strong> or <strong>distributed strategy folder path</strong>.<br> - If the pre-loaded weights are distributed and pipeline parallelism is not used when the pre-load weights are saved, set this parameter to any <strong>ckpt_strategy_rank_x.ckpt</strong> path.</p></td>
+</tr>
+<tr class="row-even"><td><p>auto_trans_ckpt</p></td>
+<td><p>Specifies whether to enable automatic weight conversion. The value True indicates that it is enabled. The default value is False.</p></td>
+</tr>
+<tr class="row-odd"><td><p>transform_process_num</p></td>
+<td><p>Number of processes used for automatic weight conversion. The default value is 1.<br> - If transform_process_num is set to 1, only rank_0 is used for weight conversion. Other processes wait until the conversion ends.<br> - If transform_process_num is larger than 1, <strong>multiple processes conduct conversion</strong>. For example, for an 8-device task, if transform_process_num is set to 2, rank_0 is used for converting the weights of slices rank_0, rank_1, rank_2, and rank_3, and rank_4 is used for converting the weights of slices rank_4, rank_5, rank_6, and rank_7, and other processes wait until rank_0 and rank_4 complete the conversion.<br><strong>Note</strong>:<br> 1. A larger value of transform_process_num indicates a shorter conversion time and <strong>a larger host memory occupied by the conversion</strong>. If the host memory is insufficient, decrease the value of transform_process_num.<br> 2. The value of transform_process_num must be a number that can be exactly divided by and cannot exceed that of NPUs.</p></td>
+</tr>
+<tr class="row-even"><td><p>transform_by_rank</p></td>
+<td><p>Specifies whether to use the mindspore.transform_checkpoint_by_rank API for weight conversion.<br> - If transform_process_num is larger than 1, the value is automatically set to <code class="docutils literal notranslate"><span class="pre">True</span></code>.<br> - If transform_process_num is set to 1, if the target weight is a distributed weight, the mindspore.transform_checkpoint_by_rank API is cyclically called to convert the weight of each rank slice in serial mode.<br>- If transform_process_num is set to 1, if the target weight is a complete weight, the value is automatically set to <code class="docutils literal notranslate"><span class="pre">False</span></code>, and the mindspore.transform_checkpoints API is called for weight conversion.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="yaml-configurations-in-different-scenarios">
+<h4>YAML Configurations in Different Scenarios<a class="headerlink" href="#yaml-configurations-in-different-scenarios" title="Link to this heading"></a></h4>
+<p><strong>Slicing a Single-Device Weight into Multi-Device Weights</strong></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># load_checkpoint: specifies path of the pre-trained weight file.</span>
+<span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/worker/qwen2_5-7b/qwen2_5-7b.ckpt&quot;</span>
+
+<span class="c1"># auto_trans_ckpt: specifies whether to enable automatic conversion.</span>
+<span class="nt">auto_trans_ckpt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+</div>
+<p><strong>Conversion Between Multi-Device Weights</strong></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># load_checkpoint: specifies the path of the multi-device weight folder.</span>
+<span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/worker/checkpoint/qwen2_5-7b-2layer-dp2mp2pp2&quot;</span>
+
+<span class="c1"># src_strategy_path_or_dir: specifies the path of the distributed strategy file.</span>
+<span class="nt">src_strategy_path_or_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/worker/checkpoint/qwen2_5-7b-2layer-dp2mp2pp2/strategy/merged_ckpt_strategy.ckpt&quot;</span>
+
+<span class="c1"># auto_trans_ckpt: specifies whether to enable automatic conversion.</span>
+<span class="nt">auto_trans_ckpt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+</div>
+<p><strong>Merging Multi-Device Weights into a Single-Device Weight</strong></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># load_checkpoint: specifies the path of the multi-device weight folder.</span>
+<span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/worker/checkpoint/qwen2_5-7b-2layer-dp1mp2pp2&quot;</span>
+
+<span class="c1"># src_strategy_path_or_dir: specifies the path of the distributed strategy file.</span>
+<span class="nt">src_strategy_path_or_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/worker/checkpoint/qwen2_5-7b-2layer-dp1mp2pp2/strategy/merged_ckpt_strategy.ckpt&quot;</span>
+
+<span class="c1"># auto_trans_ckpt: specifies whether to enable automatic conversion.</span>
+<span class="nt">auto_trans_ckpt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+
+<span class="c1"># use_parallel: Set it to False.</span>
+<span class="nt">use_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+</pre></div>
+</div>
+<p><strong>Enabling Multi-Process Conversion (Optional)</strong></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># transform_process_num: specifies the number of processes involved in the conversion.</span>
+<span class="nt">transform_process_num</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+</pre></div>
+</div>
+</section>
+<section id="precautions">
+<h4>Precautions<a class="headerlink" href="#precautions" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p><strong>Multi-process conversion</strong>: Set the <code class="docutils literal notranslate"><span class="pre">transform_process_num</span></code> parameter to enable multi-process conversion. Pay attention to the memory usage. If a memory overflow occurs, you are advised to reduce the number of processes.</p></li>
+<li><p><strong>Automatic weight conversion</strong>: After this function is enabled, the system deletes the old <code class="docutils literal notranslate"><span class="pre">strategy</span></code> and <code class="docutils literal notranslate"><span class="pre">transformed_checkpoint</span></code> folders from the <code class="docutils literal notranslate"><span class="pre">output</span></code> directory and saves the output of the current task. After the conversion task is complete, you are advised to move the <code class="docutils literal notranslate"><span class="pre">strategy</span></code> and <code class="docutils literal notranslate"><span class="pre">transformed_checkpoint</span></code> folders to a user-defined directory to prevent them from being deleted by mistake in subsequent operations.</p></li>
+<li><p><strong>Distributed strategy file saving</strong>: The distributed strategy file is saved in the <code class="docutils literal notranslate"><span class="pre">output/strategy</span></code> folder. If <strong>pipeline parallelism</strong> is enabled, the system automatically merges all <code class="docutils literal notranslate"><span class="pre">ckpt_strategy_rank_x.ckpt</span></code> files into a <code class="docutils literal notranslate"><span class="pre">merged_ckpt_strategy.ckpt</span></code> file. If pipeline parallelism is not enabled, the MERGE operation is not performed.</p></li>
+</ul>
+</section>
+</section>
+<section id="offline-conversion">
+<h3>Offline Conversion<a class="headerlink" href="#offline-conversion" title="Link to this heading"></a></h3>
+<p>The offline conversion function is designed to meet your requirements for manually converting weights. With offline conversion, you can convert model weights in an independent environment. Offline conversion supports multiple weight conversion scenarios, including slicing a single-device weight into multi-device weights, converting between multi-device weights, and merging multi-device weights into a single-device weight.</p>
+<p>When using offline conversion, you can manually configure conversion parameters as required to ensure that the conversion process is flexible and controllable. This function is especially suitable for model deployment and optimization in a strictly controlled computing environment.</p>
+<section id="offline-conversion-configuration">
+<h4>Offline Conversion Configuration<a class="headerlink" href="#offline-conversion-configuration" title="Link to this heading"></a></h4>
+<p><strong>Generating Distributed Strategy</strong></p>
+<p>MindSpore generates a distributed strategy file (ckpt format) corresponding to the number of cards in the <code class="docutils literal notranslate"><span class="pre">output/strategy</span></code> folder after running a distributed task, which can be used in offline weight conversion.</p>
+<p>If there is currently no distributed strategy file, it can be quickly generated by setting <code class="docutils literal notranslate"><span class="pre">only_save_strategy:True</span></code> in the yaml configuration file on the basis of the original distributed training/inference task. After setting, the task will stop immediately after generating the distributed strategy file, without actually executing training or inference.</p>
+<p><strong>Single-Process Conversion</strong></p>
+<p>Use <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/mindformers/tools/ckpt_transform/transform_checkpoint.py">mindformers/tools/ckpt_transform/transform_checkpoint.py</a> to perform single-process conversion on the loaded weight.</p>
+<p><strong>Run the command.</strong></p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>transform_checkpoint.py<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--src_checkpoint<span class="w"> </span>/worker/checkpoint/qwen2_5-7b-2layer/rank_0/qwen2_5-7b.ckpt<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dst_checkpoint<span class="w"> </span>/worker/transform_ckpt/qwen2_5-7b_1to8/<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dst_strategy<span class="w"> </span>/worker/mindformers/output/strategy/<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--prefix<span class="w"> </span><span class="s2">&quot;checkpoint_&quot;</span>
+</pre></div>
+</div>
+<p><strong>Multi-Process Conversion</strong></p>
+<p>Use <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/mindformers/tools/ckpt_transform/transform_checkpoint.sh">mindformers/tools/ckpt_transform/transform_checkpoint.sh</a> to perform multi-process conversion on the loaded weight.</p>
+<p><strong>Run the command.</strong></p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>bash<span class="w"> </span>transform_checkpoint.sh<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>/worker/checkpoint/qwen2_5-7b-2layer/rank_0/qwen2_5-7b.ckpt<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>None<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>/worker/transform_ckpt/qwen2_5-7b_1to8/<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>/worker/mindformers/output/strategy/<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="m">8</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="s2">&quot;checkpoint_&quot;</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>The order of parameters is src_checkpoint, src_strategy, dst_checkpoint_dir, dst_strategy, world_size, transform_process_num, prefix.</p>
+</div></blockquote>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><p>Parameters for single-process conversion</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>src_checkpoint</p></td>
+<td><p>Absolute path or folder path of the source weight.<br> - For <strong>a complete set of weights</strong>, set this parameter to an <strong>absolute path</strong>.<br> - For <strong>distributed weights</strong>, set this parameter to the <strong>folder path</strong>. The distributed weights must be stored in the <code class="docutils literal notranslate"><span class="pre">model_dir/rank_x/xxx.ckpt</span></code> format. The folder path is <code class="docutils literal notranslate"><span class="pre">model_dir</span></code>.<br><strong>If there are multiple CKPT files in the rank_x folder, the last CKPT file in the file name sequence is used for conversion by default.</strong></p></td>
+</tr>
+<tr class="row-odd"><td><p>src_strategy</p></td>
+<td><p>Path of the distributed strategy file corresponding to the source weight.<br> - For a complete set of weights, leave it <strong>blank</strong>.<br> - For distributed weights, if pipeline parallelism is used, set this parameter to the <strong>merged strategy file path</strong> or <strong>distributed strategy folder path</strong>.<br> - For distributed weights, if pipeline parallelism is not used, set this parameter to any <strong>ckpt_strategy_rank_x.ckpt</strong> path.</p></td>
+</tr>
+<tr class="row-even"><td><p>dst_checkpoint_dir</p></td>
+<td><p>Path of the folder that stores the target weight.</p></td>
+</tr>
+<tr class="row-odd"><td><p>dst_strategy</p></td>
+<td><p>Path of the distributed strategy file corresponding to the target weight.<br> - For a complete set of weights, leave it <strong>blank</strong>.<br> - For distributed weights, if pipeline parallelism is used, set this parameter to the <strong>merged strategy file path</strong> or <strong>distributed strategy folder path</strong>.<br> - For distributed weights, if pipeline parallelism is not used, set this parameter to any <strong>ckpt_strategy_rank_x.ckpt</strong> path.</p></td>
+</tr>
+<tr class="row-even"><td><p>prefix</p></td>
+<td><p>Prefix name of the saved target weight. The weight is saved as {prefix}rank_x.ckpt. The default value is checkpoint_.</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>Additional parameters used for multi-process conversion</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>world_size</p></td>
+<td><p>Total number of slices of the target weight. Generally, the value is dp * mp * pp.</p></td>
+</tr>
+<tr class="row-odd"><td><p>transform_process_num</p></td>
+<td><p>Number of processes used for offline weight conversion. The default value is 1.<br> - If process_num is set to 1, <strong>a single process is used for conversion</strong>.<br>- If process_num is larger than 1, <strong>multi-process conversion</strong> is used. For example, if the target weight for conversion is the distributed weight of eight GPUs and process_num is set to 2, two processes are started to convert the weights of slices rank_0, rank_1, rank_2, and rank_3 and slices rank_4, rank_5, rank_6, and rank_7, respectively.</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</section>
+</section>
+<section id="special-scenarios">
+<h3>Special Scenarios<a class="headerlink" href="#special-scenarios" title="Link to this heading"></a></h3>
+<section id="multi-node-multi-device-training-on-physical-machines">
+<h4>Multi-Node Multi-Device Training on Physical Machines<a class="headerlink" href="#multi-node-multi-device-training-on-physical-machines" title="Link to this heading"></a></h4>
+<p>Training a large-scale model usually needs a cluster of servers. In the multi-node multi-device scenario, if a unified shared storage path (such as the NFS-mounted /worker directory) is configured between servers, the automatic conversion function can be used. Otherwise, only offline conversion can be used. The following example is a training that uses two servers and 16 GPUs.</p>
+<p><strong>Scenario 1: A shared disk exists between servers.</strong></p>
+<p>If a unified shared storage path (such as the NFS-mounted /worker directory) is configured between servers, you can use MindSpore Transformers to automatically convert a weight before multi-node multi-device training.</p>
+<ul>
+<li><p><strong>Single-process conversion</strong></p>
+<p>In single-process conversion mode, you only need to set the path of the pre-trained weight in the configuration file and enable automatic weight conversion.</p>
+<p><strong>Configure the parameter.</strong></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set the path of the pre-trained weight file to an absolute path.</span>
+<span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/worker/checkpoint/qwen2_5-7b/rank_0/qwen2_5-7b.ckpt&quot;</span>
+
+<span class="c1"># Set auto_trans_ckpt to True to enable automatic weight conversion.</span>
+<span class="nt">auto_trans_ckpt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+
+<span class="c1"># Set the dataset path.</span>
+<span class="nt">train_dataset</span><span class="p">:</span><span class="w"> </span><span class="nl">&amp;train_dataset</span>
+<span class="w">  </span><span class="nt">data_loader</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MindDataset</span>
+<span class="w">    </span><span class="nt">dataset_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/worker/dataset/wiki103/&quot;</span>
+<span class="w">    </span><span class="nt">shuffle</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+
+<span class="c1"># Configure the 16-device distributed strategy (for reference only).</span>
+<span class="nt">parallel_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">data_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">model_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">  </span><span class="nt">pipeline_stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">micro_batch_num</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">vocab_emb_dp</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">gradient_aggregation_group</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">  </span><span class="nt">micro_batch_interleave_num</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Multi-process conversion (optional)</strong></p>
+<p>To accelerate weight conversion, you can choose the multi-process conversion mode by setting the <code class="docutils literal notranslate"><span class="pre">transform_process_num</span></code> parameter.</p>
+<p><strong>Configure the parameter.</strong></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use two processes for conversion.</span>
+<span class="nt">transform_process_num</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+</pre></div>
+</div>
+<p><strong>Start a task.</strong></p>
+<p>Use <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/scripts/msrun_launcher.sh">mindformers/scripts/msrun_launcher.sh</a> to start the task.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># First server (main node)</span>
+bash<span class="w"> </span>scripts/msrun_launcher.sh<span class="w"> </span><span class="s2">&quot;run_mindformer.py \</span>
+<span class="s2">  --config {CONFIG_PATH} \</span>
+<span class="s2">  --run_mode train&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="m">16</span><span class="w"> </span><span class="m">8</span><span class="w"> </span><span class="si">${</span><span class="nv">ip</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">port</span><span class="si">}</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>output/msrun_log<span class="w"> </span>False<span class="w"> </span><span class="m">300</span>
+<span class="c1"># Second server (subnode)</span>
+bash<span class="w"> </span>scripts/msrun_launcher.sh<span class="w"> </span><span class="s2">&quot;run_mindformer.py \</span>
+<span class="s2">  --config {CONFIG_PATH} \</span>
+<span class="s2">  --run_mode train&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="m">16</span><span class="w"> </span><span class="m">8</span><span class="w"> </span><span class="si">${</span><span class="nv">ip</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">port</span><span class="si">}</span><span class="w"> </span><span class="m">1</span><span class="w"> </span>output/msrun_log<span class="w"> </span>False<span class="w"> </span><span class="m">300</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p><strong>Scenario 2: No shared path exists between servers.</strong></p>
+<p>If there is no shared path between servers, you need to use the offline weight conversion tool to convert the weight. The following steps describe how to perform offline weight conversion and start a multi-node multi-device training task.</p>
+<ul>
+<li><p><strong>Obtain the distributed policy file.</strong></p>
+<p>Before offline weight conversion, you need to obtain the distributed strategy file of each node.</p>
+<p><strong>Configure the parameter.</strong></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set **only_save_strategy** to **True** to obtain the distributed strategy file.</span>
+<span class="nt">only_save_strategy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+
+<span class="c1"># Set the dataset path.</span>
+<span class="nt">train_dataset</span><span class="p">:</span><span class="w"> </span><span class="nl">&amp;train_dataset</span>
+<span class="w">  </span><span class="nt">data_loader</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MindDataset</span>
+<span class="w">    </span><span class="nt">dataset_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/worker/dataset/wikitext_2048/&quot;</span>
+<span class="w">    </span><span class="nt">shuffle</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+
+<span class="c1"># Configure the 16-device distributed strategy (for reference only).</span>
+<span class="nt">parallel_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">data_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">model_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">  </span><span class="nt">pipeline_stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">micro_batch_num</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">vocab_emb_dp</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">gradient_aggregation_group</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">  </span><span class="nt">micro_batch_interleave_num</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+<p>The strategy file of each node is stored in the corresponding <code class="docutils literal notranslate"><span class="pre">output/strategy</span></code> directory. For example, node 0 stores the <code class="docutils literal notranslate"><span class="pre">ckpt_strategy_rank_0-7.ckpt</span></code> file, and node 1 stores the <code class="docutils literal notranslate"><span class="pre">ckpt_strategy_rank_8-15.ckpt</span></code> file. Then, you need to integrate the strategy files of all nodes on the same server to facilitate subsequent operations.</p>
+</li>
+<li><p><strong>Offline weight conversion</strong></p>
+<p>On the server where all strategy files are stored, use <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/mindformers/tools/ckpt_transform/transform_checkpoint.py">mindformers/tools/ckpt_transform/transform_checkpoint.py</a> to perform offline weight conversion.</p>
+<p><strong>Single-process conversion</strong></p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>mindformers/tools/ckpt_transform/transform_checkpoint.py<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--src_checkpoint<span class="w"> </span>/worker/checkpoint/qwen2_5-7b/rank_0/qwen2_5-7b.ckpt<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dst_checkpoint<span class="w"> </span>./output/qwen2_5-7b_dp2mp4pp2<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dst_strategy<span class="w"> </span>./output/strategy
+</pre></div>
+</div>
+<p><strong>Multi-process conversion (optional)</strong></p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use two processes for conversion.</span>
+bash<span class="w"> </span>mindformers/tools/ckpt_transform/transform_checkpoint.sh<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>/worker/checkpoint/qwen2_5-7b/rank_0/qwen2_5-7b.ckpt<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>None<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>./output/qwen2_5-7b_dp2mp4pp2<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>./output/strategy<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="m">16</span><span class="w"> </span><span class="m">2</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><p>Parameters for transform_checkpoint.py conversion</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>src_checkpoint</p></td>
+<td><p>Absolute path or folder path of the source weight.<br> - For <strong>a complete set of weights</strong>, set this parameter to an <strong>absolute path</strong>.<br> - For <strong>distributed weights</strong>, set this parameter to the <strong>folder path</strong>. The distributed weights must be stored in the <code class="docutils literal notranslate"><span class="pre">model_dir/rank_x/xxx.ckpt</span></code> format. The folder path is <code class="docutils literal notranslate"><span class="pre">model_dir</span></code>.<br><strong>If there are multiple CKPT files in the rank_x folder, the last CKPT file in the file name sequence is used for conversion by default.</strong></p></td>
+</tr>
+<tr class="row-odd"><td><p>src_strategy</p></td>
+<td><p>Path of the distributed strategy file corresponding to the source weight.<br> - For a complete set of weights, leave it <strong>blank</strong>.<br> - For distributed weights, if pipeline parallelism is used, set this parameter to the <strong>merged strategy file path</strong> or <strong>distributed strategy folder path</strong>.<br> - For distributed weights, if pipeline parallelism is not used, set this parameter to any <strong>ckpt_strategy_rank_x.ckpt</strong> path.</p></td>
+</tr>
+<tr class="row-even"><td><p>dst_checkpoint_dir</p></td>
+<td><p>Path of the folder that stores the target weight.</p></td>
+</tr>
+<tr class="row-odd"><td><p>dst_strategy</p></td>
+<td><p>Path of the distributed strategy file corresponding to the target weight.<br> - For a complete set of weights, leave it <strong>blank</strong>.<br> - For distributed weights, if pipeline parallelism is used, set this parameter to the <strong>merged strategy file path</strong> or <strong>distributed strategy folder path</strong>.<br> - For distributed weights, if pipeline parallelism is not used, set this parameter to any <strong>ckpt_strategy_rank_x.ckpt</strong> path.</p></td>
+</tr>
+<tr class="row-even"><td><p>prefix</p></td>
+<td><p>Prefix name of the saved target weight. The weight is saved as {prefix}rank_x.ckpt. The default value is checkpoint_.</p></td>
+</tr>
+<tr class="row-odd"><td><p>rank_id</p></td>
+<td><p>Rank ID of the current conversion process. Single-process is not required.</p></td>
+</tr>
+<tr class="row-even"><td><p>world_size</p></td>
+<td><p>Total number of slices of the target weight. Generally, the value is dp * mp * pp. Single-process is not required.</p></td>
+</tr>
+<tr class="row-odd"><td><p>transform_process_num</p></td>
+<td><p>Number of processes used for offline weight conversion. The default value is 1.<br> - If process_num is set to 1, <strong>a single process is used for conversion</strong>.<br>- If process_num is larger than 1, <strong>multi-process conversion</strong> is used. For example, if the target weight for conversion is the distributed weight of eight GPUs and process_num is set to 2, two processes are started to convert the weights of slices rank_0, rank_1, rank_2, and rank_3 and slices rank_4, rank_5, rank_6, and rank_7, respectively.</p></td>
+</tr>
+<tr class="row-even"><td><p>transform_by_rank</p></td>
+<td><p>Whether the mindspore.transform_checkpoint_by_rank is used for checkpoint transform. It will automatically be set to True when transform_process_num &gt; 1.</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>Additional parameters used for transform_checkpoint.sh conversion</p>
+<p>For parameter descriptions, please refer to the parameters used in the transformation of transform_checkpoint.py. The order of parameters is src_checkpoint, src_strategy, dst_checkpoint_dir, dst_strategy, world_size, transform_process_num, prefix.</p>
+</li>
+<li><p><strong>Copy the weights to other nodes.</strong></p>
+<p>Copy the distributed weights that have been converted to respective nodes. Node 0 requires only the weights of slices from <code class="docutils literal notranslate"><span class="pre">rank_0</span></code> to <code class="docutils literal notranslate"><span class="pre">rank_7</span></code>, and node 1 requires only the weights of slices from <code class="docutils literal notranslate"><span class="pre">rank_8</span></code> to <code class="docutils literal notranslate"><span class="pre">rank_15</span></code>.</p>
+</li>
+<li><p><strong>Set the parameter.</strong></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set the pre-trained weight path to model_dir, the distributed weight folder path.</span>
+<span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/worker/checkpoint/qwen2_5-7b_dp2mp4pp2&quot;</span>
+
+<span class="c1"># Change only_save_strategy to False.</span>
+<span class="nt">only_save_strategy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="modelarts-training">
+<h4>ModelArts Training<a class="headerlink" href="#modelarts-training" title="Link to this heading"></a></h4>
+<p>Training in ModelArts is similar to multi-node multi-device training on physical machines. Automatic weight conversion can also be enabled. You can set <code class="docutils literal notranslate"><span class="pre">auto_trans_ckpt=True</span></code> in the hyperparameters of a training task to enable automatic weight conversion and set <code class="docutils literal notranslate"><span class="pre">transform_process_num</span> <span class="pre">&gt;</span> <span class="pre">1</span></code> to enable multi-process conversion.</p>
+<p><strong>Note</strong>: If the number of NPUs on the server node in the ModelArts resource pool is not 8, you need to set <code class="docutils literal notranslate"><span class="pre">npu_num_per_node</span> <span class="pre">=</span> <span class="pre">the</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">NPUs</span> <span class="pre">on</span> <span class="pre">the</span> <span class="pre">node</span></code>. For example, if each node is configured with 16 NPUs, <code class="docutils literal notranslate"><span class="pre">npu_num_per_node=16</span></code> should be set.</p>
+</section>
+</section>
+<section id="lora-weight-merging">
+<h3>LoRA Weight Merging<a class="headerlink" href="#lora-weight-merging" title="Link to this heading"></a></h3>
+<section id="id4">
+<h4>Overview<a class="headerlink" href="#id4" title="Link to this heading"></a></h4>
+<p>The basic principle of low-rank adaptation (LoRA) is to parameterize the original model with low-rank weights. The core process of merging LoRA weights is to calculate the parameters of the LoRA branches and add them to the corresponding model parameters, which makes the parameter list of the final weight file the same as that of the original model and excludes additional LoRA parameters. This operation does not affect the inference result. Therefore, the model after merging still has the same performance as the original model during inference.
+For details about the principles and implementation of LoRA, see the following resources:</p>
+<ul class="simple">
+<li><p>Paper: <a class="reference external" href="https://arxiv.org/abs/2106.09685">LoRA: Low-Rank Adaptation of Large Language Models</a></p></li>
+<li><p>GitHub: <a class="reference external" href="https://github.com/microsoft/LoRA">https://github.com/microsoft/LoRA</a></p></li>
+</ul>
+</section>
+<section id="instructions">
+<h4>Instructions<a class="headerlink" href="#instructions" title="Link to this heading"></a></h4>
+<p>Use the <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/mindformers/tools/transform_ckpt_lora.py">LoRA weight merging script</a> provided by MindSpore Transformers to merge LoRA weights as follows:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>mindformers/tools/transform_ckpt_lora.py<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--src_ckpt_strategy<span class="w"> </span>src_strategy_path_or_dir<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--src_ckpt_path_or_dir<span class="w"> </span>src_ckpt_path_or_dir<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dst_ckpt_dir<span class="w"> </span>dst_ckpt_dir<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--prefix<span class="w"> </span><span class="s2">&quot;checkpoint_&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--lora_scaling<span class="w"> </span>lora_alpha/lora_rank
+</pre></div>
+</div>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><p><strong>src_ckpt_strategy</strong>: specifies the path of the distributed strategy file corresponding to the source weight. The file is stored in the <code class="docutils literal notranslate"><span class="pre">output/strategy/</span></code> directory by default after the training task is started. If the source is a complete set of weights, you do not need to set this parameter. If the source contains distributed weights, set this parameter based on the following conditions:</p>
+<ul class="simple">
+<li><p><strong>Pipeline parallelism enabled for the source weights</strong>: Weight conversion is based on the merging strategy file. Set the parameter to the path of the distributed strategy folder. The script automatically merges all <code class="docutils literal notranslate"><span class="pre">ckpt_strategy_rank_x.ckpt</span></code> files in the folder into <code class="docutils literal notranslate"><span class="pre">merged_ckpt_strategy.ckpt</span></code> in the folder. If <code class="docutils literal notranslate"><span class="pre">merged_ckpt_strategy.ckpt</span></code> already exists, set the parameter to the path of the file.</p></li>
+<li><p><strong>Pipeline parallelism not enabled for the source weights</strong>: Weight conversion can be based on any strategy file. Set the parameter to the path of any <code class="docutils literal notranslate"><span class="pre">ckpt_strategy_rank_x.ckpt</span></code> file.</p></li>
+</ul>
+<p><strong>Note</strong>: If a <code class="docutils literal notranslate"><span class="pre">merged_ckpt_strategy.ckpt</span></code> already exists in the strategy folder and is still transferred to the folder path, the script deletes the old <code class="docutils literal notranslate"><span class="pre">merged_ckpt_strategy.ckpt</span></code> and then merges files into a new <code class="docutils literal notranslate"><span class="pre">merged_ckpt_strategy.ckpt</span></code> for weight conversion. Therefore, ensure that the folder has enough write permission. Otherwise, an error will be reported.</p>
+</li>
+<li><p><strong>src_ckpt_path_or_dir</strong>: specifies the path of the source weight. For distributed weights, set the parameter to the path of the folder where the source weights are located. The source weights must be stored in the <code class="docutils literal notranslate"><span class="pre">model_dir/rank_x/xxx.ckpt</span></code> format, and the folder path must be set to <code class="docutils literal notranslate"><span class="pre">model_dir</span></code>. If the source is a complete set of weights, set the parameter to an absolute path.</p></li>
+<li><p><strong>dst_ckpt_strategy</strong>: The distributed policy file path corresponding to the target weight.</p></li>
+<li><p><strong>dst_ckpt_dir</strong>: specifies the path for storing the target weight, which must be a user-defined path of an empty folder. The target weight is saved in the <code class="docutils literal notranslate"><span class="pre">model_dir/rank_x/xxx.ckpt</span></code> format.</p></li>
+<li><p><strong>prefix</strong>: name prefix of the target weight file. The default value is “checkpoint_”, indicating that the target weight is saved in the <code class="docutils literal notranslate"><span class="pre">model_dir/rank_x/checkpoint_x.ckpt</span></code> format.</p></li>
+<li><p><strong>lora_scaling</strong>: combination coefficient of the LoRA weight. The default value is <code class="docutils literal notranslate"><span class="pre">lora_alpha/lora_rank</span></code>. The two parameters are used for LoRA model configuration and need to be calculated.</p></li>
+<li><p><strong>save_format</strong>: The format for saving target weights. The default value is <code class="docutils literal notranslate"><span class="pre">ckpt</span></code>.</p></li>
+</ul>
+</section>
+<section id="examples">
+<h4>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h4>
+<p><strong>Scenario 1: There is a complete set of weights for LoRA parameters.</strong></p>
+<p>If the weight file before merging is a complete one, you can set the parameters as follows (directly enter the path of the complete set of weights):</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>mindformers/tools/transform_ckpt_lora.py<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--src_ckpt_path_or_dir<span class="w"> </span>.../xxx/xxx.ckpt<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dst_ckpt_dir<span class="w"> </span>dst_ckpt_dir<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--prefix<span class="w"> </span><span class="s2">&quot;checkpoint_&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--lora_scaling<span class="w"> </span>lora_alpha/lora_rank
+</pre></div>
+</div>
+<p><strong>Scenario 2: There are distributed weights for LoRA parameters.</strong></p>
+<p>If the weight file before merging contains distributed weights, you can set the parameters as follows (enter the path of the distributed weight folder and the path of the distributed strategy folder). The obtained weights are automatically merged into a complete weight file.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>mindformers/tools/transform_ckpt_lora.py<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--src_ckpt_strategy<span class="w"> </span>.../xxx/mindformers/output/strategy/<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--src_ckpt_path_or_dir<span class="w"> </span>.../xxx/model_dir<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dst_ckpt_dir<span class="w"> </span>dst_ckpt_dir<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--prefix<span class="w"> </span><span class="s2">&quot;checkpoint_&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--lora_scaling<span class="w"> </span>lora_alpha/lora_rank
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="start_tasks.html" class="btn btn-neutral float-left" title="Start Tasks" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="safetensors.html" class="btn btn-neutral float-right" title="Safetensors Weights" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

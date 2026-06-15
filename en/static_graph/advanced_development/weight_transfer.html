@@ -1,0 +1,257 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weight Conversion Development Adaptation &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="API" href="api.html" />
+    <link rel="prev" title="Training Configuration Template Instruction" href="training_template_instruction.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">Models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contribution Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">Modelers Contribution Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">Model-Related FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">Feature-Related FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Static Graph Implementation (Deprecated)</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Full-process Guide to Large Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/index.html">Features</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Advanced Development</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">Advanced Development Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="precision_optimization.html">Large Model Precision Optimization Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance_optimization.html">Large Model Performance Optimization Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev_migration.html">Development Migration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yaml_config_inference.html">Guide to Using the Inference Configuration Template</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inference_precision_comparison.html">Comparison of Reasoning Precision</a></li>
+<li class="toctree-l2"><a class="reference internal" href="accuracy_comparison.html">Comparing the Model Precision with that of Megatron-LM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training_template_instruction.html">Training Configuration Template Instruction</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Weight Conversion Development Adaptation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mcore-model-network-loading-hugging-face-weights-flowchart">Mcore Model Network Loading Hugging Face Weights Flowchart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#development-steps">Development Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#qwen3-model-weight-conversion-adaptation-example">Qwen3 Model Weight Conversion Adaptation Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#verifying-successful-weight-loading">Verifying Successful Weight Loading</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.html">API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">Excellent Practice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">Environment Variable Descriptions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Advanced Development</a></li>
+      <li class="breadcrumb-item active">Weight Conversion Development Adaptation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/advanced_development/weight_transfer.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">Deprecated</p>
+<p>This page belongs to the <strong>Static Graph (GRAPH_MODE) Implementation</strong> section and has been marked as deprecated. New features are primarily being developed in the “r2.0.0 Dynamic Graph Implementation” section. Please refer to the dynamic graph documentation first.</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="weight-conversion-development-adaptation">
+<h1>Weight Conversion Development Adaptation<a class="headerlink" href="#weight-conversion-development-adaptation" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_en/static_graph/advanced_development/weight_transfer.md"><img alt="View Source on AtomGit" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source_en.svg" /></a></p>
+<p>This document will guide developers on how to adapt the weight conversion functionality of new models to MindSpore Transformers during development, enabling users to convert Hugging Face weights into MindSpore Transformers weights through a unified automatic conversion process, thus initiating the inference workflow.</p>
+<section id="mcore-model-network-loading-hugging-face-weights-flowchart">
+<h2>Mcore Model Network Loading Hugging Face Weights Flowchart<a class="headerlink" href="#mcore-model-network-loading-hugging-face-weights-flowchart" title="Link to this heading"></a></h2>
+<p><img alt="weight_loader" src="../../_images/weight_loader.png" /></p>
+<p>The above flowchart describes the complete weight conversion and loading process of loading <code class="docutils literal notranslate"><span class="pre">.safetensors</span></code> weight files in <code class="docutils literal notranslate"><span class="pre">Hugging</span> <span class="pre">Face</span></code> format into the <code class="docutils literal notranslate"><span class="pre">Mcore</span></code> model.</p>
+<p>The main steps are as follows:</p>
+<ol class="arabic simple">
+<li><p>Read all <code class="docutils literal notranslate"><span class="pre">.safetensors</span></code> files and obtain the <code class="docutils literal notranslate"><span class="pre">key</span></code> names of each weight;</p></li>
+<li><p>Call the <code class="docutils literal notranslate"><span class="pre">convert_name</span></code> method to convert the weight keys. This step is also a necessary adaptation for weight conversion development, and it returns the weight <code class="docutils literal notranslate"><span class="pre">key</span></code> and the corresponding weight value;</p></li>
+<li><p>Traverse the weight <code class="docutils literal notranslate"><span class="pre">key</span></code> and the corresponding weight value, and determine the type of the weight <code class="docutils literal notranslate"><span class="pre">key</span></code>:</p>
+<ul class="simple">
+<li><p>For keys that do not belong to <code class="docutils literal notranslate"><span class="pre">MoE</span></code> or special structures, they can be directly loaded using <code class="docutils literal notranslate"><span class="pre">weight_loader</span></code>;</p></li>
+<li><p>For keys related to routing experts in <code class="docutils literal notranslate"><span class="pre">MoE</span></code>, generate the corresponding processing rules <code class="docutils literal notranslate"><span class="pre">expert_params_mapping</span></code>, traverse <code class="docutils literal notranslate"><span class="pre">expert_params_mapping</span></code>, match the names, and finally call the corresponding <code class="docutils literal notranslate"><span class="pre">weight_loader</span></code> for processing;</p></li>
+<li><p>For keys that do not belong to <code class="docutils literal notranslate"><span class="pre">MoE</span></code> routing experts but require special handling, generate the corresponding processing rules <code class="docutils literal notranslate"><span class="pre">stacked_params_mapping</span></code>, traverse <code class="docutils literal notranslate"><span class="pre">stacked_params_mapping</span></code>, match the names, and finally call the corresponding <code class="docutils literal notranslate"><span class="pre">weight_loader</span></code> for processing.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="development-steps">
+<h2>Development Steps<a class="headerlink" href="#development-steps" title="Link to this heading"></a></h2>
+<p>As shown in the flowchart above, adapting the weight conversion only requires one modification: calling the <code class="docutils literal notranslate"><span class="pre">convert_name</span></code> method to complete the mapping from Hugging Face weight keys to intermediate state keys.</p>
+<p>The steps are as follows:</p>
+<ol class="arabic">
+<li><p>Create a utils.py common utility file under the model implementation directory to encapsulate general functional methods for the model base class.</p></li>
+<li><p>Create a class in utils.py:</p>
+<ul class="simple">
+<li><p>Name the class using the format [ModelName]PreTrainedModel</p></li>
+<li><p>Inherit from PreTrainedModel and ModelMixin base classes</p></li>
+</ul>
+</li>
+<li><p>Define class attributes config_class and base_model_prefix:</p>
+<ul class="simple">
+<li><p>config_class: Specify as the Config class corresponding to the model</p></li>
+<li><p>base_model_prefix: Set as the string identifier for the model name</p></li>
+</ul>
+</li>
+<li><p>Implement the key-value mapping table weight_mapping required by the convert_name() method:</p>
+<p>Example of weight_mapping:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">weight_mapping</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s1">&#39;model.embed_tokens.&#39;</span><span class="p">,</span> <span class="s1">&#39;embedding.word_embeddings.&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;.self_attn.q_proj.&#39;</span><span class="p">,</span> <span class="s1">&#39;.self_attention.linear_q.&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;.self_attn.k_proj.&#39;</span><span class="p">,</span> <span class="s1">&#39;.self_attention.linear_k.&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;.self_attn.v_proj.&#39;</span><span class="p">,</span> <span class="s1">&#39;.self_attention.linear_v.&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;.self_attn.o_proj.&#39;</span><span class="p">,</span> <span class="s1">&#39;.self_attention.linear_proj.&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;.mlp.gate_proj.&#39;</span><span class="p">,</span> <span class="s1">&#39;.mlp.gating.&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;.mlp.down_proj.&#39;</span><span class="p">,</span> <span class="s1">&#39;.mlp.linear_fc2.&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;.mlp.up_proj.&#39;</span><span class="p">,</span> <span class="s1">&#39;.mlp.hidden.&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;.post_attention_layernorm.&#39;</span><span class="p">,</span> <span class="s1">&#39;.pre_mlp_layernorm.&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;model.norm.&#39;</span><span class="p">,</span> <span class="s1">&#39;decoder.final_layernorm.&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;lm_head.&#39;</span><span class="p">,</span> <span class="s1">&#39;output_layer.&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;model.layers.&#39;</span><span class="p">,</span> <span class="s1">&#39;decoder.layers.&#39;</span><span class="p">)</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>In each tuple, the first element is the Hugging Face weight key, and the second element is the intermediate state weight key.</p>
+</li>
+</ol>
+</section>
+<section id="qwen3-model-weight-conversion-adaptation-example">
+<h2>Qwen3 Model Weight Conversion Adaptation Example<a class="headerlink" href="#qwen3-model-weight-conversion-adaptation-example" title="Link to this heading"></a></h2>
+<p>Create a new utils.py file under the models/qwen3 directory. Refer to <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/mindformers/models/qwen3/utils.py">utils.py</a> for more details.</p>
+<p>Partial code of Qwen3PreTrainedModel is as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Qwen3PreTrainedModel</span><span class="p">(</span><span class="n">PreTrainedModel</span><span class="p">,</span> <span class="n">ModelMixin</span><span class="p">):</span>
+
+    <span class="n">config_class</span> <span class="o">=</span> <span class="n">Qwen3Config</span>
+    <span class="n">base_model_prefix</span> <span class="o">=</span> <span class="s2">&quot;Qwen3&quot;</span>
+
+    <span class="n">weight_mapping</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s1">&#39;model.embed_tokens.&#39;</span><span class="p">,</span> <span class="s1">&#39;embedding.word_embeddings.&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;.self_attn.q_proj.&#39;</span><span class="p">,</span> <span class="s1">&#39;.self_attention.linear_q.&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;.self_attn.k_proj.&#39;</span><span class="p">,</span> <span class="s1">&#39;.self_attention.linear_k.&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;.self_attn.v_proj.&#39;</span><span class="p">,</span> <span class="s1">&#39;.self_attention.linear_v.&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;.self_attn.o_proj.&#39;</span><span class="p">,</span> <span class="s1">&#39;.self_attention.linear_proj.&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;.self_attn.q_norm.&#39;</span><span class="p">,</span> <span class="s1">&#39;.self_attention.q_layernorm.&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;.self_attn.k_norm.&#39;</span><span class="p">,</span> <span class="s1">&#39;.self_attention.k_layernorm.&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;.mlp.gate_proj.&#39;</span><span class="p">,</span> <span class="s1">&#39;.mlp.gating.&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;.mlp.down_proj.&#39;</span><span class="p">,</span> <span class="s1">&#39;.mlp.linear_fc2.&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;.mlp.up_proj.&#39;</span><span class="p">,</span> <span class="s1">&#39;.mlp.hidden.&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;.post_attention_layernorm.&#39;</span><span class="p">,</span> <span class="s1">&#39;.pre_mlp_layernorm.&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;model.norm.&#39;</span><span class="p">,</span> <span class="s1">&#39;decoder.final_layernorm.&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;lm_head.&#39;</span><span class="p">,</span> <span class="s1">&#39;output_layer.&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;model.layers.&#39;</span><span class="p">,</span> <span class="s1">&#39;decoder.layers.&#39;</span><span class="p">)</span>
+    <span class="p">]</span>
+
+</pre></div>
+</div>
+</section>
+<section id="verifying-successful-weight-loading">
+<h2>Verifying Successful Weight Loading<a class="headerlink" href="#verifying-successful-weight-loading" title="Link to this heading"></a></h2>
+<p>Refer to the <a class="reference internal" href="../guide/inference.html"><span class="std std-doc">Inference Documentation</span></a> to run the inference process. Check the logs. If the following content appears in the log, it indicates that the weights and network fully match, and the weights have been completely loaded into the network. Verify whether the model inference results meet expectations. If garbled output occurs, further investigation is needed, refer to the inference accuracy comparison documentation:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>These parameters are not loaded in the network: {}
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="training_template_instruction.html" class="btn btn-neutral float-left" title="Training Configuration Template Instruction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="api.html" class="btn btn-neutral float-right" title="API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

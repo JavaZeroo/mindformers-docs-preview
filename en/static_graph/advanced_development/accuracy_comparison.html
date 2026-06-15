@@ -1,0 +1,1378 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Comparing the Model Precision with that of Megatron-LM &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Training Configuration Template Instruction" href="training_template_instruction.html" />
+    <link rel="prev" title="Comparison of Reasoning Precision" href="inference_precision_comparison.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">Models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contribution Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">Modelers Contribution Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">Model-Related FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">Feature-Related FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Static Graph Implementation (Deprecated)</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Full-process Guide to Large Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/index.html">Features</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Advanced Development</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">Advanced Development Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="precision_optimization.html">Large Model Precision Optimization Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance_optimization.html">Large Model Performance Optimization Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev_migration.html">Development Migration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yaml_config_inference.html">Guide to Using the Inference Configuration Template</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inference_precision_comparison.html">Comparison of Reasoning Precision</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Comparing the Model Precision with that of Megatron-LM</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">1. Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#environment">2. Environment</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#driver-version">Driver Version</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#important-libraries-and-dependency-versions">Important Libraries and Dependency Versions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#image-links">Image Links</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#precision-comparison-process">3. Precision Comparison Process</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#configuration-alignment">3.1 Configuration Alignment</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dataset-alignment">3.2 Dataset Alignment</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#weight-alignment">3.3 Weight Alignment</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#viewing-results">3.4 Viewing Results</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="training_template_instruction.html">Training Configuration Template Instruction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="weight_transfer.html">Weight Conversion Development Adaptation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html">API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">Excellent Practice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">Environment Variable Descriptions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Advanced Development</a></li>
+      <li class="breadcrumb-item active">Comparing the Model Precision with that of Megatron-LM</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/advanced_development/accuracy_comparison.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">Deprecated</p>
+<p>This page belongs to the <strong>Static Graph (GRAPH_MODE) Implementation</strong> section and has been marked as deprecated. New features are primarily being developed in the “r2.0.0 Dynamic Graph Implementation” section. Please refer to the dynamic graph documentation first.</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="comparing-the-model-precision-with-that-of-megatron-lm">
+<h1>Comparing the Model Precision with that of Megatron-LM<a class="headerlink" href="#comparing-the-model-precision-with-that-of-megatron-lm" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_en/static_graph/advanced_development/accuracy_comparison.md"><img alt="View Source on AtomGit" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source_en.svg" /></a></p>
+<section id="overview">
+<h2>1. Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>In the LLM training system, precision validation at the model level is a key step to ensure training stability and result reliability. As training tasks become increasingly complex and model structures become larger, it is particularly important to ensure alignment of the overall model behavior between different implementations.</p>
+<p>Megatron-LM is a mature framework for large-scale training tasks. It is highly modular and scalable and is widely used in training scenarios with high performance requirements. MindSpore Transformers r1.6.0 upgrades the model architecture by using the ModuleSpec configuration mode to build models. This makes model structure definition <strong>more flexible</strong> and <strong>easier to reuse</strong>, greatly improving development efficiency. In addition, comprehensive training support is provided in the NPU environment, fully leveraging the advantages of the NPU architecture.</p>
+<p>This document focuses on the validation of precision consistency at the model level. By building equivalent model structures and configurations and using unified inputs, this document compares key training performance indicators such as the forward output, loss, and gradient behavior to validate the reliability and precision controllability of MindSpore Transformers in the NPU environment.</p>
+</section>
+<section id="environment">
+<h2>2. Environment<a class="headerlink" href="#environment" title="Link to this heading"></a></h2>
+<p>This section describes the recommended basic operating environment for the precision comparison experiment.</p>
+<section id="driver-version">
+<h3>Driver Version<a class="headerlink" href="#driver-version" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>GPU</p></th>
+<th class="head"><p>Version</p></th>
+<th class="head"><p>NPU</p></th>
+<th class="head"><p>Version</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>CUDA</p></td>
+<td><p>12.1</p></td>
+<td><p>CANN</p></td>
+<td><p>8.1.RC1</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="important-libraries-and-dependency-versions">
+<h3>Important Libraries and Dependency Versions<a class="headerlink" href="#important-libraries-and-dependency-versions" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>GPU</p></th>
+<th class="head"><p>Version</p></th>
+<th class="head"><p>NPU</p></th>
+<th class="head"><p>Version</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Megatron-LM</p></td>
+<td><p>core_r0.12.0</p></td>
+<td><p>MindSpore Transformers</p></td>
+<td><p>master</p></td>
+</tr>
+<tr class="row-odd"><td><p>Python</p></td>
+<td><p>3.10 or later</p></td>
+<td><p>Python</p></td>
+<td><p>3.10 or later</p></td>
+</tr>
+<tr class="row-even"><td><p>PyTorch</p></td>
+<td><p>2.7.0</p></td>
+<td><p>MindSpore</p></td>
+<td><p>2.6.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>NumPy</p></td>
+<td><p>1.26.4</p></td>
+<td><p>NumPy</p></td>
+<td><p>1.26.4</p></td>
+</tr>
+<tr class="row-even"><td><p>Transformer Engine</p></td>
+<td><p>2.1.0</p></td>
+<td><p></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>Apex</p></td>
+<td><p>0.1</p></td>
+<td><p></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="image-links">
+<h3>Image Links<a class="headerlink" href="#image-links" title="Link to this heading"></a></h3>
+<p>The <strong>GPU/NPU</strong> dependency versions in the preceding tables are for reference only. The actual versions in official images prevail.</p>
+<ul class="simple">
+<li><p><strong>Megatron-LM</strong>: For details, see <a class="reference external" href="https://github.com/NVIDIA/Megatron-LM/tree/core_r0.12.0?tab=readme-ov-file#setup">Megatron-LM documentation</a>.</p></li>
+<li><p><strong>MindSpore Transformers</strong>: For details, see <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/README.md">MindSpore Transformers documentation</a>.</p></li>
+</ul>
+</section>
+</section>
+<section id="precision-comparison-process">
+<h2>3. Precision Comparison Process<a class="headerlink" href="#precision-comparison-process" title="Link to this heading"></a></h2>
+<p>This section describes the model-level precision consistency validation process between MindSpore Transformers and the mainstream Megatron-LM in an NPU environment. This process is used to guide users through the entire alignment from model configuration, data input, and forward output, to gradient backpropagation, and finally evaluate the precision consistency of the two frameworks under the same task.</p>
+<section id="configuration-alignment">
+<h3>3.1 Configuration Alignment<a class="headerlink" href="#configuration-alignment" title="Link to this heading"></a></h3>
+<p>The first step of the precision comparison process is to ensure that the two frameworks use <strong>the same model configuration</strong>. This section provides the configuration files of <a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/example/accuracy_comparison/example.sh">Megatron-LM</a> and <a class="reference external" href="https://atomgit.com/mindspore/mindformers">MindSpore Transformers</a>, which define the model structure, parallel policy, and key training hyperparameters.</p>
+<p>The configuration alignment aims to ensure that the two systems are as consistent as possible in the initial state, so that the forward output and gradient backpropagation can be compared.</p>
+<p>For each configuration parameter of Megatron-LM, the corresponding configuration parameters of MindSpore Transformers are shown in the following tables.</p>
+<ul>
+<li><p>Model configurations</p>
+<p>This document supports only the precision comparison of the mcore model. Therefore, <code class="docutils literal notranslate"><span class="pre">--use-mcore-model</span></code> must be configured for Megatron-LM, and <code class="docutils literal notranslate"><span class="pre">use_legacy:</span> <span class="pre">False</span></code> must be configured for MindSpore Transformers.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Megatron-LM</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>MindSpore Transformers</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">use-legacy-model</span></code> and <code class="docutils literal notranslate"><span class="pre">use-mcore-model</span></code></p></td>
+<td><p>Specifies whether to use the mcore model.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">use_legacy</span></code></p></td>
+<td><p>Specifies whether to use the mcore model. <code class="docutils literal notranslate"><span class="pre">use_legacy:</span> <span class="pre">False</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">--use-mcore-model</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">num-layers</span></code></p></td>
+<td><p>Number of network layers, that is, number of transformer layers.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">num_layers</span></code></p></td>
+<td><p>Number of network layers, that is, number of transformer layers.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">encoder-num-layers</span></code></p></td>
+<td><p>Number of encoder layers.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">decoder-num-layers</span></code></p></td>
+<td><p>Number of decoder layers.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">hidden-size</span></code></p></td>
+<td><p>Size of the hidden layer, which is the dimension in the hidden state.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">hidden_size</span></code></p></td>
+<td><p>Size of the hidden layer, which is the dimension in the hidden state.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ffn-hidden-size</span></code></p></td>
+<td><p>Size of the hidden layer in the feedforward network.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">intermediate_size</span></code></p></td>
+<td><p>Size of the hidden layer in the feedforward network.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">num-attention-heads</span></code></p></td>
+<td><p>Number of attention heads.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">num_heads</span></code></p></td>
+<td><p>Number of attention heads.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">kv-channels</span></code></p></td>
+<td><p>Number of key/value tensor channels.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">head_dim</span></code></p></td>
+<td><p>Number of key/value tensor channels.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">group-query-attention</span></code></p></td>
+<td><p>Specifies whether to enable group query attention.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">use_gqa</span></code></p></td>
+<td><p>Specifies whether to enable group query attention.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">num-query-groups</span></code></p></td>
+<td><p>Number of query groups.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">n_kv_heads</span></code></p></td>
+<td><p>Number of query groups.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">max-position-embeddings</span></code></p></td>
+<td><p>Maximum position encoding length.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">max_position_embeddings</span></code></p></td>
+<td><p>Maximum position encoding length.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">position-embedding-type</span></code></p></td>
+<td><p>Position encoding type, such as learned_absolute and rope.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">position_embedding_type</span></code></p></td>
+<td><p>Position encoding type, such as learned_absolute and rope.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">use-rotary-position-embeddings</span></code></p></td>
+<td><p>Specifies whether to use rotary position embedding (RoPE).</p></td>
+<td><p>Specified by <code class="docutils literal notranslate"><span class="pre">position_embedding_type</span></code>==<code class="docutils literal notranslate"><span class="pre">rope</span></code></p></td>
+<td><p>Specifies whether to use RoPE.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rotary-base</span></code></p></td>
+<td><p>Rotary base used for RoPE.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">rotary_base</span></code></p></td>
+<td><p>Rotary base used for RoPE.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rotary-percent</span></code></p></td>
+<td><p>RoPE usage ratio.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">rotary_percent</span></code></p></td>
+<td><p>RoPE usage ratio.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rotary-interleaved</span></code></p></td>
+<td><p>Specifies whether to use interleaved RoPE.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">rotary_interleaved</span></code></p></td>
+<td><p>Specifies whether to use interleaved RoPE.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rotary-seq-len-interpolation-factor</span></code></p></td>
+<td><p>Rotary sequence length interpolation factor.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">rotary_seq_len_interpolation_factor</span></code></p></td>
+<td><p>Rotary sequence length interpolation factor.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">use-rope-scaling</span></code></p></td>
+<td><p>Specifies whether to enable RoPE scaling.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">use_rope_scaling</span></code></p></td>
+<td><p>Specifies whether to enable RoPE scaling.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rope-scaling-factor</span></code></p></td>
+<td><p>RoPE scaling factor.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">scaling_factor</span></code></p></td>
+<td><p>RoPE scaling factor.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">no-position-embedding</span></code></p></td>
+<td><p>Specifies whether to disable location encoding.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">no-position-embedding</span></code></p></td>
+<td><p>Specifies whether to disable location encoding.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">disable-bias-linear</span></code></p></td>
+<td><p>Disables bias in linear layers.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">add_bias_linear</span></code></p></td>
+<td><p>Enables bias in linear layers.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">mrope-section</span></code></p></td>
+<td><p>Information of multiple RoPE sections.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">make-vocab-size-divisible-by</span></code></p></td>
+<td><p>Divides the size of the word table by a specified number.</p></td>
+<td><p>Not supported.</p></td>
+<td><p>By default, the dictionary size is not changed.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">init-method-std</span></code></p></td>
+<td><p>Standard deviation of the normal distribution used during model parameter initialization.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">init_method_std</span></code></p></td>
+<td><p>Standard deviation of the normal distribution used during model parameter initialization.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">attention-dropout</span></code></p></td>
+<td><p>Dropout probability applied in the multi-head self-attention mechanism.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">attention_dropout</span></code></p></td>
+<td><p>Dropout probability applied in the multi-head self-attention mechanism.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">hidden-dropout</span></code></p></td>
+<td><p>Dropout probability in the hidden layer.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">hidden_dropout</span></code></p></td>
+<td><p>Dropout probability in the hidden layer.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">normalization</span></code></p></td>
+<td><p>Normalization method, which can be LayerNorm or RMSNorm.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">normalization</span></code></p></td>
+<td><p>Normalization method, which can be LayerNorm or RMSNorm.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">norm-epsilon</span></code></p></td>
+<td><p>Normalized stability factor (epsilon).</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">rms_norm_eps</span></code></p></td>
+<td><p>RMSNorm stability factor.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">apply-layernorm-1p</span></code></p></td>
+<td><p>Specifies whether to add 1 after LayerNorm.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">apply-residual-connection-post-layernorm</span></code></p></td>
+<td><p>Specifies whether the residual connection is applied after LayerNorm.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">apply_residual_connection_post_layernorm</span></code></p></td>
+<td><p>Specifies whether the residual connection is applied after LayerNorm.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">openai-gelu</span></code></p></td>
+<td><p>Specifies whether to use the GELU activation function of the OpenAI version.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">squared-relu</span></code></p></td>
+<td><p>Specifies whether to use the square ReLU activation function.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p>Specified by <code class="docutils literal notranslate"><span class="pre">swiglu</span></code>, <code class="docutils literal notranslate"><span class="pre">openai-gelu</span></code>, and <code class="docutils literal notranslate"><span class="pre">squared-relu</span></code></p></td>
+<td><p>The default value is <strong>torch.nn.functional.gelu</strong>.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">hidden_act</span></code></p></td>
+<td><p>Activation function type.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gated_linear_unit</span></code></p></td>
+<td><p>Specifies whether to use gate linear unit in multi-layer perceptron (MLP).</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">gated_linear_unit</span></code></p></td>
+<td><p>Specifies whether to use gate linear unit in MLP.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">swiglu</span></code></p></td>
+<td><p>Specifies whether to use the SwiGLU activation function.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">hidden_act</span></code> == <code class="docutils literal notranslate"><span class="pre">silu</span></code> and <code class="docutils literal notranslate"><span class="pre">gated_linear_unit</span></code></p></td>
+<td><p>Specifies whether to use the SwiGLU activation function.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">no-persist-layer-norm</span></code></p></td>
+<td><p>Disables persistence layer normalization.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">untie-embeddings-and-output-weights</span></code></p></td>
+<td><p>Specifies whether to decouple the weights of the input embedding layer and output layer.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">untie_embeddings_and_output_weights</span></code></p></td>
+<td><p>Specifies whether to decouple the weights of the input embedding layer and output layer.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Specified by <code class="docutils literal notranslate"><span class="pre">fp16</span></code> and <code class="docutils literal notranslate"><span class="pre">bf16</span></code></p></td>
+<td><p>Tensor compute precision during training.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">compute_dtype</span></code></p></td>
+<td><p>Tensor compute precision during training.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">grad-reduce-in-bf16</span></code></p></td>
+<td><p>Gradient reduction using BFloat16.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>Not supported.</p></td>
+<td><p>By default, the initialization tensor is generated in BFloat16 format.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">param_init_type</span></code></p></td>
+<td><p>Initial precision of the weight tensor. The default value is <strong>Float32</strong>, which ensures that the backward gradient is updated in Float32.</p></td>
+</tr>
+<tr class="row-even"><td><p>Not supported.</p></td>
+<td><p>By default, layer normalization is calculated in Float32.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">layernorm_compute_type</span></code></p></td>
+<td><p>Layer normalization tensor calculation precision.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">attention-softmax-in-fp32</span></code></p></td>
+<td><p>Executes <strong>attention softmax</strong> in Float32.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">softmax_compute_type</span></code></p></td>
+<td><p>Softmax tensor calculation precision.</p></td>
+</tr>
+<tr class="row-even"><td><p>Not supported.</p></td>
+<td><p></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">rotary_dtype</span></code></p></td>
+<td><p>Position encoding tensor calculation precision.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">loss-scale</span></code></p></td>
+<td><p>Overall loss scaling factor.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">loss_scale_value</span></code></p></td>
+<td><p>Overall loss scaling factor, which is configured in <strong>runner_wrapper</strong>. If <code class="docutils literal notranslate"><span class="pre">compute_dtype</span></code> is set to <strong>BFloat16</strong>, the value is usually set to <strong>1.0</strong>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">initial-loss-scale</span></code></p></td>
+<td><p>Initial loss scaling factor.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">min-loss-scale</span></code></p></td>
+<td><p>Minimum loss scaling factor.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">loss-scale-window</span></code></p></td>
+<td><p>Dynamic window size scaling.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">loss_scale_window</span></code></p></td>
+<td><p>Dynamic window size scaling.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">hysteresis</span></code></p></td>
+<td><p>Loss scale hysteresis parameter.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">fp32-residual-connection</span></code></p></td>
+<td><p>Uses Float32 for residual connection.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">fp32_residual_connection</span></code></p></td>
+<td><p>Uses Float32 for residual connection.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">accumulate-allreduce-grads-in-fp32</span></code></p></td>
+<td><p>Accumulates and reduces gradients using Float32.</p></td>
+<td><p>Not supported.</p></td>
+<td><p>Accumulates and reduces gradients using Float32 by default.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">fp16-lm-cross-entropy</span></code></p></td>
+<td><p>Uses Float16 to execute the cross entropy of the LLM.</p></td>
+<td><p>Not supported.</p></td>
+<td><p>Uses Float32 to execute the cross entropy of the LLM by default.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">q-lora-rank</span></code></p></td>
+<td><p>LoRA rank of the query projection layer, which is used when Q-LoRA is enabled.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">q_lora_rank</span></code></p></td>
+<td><p>LoRA rank of the query projection layer, which is used when Q-LoRA is enabled.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">kv-lora-rank</span></code></p></td>
+<td><p>LoRA rank of the key/value projection layer, which is used when KV-LoRA is enabled.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">kv_lora_rank</span></code></p></td>
+<td><p>LoRA rank of the key/value projection layer, which is used when KV-LoRA is enabled.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">qk-head-dim</span></code></p></td>
+<td><p>Number of dimensions per Q/K head.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">qk_nope_head_dim</span></code></p></td>
+<td><p>Number of dimensions per Q/K head.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">qk-pos-emb-head-dim</span></code></p></td>
+<td><p>Number of relative position embedding dimensions per Q/K head.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">qk_rope_head_dim</span></code></p></td>
+<td><p>Number of relative position embedding dimensions per Q/K head.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">v-head-dim</span></code></p></td>
+<td><p>Number of dimensions per value projection (V head).</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">v_head_dim</span></code></p></td>
+<td><p>Number of dimensions per value projection (V head).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rotary-scaling-factor</span></code></p></td>
+<td><p>RoPE scaling coefficient.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">scaling_factor</span></code></p></td>
+<td><p>RoPE scaling coefficient.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">use-precision-aware-optimizer</span></code></p></td>
+<td><p>Enables the optimizer with precision awareness to automatically manage parameter updates of different data types.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">main-grads-dtype</span></code></p></td>
+<td><p>Data type of the main gradient.</p></td>
+<td><p>Not supported.</p></td>
+<td><p>By default, Float32 is used as the data type of the main gradient.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">main-params-dtype</span></code></p></td>
+<td><p>Data type of the main parameter.</p></td>
+<td><p>Not supported.</p></td>
+<td><p>By default, Float32 is used as the data type of the main parameter.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">exp-avg-dtype</span></code></p></td>
+<td><p>Data type of the exponential moving average (EMA).</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">exp-avg-sq-dtype</span></code></p></td>
+<td><p>Data type of the EMA square item.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">first-last-layers-bf16</span></code></p></td>
+<td><p>Specifies whether to forcibly use BFloat16 at the first and last layers.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">num-layers-at-start-in-bf16</span></code></p></td>
+<td><p>Number of layers that start with BFloat16.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">num-layers-at-end-in-bf16</span></code></p></td>
+<td><p>Number of layers that end with BFloat16.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">multi-latent-attention</span></code></p></td>
+<td><p>Specifies whether to enable the multi-hidden variable attention mechanism.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">multi_latent_attention</span></code></p></td>
+<td><p>Specifies whether to enable the multi-hidden variable attention mechanism.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">qk-layernorm</span></code></p></td>
+<td><p>Enables query/key layer normalization.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">qk-layernorm</span></code></p></td>
+<td><p>Enables query/key layer normalization.</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>Optimizer and learning rate scheduling configurations</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Megatron-LM</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>MindSpore Transformers</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">optimizer</span></code></p></td>
+<td><p>Optimizer type, such as Adam and SGD.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">type</span></code></p></td>
+<td><p>Optimizer type, such as Adam and SGD.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">adam-beta1</span></code> and <code class="docutils literal notranslate"><span class="pre">adam-beta2</span></code></p></td>
+<td><p>β parameter of the Adam optimizer.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">betas</span></code></p></td>
+<td><p>β parameter of the Adam optimizer.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">adam-eps</span></code></p></td>
+<td><p>ε in the Adam optimizer (to prevent division by zero).</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">eps</span></code></p></td>
+<td><p>ε in the Adam optimizer (to prevent division by zero).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">weight-decay</span></code></p></td>
+<td><p>Weight decay coefficient.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">weight-decay</span></code></p></td>
+<td><p>Weight decay coefficient.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">start-weight-decay</span></code></p></td>
+<td><p>Initial weight decay.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">end-weight-decay</span></code></p></td>
+<td><p>Final weight decay.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">weight-decay-incr-style</span></code></p></td>
+<td><p>Weight decay adjustment policy, which can be <strong>constant</strong>, <strong>linear</strong>, and <strong>cosine</strong>.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">clip-grad</span></code></p></td>
+<td><p>Gradient clipping threshold.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">clip_grad</span></code></p></td>
+<td><p>Gradient clipping threshold, which is configured in <strong>runner_wrapper</strong>. The value is usually <strong>1.0</strong>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">lr</span></code></p></td>
+<td><p>Learning rate.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">learning_rate</span></code></p></td>
+<td><p>Learning rate.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">lr-decay-style</span></code></p></td>
+<td><p>Learning rate decay mode.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">type</span></code></p></td>
+<td><p>Learning rate decay mode.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">lr-decay-iters</span></code></p></td>
+<td><p>Number of iterations corresponding to the learning rate decay.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">total_steps</span></code></p></td>
+<td><p>Total number of iterations by default.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">lr-decay-samples</span></code></p></td>
+<td><p>Number of samples corresponding to the learning rate decay.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">lr-warmup-iters</span></code></p></td>
+<td><p>Number of warm-up iteration steps of the learning rate.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">warmup_steps</span></code></p></td>
+<td><p>Number of warm-up iteration steps of the learning rate.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">lr-warmup-fraction</span></code></p></td>
+<td><p>Proportion of the learning rate warm-up phase.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">warmup_ratio</span></code></p></td>
+<td><p>Proportion of the learning rate warm-up phase.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">lr-warmup-init</span></code></p></td>
+<td><p>Initial learning rate for warm-up.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">warmup_lr_init</span></code></p></td>
+<td><p>Initial learning rate for warm-up.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">min-lr</span></code></p></td>
+<td><p>Minimum learning rate.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">min-lr</span></code></p></td>
+<td><p>Minimum learning rate.</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>Parallel and distributed configurations</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Megatron-LM</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>MindSpore Transformers</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">tensor-model-parallel-size</span></code></p></td>
+<td><p>Degree of tensor model parallelism.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">model_parallel</span></code></p></td>
+<td><p>Degree of tensor model parallelism.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pipeline-model-parallel-size</span></code></p></td>
+<td><p>Parallel size of the pipeline model.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">pipeline_stage</span></code></p></td>
+<td><p>Parallel size of the pipeline model.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sequence-parallel</span></code></p></td>
+<td><p>Specifies whether to enable sequence parallelism.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">use_seq_parallel</span></code></p></td>
+<td><p>Specifies whether to enable sequence parallelism.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">context-parallel-size</span></code></p></td>
+<td><p>Context parallel size.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">context_parallel</span></code></p></td>
+<td><p>Context parallel size.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">use-distributed-optimizer</span></code></p></td>
+<td><p>Specifies whether to use a distributed optimizer.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">parallel_optimizer_config</span></code></p></td>
+<td><p>Specifies whether to use a distributed optimizer.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">expert-model-parallel-size</span></code></p></td>
+<td><p>Degree of model parallelism at the expert layer.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">expert_parallel</span></code></p></td>
+<td><p>Degree of model parallelism at the expert layer.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">expert-tensor-parallel-size</span></code></p></td>
+<td><p>Degree of tensor parallelism at the expert layer.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">expert_model_parallel</span></code></p></td>
+<td><p>Degree of tensor parallelism at the expert layer.</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>FlashAttention/Fused Attention</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Megatron-LM</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>MindSpore Transformers</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">attention-backend</span></code></p></td>
+<td><p>Attention implementation backend, which can be <strong>flash</strong>, <strong>fused</strong>, <strong>unfused</strong>, <strong>local</strong>, and <strong>auto</strong>.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">use-flash-attn</span></code></p></td>
+<td><p>Specifies whether to enable FlashAttention.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">use_flash_attention</span></code></p></td>
+<td><p>Specifies whether to enable FlashAttention. FlashAttention is enabled by default.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">no-masked-softmax-fusion</span></code></p></td>
+<td><p>Disables masked softmax fusion.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">no-bias-gelu-fusion</span></code></p></td>
+<td><p>Disables bias+GELU fusion.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">no-bias-swiglu-fusion</span></code></p></td>
+<td><p>Disables bias+SwiGLU fusion.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">no-bias-dropout-fusion</span></code></p></td>
+<td><p>Disables bias+Dropout fusion.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">no-rope-fusion</span></code></p></td>
+<td><p>Disables RoPE fusion.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">cross-entropy-loss-fusion</span></code></p></td>
+<td><p>Enables cross entropy loss fusion.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>MoE</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Megatron-LM</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>MindSpore Transformers</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">num-experts</span></code></p></td>
+<td><p>Number of experts at each layer.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">num-experts</span></code></p></td>
+<td><p>Number of experts at each layer.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">moe-layer-freq</span></code></p></td>
+<td><p>Number of layers between inserted MoE layers.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">moe-layer-freq</span></code></p></td>
+<td><p>Number of layers between inserted MoE layers.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">moe-ffn-hidden-size</span></code></p></td>
+<td><p>Number of dimensions in the hidden FFN layer in MoE.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">moe_intermediate_size</span></code></p></td>
+<td><p>Number of dimensions in the hidden FFN layer in MoE.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">moe-shared-expert-intermediate-size</span></code></p></td>
+<td><p>Number of middle dimensions shared by experts.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">moe_shared_expert_intermediate_size</span></code></p></td>
+<td><p>Number of middle dimensions shared by experts.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">moe-shared-expert-overlap</span></code></p></td>
+<td><p>Specifies whether to overlap the middle layer shared by experts.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">moe_shared_expert_overlap</span></code></p></td>
+<td><p>Specifies whether to overlap the middle layer shared by experts.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">moe-grouped-gemm</span></code></p></td>
+<td><p>Specifies whether to use the grouped GEMM optimization.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">use_gmm</span></code></p></td>
+<td><p>Specifies whether to use the grouped GEMM optimization.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">moe-router-load-balancing-type</span></code></p></td>
+<td><p>Router load balancing policy.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">moe_router_load_balancing_type</span></code></p></td>
+<td><p>Router load balancing policy.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">moe-router-dtype</span></code></p></td>
+<td><p>Router score data type.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">router_dense_type</span></code></p></td>
+<td><p>Router score data type.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">moe-router-score-function</span></code></p></td>
+<td><p>Router score calculation method (for example, <strong>softmax</strong>).</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">use_gating_sigmoid</span></code></p></td>
+<td><p>Specifies whether to use the Sigmoid activation function.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">moe-router-topk</span></code></p></td>
+<td><p>Number of top-<em>k</em> selected routers.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">num_experts_chosen</span></code></p></td>
+<td><p>Number of top-<em>k</em> selected routers.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">moe-router-pre-softmax</span></code></p></td>
+<td><p>Specifies whether to preprocess before softmax.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">moe_router_pre_softmax</span></code></p></td>
+<td><p>Specifies whether to preprocess before softmax.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">moe-router-num-groups</span></code></p></td>
+<td><p>Number of token groups.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">n_groups</span></code></p></td>
+<td><p>Number of token groups.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">moe-router-group-topk</span></code></p></td>
+<td><p>Number of top-<em>k</em> tokens in each group.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">topk_group</span></code></p></td>
+<td><p>Number of top-<em>k</em> tokens in each group.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">moe-router-topk-scaling-factor</span></code></p></td>
+<td><p>Top-<em>k</em> score scaling factor.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">routed_scaling_factor</span></code></p></td>
+<td><p>Top-<em>k</em> score scaling factor.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">moe-router-enable-expert-bias</span></code></p></td>
+<td><p>Specifies whether to use the bias of an expert.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">balance_via_topk_bias</span></code></p></td>
+<td><p>Specifies whether to use the bias of an expert.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">moe-router-bias-update-rate</span></code></p></td>
+<td><p>Update rate of expert bias.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">topk_bias_update_rate</span></code></p></td>
+<td><p>Update rate of expert bias.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">moe-use-legacy-grouped-gemm</span></code></p></td>
+<td><p>Specifies whether to use the source version of Grouped GEMM.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">moe-aux-loss-coeff</span></code></p></td>
+<td><p>Auxiliary loss coefficient of MoE.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">moe-z-loss-coeff</span></code></p></td>
+<td><p>MoE z-loss coefficient.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">moe-input-jitter-eps</span></code></p></td>
+<td><p>Input jitter noise of MoE.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">moe_input_jitter_eps</span></code></p></td>
+<td><p>Input jitter noise of MoE.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">moe-token-dispatcher-type</span></code></p></td>
+<td><p>Token scheduling policy (for example, <strong>allgather</strong>).</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">moe_token_dispatcher_type</span></code></p></td>
+<td><p>Token scheduling policy (for example, <strong>allgather</strong>).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">moe-enable-deepep</span></code></p></td>
+<td><p>Specifies whether to enable DeepEP hybrid expert optimization.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">moe_enable_deepep</span></code></p></td>
+<td><p>Specifies whether to enable DeepEP hybrid expert optimization.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">moe-per-layer-logging</span></code></p></td>
+<td><p>Prints logs at each MoE layer.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">moe_per_layer_logging</span></code></p></td>
+<td><p>Prints logs at each MoE layer.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">moe-expert-capacity-factor</span></code></p></td>
+<td><p>Expansion ratio of the expert capacity.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">capacity_factor</span></code></p></td>
+<td><p>Expansion ratio of the expert capacity.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">moe-pad-expert-input-to-capacity</span></code></p></td>
+<td><p>Specifies whether to fill the expert input to the capacity upper limit.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">moe_pad_expert_input_to_capacity</span></code></p></td>
+<td><p>Specifies whether to fill the expert input to the capacity upper limit.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">moe-token-drop-policy</span></code></p></td>
+<td><p>Token discarding policy (for example, <strong>probs</strong> or <strong>position</strong>).</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">enable_sdrop</span></code></p></td>
+<td><p>Token discarding policy (for example, <strong>probs</strong> or <strong>position</strong>).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">moe-extended-tp</span></code></p></td>
+<td><p>Enables extended tensor parallelism.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">moe-use-upcycling</span></code></p></td>
+<td><p>Specifies whether to enable expert upcycling.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">moe-permute-fusion</span></code></p></td>
+<td><p>Enables internal permute fusion optimization of experts.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">moe_permute_fusion</span></code></p></td>
+<td><p>Enables internal permute fusion optimization of experts.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">mtp-num-layers</span></code></p></td>
+<td><p>Number of MoE layers.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">mtp_depth</span></code></p></td>
+<td><p>Number of MoE layers.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">mtp-loss-scaling-factor</span></code></p></td>
+<td><p>Loss scaling in the MoE architecture.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">mtp_loss_factor</span></code></p></td>
+<td><p>Loss scaling in the MoE architecture.</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>Data loading and tokenization</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Megatron-LM</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>MindSpore Transformers</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">data-path</span></code> and <code class="docutils literal notranslate"><span class="pre">split</span></code></p></td>
+<td><p>General data path.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">data_path</span></code></p></td>
+<td><p>Sampling ratio and path of the Megatron dataset.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">train-data-path</span></code></p></td>
+<td><p>Training data path.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">valid-data-path</span></code></p></td>
+<td><p>Validation data path.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">test-data-path</span></code></p></td>
+<td><p>Test data path.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">vocab-size</span></code></p></td>
+<td><p>Vocabulary size.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">vocab_size</span></code></p></td>
+<td><p>Vocabulary size.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">vocab-file</span></code></p></td>
+<td><p>Vocabulary file path.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">merge-file</span></code></p></td>
+<td><p>BPE combination rule file.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tokenizer-type</span></code></p></td>
+<td><p>Tokenizer type (for example, <strong>GPT2BPETokenizer</strong>).</p></td>
+<td><p>Not supported.</p></td>
+<td><p>The tokenizer corresponding to Hugging Face is used by default.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">seq-length</span></code></p></td>
+<td><p>Input sequence length.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">seq_length</span></code></p></td>
+<td><p>Input sequence length.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">encoder-seq-length</span></code></p></td>
+<td><p>Encoder input length.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">decoder-seq-length</span></code></p></td>
+<td><p>Decoder input length.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">retriever-seq-length</span></code></p></td>
+<td><p>Retriever sequence length (if enabled).</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">num-workers</span></code></p></td>
+<td><p>Number of threads for loading data.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">num_parallel_workers</span></code></p></td>
+<td><p>Number of threads for loading data.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">num-dataset-builder-threads</span></code></p></td>
+<td><p>Number of threads for building datasets.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">data-cache-path</span></code></p></td>
+<td><p>Data cache path.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>Training control and save</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Megatron-LM</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>MindSpore Transformers</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Not supported.</p></td>
+<td><p>Total number of local samples processed in each iteration.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">batch_size</span></code></p></td>
+<td><p>Total number of local samples processed in each iteration, which is configured in <code class="docutils literal notranslate"><span class="pre">runner_wrapper</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Not supported.</p></td>
+<td><p>Total number of local samples processed in each iteration.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">micro_batch_interleave_num</span></code></p></td>
+<td><p>Number of micro-batch interleaving. When <code class="docutils literal notranslate"><span class="pre">micro_batch_interleave_num</span></code> is greater than 1, multiple copies are enabled for parallel processing.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">global_batch_size</span></code></p></td>
+<td><p>Total number of global samples processed in each iteration.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">batch_size</span></code> and <code class="docutils literal notranslate"><span class="pre">data_parallel</span></code></p></td>
+<td><p>Total number of global samples processed in each iteration, which is the value of <code class="docutils literal notranslate"><span class="pre">batch_size</span></code> multiplied by the value of <code class="docutils literal notranslate"><span class="pre">data_parallel</span></code> multiplied by the value of <code class="docutils literal notranslate"><span class="pre">micro_batch_interleave_num</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Not supported.</p></td>
+<td><p>Number of iteration periods.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">epochs</span></code></p></td>
+<td><p>Number of iteration periods, which is configured in <code class="docutils literal notranslate"><span class="pre">runner_wrapper</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">train-samples</span></code></p></td>
+<td><p>Total number of training samples.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sizes</span></code></p></td>
+<td><p>Total number of training samples, which is configured in <code class="docutils literal notranslate"><span class="pre">train_dataset</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">train-iters</span></code></p></td>
+<td><p>Total number of training iterations.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">epochs</span></code>, <code class="docutils literal notranslate"><span class="pre">sizes</span></code>, and <code class="docutils literal notranslate"><span class="pre">global_batch_size</span></code></p></td>
+<td><p>Total number of training iterations, which is the value of <code class="docutils literal notranslate"><span class="pre">sizes</span></code> divided by the value of <code class="docutils literal notranslate"><span class="pre">global_batch_size</span></code> and multiplied by the value of <code class="docutils literal notranslate"><span class="pre">epochs</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">log-interval</span></code></p></td>
+<td><p>Log recording interval (number of iteration steps).</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">per_print_times</span></code></p></td>
+<td><p>Log recording interval (number of iteration steps), which is configured in <code class="docutils literal notranslate"><span class="pre">MFLossMonitor</span></code> of <code class="docutils literal notranslate"><span class="pre">callbacks</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">eval-iters</span></code></p></td>
+<td><p>Number of iterations used in each evaluation.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">eval-interval</span></code></p></td>
+<td><p>Number of evaluation interval steps.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">save</span></code></p></td>
+<td><p>Model save path.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">output_dir</span></code></p></td>
+<td><p>Model save path.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">save-interval</span></code></p></td>
+<td><p>Model save interval (number of iteration steps).</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">save_checkpoint_steps</span></code></p></td>
+<td><p>Model save interval (number of iteration steps), which is configured in <code class="docutils literal notranslate"><span class="pre">CheckpointMonitor</span></code> of <code class="docutils literal notranslate"><span class="pre">callbacks</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">non-persistent-save-interval</span></code></p></td>
+<td><p>(Non-persistent) temporary storage interval.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">non-persistent-ckpt-type</span></code></p></td>
+<td><p>Temporary storage type (for example, <strong>global</strong> or <strong>local</strong>).</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pretrained-checkpoint</span></code></p></td>
+<td><p>Pretrained model path.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ckpt-step</span></code></p></td>
+<td><p>Loads the weight of a specified step.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">load_checkpoint</span></code> and <code class="docutils literal notranslate"><span class="pre">resume_training</span></code></p></td>
+<td><p>Loads the weight of a specified name in resumable training scenarios.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">load</span></code></p></td>
+<td><p>Loads a model from the path.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">load_checkpoint</span></code></p></td>
+<td><p>Loads a model from the path.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">exit-interval</span></code></p></td>
+<td><p>Iteration interval for exiting training.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">stop_step</span></code></p></td>
+<td><p>Number of iterations after which the training is stopped, which is configured in <code class="docutils literal notranslate"><span class="pre">TrainCallMonitor</span></code> of <code class="docutils literal notranslate"><span class="pre">callbacks</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">exit-duration-in-mins</span></code></p></td>
+<td><p>Interval for exiting training (in minutes).</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>Recomputation configurations</p>
+<p>The recomputation configuration logic of MindSpore Transformers is greatly different from that of Megatron-LM. For details, see <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/memory_optimization.html#recomputation">Recomputation</a>.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Megatron-LM</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>MindSpore Transformers</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">recompute-activations</span></code></p></td>
+<td><p>Specifies whether to enable activation recomputation to save memory.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">recompute</span></code></p></td>
+<td><p>Specifies whether to enable complete activation recomputation to save memory (<code class="docutils literal notranslate"><span class="pre">bool</span></code>).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">recompute-granularity</span></code></p></td>
+<td><p>Recomputation granularity (for example, <strong>full</strong> or <strong>selective</strong>).</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">select_recompute</span></code></p></td>
+<td><p>Specifies whether to enable selective recomputation.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">recompute-method</span></code></p></td>
+<td><p>Recomputation method (for example, <strong>uniform</strong> or <strong>block</strong>).</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">recompute-num-layers</span></code></p></td>
+<td><p>Number of recomputation layers.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">recompute</span></code></p></td>
+<td><p>Number of recomputation layers (for example, <code class="docutils literal notranslate"><span class="pre">tuple</span></code> or <code class="docutils literal notranslate"><span class="pre">list</span></code>).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">distribute-saved-activations</span></code></p></td>
+<td><p>Distributed storage activation value.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">checkpoint-activations</span></code></p></td>
+<td><p>Specifies whether to enable the activation checkpoint mechanism to reduce the video RAM.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">moe-layer-recompute</span></code></p></td>
+<td><p>Enables recomputation at the MoE layer.</p></td>
+<td><p>Not supported.</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<p><strong>Note:</strong> The two frameworks have other configurations that are not closely related to training. For details about MindSpore Transformers, see <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/configuration.html">Configuration Description</a>. You can run the <code class="docutils literal notranslate"><span class="pre">torchrun</span> <span class="pre">--nproc_per_node=1</span> <span class="pre">pretrain_gpt.py</span> <span class="pre">--help</span></code> command to view the Megatron-LM configuration.</p>
+</section>
+<section id="dataset-alignment">
+<h3>3.2 Dataset Alignment<a class="headerlink" href="#dataset-alignment" title="Link to this heading"></a></h3>
+<p>In the precision comparison process, ensure that the two frameworks use the same data input. This section describes how to align the dataset creation and configuration of Megatron-LM and MindSpore Transformers to ensure the consistency of input samples, providing a basis for subsequent weight loading and precision validation.</p>
+<section id="preparing-a-dataset">
+<h4>3.2.1 Preparing a Dataset<a class="headerlink" href="#preparing-a-dataset" title="Link to this heading"></a></h4>
+<p>Both frameworks support loading the Megatron dataset. The dataset is preprocessed, serialized into a binary format (for example, <code class="docutils literal notranslate"><span class="pre">.bin</span></code> or <code class="docutils literal notranslate"><span class="pre">.idx</span></code> file), and accompanied by a specific indexing mechanism, which facilitates efficient parallel loading and data segmentation in a distributed cluster environment.</p>
+<ul class="simple">
+<li><p>Dataset download: <a class="reference external" href="https://dagshub.com/DagsHub/WIkiText-103/src/main/dataset/tokens">wikitext-103 dataset</a></p></li>
+<li><p>Tokenizer model download: <a class="reference external" href="https://huggingface.co/deepseek-ai/DeepSeek-V3/resolve/main/tokenizer.json?download=true">tokenizer.json</a></p></li>
+</ul>
+</section>
+<section id="processing-a-dataset">
+<h4>3.2.2 Processing a Dataset<a class="headerlink" href="#processing-a-dataset" title="Link to this heading"></a></h4>
+<ul>
+<li><p>Generating Megatron BIN files</p>
+<p>Place the dataset file <code class="docutils literal notranslate"><span class="pre">wiki.train.tokens</span></code> and the tokenization model file <code class="docutils literal notranslate"><span class="pre">tokenizer.json</span></code> in the <code class="docutils literal notranslate"><span class="pre">../dataset</span></code> directory, and create the <code class="docutils literal notranslate"><span class="pre">data.json</span></code> file by referring to <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/dataset.html#data-preprocessing">Megatron Dataset &gt; Data Preprocessing</a>.</p>
+<p>Use the following command to convert the dataset file into BIN format files. The environment variable <code class="docutils literal notranslate"><span class="pre">$MINDFORMERS_HOME</span></code> refers to the directory where the MindSpore Transformers source code is located. Please set it in advance.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span><span class="nv">$MINDFORMERS_HOME</span>
+python<span class="w"> </span>mindformers/tools/dataset_preprocess/preprocess_indexed_dataset.py<span class="w"> </span><span class="se">\</span>
+<span class="w"> </span>--input<span class="w"> </span>/path/data.json<span class="w"> </span><span class="se">\</span>
+<span class="w"> </span>--output-prefix<span class="w"> </span>../dataset/wiki_4096<span class="w"> </span><span class="se">\</span>
+<span class="w"> </span>--vocab-file<span class="w"> </span>../dataset/tokenizer.json<span class="w"> </span><span class="se">\</span>
+<span class="w"> </span>--seq-length<span class="w"> </span><span class="m">4096</span><span class="w"> </span><span class="se">\</span>
+<span class="w"> </span>--workers<span class="w"> </span><span class="m">1</span>
+</pre></div>
+</div>
+</li>
+<li><p>Building the Megatron BIN dataset module</p>
+<p>Run the following commands to build the Megatron BIN dataset module.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>pybind11
+<span class="nb">cd</span><span class="w"> </span><span class="nv">$MINDFORMERS_HOME</span>/mindformers/dataset/blended_datasets
+make
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="configuring-a-dataset">
+<h4>3.2.3 Configuring a Dataset<a class="headerlink" href="#configuring-a-dataset" title="Link to this heading"></a></h4>
+<p>This section compares and describes the dataset configuration items in the configuration files of the two frameworks.</p>
+<ul>
+<li><p>Megatron-LM:</p>
+<p>The dataset configuration items in the Megatron-LM sample are as follows:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">TOKENIZER_MODEL</span><span class="o">=</span><span class="s2">&quot;/path/to/tokenizer.json&quot;</span>
+<span class="nv">DATA_PATH</span><span class="o">=</span><span class="s2">&quot;/path/to/wiki_text_document&quot;</span>
+
+<span class="nv">DATA_ARGS</span><span class="o">=(</span>
+<span class="w">    </span>--tokenizer-type<span class="w"> </span>HuggingFaceTokenizer
+<span class="w">    </span>--tokenizer-model<span class="w"> </span><span class="si">${</span><span class="nv">TOKENIZER_MODEL</span><span class="si">}</span>
+<span class="w">    </span>--data-path<span class="w"> </span><span class="nv">$DATA_PATH</span>
+<span class="w">    </span>--split<span class="w"> </span><span class="m">1</span>,0,0
+<span class="o">)</span>
+</pre></div>
+</div>
+<p>In the preceding information:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">tokenizer-type</span></code>: type of the tokenization model file.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tokenizer-model</span></code>: location of the tokenization model file <code class="docutils literal notranslate"><span class="pre">tokenizer.json</span></code>, which is accurate to the full file name.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data-path</span></code>: location of the processed dataset, which is accurate to the prefix of the <code class="docutils literal notranslate"><span class="pre">.bin</span></code> or <code class="docutils literal notranslate"><span class="pre">.idx</span></code> file.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">split</span></code>: sampling ratio of the dataset.</p></li>
+</ul>
+</li>
+<li><p>MindSpore Transformers:</p>
+<p>The dataset configuration items in the MindSpore Transformers sample are as follows:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">config</span><span class="p">:</span><span class="w">  </span><span class="c1"># GPTDataset configuration items.</span>
+<span class="w">  </span><span class="nt">data_path</span><span class="p">:</span><span class="w">  </span><span class="c1"># Sampling ratio and path of the Megatron dataset.</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;1&#39;</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;/home/to/wiki_text_document&quot;</span>
+</pre></div>
+</div>
+<p>Note that the first parameter of <code class="docutils literal notranslate"><span class="pre">data_path</span></code> is the dataset sampling ratio, and the setting in the example is equivalent to <code class="docutils literal notranslate"><span class="pre">--split</span></code> in the Megatron-LM example. The second parameter is the location of the processed dataset, which is accurate to the prefix of the <code class="docutils literal notranslate"><span class="pre">.bin</span></code> or <code class="docutils literal notranslate"><span class="pre">.idx</span></code> file. The setting in the example is equivalent to <code class="docutils literal notranslate"><span class="pre">--data-path</span></code> in the Megatron-LM example.</p>
+</li>
+</ul>
+</section>
+</section>
+<section id="weight-alignment">
+<h3>3.3 Weight Alignment<a class="headerlink" href="#weight-alignment" title="Link to this heading"></a></h3>
+<p>To ensure the consistency of model behavior between different frameworks, the weights obtained after training must be accurately mapped to the corresponding positions in MindSpore Transformers and Megatron-LM through proper weight conversion and segmentation.</p>
+<section id="weight-conversion">
+<h4>Weight Conversion<a class="headerlink" href="#weight-conversion" title="Link to this heading"></a></h4>
+<p>The weight formats, parameter naming modes, and tensor arrangements of MindSpore Transformers and Megatron-LM are different. Directly loading the weights will result in incompatibility. Therefore, you need to use a dedicated conversion script to convert the model weights exported from the source framework to the format that can be identified by the target framework.</p>
+<ol class="arabic">
+<li><p>Generating initial weights of MindSpore Transformers</p>
+<p>Modify the <code class="docutils literal notranslate"><span class="pre">example.yaml</span></code> file by referring to <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/configuration.html#callbacks-configuration">Callbacks Configuration</a> and run the command provided in <a class="reference internal" href="#3-4-viewing-results"><span class="xref myst">Viewing Results</span></a> to obtain an initial weight in <code class="docutils literal notranslate"><span class="pre">checkpoints</span></code> of <code class="docutils literal notranslate"><span class="pre">output_dir</span></code> in <code class="docutils literal notranslate"><span class="pre">example.yaml</span></code> through pre-training. The modification is as follows:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Before (example.yaml)</span>
+<span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/path/to/checkpoints/&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># After (example.yaml)</span>
+<span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;&#39;</span>
+
+<span class="nt">callbacks</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CheckpointMonitor</span>
+<span class="w">  </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;deepseekv3&quot;</span>
+<span class="w">  </span><span class="nt">save_checkpoint_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">keep_checkpoint_max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">integrated_save</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">async_save</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">  </span><span class="nt">checkpoint_format</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;safetensors&quot;</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TrainCallBack</span>
+<span class="w">  </span><span class="nt">stop_step</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+<p><strong>Note</strong>: After obtaining the weight, restore <code class="docutils literal notranslate"><span class="pre">example.yaml</span></code>.</p>
+</li>
+<li><p>MindSpore Transformers to Megatron-LM</p>
+<p>To accurately map the weights of MindSpore Transformers to the equivalent weights that can be loaded by Megatron-LM, a weight conversion script is provided. You can obtain the equivalent weights by executing the weight conversion script.</p>
+</li>
+</ol>
+</section>
+</section>
+<section id="viewing-results">
+<h3>3.4 Viewing Results<a class="headerlink" href="#viewing-results" title="Link to this heading"></a></h3>
+<p>After the preceding steps are complete, you can start training and extract key data from the output result in the log to check the precision comparison result.</p>
+<ul>
+<li><p>Megatron-LM</p>
+<p>Save the <code class="docutils literal notranslate"><span class="pre">example.sh</span></code> file to the Megatron-LM code directory and run the following command:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>bash<span class="w"> </span>example.sh
+</pre></div>
+</div>
+</li>
+<li><p>MindSpore Transformers</p>
+<p>Run the following commands in the MindSpore Transformers code directory:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>bash<span class="w"> </span>scripts/msrun_launcher.sh<span class="w"> </span><span class="s2">&quot;run_mindformer.py \</span>
+<span class="s2"> --config /path/to/example.yaml&quot;</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">config</span></code> is the model configuration file, which is stored in the <strong>config</strong> directory of the MindSpore Transformers code repository.</p>
+</li>
+<li><p>Result comparison</p>
+<p>View the output logs of the two models. The log path of Megatron-LM is <code class="docutils literal notranslate"><span class="pre">logs/${logtime}.log</span></code> in <code class="docutils literal notranslate"><span class="pre">example.sh</span></code>; and that of MindSpore Transformers is <code class="docutils literal notranslate"><span class="pre">msrun_log/worker_0.log</span></code> in <code class="docutils literal notranslate"><span class="pre">output_dir</span></code> of <code class="docutils literal notranslate"><span class="pre">example.yaml</span></code>. The following table lists the comparison results.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Megatron-LM</p></th>
+<th class="head"><p>MindSpore Transformers</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">iteration</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">epoch</span></code> and <code class="docutils literal notranslate"><span class="pre">step</span></code></p></td>
+<td><p>Number of global iterations during training. In MindSpore Transformers, <code class="docutils literal notranslate"><span class="pre">(epoch,</span> <span class="pre">step)</span></code> indicates the current training location, while Megatron-LM uses a single <code class="docutils literal notranslate"><span class="pre">iteration</span></code>. The relationship between them is as follows: <code class="docutils literal notranslate"><span class="pre">iteration</span> <span class="pre">=</span> <span class="pre">(epoch</span> <span class="pre">–</span> <span class="pre">1)</span> <span class="pre">x</span> <span class="pre">steps_per_epoch</span> <span class="pre">+</span> <span class="pre">step</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">lm</span> <span class="pre">loss</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">loss</span></code></p></td>
+<td><p>Training loss, which is a core indicator in precision comparison. The value of <code class="docutils literal notranslate"><span class="pre">loss</span></code> of MindSpore Transformers is the sum of <code class="docutils literal notranslate"><span class="pre">lm</span> <span class="pre">loss</span></code> and <code class="docutils literal notranslate"><span class="pre">aux</span> <span class="pre">loss</span></code>. The values will be printed separately in the future.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">learning</span> <span class="pre">rate</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">lr</span></code></p></td>
+<td><p>Learning rate, which is the precision comparison reference indicator.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">grad</span> <span class="pre">norm</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">global</span> <span class="pre">norm</span></code></p></td>
+<td><p>Global gradient norm, which is the precision comparison reference indicator.</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="inference_precision_comparison.html" class="btn btn-neutral float-left" title="Comparison of Reasoning Precision" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="training_template_instruction.html" class="btn btn-neutral float-right" title="Training Configuration Template Instruction" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,316 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pre-trained Model Average Weight Consolidation &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Other Training Features" href="other_training_features.html" />
+    <link rel="prev" title="Data Skip And Checkpoint Health Monitor" href="skip_data_and_ckpt_health_monitor.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">Models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contribution Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">Modelers Contribution Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">Model-Related FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">Feature-Related FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Static Graph Implementation (Deprecated)</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Full-process Guide to Large Models</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Features</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">Features Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="start_tasks.html">Start Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ckpt.html">Ckpt Weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="safetensors.html">Safetensors Weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">Configuration File Descriptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="load_huggingface_config.html">Loading Hugging Face Model Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html">Logs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tokenizer.html">Using Tokenizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset.html">Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training_hyperparameters.html">Training Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monitor.html">Training Metrics Monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training.html">Resumable Training After Breakpoint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoint_saving_and_loading.html">Checkpoint Saving and Loading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training2.0.html">Resume Training2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel_training.html">Distributed Parallelism Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="high_availability.html">Training High Availability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory_optimization.html">Memory Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skip_data_and_ckpt_health_monitor.html">Data Skip And Checkpoint Health Monitor</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Pre-trained Model Average Weight Consolidation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#usage">Usage</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pmaadamw-optimizer-configuration-introduction">PmaAdamW Optimizer Configuration Introduction</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="other_training_features.html">Other Training Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantization.html">Quantization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_development/index.html">Advanced Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">Excellent Practice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">Environment Variable Descriptions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Features</a></li>
+      <li class="breadcrumb-item active">Pre-trained Model Average Weight Consolidation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/feature/pma_fused_checkpoint.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">Deprecated</p>
+<p>This page belongs to the <strong>Static Graph (GRAPH_MODE) Implementation</strong> section and has been marked as deprecated. New features are primarily being developed in the “r2.0.0 Dynamic Graph Implementation” section. Please refer to the dynamic graph documentation first.</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="pre-trained-model-average-weight-consolidation">
+<h1>Pre-trained Model Average Weight Consolidation<a class="headerlink" href="#pre-trained-model-average-weight-consolidation" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_en/static_graph/feature/pma_fused_checkpoint.md"><img alt="View Source on AtomGit" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source_en.svg" /></a></p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>Pre-trained Model Average (PMA) weight merging refers to the process of merging weights based on the selection of Exponential Moving Average (EMA) or Simple Moving Average (SMA) algorithm during training, in order to enhance the effectiveness of model training.</p>
+<p>MindSpore Transformers provides the <code class="docutils literal notranslate"><span class="pre">EMA</span></code> and <code class="docutils literal notranslate"><span class="pre">SMA</span></code> algorithms for weight fusion and merging. The merging formula is as follows:</p>
+<p>EMA algorithm formula: <span class="math notranslate nohighlight">\(PMA_n = (1 - \alpha) \times PMA_{n-1} + \alpha \times W_n\)</span></p>
+<blockquote>
+<div><p>The EMA algorithm allocates weights in an exponentially decreasing manner, making it more sensitive to the weights of the nearest model and able to quickly respond to changes in the model during the later stages of training.</p>
+</div></blockquote>
+<p>SMA algorithm formula: <span class="math notranslate nohighlight">\(PMA_n = (W_1+ ... + W_n) / n\)</span></p>
+<blockquote>
+<div><p>The SMA algorithm evenly distributes weights across all model weights and treats each weight equally.</p>
+</div></blockquote>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(PMA_n\)</span></p></td>
+<td><p>The fused weight in step n</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(PMA_{n-1}\)</span></p></td>
+<td><p>The fused weight of step n-1</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(W_1\)</span></p></td>
+<td><p>The original weight of step 1</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(W_n\)</span></p></td>
+<td><p>The original weight of step n</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\alpha\)</span></p></td>
+<td><p>The fusion coefficient will only take effect when the algorithm chooses EMA</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(n\)</span></p></td>
+<td><p>Take the average of n weights</p></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<div><p>The model will select a weight every fixed number of steps for formula calculation during training and save it as the middle value <code class="docutils literal notranslate"><span class="pre">pma_weight</span></code> in the weight, which will not affect the parameter values of the original weight.
+When the number of selected weights reaches the set number, the middle value of the weights <code class="docutils literal notranslate"><span class="pre">pma_weight</span></code> is written and overwritten with the zero after the original parameter value, and the training enters the next cycle of weight merging.</p>
+</div></blockquote>
+<p>The reference is as follows:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>@misc{modelmerging,
+      title={Model Merging in Pre-training of Large Language Models},
+      authors={Yunshui Li, Yiyuan Ma, Shen Yan, Chaoyi Zhang, Jing Liu, Jianqiao Lu,
+      Ziwen Xu, Mengzhao Chen, Minrui Wang, Shiyi Zhan, Jin Ma, Xunhao Lai, Deyi Liu, Yao Luo,
+      Xingyan Bin, Hongbin Ren, Mingji Han, Wenhao Hao, Bairen Yi, LingJun Liu, Bole Ma,
+      Xiaoying Jia, Xun Zhou, Siyuan Qiao, Liang Xiang, Yonghui Wu},
+      year={2025},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2505.12082}
+}
+</pre></div>
+</div>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
+<p><strong>Note</strong>: The parameter values shown in the following examples are only experimental data, please refer to real training data.</p>
+<p>This feature is enabled through YAML configuration files:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">optimizer</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PmaAdamW</span>
+<span class="w">  </span><span class="nt">betas</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.9</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.999</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">eps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.e-6</span>
+<span class="w">  </span><span class="nt">weight_decay</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0</span>
+<span class="w">  </span><span class="nt">fused_num</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="w">  </span><span class="nt">interleave_step</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span>
+<span class="w">  </span><span class="nt">fused_algo</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;ema&#39;</span>
+<span class="w">  </span><span class="nt">ema_alpha</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.2</span>
+</pre></div>
+</div>
+<p><strong>Parameter:</strong></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Optional</p></th>
+<th class="head"><p>Value Range</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>type</p></td>
+<td><p>Optimizer type, to enable PMA feature, it needs to be set to <code class="docutils literal notranslate"><span class="pre">PmaAdamW</span></code>. Default to <code class="docutils literal notranslate"><span class="pre">AdamW</span></code>.</p></td>
+<td><p>String</p></td>
+<td><p>Optional</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>betas</p></td>
+<td><p>The exponential decay rate of <code class="docutils literal notranslate"><span class="pre">moment1</span></code> and <code class="docutils literal notranslate"><span class="pre">moment2</span></code>. Each parameter range (0.0, 1.0). Default to <code class="docutils literal notranslate"><span class="pre">(0.9,</span> <span class="pre">0.999)</span></code>.</p></td>
+<td><p>Union[list(float), tuple(float)]</p></td>
+<td><p>Optional</p></td>
+<td><p>(0.0,1.0)</p></td>
+</tr>
+<tr class="row-even"><td><p>eps</p></td>
+<td><p>Add it to the denominator to improve numerical stability. Must be greater than 0. Default to <code class="docutils literal notranslate"><span class="pre">1e-6</span></code>.</p></td>
+<td><p>float</p></td>
+<td><p>Optional</p></td>
+<td><p>positive number</p></td>
+</tr>
+<tr class="row-odd"><td><p>weight_decay</p></td>
+<td><p>Set the optimizer weight decay coefficient. Default to <code class="docutils literal notranslate"><span class="pre">0.0</span></code>.</p></td>
+<td><p>float</p></td>
+<td><p>Optional</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p>fused_num</p></td>
+<td><p>Set <code class="docutils literal notranslate"><span class="pre">fused_num</span></code> weights for fusion, and update the fused weights to the network parameters according to the fusion algorithm. Default to <code class="docutils literal notranslate"><span class="pre">10</span></code>.</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>Positive integer</p></td>
+</tr>
+<tr class="row-odd"><td><p>interleave_step</p></td>
+<td><p>Select the number of step intervals for the weights to be fused, and take a weight as a candidate weight for fusion once every <code class="docutils literal notranslate"><span class="pre">interleave_step</span></code> step. Default to <code class="docutils literal notranslate"><span class="pre">1000</span></code>.</p></td>
+<td><p>int</p></td>
+<td><p>Optional</p></td>
+<td><p>Positive integer</p></td>
+</tr>
+<tr class="row-even"><td><p>fused_algo</p></td>
+<td><p>Fusion algorithm, supports <code class="docutils literal notranslate"><span class="pre">ema</span></code> and <code class="docutils literal notranslate"><span class="pre">sma</span></code>. Default to <code class="docutils literal notranslate"><span class="pre">ema</span></code>.</p></td>
+<td><p>string</p></td>
+<td><p>Optional</p></td>
+<td><p>[<code class="docutils literal notranslate"><span class="pre">ema</span></code>, <code class="docutils literal notranslate"><span class="pre">sma</span></code>]</p></td>
+</tr>
+<tr class="row-odd"><td><p>ema_alpha</p></td>
+<td><p>The fusion coefficient is only effective when <code class="docutils literal notranslate"><span class="pre">fused_algo</span></code> is set to <code class="docutils literal notranslate"><span class="pre">ema</span></code>. Default to <code class="docutils literal notranslate"><span class="pre">0.2</span></code>.</p></td>
+<td><p>float</p></td>
+<td><p>Optional</p></td>
+<td><p>(0, 1)</p></td>
+</tr>
+</tbody>
+</table>
+<section id="pmaadamw-optimizer-configuration-introduction">
+<h3>PmaAdamW Optimizer Configuration Introduction<a class="headerlink" href="#pmaadamw-optimizer-configuration-introduction" title="Link to this heading"></a></h3>
+<p>For information on configuring the PmaAdamW optimizer, please refer to <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/mindformers/core/optim/pma_adamw.py">MindSpore Transformers PmaAdamW Source Code</a>.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="skip_data_and_ckpt_health_monitor.html" class="btn btn-neutral float-left" title="Data Skip And Checkpoint Health Monitor" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="other_training_features.html" class="btn btn-neutral float-right" title="Other Training Features" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

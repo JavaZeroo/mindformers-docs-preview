@@ -1,0 +1,354 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>快速开始 &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="整体架构" href="../introduction/overview.html" />
+    <link rel="prev" title="MindSpore Transformers 文档" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">介绍</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">快速开始</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">前置条件</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">第一步：准备配置文件</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id5">关于数据集段</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">关于模型段</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id7">第二步：启动训练</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id8">第三步：查看结果</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id9">相关文档</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/models.html">模型支持库</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">安装</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">安装指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">功能特性</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../feature/overview.html">功能特性概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/start_task.html">启动任务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/configuration.html">配置文件说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/logging.html">日志</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/dataset.html">数据集</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/training_hyperparameters.html">训练超参数与优化器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/parallel_training.html">分布式并行训练</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/memory_optimization.html">训练内存优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/save_and_load_checkpoint.html">权重保存与加载</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/resume_training.html">断点续训</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/monitor.html">训练指标监控与 Profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/other_training_features.html">其它训练特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feature/static_graph_features.html">静态图实现特性</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">环境变量</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">环境变量说明</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">贡献指南</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contribution/mindformers_contribution.html">MindSpore Transformers贡献指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution/modelers_contribution.html">魔乐社区贡献指南</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../faq/model_related.html">模型相关 FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/feature_related.html">功能相关 FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">静态图实现（Deprecated）</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/introduction/overview.html">整体架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/guide/index.html">大模型全流程指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/feature/index.html">功能特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/advanced_development/index.html">高阶开发</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/example/index.html">优秀实践</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static_graph/env_variables.html">环境变量说明</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">快速开始</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/quick_start/quick_start.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>快速开始<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/quick_start/quick_start.md"><img alt="查看源文件" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source.svg" /></a></p>
+<section id="id2">
+<h2>概述<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p>本章帮助你快速使用动态图（PyNative）完成一次大模型训练，建立对整体流程的直观认识。我们以 <strong>DeepSeek-V3</strong> 为例，在 2 卡上执行最小规模的预训练。</p>
+<p>动态图训练以统一脚本 <code class="docutils literal notranslate"><span class="pre">run_mindformer.py</span></code> 为入口，通过 <code class="docutils literal notranslate"><span class="pre">--mode</span> <span class="pre">1</span></code> 路由到动态图训练器 <code class="docutils literal notranslate"><span class="pre">mindformers.pynative.trainer.Trainer</span></code>，由其完成模型、数据集、优化器的构建并驱动训练循环。一次任务可归纳为三步：</p>
+<ol class="arabic simple">
+<li><p><strong>准备配置文件</strong> —— 编写一份动态图 YAML，把模型、数据、并行、优化器串起来；</p></li>
+<li><p><strong>启动训练</strong> —— 使用 <code class="docutils literal notranslate"><span class="pre">msrun</span></code> 完成多卡启动；</p></li>
+<li><p><strong>查看结果</strong> —— 通过日志确认每步 loss/grad norm 正常下降。</p></li>
+</ol>
+<p>完整流程与各能力的详细配置见 <a class="reference internal" href="../feature/overview.html"><span class="std std-doc">功能特性</span></a>（训练指南与各特性页正文将随后续提交上线）。</p>
+</section>
+<section id="id3">
+<h2>前置条件<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>已安装 MindSpore 与 MindSpore Transformers，详见 <a class="reference internal" href="../installation.html"><span class="std std-doc">安装指南</span></a>；</p></li>
+<li><p>昇腾（Ascend）硬件环境，且已正确配置 CANN；</p></li>
+<li><p>已准备 <strong>Megatron 格式数据集</strong>（<code class="docutils literal notranslate"><span class="pre">.bin</span></code>/<code class="docutils literal notranslate"><span class="pre">.idx</span></code>）。数据集制作（json → bin/idx）可用仓库脚本 <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/toolkit/data_preprocess/megatron/preprocess_indexed_dataset.py"><code class="docutils literal notranslate"><span class="pre">preprocess_indexed_dataset.py</span></code></a>，详见「数据集」文档（将随后续提交上线）。</p></li>
+</ul>
+<blockquote>
+<div><p><strong>数据路径如何衔接配置</strong></p>
+<p>预处理产出的是一对 <code class="docutils literal notranslate"><span class="pre">xxx.bin</span></code> 与 <code class="docutils literal notranslate"><span class="pre">xxx.idx</span></code>，文件名形如 <code class="docutils literal notranslate"><span class="pre">&lt;output-prefix&gt;_text_document.bin</span></code>（脚本默认追加 <code class="docutils literal notranslate"><span class="pre">_text_document</span></code>）。本页 YAML 中 <code class="docutils literal notranslate"><span class="pre">train_dataset.dataloader.config.data_path</span></code> 要填<strong>含该后缀的前缀</strong>。例如 <code class="docutils literal notranslate"><span class="pre">--output-prefix</span> <span class="pre">/path/megatron_data</span></code> 会生成 <code class="docutils literal notranslate"><span class="pre">/path/megatron_data_text_document.bin</span></code>，配置里就填 <code class="docutils literal notranslate"><span class="pre">/path/megatron_data_text_document</span></code>。同时记下预处理时使用的 tokenizer 对应的 <code class="docutils literal notranslate"><span class="pre">eod</span></code>（eos）token id，下面 <code class="docutils literal notranslate"><span class="pre">config.eod</span></code> 要用到。</p>
+</div></blockquote>
+</section>
+<section id="id4">
+<h2>第一步：准备配置文件<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<p>动态图使用 dataclass 风格的 YAML 配置，顶层各段分别对应权重、训练、并行、优化器、学习率、数据、模型等。本页配套提供完整的 2 卡示例配置 <a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/example/quick_start/pynative_ds3.yaml"><code class="docutils literal notranslate"><span class="pre">pynative_ds3.yaml</span></code></a>，可直接下载使用；其各段内容如下（完整字段说明见「配置文件说明」文档）：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">checkpoint</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enable_save</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span><span class="w">              </span><span class="c1"># 快速验证可先不保存权重</span>
+<span class="w">  </span><span class="nt">save_path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;./output/ds3&quot;</span>
+
+<span class="nt">training</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w">                       </span><span class="c1"># 训练步数</span>
+<span class="w">  </span><span class="nt">local_batch_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w">             </span><span class="c1"># 每卡（每次前向）的 batch size</span>
+<span class="w">  </span><span class="nt">global_batch_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w">            </span><span class="c1"># 全局 batch size，见下方说明</span>
+<span class="w">  </span><span class="nt">max_norm</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0</span><span class="w">                   </span><span class="c1"># 梯度裁剪（&gt; 0 时生效）</span>
+<span class="w">  </span><span class="nt">seed</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">42</span>
+
+<span class="nt">parallelism</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">data_parallel_shard</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-1</span><span class="w">         </span><span class="c1"># FSDP，-1 表示按可用卡数自动切分</span>
+<span class="w">  </span><span class="nt">expert_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">tensor_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">context_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">pipeline_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="c1"># SP 随 TP 自动开启，当前不支持关闭（无需配置此项，详见分布式并行训练文档）</span>
+
+<span class="nt">optimizer</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AdamW</span>
+<span class="w">  </span><span class="nt">betas</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.9</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.95</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">eps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.e-8</span>
+<span class="w">  </span><span class="nt">weight_decay</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.01</span>
+
+<span class="nt">lr_scheduler</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConstantWarmUpLR</span>
+<span class="w">  </span><span class="nt">learning_rate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.e-5</span>
+<span class="w">  </span><span class="nt">warmup_ratio</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+
+<span class="nt">train_dataset</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">dataloader</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">BlendedMegatronDatasetDataLoader</span>
+<span class="w">    </span><span class="nt">datasets_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;GPTDataset&quot;</span>
+<span class="w">    </span><span class="nt">sizes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1000</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0</span><span class="p p-Indicator">]</span><span class="w">           </span><span class="c1"># [训练, 测试, 评估] 样本数；当前仅训练集生效</span>
+<span class="w">    </span><span class="nt">column_names</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;input_ids&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;labels&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;loss_mask&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;position_ids&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">shuffle</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">    </span><span class="nt">config</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">seed</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1234</span>
+<span class="w">      </span><span class="nt">seq_length</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4096</span><span class="w">            </span><span class="c1"># 须与 model.seq_length 一致</span>
+<span class="w">      </span><span class="nt">split</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1,</span><span class="nv"> </span><span class="s">0,</span><span class="nv"> </span><span class="s">0&quot;</span><span class="w">            </span><span class="c1"># [训练,测试,评估] 划分；设了 data_path 即必填，缺失会报错</span>
+<span class="w">      </span><span class="nt">eod</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w">                      </span><span class="c1"># 数据集中 eod(eos) 的 token id</span>
+<span class="w">      </span><span class="nt">pad</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-1</span><span class="w">                     </span><span class="c1"># 数据集中 pad 的 token id</span>
+<span class="w">      </span><span class="nt">eod_mask_loss</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">      </span><span class="nt">reset_position_ids</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">      </span><span class="nt">create_attention_mask</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span><span class="w">  </span><span class="c1"># 输出 4 列；若设 True 需在 column_names 增列 attention_mask</span>
+<span class="w">      </span><span class="nt">reset_attention_mask</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">      </span><span class="nt">create_compressed_eod_mask</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">      </span><span class="nt">eod_pad_length</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">128</span>
+<span class="w">      </span><span class="nt">data_path</span><span class="p">:</span><span class="w">                  </span><span class="c1"># 采样权重(相对值,自动归一化) + bin 前缀(含 _text_document)</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;1&#39;</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;/path/megatron_data_text_document&quot;</span>
+<span class="w">  </span><span class="nt">drop_remainder</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">num_parallel_workers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+
+<span class="nt">model</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">model_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deepseek_v3</span>
+<span class="w">  </span><span class="nt">architectures</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DeepseekV3ForCausalLM</span>
+<span class="w">  </span><span class="nt">seq_length</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4096</span><span class="w">                </span><span class="c1"># 须与 train_dataset.dataloader.config.seq_length 一致</span>
+<span class="w">  </span><span class="c1"># ↓ 其余模型结构超参（hidden_size/num_hidden_layers/MoE 等）见上方链接的完整示例配置（平铺写法）</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">global_batch_size</span></code> 的精确含义：框架按 <code class="docutils literal notranslate"><span class="pre">num_accumulation_steps</span> <span class="pre">=</span> <span class="pre">global_batch_size</span> <span class="pre">/</span> <span class="pre">(data_parallel_shard</span> <span class="pre">×</span> <span class="pre">local_batch_size)</span></code> 推导梯度累积步数。未启用梯度累积时（即三者相乘恰好相等），<code class="docutils literal notranslate"><span class="pre">global_batch_size</span> <span class="pre">=</span> <span class="pre">local_batch_size</span> <span class="pre">×</span> <span class="pre">数据并行数</span></code>；一旦 <code class="docutils literal notranslate"><span class="pre">global_batch_size</span></code> 大于该乘积，多出的倍数即为梯度累积步数。精确定义见「配置文件说明」文档。</p>
+</div></blockquote>
+<section id="id5">
+<h3>关于数据集段<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">BlendedMegatronDatasetDataLoader</span></code> 运行时<strong>必须</strong>有 <code class="docutils literal notranslate"><span class="pre">datasets_type</span></code>、<code class="docutils literal notranslate"><span class="pre">sizes</span></code> 以及嵌套的 <code class="docutils literal notranslate"><span class="pre">config</span></code> 块（含 <code class="docutils literal notranslate"><span class="pre">seq_length</span></code>/<code class="docutils literal notranslate"><span class="pre">split</span></code>/<code class="docutils literal notranslate"><span class="pre">eod</span></code>/<code class="docutils literal notranslate"><span class="pre">pad</span></code>/<code class="docutils literal notranslate"><span class="pre">data_path</span></code>/<code class="docutils literal notranslate"><span class="pre">create_compressed_eod_mask</span></code> 等），缺一不可。其中：</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>字段</p></th>
+<th class="head"><p>说明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">datasets_type</span></code></p></td>
+<td><p>数据集类型，预训练用 <code class="docutils literal notranslate"><span class="pre">&quot;GPTDataset&quot;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">sizes</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">[训练,</span> <span class="pre">测试,</span> <span class="pre">评估]</span></code> 样本数，当前仅训练集生效</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">config.seq_length</span></code></p></td>
+<td><p>返回序列长度，<strong>须与 <code class="docutils literal notranslate"><span class="pre">model.seq_length</span></code> 一致</strong></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">config.split</span></code></p></td>
+<td><p>训练/测试/评估划分比例（如 <code class="docutils literal notranslate"><span class="pre">&quot;1,</span> <span class="pre">0,</span> <span class="pre">0&quot;</span></code>）；设了 <code class="docutils literal notranslate"><span class="pre">data_path</span></code> 即必填</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">config.eod</span></code> / <code class="docutils literal notranslate"><span class="pre">config.pad</span></code></p></td>
+<td><p>eod(eos)/pad 的 token id，取自预处理时的 tokenizer</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">config.data_path</span></code></p></td>
+<td><p>列表，每两个元素为一组「采样权重, bin 前缀」，权重为相对值、自动归一化（不要求之和为 1）；bin 前缀含 <code class="docutils literal notranslate"><span class="pre">_text_document</span></code> 后缀</p></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<div><p>这些字段的逐项含义、多数据源混合、压缩 EOD mask 等场景化配置见「数据集」文档。本页只给最小可跑配置。</p>
+</div></blockquote>
+</section>
+<section id="id6">
+<h3>关于模型段<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<p>DeepSeek-V3 的 <code class="docutils literal notranslate"><span class="pre">model</span></code> 段包含数十个结构超参（<code class="docutils literal notranslate"><span class="pre">hidden_size</span></code>、<code class="docutils literal notranslate"><span class="pre">num_hidden_layers</span></code>、MoE 路由等），逐一手写既冗长又易错。本页配套的完整示例配置 <a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/example/quick_start/pynative_ds3.yaml"><code class="docutils literal notranslate"><span class="pre">pynative_ds3.yaml</span></code></a> 已包含全部 <code class="docutils literal notranslate"><span class="pre">model</span></code> 段字段（dataclass 风格、结构超参平铺），直接下载使用即可；仅需确认 <code class="docutils literal notranslate"><span class="pre">seq_length</span></code> 与数据集一致。</p>
+<blockquote>
+<div><p>注意：<code class="docutils literal notranslate"><span class="pre">configs/deepseek3/</span></code> 下的配置是静态图 legacy 结构（结构超参嵌套在 <code class="docutils literal notranslate"><span class="pre">model.model_config</span></code> 下、<code class="docutils literal notranslate"><span class="pre">architectures</span></code> 为列表、<code class="docutils literal notranslate"><span class="pre">context.mode:</span> <span class="pre">0</span></code>），不能整段复制到动态图配置——需把结构超参「上提一层」平铺到 <code class="docutils literal notranslate"><span class="pre">model:</span></code> 下，并把 <code class="docutils literal notranslate"><span class="pre">architectures</span></code> 改成字符串。</p>
+</div></blockquote>
+</section>
+</section>
+<section id="id7">
+<h2>第二步：启动训练<a class="headerlink" href="#id7" title="Link to this heading"></a></h2>
+<p>动态图训练通过 <code class="docutils literal notranslate"><span class="pre">msrun</span></code> 启动多卡。以下命令在 <strong>mindformers 仓库根目录</strong>下执行（将下载的 <code class="docutils literal notranslate"><span class="pre">pynative_ds3.yaml</span></code> 放在该目录），在 2 卡上启动训练：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>msrun<span class="w"> </span>--worker_num<span class="o">=</span><span class="m">2</span><span class="w"> </span>--local_worker_num<span class="o">=</span><span class="m">2</span><span class="w"> </span>--master_port<span class="o">=</span><span class="m">8118</span><span class="w"> </span><span class="se">\</span>
+<span class="w">      </span>--join<span class="o">=</span>True<span class="w"> </span>--log_dir<span class="o">=</span>./msrun_log<span class="w"> </span><span class="se">\</span>
+<span class="w">      </span>run_mindformer.py<span class="w"> </span>--config<span class="w"> </span>pynative_ds3.yaml<span class="w"> </span>--mode<span class="w"> </span><span class="m">1</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--worker_num</span></code> / <code class="docutils literal notranslate"><span class="pre">--local_worker_num</span></code>：总卡数 / 本机卡数；</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--config</span></code>：上一步的 YAML；</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--mode</span> <span class="pre">1</span></code>：使用动态图。</p></li>
+</ul>
+<blockquote>
+<div><p>进入动态图训练<strong>必须在启动命令显式传入 <code class="docutils literal notranslate"><span class="pre">--mode</span> <span class="pre">1</span></code></strong>（入口只读取命令行 <code class="docutils literal notranslate"><span class="pre">--mode</span></code>，不读取 YAML）。YAML 的 <code class="docutils literal notranslate"><span class="pre">context</span></code> 段可省略：默认即动态图模式（<code class="docutils literal notranslate"><span class="pre">mode:</span> <span class="pre">1</span></code>）、Ascend 后端；如需调整 <code class="docutils literal notranslate"><span class="pre">max_device_memory</span></code> 等再显式配置。</p>
+</div></blockquote>
+<p>更多集群规模（单卡、多机）的启动方式见「启动任务」文档。</p>
+</section>
+<section id="id8">
+<h2>第三步：查看结果<a class="headerlink" href="#id8" title="Link to this heading"></a></h2>
+<p>训练日志输出在 <code class="docutils literal notranslate"><span class="pre">--log_dir</span></code> 指定目录下，每个 worker 一份子目录（如 <code class="docutils literal notranslate"><span class="pre">./msrun_log/worker_0.log</span></code>）。打开任一 worker 日志，看到形如下面的逐步输出即说明训练已正常运行：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>{ step:[    1/   10], loss:  11.813965, per_step_time:  13570ms, load_balancing_loss:   1.093977, lr: 1.000000e-05, grad_norm:  13.831877, throughput:   1.36T }
+{ step:[    2/   10], loss:  11.755612, per_step_time:    710ms, load_balancing_loss:   1.106543, lr: 1.000000e-05, grad_norm:  19.926786, throughput:  25.92T }
+</pre></div>
+</div>
+<p>判断要点：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">step</span></code> 持续递增、<code class="docutils literal notranslate"><span class="pre">loss</span></code> 整体呈下降趋势（前几步可能波动）；</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">grad_norm</span></code> 是有限数值而非 <code class="docutils literal notranslate"><span class="pre">NaN</span></code>；</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">per_step_time</span></code> 在首步后趋于稳定（首步含初始化开销，通常显著更慢）；</p></li>
+<li><p>MoE 模型（如本例 DeepSeek-V3）会额外打印 <code class="docutils literal notranslate"><span class="pre">load_balancing_loss</span></code>。</p></li>
+</ul>
+<p>此外：</p>
+<ul class="simple">
+<li><p><strong>权重</strong>：若开启 <code class="docutils literal notranslate"><span class="pre">checkpoint.enable_save</span></code>，权重以 Safetensors 格式保存到 <code class="docutils literal notranslate"><span class="pre">checkpoint.save_path</span></code>；</p></li>
+<li><p><strong>更多指标</strong>：可通过 <code class="docutils literal notranslate"><span class="pre">monitor.train_state</span></code> 采集逐参数范数与本地/设备级 loss（注意：动态图监控指标当前仅通过训练日志输出，TensorBoard 配置暂不生效），详见「训练指标监控与 Profiling」文档。</p></li>
+</ul>
+</section>
+<section id="id9">
+<h2>相关文档<a class="headerlink" href="#id9" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>动态图整体架构：<a class="reference internal" href="../introduction/overview.html"><span class="std std-doc">整体架构</span></a></p></li>
+<li><p>当前支持的模型：<a class="reference internal" href="../introduction/models.html"><span class="std std-doc">模型支持库</span></a></p></li>
+<li><p>各能力一览：<a class="reference internal" href="../feature/overview.html"><span class="std std-doc">功能特性概述</span></a></p></li>
+</ul>
+<blockquote>
+<div><p>配置文件说明、数据集、分布式并行训练、训练指南等页面正文将随后续提交上线。</p>
+</div></blockquote>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="MindSpore Transformers 文档" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../introduction/overview.html" class="btn btn-neutral float-right" title="整体架构" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

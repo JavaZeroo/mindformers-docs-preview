@@ -1,0 +1,932 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Safetensors Weights &mdash; MindSpore Transformers</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/theme.css?v=eac56882" />
+      <link rel="stylesheet" type="text/css" href="../../_static/common.css?v=d91f444e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/preview-patch.css?v=1179811f" />
+      <link rel="stylesheet" type="text/css" href="../../_static/wide.css?v=05d7ee6e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b3a2b64a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+      <script src="../../_static/preview-init.js?v=b2857e68"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Configuration File Descriptions" href="configuration.html" />
+    <link rel="prev" title="Ckpt Weights" href="ckpt.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MindSpore Transformers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/models.html">Models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contribution Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/mindformers_contribution.html">MindSpore Transformers Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/modelers_contribution.html">Modelers Contribution Guidelines</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/model_related.html">Model-Related FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/feature_related.html">Feature-Related FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Static Graph Implementation (Deprecated)</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/overview.html">Overall Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Full-process Guide to Large Models</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Features</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview.html">Features Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="start_tasks.html">Start Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ckpt.html">Ckpt Weights</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Safetensors Weights</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#important-note">Important Note</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#safetensors-weights-samples">Safetensors Weights Samples</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#complete-weights">Complete Weights</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#distributed-weights">Distributed Weights</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#weight-saving">Weight Saving</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#directory-structure">Directory Structure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#configuration-and-usage">Configuration and Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#weight-loading">Weight Loading</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id2">Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#configuration-description">Configuration Description</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#complete-weight-loading">Complete Weight Loading</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#distributed-weight-loading">Distributed Weight Loading</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#special-scenarios">Special Scenarios</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#weight-features">Weight Features</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#de-redundant-saving-and-loading">De-redundant Saving and Loading</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#loading-hugging-face-safetensors">Loading Hugging Face safetensors</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#weight-slicing-and-merging">Weight Slicing and Merging</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id3">Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#weight-merging">Weight Merging</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#weight-slicing">Weight Slicing</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#weights-format-conversion">Weights Format Conversion</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#converting-ckpt-to-safetensors">Converting Ckpt to Safetensors</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#usage-example">Usage Example</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#examples-of-training-tasks">Examples of Training Tasks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#example-of-an-inference-task">Example of an Inference Task</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#examples-of-resumable-training-after-breakpoint-tasks">Examples of Resumable Training after Breakpoint Tasks</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">Configuration File Descriptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="load_huggingface_config.html">Loading Hugging Face Model Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html">Logs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tokenizer.html">Using Tokenizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset.html">Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training_hyperparameters.html">Training Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monitor.html">Training Metrics Monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training.html">Resumable Training After Breakpoint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoint_saving_and_loading.html">Checkpoint Saving and Loading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resume_training2.0.html">Resume Training2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel_training.html">Distributed Parallelism Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="high_availability.html">Training High Availability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory_optimization.html">Memory Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skip_data_and_ckpt_health_monitor.html">Data Skip And Checkpoint Health Monitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pma_fused_checkpoint.html">Pre-trained Model Average Weight Consolidation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="other_training_features.html">Other Training Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantization.html">Quantization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_development/index.html">Advanced Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example/index.html">Excellent Practice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../env_variables.html">Environment Variable Descriptions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MindSpore Transformers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Features</a></li>
+      <li class="breadcrumb-item active">Safetensors Weights</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/static_graph/feature/safetensors.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- __SG_DEPRECATED_BANNER__ -->
+<div class="warning admonition">
+<p class="admonition-title">Deprecated</p>
+<p>This page belongs to the <strong>Static Graph (GRAPH_MODE) Implementation</strong> section and has been marked as deprecated. New features are primarily being developed in the “r2.0.0 Dynamic Graph Implementation” section. Please refer to the dynamic graph documentation first.</p>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="safetensors-weights">
+<h1>Safetensors Weights<a class="headerlink" href="#safetensors-weights" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_en/static_graph/feature/safetensors.md"><img alt="View Source on AtomGit" src="https://mindspore-website.obs.cn-north-4.myhuaweicloud.com/website-images/master/resource/_static/logo_source_en.svg" /></a></p>
+<p>This document provides an introduction to the usage of <strong>Safetensors format weights for Checkpoint 1.0</strong> under the MindSpore Transformers framework.</p>
+<section id="important-note">
+<h2>Important Note<a class="headerlink" href="#important-note" title="Link to this heading"></a></h2>
+<p>Currently, MindSpore Transformers has officially supported <strong>Checkpoint 2.0</strong>. To ensure user experience and functional compatibility, this document related to Checkpoint 1.0 will be gradually <strong>sunset (discontinued from maintenance and updates)</strong>.</p>
+<p>It is recommended that users prioritize migrating to <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/checkpoint_saving_and_loading.html">Checkpoint 2.0</a> for relevant operations. Subsequent feature iterations and technical support will focus on the new version. Thank you for your understanding and support.</p>
+</section>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>Safetensors is a reliable and portable machine learning model storage format from Huggingface for storing Tensors securely and with fast storage (zero copies). This article focuses on how MindSpore Transformers supports saving and loading of this file format to help users use weights better and faster.</p>
+</section>
+<section id="safetensors-weights-samples">
+<h2>Safetensors Weights Samples<a class="headerlink" href="#safetensors-weights-samples" title="Link to this heading"></a></h2>
+<p>There are two main types of Safetensors files: complete weights files and distributed weights files. Below are examples of how they are obtained and the corresponding files.</p>
+<section id="complete-weights">
+<h3>Complete Weights<a class="headerlink" href="#complete-weights" title="Link to this heading"></a></h3>
+<p>Safetensors complete weights can be obtained in two ways:</p>
+<ol class="arabic simple">
+<li><p>Download directly from Huggingface.</p></li>
+<li><p>After MindSpore Transformers distributed training, the weights are generated by <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/ckpt.html#distributed-weight-slicing-and-merging">merge script</a>.</p></li>
+</ol>
+<p>Huggingface Safetensors example catalog structure is as follows:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>qwen3_8b
+ └── hf_unified_safetensors
+        ├── model-00001-of-00005.safetensors
+        ├── model-00002-of-00005.safetensors
+        ├── model-00003-of-00005.safetensors
+        ├── model-00004-of-00005.safetensors
+        ├── model-00005-of-00005.safetensors
+        └── model.safetensors.index.json        # Huggingface weight parameter and file storage relationship mapping json file
+</pre></div>
+</div>
+<p>MindSpore Safetensors example catalog structure is as follows:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>qwen3_8b
+ └── ms_unified_safetensors
+        ├── model-00001-of-00005.safetensors
+        ├── model-00002-of-00005.safetensors
+        ├── model-00003-of-00005.safetensors
+        ├── model-00004-of-00005.safetensors
+        ├── model-00005-of-00005.safetensors
+        ├── hyper_param.safetensors            # Hyperparameter files for training task records
+        └── param_name_map.json                # MindSpore weight parameter and file storage relationship mapping json file
+</pre></div>
+</div>
+</section>
+<section id="distributed-weights">
+<h3>Distributed Weights<a class="headerlink" href="#distributed-weights" title="Link to this heading"></a></h3>
+<p>Safetensors distributed weights can be obtained in two ways:</p>
+<ol class="arabic simple">
+<li><p>Generated by distributed training with MindSpore Transformers.</p></li>
+<li><p>Using <a class="reference external" href="https://www.mindspore.cn/docs/en/master/api_python/mindspore/mindspore.ckpt_to_safetensors.html">format conversion script</a>, the original distributed ckpt weights are changed to the Safetensors format.</p></li>
+</ol>
+<p>Distributed Safetensors example catalog structure is as follows:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>qwen3_8b
+ └── distributed_safetensors
+        ├── rank_0
+            └── qwen3_8b_rank_0.safetensors
+        ├── rank_1
+            └── qwen3_8b_rank_1.safetensors
+        ...
+        └── rank_x
+            └── qwen3_8b_rank_x.safetensors
+</pre></div>
+</div>
+</section>
+</section>
+<section id="weight-saving">
+<h2>Weight Saving<a class="headerlink" href="#weight-saving" title="Link to this heading"></a></h2>
+<section id="id1">
+<h3>Overview<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<p>In the training process of deep learning models, saving the model weights is a crucial step. The weight saving function allows us to store the model parameters at any stage of training, so that users can restore, continue training, evaluate or deploy after training is interrupted or completed. At the same time, by saving weights, experimental results can be reproduced in different environments.</p>
+<p>Currently, MindSpore Transformers supports reading and saving weight files in the <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/safetensors.html">safetensors</a> format.</p>
+</section>
+<section id="directory-structure">
+<h3>Directory Structure<a class="headerlink" href="#directory-structure" title="Link to this heading"></a></h3>
+<p>During the training process, MindSpore Transformers will generate a weight saving folder: <code class="docutils literal notranslate"><span class="pre">checkpoint</span></code> in the output directory (same as training log, default is <code class="docutils literal notranslate"><span class="pre">./output</span></code>).</p>
+<p>If the configuration item <code class="docutils literal notranslate"><span class="pre">save_network_params:True</span></code> is set in yaml file, an additional weight saving folder <code class="docutils literal notranslate"><span class="pre">checkpoint_network</span></code> will be generated.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Folder</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>checkpoint</p></td>
+<td><p>Save model weights, optimizer state, step and epoch in safetensors files, which can be used to <strong>restore training from breakpoints</strong>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>checkpoint_network</p></td>
+<td><p>Only the model weight parameters are saved in the safetensors file, which is suitable for subsequent fine-tuning, reasoning, and evaluation. It does not support breakpoint continuation.</p></td>
+</tr>
+</tbody>
+</table>
+<section id="checkpoint-directory-structure">
+<h4>checkpoint Directory Structure<a class="headerlink" href="#checkpoint-directory-structure" title="Link to this heading"></a></h4>
+<p>Take an 8-rank task as an example, the weight files in the <code class="docutils literal notranslate"><span class="pre">output</span></code> folder are saved in the following format:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>output
+    ├── checkpoint
+        ├── rank_0
+            ├── meta.json
+            └── {prefix}-{epoch}_{step}.safetensors
+        ...
+        └── rank_7
+            ├── meta.json
+            └── {prefix}-{epoch}_{step}.safetensors
+    └── checkpoint_network
+        ├── rank_0
+            └── {prefix}-{epoch}_{step}.safetensors
+        ...
+        └── rank_7
+            └── {prefix}-{epoch}_{step}.safetensors
+</pre></div>
+</div>
+<p>Weight-related File Description</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>File</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>meta.json</p></td>
+<td><p>Records the <code class="docutils literal notranslate"><span class="pre">epoch</span></code>, <code class="docutils literal notranslate"><span class="pre">step</span></code> and weight name of the last saved weight. Each rank process maintains a <code class="docutils literal notranslate"><span class="pre">meta.json</span></code> file independently.</p></td>
+</tr>
+<tr class="row-odd"><td><p>{prefix}-{epoch}_{step}.safetensors</p></td>
+<td><p>The saved weight file, <code class="docutils literal notranslate"><span class="pre">prefix</span></code> contains rank_id information, and the format is <code class="docutils literal notranslate"><span class="pre">{prefix}-{epoch}_{step}.safetensors</span></code>. If a file with the same prefix already exists, the system will automatically increment the suffix. <br>When data sinking is enabled, the <code class="docutils literal notranslate"><span class="pre">epoch</span></code> position is calculated as <span class="math notranslate nohighlight">\(\frac{CurrentTotalStepNumber}{SinkSize} = \frac{((CurrentEpoch-1)*StepsPerEpoch+CurrentStepInEpoch)}{SinkSize}\)</span>, and <code class="docutils literal notranslate"><span class="pre">step</span></code> is fixed to <code class="docutils literal notranslate"><span class="pre">sink_size</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="configuration-and-usage">
+<h3>Configuration and Usage<a class="headerlink" href="#configuration-and-usage" title="Link to this heading"></a></h3>
+<section id="yaml-parameter-configuration">
+<h4>YAML Parameter Configuration<a class="headerlink" href="#yaml-parameter-configuration" title="Link to this heading"></a></h4>
+<p>Users can control the weight saving behavior by modifying the configuration file. The following are the main parameters:</p>
+<p>Users can modify the fields under <code class="docutils literal notranslate"><span class="pre">CheckpointMonitor</span></code> in the <code class="docutils literal notranslate"><span class="pre">yaml</span></code> configuration file to control the weight saving behavior.</p>
+<p>Taking <a class="reference external" href="https://atomgit.com/mindspore/docs/blob/master/docs/mindformers/docs/source_zh_cn/example/deepseek3/pretrain_deepseek3_671b.yaml"><code class="docutils literal notranslate"><span class="pre">DeepSeek-V3</span></code> pre-training yaml</a> as an example, the following configuration can be made:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># callbacks</span>
+<span class="nt">callbacks</span><span class="p">:</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">- type</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CheckpointMonitor</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">prefix</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;deepseekv3&quot;</span>
+<span class="w">    </span><span class="nt">save_checkpoint_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span>
+<span class="w">    </span><span class="nt">keep_checkpoint_max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+<span class="w">    </span><span class="nt">save_network_params</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">    </span><span class="nt">integrated_save</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">    </span><span class="nt">async_save</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">    </span><span class="nt">checkpoint_format</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;safetensors&quot;</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+<p>The meaning of this configuration is: save the safetensors weights every 1000 steps, store up to 5 weights at the same time,
+do not merge and save the split Tensor in parallel scenarios, and do not use asynchronous method to save weight files.</p>
+<p>The main parameters concerning the preservation of the weight configuration are listed in the following table:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter names</p></th>
+<th class="head"><p>Descriptions</p></th>
+<th class="head"><p>Description of values</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>prefix</p></td>
+<td><p>The prefix name of the model weights file, which can be used to refer to the model name.</p></td>
+<td><p>(str, optional) - Default: <code class="docutils literal notranslate"><span class="pre">&quot;CKP&quot;</span></code> .</p></td>
+</tr>
+<tr class="row-odd"><td><p>save_checkpoint_steps</p></td>
+<td><p>Save the weights several steps of training.</p></td>
+<td><p>(int, optional) - Default: <code class="docutils literal notranslate"><span class="pre">1</span></code> , model weights are not saved when not set.</p></td>
+</tr>
+<tr class="row-even"><td><p>keep_checkpoint_max</p></td>
+<td><p>The maximum number of weight files that can be saved at the same time, and when the limit is reached the oldest weight file will be deleted when the weights are saved.</p></td>
+<td><p>(int, optional) - Default: <code class="docutils literal notranslate"><span class="pre">5</span></code> , the number of weights under the folder is not monitored and deleted when not set.</p></td>
+</tr>
+<tr class="row-odd"><td><p>integrated_save</p></td>
+<td><p>Whether to merge and save split Tensors in parallel scenarios. The merge and save feature is only supported in automatic parallel scenarios, not in manual parallel scenarios.</p></td>
+<td><p>(bool, optional) - Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>async_save</p></td>
+<td><p>Whether to save safetensors files asynchronously.</p></td>
+<td><p>(bool, optional) - Asynchronous threads are used by default when <code class="docutils literal notranslate"><span class="pre">True</span></code>. Default: <code class="docutils literal notranslate"><span class="pre">False</span></code> .</p></td>
+</tr>
+<tr class="row-odd"><td><p>checkpoint_format</p></td>
+<td><p>The format of the output file, which needs to be configured as <code class="docutils literal notranslate"><span class="pre">safetensors</span></code>.</p></td>
+<td><p>(str, optional) - Format in which model weights are saved. Supports <code class="docutils literal notranslate"><span class="pre">&quot;ckpt&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;safetensors&quot;</span></code> .Default: <code class="docutils literal notranslate"><span class="pre">ckpt</span></code> . (Note: the ckpt format will be sunsetted in a later release, the safetensors format is recommended.)</p></td>
+</tr>
+<tr class="row-even"><td><p>remove_redundancy</p></td>
+<td><p>Whether redundancy is removed when saving model weights.</p></td>
+<td><p>(bool, optional) - Default: <code class="docutils literal notranslate"><span class="pre">False</span></code> .</p></td>
+</tr>
+<tr class="row-odd"><td><p>save_network_params</p></td>
+<td><p>Whether to additionally save only network parameters.</p></td>
+<td><p>(bool, optional) - Whether to additionally save only network parameters. Default: <code class="docutils literal notranslate"><span class="pre">False</span></code> .</p></td>
+</tr>
+</tbody>
+</table>
+<p>If you want to know more about CheckpointMonitor, you can refer to <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/core/mindformers.core.CheckpointMonitor.html">CheckpointMonitor API documentation</a>.</p>
+</section>
+</section>
+</section>
+<section id="weight-loading">
+<h2>Weight Loading<a class="headerlink" href="#weight-loading" title="Link to this heading"></a></h2>
+<section id="id2">
+<h3>Overview<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<p>MindSpore Transformers supports training, inference, and resumable training in a full range of scenarios with single and multiple cards, including full weights and distributed weights. Please refer to the following instructions to adjust the configuration for the corresponding scenarios.</p>
+</section>
+<section id="configuration-description">
+<h3>Configuration Description<a class="headerlink" href="#configuration-description" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter names</p></th>
+<th class="head"><p>Descriptions</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>load_checkpoint</p></td>
+<td><p>The path to the folder where the weights are preloaded. Supports MindSpore Safetensors and Hugging Face Safetensors. <br/>For MindSpore Safetensors:<br/>- If it’s a complete weight, enter the folder path to the slice/single weight file. <br/>- If it’s a distributed weight, it must be stored in the format <code class="docutils literal notranslate"><span class="pre">model_dir/rank_x/xxx.safetensors</span></code>, and the folder path should be <code class="docutils literal notranslate"><span class="pre">model_dir</span></code>. <br/>For Hugging Face Safetensors:<br/>- Supports directly loading model weights downloaded from Hugging Face (currently supports the <a class="reference external" href="https://atomgit.com/mindspore/mindformers/tree/master/configs/qwen3">Qwen3</a> and <a class="reference external" href="https://atomgit.com/mindspore/mindformers/tree/master/configs/qwen3_moe">Qwen3-MoE</a> series models of the Mcore architecture).<br/>- During loading, it will automatically convert to MindSpore Safetensors for loading, and save a copy of the converted weight file to <code class="docutils literal notranslate"><span class="pre">/output/ms_safetensors</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>load_ckpt_format</p></td>
+<td><p>The format of the loaded model weights, optionally <code class="docutils literal notranslate"><span class="pre">ckpt</span></code>, <code class="docutils literal notranslate"><span class="pre">safetensors</span></code>, defaults to <code class="docutils literal notranslate"><span class="pre">ckpt</span></code>.<br/>Loading weights in <code class="docutils literal notranslate"><span class="pre">safetensors</span></code> format needs to change this configuration to <code class="docutils literal notranslate"><span class="pre">safetensors</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>use_parallel</p></td>
+<td><p>Whether to load in parallel.</p></td>
+</tr>
+<tr class="row-odd"><td><p>auto_trans_ckpt</p></td>
+<td><p>Whether to enable the online slicing function.<br/>- If loading weight is full weight:<br/>a. when <code class="docutils literal notranslate"><span class="pre">use_parallel:</span> <span class="pre">True</span></code>, it is judged as distributed loading, <code class="docutils literal notranslate"><span class="pre">auto_trans_ckpt:</span> <span class="pre">True</span></code> needs to be set synchronously to turn on online slicing. <br/>b. When <code class="docutils literal notranslate"><span class="pre">use_parallel:</span> <span class="pre">False</span></code>, it is judged as single card loading, you need to set <code class="docutils literal notranslate"><span class="pre">auto_trans_ckpt:</span> <span class="pre">False</span></code> synchronously to disable the online slicing function.<br/>- If loading weight is distributed weight:<br/>a. Without changing the original slicing strategy, you need to set <code class="docutils literal notranslate"><span class="pre">auto_trans_ckpt:</span> <span class="pre">False</span></code> to load directly according to the original slicing strategy.<br/>b. To change the original slicing strategy, set <code class="docutils literal notranslate"><span class="pre">auto_trans_ckpt:</span> <span class="pre">True</span></code> and configure <code class="docutils literal notranslate"><span class="pre">src_strategy_path_or_dir</span></code> to be the original slicing strategy file path.<br/>When the task is pulled up, the weights are merged online into full weights, which are sliced and loaded according to the parallelism strategy set in the configuration file. The online merged weights are saved in the current directory under the <code class="docutils literal notranslate"><span class="pre">/output/unified_checkpoint</span></code> file.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="complete-weight-loading">
+<h3>Complete Weight Loading<a class="headerlink" href="#complete-weight-loading" title="Link to this heading"></a></h3>
+<section id="single-card-loading">
+<h4>Single-card Loading<a class="headerlink" href="#single-card-loading" title="Link to this heading"></a></h4>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># configuration file</span>
+<span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/qwen3_8b/unified_safetensors&#39;</span><span class="w">    </span><span class="c1"># Load full weights file path</span>
+<span class="nt">load_ckpt_format</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;safetensors&#39;</span><span class="w">                     </span><span class="c1"># Load weight file format</span>
+<span class="nt">auto_trans_ckpt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span><span class="w">                              </span><span class="c1"># Full weights + single card loading requires this configuration item to be turned off</span>
+<span class="nt">use_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span><span class="w">                                 </span><span class="c1"># single card loading</span>
+<span class="nt">parallel_config</span><span class="p">:</span><span class="w">                                    </span><span class="c1"># Configure the target distributed strategy</span>
+<span class="w">  </span><span class="nt">data_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">model_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">pipeline_stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+</section>
+<section id="multi-cards-loading">
+<h4>Multi-cards Loading<a class="headerlink" href="#multi-cards-loading" title="Link to this heading"></a></h4>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># configuration file</span>
+<span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/qwen3_8b/unified_safetensors&#39;</span><span class="w">    </span><span class="c1"># Load full weights file path</span>
+<span class="nt">load_ckpt_format</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;safetensors&#39;</span><span class="w">                     </span><span class="c1"># Load weight file format</span>
+<span class="nt">auto_trans_ckpt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w">                               </span><span class="c1"># This configuration item needs to be turned on for full weights + distributed loading to turn on online slicing</span>
+<span class="nt">use_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w">                                  </span><span class="c1"># Multi-cards loading</span>
+<span class="nt">parallel_config</span><span class="p">:</span><span class="w">                                    </span><span class="c1"># Configure the target distributed strategy</span>
+<span class="w">  </span><span class="nt">data_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">model_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">  </span><span class="nt">pipeline_stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="distributed-weight-loading">
+<h3>Distributed Weight Loading<a class="headerlink" href="#distributed-weight-loading" title="Link to this heading"></a></h3>
+<section id="multi-card-loading-original-slicing-strategy">
+<h4>Multi-card Loading-Original Slicing Strategy<a class="headerlink" href="#multi-card-loading-original-slicing-strategy" title="Link to this heading"></a></h4>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># configuration file</span>
+<span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/output/distributed_safetensors&#39;</span><span class="w">  </span><span class="c1"># Load source distributed weights file paths</span>
+<span class="nt">load_ckpt_format</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;safetensors&#39;</span><span class="w">                     </span><span class="c1"># Load weight file format</span>
+<span class="nt">auto_trans_ckpt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span><span class="w">                              </span><span class="c1"># Disable the online slicing function</span>
+<span class="nt">parallel_config</span><span class="p">:</span><span class="w">                                    </span><span class="c1"># Configure the target distributed strategy</span>
+<span class="w">  </span><span class="nt">data_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">model_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">  </span><span class="nt">pipeline_stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+</section>
+<section id="multi-card-loading-changing-the-slicing-strategy">
+<h4>Multi-Card Loading - Changing the Slicing Strategy<a class="headerlink" href="#multi-card-loading-changing-the-slicing-strategy" title="Link to this heading"></a></h4>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># configuration file</span>
+<span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/output/distributed_safetensors&#39;</span><span class="w">  </span><span class="c1"># Load source distributed weights file paths</span>
+<span class="nt">src_strategy_path_or_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/output/src_strategy&#39;</span><span class="w">    </span><span class="c1"># Load source strategy file for merging source distributed weights into full weights</span>
+<span class="nt">load_ckpt_format</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;safetensors&#39;</span><span class="w">                     </span><span class="c1"># Load weight file format</span>
+<span class="nt">auto_trans_ckpt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w">                               </span><span class="c1"># Enable the online slicing function</span>
+<span class="nt">parallel_config</span><span class="p">:</span><span class="w">                                    </span><span class="c1"># Configure the target distributed strategy</span>
+<span class="w">  </span><span class="nt">data_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">  </span><span class="nt">model_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">pipeline_stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+<p>In large cluster scale scenarios, to avoid the online merging process taking too long and occupying training resources, it is recommended to pass in the original distributed weights file after <a class="reference internal" href="#weight-merging">merge complete weights</a> offline, when there is no need to pass in the path of the source cut-partitioning strategy file.</p>
+</section>
+</section>
+<section id="special-scenarios">
+<h3>Special Scenarios<a class="headerlink" href="#special-scenarios" title="Link to this heading"></a></h3>
+<section id="physical-machine-multi-machcine-multi-card-training">
+<h4>Physical Machine Multi-machcine Multi-card Training<a class="headerlink" href="#physical-machine-multi-machcine-multi-card-training" title="Link to this heading"></a></h4>
+<p>Large-scale models usually need to be trained by clusters of multiple servers. Weight slicing conversion needs to rely on the target slicing strategy file after the compilation is completed. In this multi-machine and multi-card scenario, if a unified shared storage path (such as the NFS-mounted /worker directory) is configured between servers and the generated strategy file is in the same directory, you can use the automatic conversion function; if there is no shared disk between servers, you need to manually copy the strategy file and then carry out the conversion function. The following is an example of two servers and 16 cards training.</p>
+<p><strong>Scenario 1: There are shared disks between servers</strong></p>
+<p>If a unified shared storage path (such as the NFS-mounted /worker directory) is configured between servers, you can use MindSpore Transformers to automatically convert a weight before multi-node multi-device training.</p>
+<p><strong>Parameter Configuration:</strong></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">output_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;./output&#39;</span><span class="w">                              </span><span class="c1"># The strategy file is generated under ./output/strategy, which is used to slice the weights online.</span>
+<span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/qwen3_8b/unified_safetensors&#39;</span><span class="w">    </span><span class="c1"># Load full weights file path</span>
+<span class="nt">load_ckpt_format</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;safetensors&#39;</span><span class="w">                     </span><span class="c1"># Load weight file format</span>
+<span class="nt">auto_trans_ckpt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w">                               </span><span class="c1"># This configuration item needs to be turned on for full weights + distributed loading to turn on online slicing</span>
+<span class="nt">train_dataset</span><span class="p">:</span><span class="w"> </span><span class="nl">&amp;train_dataset</span>
+<span class="w">  </span><span class="nt">data_loader</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MindDataset</span>
+<span class="w">    </span><span class="nt">dataset_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/worker/dataset/wiki103/&quot;</span>
+<span class="w">    </span><span class="nt">shuffle</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="nt">parallel_config</span><span class="p">:</span><span class="w">                                    </span><span class="c1"># Configuring a 16-card distributed strategy (for information only)</span>
+<span class="w">  </span><span class="nt">data_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">model_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">  </span><span class="nt">pipeline_stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">micro_batch_num</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">vocab_emb_dp</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">gradient_aggregation_group</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">  </span><span class="nt">micro_batch_interleave_num</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+<p><strong>Initiating tasks</strong>:</p>
+<p>Use <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/scripts/msrun_launcher.sh">mindformers/scripts/msrun_launcher.sh</a> to initiate tasks.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># The first server (master node)</span>
+bash<span class="w"> </span>scripts/msrun_launcher.sh<span class="w"> </span><span class="s2">&quot;run_mindformer.py \</span>
+<span class="s2">  --config {CONFIG_PATH} \</span>
+<span class="s2">  --run_mode train&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="m">16</span><span class="w"> </span><span class="m">8</span><span class="w"> </span><span class="si">${</span><span class="nv">ip</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">port</span><span class="si">}</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>output/msrun_log<span class="w"> </span>False<span class="w"> </span><span class="m">300</span>
+<span class="c1"># The second server (sub-node)</span>
+bash<span class="w"> </span>scripts/msrun_launcher.sh<span class="w"> </span><span class="s2">&quot;run_mindformer.py \</span>
+<span class="s2">  --config {CONFIG_PATH} \</span>
+<span class="s2">  --run_mode train&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="m">16</span><span class="w"> </span><span class="m">8</span><span class="w"> </span><span class="si">${</span><span class="nv">ip</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">port</span><span class="si">}</span><span class="w"> </span><span class="m">1</span><span class="w"> </span>output/msrun_log<span class="w"> </span>False<span class="w"> </span><span class="m">300</span>
+</pre></div>
+</div>
+<p><strong>Scenario 2: No shared path between servers</strong></p>
+<p>In the case where there is no shared path between servers, you need to perform an offline merge and forward operation on the generated strategy files before enabling the online slicing function. The following steps describe how to perform this operation and start a multi-machine, multi-card training task.</p>
+<p><strong>1.Getting Distributed Strategies</strong></p>
+<p>Before performing the offline weight conversion, it is first necessary to obtain the distributed policy files of each node.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="c1"># Set only_save_strategy to True to get a distributed strategy file, which is generated and the task exits automatically</span>
+<span class="w">  </span><span class="nt">only_save_strategy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+
+<span class="w">  </span><span class="c1"># Configure dataset paths</span>
+<span class="w">  </span><span class="nt">train_dataset</span><span class="p">:</span><span class="w"> </span><span class="nl">&amp;train_dataset</span>
+<span class="w">    </span><span class="nt">data_loader</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MindDataset</span>
+<span class="w">      </span><span class="nt">dataset_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/worker/dataset/wikitext_2048/&quot;</span>
+<span class="w">      </span><span class="nt">shuffle</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+
+<span class="w">  </span><span class="c1"># Configure 16-card distributed strategy (for information only)</span>
+<span class="w">  </span><span class="nt">parallel_config</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">data_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">    </span><span class="nt">model_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">    </span><span class="nt">pipeline_stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">    </span><span class="nt">micro_batch_num</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">    </span><span class="nt">vocab_emb_dp</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">    </span><span class="nt">gradient_aggregation_group</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">    </span><span class="nt">micro_batch_interleave_num</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+<p>The strategy files for each node will be saved separately in their respective <code class="docutils literal notranslate"><span class="pre">output/strategy</span></code> directories. For example, node 0 will save only the <code class="docutils literal notranslate"><span class="pre">ckpt_strategy_rank_0-7.ckpt</span></code> file and node 1 will save only the <code class="docutils literal notranslate"><span class="pre">ckpt_strategy_rank_8-15.ckpt</span></code> file. Subsequently, the strategy files of all nodes need to be centralized on the same server for subsequent operations, and the directories and files after centralization are as follows.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>output
+    ├── strategy
+        ├── ckpt_strategy_rank_0.ckpt
+        ...
+        ├── ckpt_strategy_rank_7.ckpt
+        ├── ckpt_strategy_rank_8.ckpt
+        ...
+        └── ckpt_strategy_rank_15.ckpt
+</pre></div>
+</div>
+<p><strong>2. Merging Distributed Strategy</strong></p>
+<p>Call the <a class="reference external" href="https://www.mindspore.cn/docs/en/master/api_python/parallel/mindspore.parallel.merge_pipeline_strategys.html">strategy merge interface</a> to merge all strategy files after centralization into one file for subsequent weight slicing.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">mindspore</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ms</span>
+<span class="n">ms</span><span class="o">.</span><span class="n">parallel</span><span class="o">.</span><span class="n">merge_pipeline_strategys</span><span class="p">(</span><span class="s2">&quot;/output/strategy&quot;</span><span class="p">,</span> <span class="s2">&quot;/output/merged_strategy/dst_strategy.ckpt&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>3.Weight Slice Loading</strong></p>
+<p><strong>Distribute strategy files + online slicing (recommended):</strong></p>
+<p>Distribute the merged strategy file <code class="docutils literal notranslate"><span class="pre">dst_strategy.ckpt</span></code> to each node under the <code class="docutils literal notranslate"><span class="pre">.</span> <span class="pre">/output/merged_strategy/</span></code> directory, turn on auto-slicing, and pull up the training task again. The configuration file for each node needs to be modified.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">output_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;./output&#39;</span><span class="w">                              </span><span class="c1"># Make sure that each node under ./output/merged_strategy/ has the merged strategy file</span>
+<span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/qwen3_8b/unified_safetensors&#39;</span><span class="w">    </span><span class="c1"># Load full weights file path</span>
+<span class="nt">load_ckpt_format</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;safetensors&#39;</span><span class="w">                     </span><span class="c1"># Load weight file format</span>
+<span class="nt">auto_trans_ckpt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w">                               </span><span class="c1"># This configuration item needs to be turned on for full weights + distributed loading to turn on online slicing</span>
+</pre></div>
+</div>
+<p><strong>Offline slicing + distributing distributed weights:</strong></p>
+<p>According to the <a class="reference internal" href="#weight-slicing">weight slicing</a> guide, the full weights are first sliced offline into distributed weights files, which are then distributed to each machine, the automatic slicing is turned off, and <code class="docutils literal notranslate"><span class="pre">load_checkpoint</span></code> is configured as the distributed weights path. Each node’s configuration file needs to be modified.</p>
+<p>Because distributed weight files are generally larger than strategy files and distribution operations are more time-consuming, the first approach is more recommended.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/output/distributed_safetensors&#39;</span><span class="w">  </span><span class="c1"># Load distributed weights file path</span>
+<span class="nt">load_ckpt_format</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;safetensors&#39;</span><span class="w">                     </span><span class="c1"># Load weight file format</span>
+<span class="nt">auto_trans_ckpt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span><span class="w">                              </span><span class="c1"># Distributed weight loading with online slicing turned off</span>
+</pre></div>
+</div>
+<p><strong>4. Initiating tasks</strong>：</p>
+<p>Use <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/scripts/msrun_launcher.sh">mindformers/scripts/msrun_launcher.sh</a> to initiate tasks.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># The first server (master node)</span>
+bash<span class="w"> </span>scripts/msrun_launcher.sh<span class="w"> </span><span class="s2">&quot;run_mindformer.py \</span>
+<span class="s2">  --config {CONFIG_PATH} \</span>
+<span class="s2">  --run_mode train&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="m">16</span><span class="w"> </span><span class="m">8</span><span class="w"> </span><span class="si">${</span><span class="nv">ip</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">port</span><span class="si">}</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>output/msrun_log<span class="w"> </span>False<span class="w"> </span><span class="m">300</span>
+<span class="c1"># The second server (sub-node)</span>
+bash<span class="w"> </span>scripts/msrun_launcher.sh<span class="w"> </span><span class="s2">&quot;run_mindformer.py \</span>
+<span class="s2">  --config {CONFIG_PATH} \</span>
+<span class="s2">  --run_mode train&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="m">16</span><span class="w"> </span><span class="m">8</span><span class="w"> </span><span class="si">${</span><span class="nv">ip</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">port</span><span class="si">}</span><span class="w"> </span><span class="m">1</span><span class="w"> </span>output/msrun_log<span class="w"> </span>False<span class="w"> </span><span class="m">300</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="weight-features">
+<h2>Weight Features<a class="headerlink" href="#weight-features" title="Link to this heading"></a></h2>
+<section id="de-redundant-saving-and-loading">
+<h3>De-redundant Saving and Loading<a class="headerlink" href="#de-redundant-saving-and-loading" title="Link to this heading"></a></h3>
+<p>Currently when MindSpore Transformers saves weights, by default it duplicates multiple consistent weight files in the dp/opt domain, resulting in additional storage overhead and burden. The following configuration and usage methods can be used to realize dp/opt de-redundant saving and loading, effectively reducing the storage pressure under large-scale clusters of thousands of cards and above. This feature is only effective under distributed weights, and complete weights do not involve de-redundancy.</p>
+<p>The following configuration is enabled when saved:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">callbacks</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CheckpointMonitor</span>
+<span class="w">    </span><span class="nt">checkpoint_format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">safetensors</span><span class="w">                  </span><span class="c1"># Save weights file format</span>
+<span class="w">    </span><span class="nt">remove_redundancy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w">                         </span><span class="c1"># Turn on de-redundancy when saving weights</span>
+</pre></div>
+</div>
+<p>The saved distributed weights are of different sizes, and the total weight file is smaller than that before the de-redundancy feature is turned on:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>output
+    ├── checkpoint
+        ├── rank_0
+            └── example-1_1.safetensors  #file size：5.2G
+        ├── rank_1
+            └── example-1_1.safetensors  #file size：5.2G
+        ...
+        ├── rank_6
+            └── example-1_1.safetensors  #file size：4.1G
+        └── rank_7
+            └── example-1_1.safetensors  #file size：4.1G
+</pre></div>
+</div>
+<p>Turn on the following configuration when loading:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">load_ckpt_format</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;safetensors&#39;</span><span class="w">    </span><span class="c1"># Load weight file format</span>
+<span class="nt">remove_redundancy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w">            </span><span class="c1"># Turn on de-redundancy when loading weights</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>MindSpore Transformers version 1.5.0 and below may cause accuracy anomalies when the saved and loaded configuration items for de-redundancy are not the same, please make sure the configuration is correct. Version 1.5.0 and above will automatically identify and load the weights based on whether they are de-redundant or not, so you don’t need to pay attention to the loaded configuration.</p>
+</div></blockquote>
+</section>
+<section id="loading-hugging-face-safetensors">
+<h3>Loading Hugging Face safetensors<a class="headerlink" href="#loading-hugging-face-safetensors" title="Link to this heading"></a></h3>
+<p>By adding the pretrained_model_dir field in the configuration file, specify a folder directory that stores all model files downloaded from Hugging Face (including config. json, tokenizer, weight files, etc.), and then directly instantiated the model configuration and tokenizer, loading Hugging Face weights.</p>
+<p>Taking Qwen3 as an example, the meaning of the fields configured in the YAML configuration file is as follows: the folder directory specified in pretrained_model_dir stores the Qwen3 model configuration file, tokenizer file, and weight file on Hugging Face.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">use_legacy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="nt">load_checkpoint </span><span class="p">:</span><span class="w"> </span><span class="s">&#39;&#39;</span>
+<span class="nt">pretrained_model_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/path/qwen3&quot;</span>
+<span class="nt">model</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">model_config</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">compute_dtype</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;bfloat16&quot;</span>
+<span class="w">    </span><span class="nt">layernorm_compute_dtype</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;float32&quot;</span>
+<span class="w">    </span><span class="nt">softmax_compute_dtype</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;float32&quot;</span>
+<span class="w">    </span><span class="nt">rotary_dtype</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;bfloat16&quot;</span>
+<span class="w">    </span><span class="nt">params_dtype</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;bfloat16&quot;</span>
+<span class="nt">generation</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">max_length</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span>
+</pre></div>
+</div>
+<p><strong>Parameter Descriptions</strong>:</p>
+<ul class="simple">
+<li><p><strong>use_legacy</strong> - This parameter is set to False to enable Hugging Face loading</p></li>
+<li><p><strong>load_checkpoint</strong> - User defined weight loading path, high priority</p></li>
+<li><p><strong>pretrained_model_dir</strong> - Hugging Face weight, low priority</p></li>
+</ul>
+<p>The priority for selecting the weight path of <code class="docutils literal notranslate"><span class="pre">load_checkpoint</span></code> is high. When configuring this parameter, the weight files in the path of <code class="docutils literal notranslate"><span class="pre">pretrained_model_dir</span></code> will not be loaded.</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">load_checkpoint</span></code> is not configured, if there are safetensors weight files in the path ‘pretrained_model_dir’, it will be loaded. If it does not exist, the weights will be randomly initialized.</p>
+<blockquote>
+<div><p>This feature currently only supports Qwen3 series and DeepSeek V3 series models in fine-tuning/inference scenarios, and is being continuously updated.</p>
+</div></blockquote>
+</section>
+</section>
+<section id="weight-slicing-and-merging">
+<h2>Weight Slicing and Merging<a class="headerlink" href="#weight-slicing-and-merging" title="Link to this heading"></a></h2>
+<section id="id3">
+<h3>Overview<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p>In the current distributed training and inference environment, when users need to change the distributed strategy, they need to merge the existing distributed weights into the complete weights before completing the weight loading by online slicing/offline slicing. In order to meet the needs of weight conversion in different scenarios, you can refer to the following scripts and interfaces to realize the functions of weight multi-card merging single card and single card slicing multi-card.</p>
+</section>
+<section id="weight-merging">
+<h3>Weight Merging<a class="headerlink" href="#weight-merging" title="Link to this heading"></a></h3>
+<section id="usage-directions">
+<h4>Usage Directions<a class="headerlink" href="#usage-directions" title="Link to this heading"></a></h4>
+<p>Use the <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/toolkit/safetensors/unified_safetensors.py">safetensors weights merging script</a> provided by MindSpore Transformers to perform safetensors weight merging as follows. The format of the merged weights is <a class="reference internal" href="#complete-weights">complete-weights</a>.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>toolkit/safetensors/unified_safetensors.py<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--src_strategy_dirs<span class="w"> </span><span class="s2">&quot;src_strategy_path_or_dir/&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--mindspore_ckpt_dir<span class="w"> </span><span class="s2">&quot;src_ckpt_dir/&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--output_dir<span class="w"> </span><span class="s2">&quot;merged_ckpt_dir/&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--file_suffix<span class="w"> </span><span class="s2">&quot;1_1&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--has_redundancy<span class="w"> </span>False<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--filter_out_param_prefix<span class="w"> </span><span class="s2">&quot;adam_&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--max_process_num<span class="w"> </span><span class="m">32</span>
+</pre></div>
+</div>
+</section>
+<section id="parameter-descriptions">
+<h4>Parameter Descriptions<a class="headerlink" href="#parameter-descriptions" title="Link to this heading"></a></h4>
+<ul>
+<li><p><strong>src_strategy_dirs</strong>: The path to the distributed strategy file corresponding to the source weights, usually saved by default in the <code class="docutils literal notranslate"><span class="pre">output/strategy/</span></code> directory after starting the training task. Distributed weights need to be filled in according to the following:</p>
+<ul class="simple">
+<li><p><strong>Source weights turn on pipeline parallelism</strong>: The weight conversion is based on the merged strategy files, fill in the path to the distributed strategies folder. The script will automatically merge all <code class="docutils literal notranslate"><span class="pre">ckpt_strategy_rank_x.ckpt</span></code> files in the folder and generate <code class="docutils literal notranslate"><span class="pre">merged_ckpt_strategy.ckpt</span></code> in the folder. If <code class="docutils literal notranslate"><span class="pre">merged_ckpt_strategy.ckpt</span></code> already exists, you can just fill in the path to that file.</p></li>
+<li><p><strong>Source weights turn off pipeline parallelism</strong>: The weight conversion can be based on any of the strategy files, just fill in the path to any of the <code class="docutils literal notranslate"><span class="pre">ckpt_strategy_rank_x.ckpt</span></code> files.</p></li>
+</ul>
+<p><strong>Note</strong>: If <code class="docutils literal notranslate"><span class="pre">merged_ckpt_strategy.ckpt</span></code> already exists in the strategy folder and the folder path is still passed in, the script will first delete the old <code class="docutils literal notranslate"><span class="pre">merged_ckpt_strategy.ckpt</span></code> and merge it to create a new <code class="docutils literal notranslate"><span class="pre">merged_ckpt_strategy.ckpt</span></code> for weight conversion. Therefore, make sure that the folder has sufficient write permissions, otherwise the operation will report an error.</p>
+</li>
+<li><p><strong>mindspore_ckpt_dir</strong>: Distributed weights path, please fill in the path of the folder where the source weights are located, the source weights should be stored in <code class="docutils literal notranslate"><span class="pre">model_dir/rank_x/xxx.safetensors</span></code> format, and fill in the folder path as <code class="docutils literal notranslate"><span class="pre">model_dir</span></code>.</p></li>
+<li><p><strong>output_dir</strong>: The path where the target weights will be saved. The default value is <code class="docutils literal notranslate"><span class="pre">&quot;/path/output_dir&quot;</span></code>. If this parameter is not configured, the target weights will be placed in the <code class="docutils literal notranslate"><span class="pre">/path/output_dir</span></code> directory by default.</p></li>
+<li><p><strong>file_suffix</strong>: The naming suffix of the target weights file. The default value is <code class="docutils literal notranslate"><span class="pre">&quot;1_1&quot;</span></code>, i.e. the target weights will be merged by searching for matching weight files in the <code class="docutils literal notranslate"><span class="pre">*1_1.safetensors</span></code> format.</p></li>
+<li><p><strong>has_redundancy</strong>: Whether the merged source weights are redundant weights. The default value is <code class="docutils literal notranslate"><span class="pre">True</span></code>, which means that the original weights used for merging are redundant. If the original weights are saved as de-redundant weights, it needs to be set to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>filter_out_param_prefix</strong>: You can customize the parameters to be filtered out when merging weights, and the filtering rules are based on prefix name matching. For example, optimizer parameter <code class="docutils literal notranslate"><span class="pre">&quot;adam_&quot;</span></code>.</p></li>
+<li><p><strong>max_process_num</strong>: Maximum number of processes to merge. Default value: <code class="docutils literal notranslate"><span class="pre">64</span></code>.</p></li>
+</ul>
+</section>
+<section id="samples">
+<h4>Samples<a class="headerlink" href="#samples" title="Link to this heading"></a></h4>
+<p>Scenario one:</p>
+<p>If merging to remove redundant safetensors weights, you can fill in the parameters as follows:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>toolkit/safetensors/unified_safetensors.py<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--src_strategy_dirs<span class="w"> </span><span class="s2">&quot;src_strategy_path_or_dir/&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--mindspore_ckpt_dir<span class="w"> </span><span class="s2">&quot;src_ckpt_dir/&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--output_dir<span class="w"> </span><span class="s2">&quot;merged_ckpt_dir/&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--file_suffix<span class="w"> </span><span class="s2">&quot;1_1&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--has_redundancy<span class="w"> </span>False
+</pre></div>
+</div>
+<p>Scenario two:</p>
+<p>If merge filtering the Adam optimizer’s safetensors weights, you can fill in the parameters as follows:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>toolkit/safetensors/unified_safetensors.py<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--src_strategy_dirs<span class="w"> </span><span class="s2">&quot;src_strategy_path_or_dir/&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--mindspore_ckpt_dir<span class="w"> </span><span class="s2">&quot;src_ckpt_dir/&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--output_dir<span class="w"> </span><span class="s2">&quot;merged_ckpt_dir/&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--file_suffix<span class="w"> </span><span class="s2">&quot;1_1&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--filter_out_param_prefix<span class="w"> </span><span class="s2">&quot;adam_&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="weight-slicing">
+<h3>Weight Slicing<a class="headerlink" href="#weight-slicing" title="Link to this heading"></a></h3>
+<section id="id4">
+<h4>Usage Directions<a class="headerlink" href="#id4" title="Link to this heading"></a></h4>
+<p>Use <a class="reference external" href="https://www.mindspore.cn/docs/en/master/api_python/parallel/mindspore.parallel.merge_pipeline_strategys.html">strategy merging interface</a> and <a class="reference external" href="https://www.mindspore.cn/docs/en/master/api_python/parallel/mindspore.parallel.load_distributed_checkpoint.html">slicing saving interface</a> provided by MindSpore. The safetensors weights are sliced and saved offline as follows. The format of the sliced weights is <a class="reference internal" href="#distributed-weights">distributed weights</a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">mindspore</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ms</span>
+
+<span class="c1"># step1: Merge target slicing strategy document</span>
+<span class="n">ms</span><span class="o">.</span><span class="n">parallel</span><span class="o">.</span><span class="n">merge_pipeline_strategys</span><span class="p">(</span>
+    <span class="n">src_strategy_dirs</span><span class="o">=</span><span class="s2">&quot;output/strategy&quot;</span><span class="p">,</span>
+    <span class="n">dst_strategy_file</span><span class="o">=</span><span class="s2">&quot;output/merged_strategy/dst_strategy.ckpt&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># step2: Based on the merged target slicing strategy and the complete weights, the weights are sliced and saved as distributed weights</span>
+<span class="n">ms</span><span class="o">.</span><span class="n">load_distributed_checkpoint</span><span class="p">(</span>
+    <span class="n">network</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">predict_strategy</span><span class="o">=</span><span class="s1">&#39;output/merged_strategy/dst_strategy.ckpt&#39;</span><span class="p">,</span>
+    <span class="n">unified_safetensors_dir</span><span class="o">=</span><span class="s1">&#39;/path/unified_safetensors&#39;</span><span class="p">,</span>
+    <span class="n">dst_safetensors_dir</span><span class="o">=</span><span class="s1">&#39;/path/distributed_safetensors&#39;</span><span class="p">,</span>
+    <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;safetensors&#39;</span><span class="p">,</span>
+    <span class="n">max_process_num</span><span class="o">=</span><span class="mi">64</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="id5">
+<h4>Parameter Descriptions<a class="headerlink" href="#id5" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p><strong>src_strategy_dirs</strong> (str) - The directory where the strategy files for training tasks are stored, typically under <code class="docutils literal notranslate"><span class="pre">output/strategy</span></code>. If a new <code class="docutils literal notranslate"><span class="pre">output_dir</span></code> is specified in the training config yaml, <code class="docutils literal notranslate"><span class="pre">output_dir/strategy</span></code> should be configured.</p></li>
+<li><p><strong>dst_strategy_file</strong> (str) – The merged strategy file path. It can be specified as any path, such as <code class="docutils literal notranslate"><span class="pre">output/merged_strategy/dst_strategy.ckpt</span></code>, which is passed to <code class="docutils literal notranslate"><span class="pre">predict_strategy</span></code> in step 2.</p></li>
+<li><p><strong>network</strong> (Cell) - Distributed Predictive Network, when format is safetensors, network is passed as None, at which point the interface executes the save mode.</p></li>
+<li><p><strong>predict_strategy</strong> (Union[dict, str]) - The target slice strategy file. Default: <code class="docutils literal notranslate"><span class="pre">None</span></code> .</p></li>
+<li><p><strong>unified_safetensors_dir</strong> (str) - Directory of complete weights files. Default: <code class="docutils literal notranslate"><span class="pre">None</span></code> .</p></li>
+<li><p><strong>dst_safetensors_dir</strong> (str) - The save directory for the weights in the save mode scenario.</p></li>
+<li><p><strong>max_process_num</strong> (int) - Maximum number of processes. Default: 64.</p></li>
+</ul>
+<blockquote>
+<div><p>Note: When loading the weights of offline sliced, the distributed strategy of the task must remain unchanged.</p>
+</div></blockquote>
+</section>
+</section>
+</section>
+<section id="weights-format-conversion">
+<h2>Weights Format Conversion<a class="headerlink" href="#weights-format-conversion" title="Link to this heading"></a></h2>
+<section id="converting-ckpt-to-safetensors">
+<h3>Converting Ckpt to Safetensors<a class="headerlink" href="#converting-ckpt-to-safetensors" title="Link to this heading"></a></h3>
+<p>MindSpore Transformers stock weights file is in ckpt format, which can be formatted into safetensors file in the following two ways.</p>
+<section id="interface-calling">
+<h4>Interface Calling<a class="headerlink" href="#interface-calling" title="Link to this heading"></a></h4>
+<p>Call <a class="reference external" href="https://www.mindspore.cn/docs/en/master/api_python/mindspore/mindspore.ckpt_to_safetensors.html">Mindspore format conversion interface</a> to implement.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">mindspore</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ms</span>
+<span class="n">ms</span><span class="o">.</span><span class="n">ckpt_to_safetensors</span><span class="p">(</span><span class="s2">&quot;./ckpt_save_path/rank0/checkpoint_0.ckpt&quot;</span><span class="p">,</span> <span class="s2">&quot;./output/safetensors_path/&quot;</span><span class="p">)</span>
+<span class="c1">#Parameter descriptions</span>
+<span class="c1">#file_path (str) - Path to directory containing checkpoint files or path to individual checkpoint files (.ckpt)</span>
+<span class="c1">#save_path (str, optional) - Path to the directory where safetensors files are stored. Default: None</span>
+</pre></div>
+</div>
+</section>
+<section id="training-tasks">
+<h4>Training Tasks<a class="headerlink" href="#training-tasks" title="Link to this heading"></a></h4>
+<p>The MindSpore Transformers training task is started after adjusting the configuration file, and the conversion is achieved by loading in ckpt format and saving in safetensors format on a trial basis.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;output/checkpoint/&#39;</span><span class="w">               </span><span class="c1"># Load weights file path</span>
+<span class="nt">load_ckpt_format</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;ckpt&#39;</span><span class="w">                            </span><span class="c1"># Load weight file format as ckpt</span>
+<span class="nt">callbacks</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CheckpointMonitor</span>
+<span class="w">    </span><span class="nt">checkpoint_format</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;safetensors&#39;</span><span class="w">                </span><span class="c1"># Save the weights file format as safetensors</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="usage-example">
+<h2>Usage Example<a class="headerlink" href="#usage-example" title="Link to this heading"></a></h2>
+<section id="examples-of-training-tasks">
+<h3>Examples of Training Tasks<a class="headerlink" href="#examples-of-training-tasks" title="Link to this heading"></a></h3>
+<p>If you use the full weighted multicard online fine-tuning, take the Qwen3-8B model as an example and modify the configuration item <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/configs/qwen3/finetune_qwen3.yaml">finetune_qwen3.yaml</a>：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Modified configuration</span>
+<span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/qwen3_8b/hf_unified_safetensors&#39;</span><span class="w"> </span><span class="c1"># Load weights file path</span>
+<span class="nt">load_ckpt_format</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;safetensors&#39;</span><span class="w">                     </span><span class="c1"># Load weights file format</span>
+<span class="nt">auto_trans_ckpt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w">                               </span><span class="c1"># This configuration item needs to be turned on for complete weights to enable the online slicing feature</span>
+<span class="nt">parallel_config</span><span class="p">:</span><span class="w">                                    </span><span class="c1"># Configure the target distributed strategy</span>
+<span class="w">  </span><span class="nt">data_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">model_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+<span class="w">  </span><span class="nt">pipeline_stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="nt">callbacks</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CheckpointMonitor</span>
+<span class="w">    </span><span class="nt">checkpoint_format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">safetensors</span><span class="w">                  </span><span class="c1"># Save weights file format</span>
+</pre></div>
+</div>
+<p>If you use distributed weights multicard online fine-tuning, take the Qwen3-8B model as an example, modify the configuration item <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/configs/qwen3/finetune_qwen3.yaml">finetune_qwen3.yaml</a>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Modified configuration</span>
+<span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/qwen3_8b/distributed_safetensors&#39;</span><span class="w"> </span><span class="c1"># Load weights file path</span>
+<span class="nt">load_ckpt_format</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;safetensors&#39;</span><span class="w">                      </span><span class="c1"># Load weights file format</span>
+<span class="nt">parallel_config</span><span class="p">:</span><span class="w">                                     </span><span class="c1"># Configure the target distributed strategy</span>
+<span class="w">  </span><span class="nt">data_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">model_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+<span class="w">  </span><span class="nt">pipeline_stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="nt">callbacks</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CheckpointMonitor</span>
+<span class="w">    </span><span class="nt">checkpoint_format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">safetensors</span><span class="w">                  </span><span class="c1"># Save weights file format</span>
+</pre></div>
+</div>
+<p>Execute the command when completed:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>bash<span class="w"> </span>scripts/msrun_launcher.sh<span class="w"> </span><span class="s2">&quot;run_mindformer.py \</span>
+<span class="s2"> --config configs/qwen3/finetune_qwen3.yaml&quot;</span><span class="w"> </span><span class="m">8</span>
+</pre></div>
+</div>
+<p>After the task is executed, a checkpoint folder is generated in the mindformers/output directory, while the model files are saved in that folder.</p>
+<p>For more details, please refer to <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/guide/supervised_fine_tuning.html">Introduction to SFT fine-tuning</a> and <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/guide/pre_training.html">Introduction to Pre-training</a>.</p>
+</section>
+<section id="example-of-an-inference-task">
+<h3>Example of an Inference Task<a class="headerlink" href="#example-of-an-inference-task" title="Link to this heading"></a></h3>
+<p>If you use complete weighted multicard online inference, take the Qwen3-8B model as an example, and modify the configuration item <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/configs/qwen3/predict_qwen3.yaml">predict_qwen3.yaml</a>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Modified configuration</span>
+<span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/qwen3_8b/hf_unified_safetensors&#39;</span><span class="w"> </span><span class="c1"># Load weights file path</span>
+<span class="nt">load_ckpt_format</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;safetensors&#39;</span><span class="w">                     </span><span class="c1"># Load weights file format</span>
+<span class="nt">auto_trans_ckpt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w">                               </span><span class="c1"># This configuration item needs to be turned on for complete weights to enable the online slicing function</span>
+<span class="nt">parallel_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">data_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">model_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">  </span><span class="nt">pipeline_stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+<p>If you use distributed weighted multicard online inference, take the Qwen3-8B model as an example, modify the configuration item <a class="reference external" href="https://atomgit.com/mindspore/mindformers/blob/master/configs/qwen3/predict_qwen3.yaml">predict_qwen3.yaml</a>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Modified configuration</span>
+<span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/qwen3_8b/distributed_safetensors&#39;</span><span class="w"> </span><span class="c1"># Load weights file path</span>
+<span class="nt">load_ckpt_format</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;safetensors&#39;</span><span class="w">                      </span><span class="c1"># Load weights file format</span>
+<span class="nt">parallel_config</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">data_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">model_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">  </span><span class="nt">pipeline_stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+<p>Execute the command when completed:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>bash<span class="w"> </span>scripts/msrun_launcher.sh<span class="w"> </span><span class="s2">&quot;python run_mindformer.py \</span>
+<span class="s2">--config configs/qwen3/predict_qwen3.yaml \</span>
+<span class="s2">--run_mode predict \</span>
+<span class="s2">--use_parallel True \</span>
+<span class="s2">--predict_data &#39;I love Beijing, because&#39;&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="m">4</span>
+</pre></div>
+</div>
+<p>The results of executing the above single-card inference and multi-card inference commands are as follows:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>&#39;text_generation_text&#39;: [I love Beijing, because it is a city with a long history and culture.......]
+</pre></div>
+</div>
+<p>For more details, please refer to: <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/guide/inference.html">Introduction to Inference</a></p>
+</section>
+<section id="examples-of-resumable-training-after-breakpoint-tasks">
+<h3>Examples of Resumable Training after Breakpoint Tasks<a class="headerlink" href="#examples-of-resumable-training-after-breakpoint-tasks" title="Link to this heading"></a></h3>
+<p>MindSpore Transformers supports step-level resumable training after breakpoint, which allows you to save a model’s checkpoints during training and load the saved checkpoints to restore the previous state to continue training after a break in training.</p>
+<p>If you use distributed weight multicard resumable training and do not change the slicing strategy, modify the configuration item and start the original training task:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Modified configuration</span>
+<span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/output/checkpoint&#39;</span><span class="w">                </span><span class="c1"># Load source distributed weights file path</span>
+<span class="nt">load_ckpt_format</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;safetensors&#39;</span><span class="w">                      </span><span class="c1"># Load weights file format</span>
+<span class="nt">resume_training</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w">                                </span><span class="c1"># Resumable training after breakpoint switch</span>
+<span class="nt">callbacks</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CheckpointMonitor</span>
+<span class="w">    </span><span class="nt">checkpoint_format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">safetensors</span><span class="w">                   </span><span class="c1"># Save weights file format</span>
+</pre></div>
+</div>
+<p>If the distributed weight multi-card training is renewed and the slicing strategy is changed, it is necessary to pass in the path of the source slicing strategy file and start the original training task after modifying the configuration items:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Modified configuration</span>
+<span class="nt">load_checkpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/output/checkpoint&#39;</span><span class="w">               </span><span class="c1"># Load source distributed weights file path</span>
+<span class="nt">src_strategy_path_or_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/output/src_strategy&#39;</span><span class="w">    </span><span class="c1"># Load source strategy file for merging source distributed weights into full weights</span>
+<span class="nt">load_ckpt_format</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;safetensors&#39;</span><span class="w">                     </span><span class="c1"># Load weights file format</span>
+<span class="nt">auto_trans_ckpt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w">                               </span><span class="c1"># Enable online slicing</span>
+<span class="nt">resume_training</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w">                               </span><span class="c1"># Resumable training after breakpoint switch</span>
+<span class="nt">parallel_config</span><span class="p">:</span><span class="w">                                    </span><span class="c1"># Configure the target distributed strategy</span>
+<span class="w">  </span><span class="nt">data_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">model_parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">  </span><span class="nt">pipeline_stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="nt">callbacks</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CheckpointMonitor</span>
+<span class="w">    </span><span class="nt">checkpoint_format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">safetensors</span><span class="w">                  </span><span class="c1"># Save weights file format</span>
+</pre></div>
+</div>
+<p>For more details, please refer to: <a class="reference external" href="https://www.mindspore.cn/mindformers/docs/en/master/feature/resume_training.html">Introduction to Breakpoints</a>.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ckpt.html" class="btn btn-neutral float-left" title="Ckpt Weights" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="configuration.html" class="btn btn-neutral float-right" title="Configuration File Descriptions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
